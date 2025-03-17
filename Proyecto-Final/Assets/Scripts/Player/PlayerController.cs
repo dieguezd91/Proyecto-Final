@@ -47,14 +47,24 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
-
         Vector2 direction = (mousePos - transform.position).normalized;
 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.velocity = direction * bulletSpeed;
-    }
+        GameObject spell = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
 
+        Spell spellComponent = spell.GetComponent<Spell>();
+        if (spellComponent != null)
+        {
+            spellComponent.SetDirection(direction);
+        }
+        else
+        {
+            Rigidbody2D rb = spell.GetComponent<Rigidbody2D>();
+            if (rb != null)
+            {
+                rb.velocity = direction * bulletSpeed;
+            }
+        }
+    }
 
     void RotatePlayer()
     {
