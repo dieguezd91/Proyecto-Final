@@ -59,26 +59,14 @@ public class LifeController : MonoBehaviour
         Debug.Log($"{gameObject.name} took {damage} damage. Current health: {currentHealth}/{maxHealth}");
     }
 
-    public void Heal(float amount)
-    {
-        if (isDead)
-            return;
-
-        currentHealth += amount;
-
-        currentHealth = Mathf.Min(currentHealth, maxHealth);
-
-        onHealthChanged?.Invoke(currentHealth, maxHealth);
-
-        Debug.Log($"{gameObject.name} healed for {amount}. Current health: {currentHealth}/{maxHealth}");
-    }
-
     public virtual void Die()
     {
         isDead = true;
-        Debug.Log($"{gameObject.name} died!");
+        Debug.Log($"{gameObject.name} died");
 
         onDeath?.Invoke();
+
+        Destroy(gameObject);
     }
 
     IEnumerator FlashRoutine()

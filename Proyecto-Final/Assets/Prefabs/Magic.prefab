@@ -174,8 +174,3 @@ MonoBehaviour:
   damage: 20
   lifeTime: 3
   speed: 10
-  piercing: 0
-  maxPierceCount: 1
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 0
