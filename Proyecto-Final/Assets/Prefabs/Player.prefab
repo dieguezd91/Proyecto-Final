@@ -75,11 +75,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingLayerID: 1972390401
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: -9095717837082945937, guid: bd3cb4af8406d4436a2ae8c2aafe1f8d, type: 3}
-  m_Color: {r: 0.9098039, g: 0.11372549, b: 0.36330628, a: 1}
+  m_Color: {r: 0.15930024, g: 0.11372549, b: 0.9098039, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -158,8 +158,8 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &4875041280475820911
 MonoBehaviour:
@@ -179,10 +179,11 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
   firePoint: {fileID: 7145714007259786806}
   bulletSpeed: 10
-  selectedSeed: {fileID: 0}
+  selectedSeed: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
   plantingLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
+  gameStateController: {fileID: 0}
 --- !u!114 &94765001059883094
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum GameState
-{
-    None = 0,
-    Day,
-    Night
-}
-
 public class WaveSpawner : MonoBehaviour
 {
     [Header("Wave Settings")]
@@ -41,8 +34,8 @@ public class WaveSpawner : MonoBehaviour
     public int currentWave;
     private bool waveEnded = false;
     private int nextWaveToStart = 1;
-
-    public GameState currentGameState;
+    private bool needsWaveReset = false;
+    private GameState lastGameState = GameState.None;
 
     void Start()
     {
@@ -52,10 +45,9 @@ public class WaveSpawner : MonoBehaviour
             playerTransform = player.transform;
         }
 
-        currentWave = 0;
-        nextWaveToStart = 1;
+        ResetWaveCounters();
 
-        if (currentGameState == GameState.Night)
+        if (GameManager.Instance.currentGameState == GameState.Night)
         {
             StartWave(1);
         }
@@ -63,7 +55,22 @@ public class WaveSpawner : MonoBehaviour
 
     void Update()
     {
-        if (currentGameState == GameState.Night && !isSpawning && enemiesRemaining <= 0 && !waveEnded)
+        if (GameManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
+        {
+            Debug.Log("Cambio de dia a noche. Iniciando oleadas.");
+            needsWaveReset = true;
+        }
+
+        lastGameState = GameManager.Instance.currentGameState;
+
+        if (GameManager.Instance.currentGameState == GameState.Night && needsWaveReset)
+        {
+            ResetWaveCounters();
+            StartWave(1);
+            needsWaveReset = false;
+        }
+
+        if (GameManager.Instance.currentGameState == GameState.Night && !isSpawning && enemiesRemaining <= 0 && !waveEnded && currentWave > 0)
         {
             HandleWaveEnd();
         }
@@ -71,7 +78,7 @@ public class WaveSpawner : MonoBehaviour
 
     void StartWave(int waveIndex)
     {
-        if (currentGameState != GameState.Night)
+        if (GameManager.Instance.currentGameState != GameState.Night)
         {
             Debug.Log($"No se puede iniciar oleada {waveIndex}: no es de noche");
             return;
@@ -79,10 +86,10 @@ public class WaveSpawner : MonoBehaviour
 
         if (waveIndex > totalWaves)
         {
-            Debug.Log($"No hay más oleadas disponibles. Intentando iniciar oleada {waveIndex} de {totalWaves}");
+            Debug.Log($"No hay mas oleadas disponibles");
             if (!isSpawning && enemiesRemaining <= 0)
             {
-                currentGameState = GameState.Day;
+                GameManager.Instance.currentGameState = GameState.Day;
                 onAllWavesCompleted?.Invoke();
             }
             return;
@@ -111,7 +118,6 @@ public class WaveSpawner : MonoBehaviour
 
         if (nextWave <= totalWaves)
         {
-            Debug.Log($"Se iniciará la oleada {nextWave} después del retraso");
             if (autoStartNextWave)
             {
                 StartCoroutine(StartNextWaveAfterDelay(nextWave));
@@ -120,7 +126,7 @@ public class WaveSpawner : MonoBehaviour
         else
         {
             Debug.Log($"Era la última oleada ({currentWave} de {totalWaves}). Cambiando a estado Día");
-            currentGameState = GameState.Day;
+            GameManager.Instance.currentGameState = GameState.Day;
             onAllWavesCompleted?.Invoke();
         }
     }
@@ -130,7 +136,7 @@ public class WaveSpawner : MonoBehaviour
         Debug.Log($"Esperando {timeBetweenWaves} segundos para iniciar oleada {nextWaveIndex}");
         yield return new WaitForSeconds(timeBetweenWaves);
 
-        if (currentGameState == GameState.Night)
+        if (GameManager.Instance.currentGameState == GameState.Night)
         {
             Debug.Log($"Iniciando siguiente oleada: {nextWaveIndex}");
             StartWave(nextWaveIndex);
@@ -178,22 +184,28 @@ public class WaveSpawner : MonoBehaviour
         }
     }
 
+    public void ResetWaveCounters()
+    {
+        currentWave = 0;
+        nextWaveToStart = 1;
+        waveEnded = true;
+        isSpawning = false;
+        enemiesRemaining = 0;
+    }
+
     void OnEnemyDeath()
     {
         enemiesRemaining--;
-        Debug.Log($"Enemigo derrotado. Restantes: {enemiesRemaining} en oleada {currentWave}");
 
-        if (enemiesRemaining <= 0 && !isSpawning && !waveEnded && currentGameState == GameState.Night)
+        if (enemiesRemaining <= 0 && !isSpawning && !waveEnded && GameManager.Instance.currentGameState == GameState.Night)
         {
-            Debug.Log($"Último enemigo derrotado en oleada {currentWave}");
             HandleWaveEnd();
         }
     }
 
-
     public void StartNextWave()
     {
-        if (currentGameState != GameState.Night || isSpawning || enemiesRemaining > 0)
+        if (GameManager.Instance.currentGameState != GameState.Night || isSpawning || enemiesRemaining > 0)
         {
             Debug.Log("No se puede iniciar la siguiente oleada ahora");
             return;
@@ -207,10 +219,9 @@ public class WaveSpawner : MonoBehaviour
         }
         else
         {
-            Debug.Log("No hay más oleadas disponibles para iniciar manualmente");
             if (!isSpawning && enemiesRemaining <= 0)
             {
-                currentGameState = GameState.Day;
+                GameManager.Instance.currentGameState = GameState.Day;
                 onAllWavesCompleted?.Invoke();
             }
         }

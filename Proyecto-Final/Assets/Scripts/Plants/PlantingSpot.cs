@@ -23,7 +23,7 @@ public class PlantingSpot : MonoBehaviour
             return;
         }
 
-        if (gameStateController != null && gameStateController.currentGameState != GameState.Day)
+        if (gameStateController != null && GameManager.Instance.currentGameState != GameState.Day)
         {
             Debug.Log("Solo puedes plantar durante el dia");
             return;

@@ -34,14 +34,14 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
 
-        if (gameStateController != null && gameStateController.currentGameState == GameState.Night)
+        if (gameStateController != null && GameManager.Instance.currentGameState == GameState.Night)
         {
             HandleAttack();
         }
 
         RotatePlayer();
 
-        if (Input.GetMouseButtonDown(1) && gameStateController != null && gameStateController.currentGameState == GameState.Day)
+        if (Input.GetMouseButtonDown(1) && gameStateController != null && GameManager.Instance.currentGameState == GameState.Day)
         {
             TryPlant();
         }

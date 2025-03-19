@@ -45,16 +45,16 @@ public class DayNightLightController : MonoBehaviour
             }
         }
 
-        UpdateLightBasedOnGameState(waveSpawner.currentGameState, false);
-        lastGameState = waveSpawner.currentGameState;
+        UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
+        lastGameState = GameManager.Instance.currentGameState;
     }
 
     void Update()
     {
-        if (waveSpawner.currentGameState != lastGameState)
+        if (GameManager.Instance.currentGameState != lastGameState)
         {
-            UpdateLightBasedOnGameState(waveSpawner.currentGameState, useSmoothTransition);
-            lastGameState = waveSpawner.currentGameState;
+            UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, useSmoothTransition);
+            lastGameState = GameManager.Instance.currentGameState;
         }
     }
 
