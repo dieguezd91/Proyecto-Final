@@ -10,8 +10,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab; // Prefab de la bala
     [SerializeField] private Transform firePoint; // Punto desde donde se dispara
     [SerializeField] private float bulletSpeed = 10f; // Velocidad de la bala
-    [SerializeField] private GameObject selectedSeed; // Semilla seleccionada
+
+    [Header("Plant System")]
+    [SerializeField] private GameObject attackPlantPrefab; // Prefab de planta de ataque
+    [SerializeField] private GameObject defensePlantPrefab; // Prefab de planta de defensa
+    [SerializeField] private GameObject selectedSeed; // Semilla actualmente seleccionada
     [SerializeField] private LayerMask plantingLayer; // Capa de parcelas
+    private int selectedPlantType = 1;
 
     [SerializeField] private WaveSpawner gameStateController;
 
@@ -24,9 +29,11 @@ public class PlayerController : MonoBehaviour
             gameStateController = FindObjectOfType<WaveSpawner>();
             if (gameStateController == null)
             {
-                Debug.Log("No se encontro el WaveSpawner");
+                Debug.Log("No se encontró el WaveSpawner");
             }
         }
+
+        UpdateSelectedPlant();
     }
 
 
@@ -41,7 +48,9 @@ public class PlayerController : MonoBehaviour
 
         RotatePlayer();
 
-        if (Input.GetMouseButtonDown(1) && gameStateController != null && GameManager.Instance.currentGameState == GameState.Day)
+        HandlePlantSelection();
+
+        if (Input.GetMouseButtonDown(1) && gameStateController != null && GameManager.Instance.currentGameState == GameState.Day) //click derecho durante el dia
         {
             TryPlant();
         }
@@ -57,9 +66,35 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0)) // Clic izquierdo
+        if (Input.GetMouseButtonDown(0)) // Click izquierdo durante la noche
         {
             Shoot();
+        }
+    }
+
+    void HandlePlantSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            selectedPlantType = 1;
+            UpdateSelectedPlant();
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            selectedPlantType = 2;
+            UpdateSelectedPlant();
+        }
+    }
+
+    void UpdateSelectedPlant()
+    {
+        if (selectedPlantType == 1 && attackPlantPrefab != null)
+        {
+            selectedSeed = attackPlantPrefab;
+        }
+        else if (selectedPlantType == 2 && defensePlantPrefab != null)
+        {
+            selectedSeed = defensePlantPrefab;
         }
     }
 

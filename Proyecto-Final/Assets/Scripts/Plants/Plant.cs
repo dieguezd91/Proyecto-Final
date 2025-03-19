@@ -5,19 +5,19 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
-    public float growthTime = 5f; // Tiempo total para crecer completamente
-    private float timer = 0f;
+    public float growthTime; // Tiempo total para crecer completamente
+    protected float timer = 0f;
     private Vector3 initialScale;
     private Vector3 finalScale = Vector3.one; // Tamaño final (1,1,1)
 
-    void Start()
+    protected virtual void Start()
     {
         initialScale = Vector3.one * 0.2f; // Comienza en tamaño chico
         transform.localScale = initialScale;
     }
 
 
-    void Update()
+    protected virtual void Update()
     {
         if (timer < growthTime)
         {

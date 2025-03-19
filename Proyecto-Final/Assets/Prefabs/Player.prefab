@@ -179,6 +179,8 @@ MonoBehaviour:
   bulletPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
   firePoint: {fileID: 7145714007259786806}
   bulletSpeed: 10
+  attackPlantPrefab: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
+  defensePlantPrefab: {fileID: 6736001113723686055, guid: a0286c64e2e6c4a4a9c4554ba174ecd3, type: 3}
   selectedSeed: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
   plantingLayer:
     serializedVersion: 2

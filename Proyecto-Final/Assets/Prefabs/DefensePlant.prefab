@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6935603351286286704}
   - component: {fileID: 7870551252598160990}
   - component: {fileID: -586160436747385095}
-  - component: {fileID: -7572098155704673509}
+  - component: {fileID: 1407668023263652863}
   m_Layer: 0
-  m_Name: Plant
+  m_Name: DefensePlant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 0.16228124, g: 1, b: 0.035848916, a: 1}
+  m_Color: {r: 1, g: 0.77873516, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -121,7 +121,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!114 &-7572098155704673509
+--- !u!114 &1407668023263652863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,7 +130,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 6736001113723686055}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15c3fd97ab918ef4eba47344ca73b7f5, type: 3}
+  m_Script: {fileID: 11500000, guid: e65b7e910cf51b246bb167cb851a783b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growthTime: 5
+  growthTime: 3
+  attractionRadius: 10
+  reflectRadius: 0.5
+  reflectDamage: 5
+  reflectInterval: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  attractionColor: {r: 0.5, g: 1, b: 0.5, a: 0.3}
+  reflectColor: {r: 1, g: 0.5, b: 0.5, a: 0.5}
