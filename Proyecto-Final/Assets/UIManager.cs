@@ -6,6 +6,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI wavesText;
+    [SerializeField] TextMeshProUGUI enemiesRemainingText;
     private WaveSpawner waveSpawner;
 
     void Start()
@@ -17,7 +18,8 @@ public class UIManager : MonoBehaviour
     {
         if (waveSpawner != null)
         {
-            wavesText.text = "OLEADA: " + WaveSpawner.currentWave.ToString() + " / " + waveSpawner.totalWaves.ToString();
+            wavesText.text = "OLEADA: " + waveSpawner.GetCurrentWaveIndex().ToString() + " / " + waveSpawner.totalWaves.ToString();
+            enemiesRemainingText.text = "ENEMIGOS RESTANTES: " + waveSpawner.GetRemainingEnemies().ToString() + " / " + waveSpawner.GetEnemiesPerWave().ToString();
         }
     }
 }

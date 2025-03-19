@@ -55,8 +55,6 @@ public class LifeController : MonoBehaviour
         {
             Die();
         }
-
-        Debug.Log($"{gameObject.name} took {damage} damage. Current health: {currentHealth}/{maxHealth}");
     }
 
     public virtual void Die()

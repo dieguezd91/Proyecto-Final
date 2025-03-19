@@ -13,15 +13,35 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject selectedSeed; // Semilla seleccionada
     [SerializeField] private LayerMask plantingLayer; // Capa de parcelas
 
+    [SerializeField] private WaveSpawner gameStateController;
+
     private Vector2 moveInput;
+
+    private void Start()
+    {
+        if (gameStateController == null)
+        {
+            gameStateController = FindObjectOfType<WaveSpawner>();
+            if (gameStateController == null)
+            {
+                Debug.Log("No se encontro el WaveSpawner");
+            }
+        }
+    }
+
 
     void Update()
     {
         HandleMovement();
-        HandleAttack();
+
+        if (gameStateController != null && gameStateController.currentGameState == GameState.Night)
+        {
+            HandleAttack();
+        }
+
         RotatePlayer();
 
-        if (Input.GetMouseButtonDown(1)) // Clic derecho para plantar
+        if (Input.GetMouseButtonDown(1) && gameStateController != null && gameStateController.currentGameState == GameState.Day)
         {
             TryPlant();
         }
