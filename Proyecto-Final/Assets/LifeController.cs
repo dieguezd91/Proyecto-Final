@@ -18,6 +18,11 @@ public class LifeController : MonoBehaviour
     public UnityEvent onDeath;
     public UnityEvent<float, float> onHealthChanged;
 
+
+    [Header("ObjectDrop")]
+    [SerializeField] private GameObject objetDrop;
+
+
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isDead = false;
@@ -60,6 +65,13 @@ public class LifeController : MonoBehaviour
     public virtual void Die()
     {
         isDead = true;
+
+        // 50% de probabilidad de dropear el objeto(Abierto a ser modificado)
+        if (objetDrop != null && Random.value < 0.5f)
+        {
+            Instantiate(objetDrop, transform.position, Quaternion.identity);
+        }
+
         Debug.Log($"{gameObject.name} died");
 
         onDeath?.Invoke();
