@@ -5,41 +5,30 @@ using UnityEngine.Rendering.Universal;
 
 public class DayNightLightController : MonoBehaviour
 {
-    [Header("Referencias")]
+    [Header("References")]
     public Light2D globalLight;
-    public WaveSpawner waveSpawner;
 
-    [Header("Intensidad")]
+    [Header("Light Intensity")]
     public float dayLightIntensity = 1.0f;
     public float nightLightIntensity = 0.5f;
 
-    [Header("Transicion")]
+    [Header("Transition")]
     public float transitionDuration = 2.0f;
     public bool useSmoothTransition = true;
+    public float preTransitionTime = 3.0f;
 
     private Coroutine transitionCoroutine;
     private GameState lastGameState = GameState.None;
+    private bool isTransitioning = false;
 
     void Start()
     {
         if (globalLight == null)
         {
             globalLight = GetComponent<Light2D>();
-
             if (globalLight == null)
             {
-                Debug.Log("No se encontro Light2D");
-                enabled = false;
-                return;
-            }
-        }
-
-        if (waveSpawner == null)
-        {
-            waveSpawner = FindObjectOfType<WaveSpawner>();
-            if (waveSpawner == null)
-            {
-                Debug.Log("No se encontro el WaveSpawner");
+                Debug.LogError("Light2D component not found");
                 enabled = false;
                 return;
             }
@@ -47,15 +36,52 @@ public class DayNightLightController : MonoBehaviour
 
         UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
         lastGameState = GameManager.Instance.currentGameState;
+
+        if (GameManager.Instance != null)
+        {
+            StartCoroutine(MonitorDayTimeForPreTransition());
+        }
     }
 
     void Update()
     {
-        if (GameManager.Instance.currentGameState != lastGameState)
+        if (!isTransitioning && GameManager.Instance.currentGameState != lastGameState)
         {
             UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, useSmoothTransition);
             lastGameState = GameManager.Instance.currentGameState;
         }
+    }
+
+    private IEnumerator MonitorDayTimeForPreTransition()
+    {
+        while (true)
+        {
+            if (GameManager.Instance.currentGameState == GameState.Day &&
+                GameManager.Instance.currentDayTime <= preTransitionTime &&
+                !isTransitioning)
+            {
+                StartEarlyTransitionToNight();
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
+    private void StartEarlyTransitionToNight()
+    {
+        if (isTransitioning)
+            return;
+
+        Debug.Log("Starting early transition to night lighting");
+
+        float adjustedDuration = GameManager.Instance.currentDayTime;
+
+        if (transitionCoroutine != null)
+        {
+            StopCoroutine(transitionCoroutine);
+        }
+
+        transitionCoroutine = StartCoroutine(TransitionLightIntensity(nightLightIntensity, adjustedDuration));
     }
 
     void UpdateLightBasedOnGameState(GameState gameState, bool useTransition)
@@ -69,7 +95,7 @@ public class DayNightLightController : MonoBehaviour
                 StopCoroutine(transitionCoroutine);
             }
 
-            transitionCoroutine = StartCoroutine(TransitionLightIntensity(targetIntensity));
+            transitionCoroutine = StartCoroutine(TransitionLightIntensity(targetIntensity, transitionDuration));
         }
         else
         {
@@ -77,23 +103,37 @@ public class DayNightLightController : MonoBehaviour
         }
     }
 
-    IEnumerator TransitionLightIntensity(float targetIntensity)
+    IEnumerator TransitionLightIntensity(float targetIntensity, float duration)
     {
+        isTransitioning = true;
+
         float startIntensity = globalLight.intensity;
         float elapsedTime = 0f;
 
-        while (elapsedTime < transitionDuration)
+        while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / transitionDuration);
-
+            float t = Mathf.Clamp01(elapsedTime / duration);
             t = Mathf.SmoothStep(0, 1, t);
-
             globalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
             yield return null;
         }
 
         globalLight.intensity = targetIntensity;
         transitionCoroutine = null;
+        isTransitioning = false;
+    }
+
+    public void OnWavesCompleted()
+    {
+        if (GameManager.Instance.currentGameState == GameState.Night)
+        {
+            if (transitionCoroutine != null)
+            {
+                StopCoroutine(transitionCoroutine);
+            }
+
+            transitionCoroutine = StartCoroutine(TransitionLightIntensity(dayLightIntensity, transitionDuration));
+        }
     }
 }
