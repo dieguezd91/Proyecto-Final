@@ -243,7 +243,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &18894982
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -639,7 +638,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &409066308
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1314,11 +1312,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   globalLight: {fileID: 619394801}
-  waveSpawner: {fileID: 0}
-  dayLightIntensity: 1.25
+  dayLightIntensity: 1
   nightLightIntensity: 0.25
   transitionDuration: 2
   useSmoothTransition: 1
+  preTransitionTime: 3
 --- !u!1 &655522971
 GameObject:
   m_ObjectHideFlags: 0
@@ -1439,7 +1437,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &655522976
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1614,7 +1611,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &1064823670
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1996,7 +1992,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &1233553391
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2169,7 +2164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &1310530927
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3010,7 +3004,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &1876308284
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3306,6 +3299,10 @@ MonoBehaviour:
   gameOverDelay: 2
   dayDuration: 20.5
   currentDayTime: 0
+  dayCount: 0
+  onNewDay:
+    m_PersistentCalls:
+      m_Calls: []
   uiManager: {fileID: 0}
   currentGameState: 0
 --- !u!4 &1941896399
@@ -3577,7 +3574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &2037949705
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3750,7 +3746,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOccupied: 0
-  gameStateController: {fileID: 0}
 --- !u!212 &2053064347
 SpriteRenderer:
   m_ObjectHideFlags: 0
