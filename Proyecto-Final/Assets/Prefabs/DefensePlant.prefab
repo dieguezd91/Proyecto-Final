@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 1972390401
   m_SortingLayer: 2
   m_SortingOrder: 2
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
-  m_Color: {r: 1, g: 0.77873516, b: 0, a: 1}
+  m_Sprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -135,6 +135,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   daysToGrow: 1
+  healthMultiplierWhenMature: 1.5
+  plantSprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
   plantingDay: 0
   growthCompleted: 0
   attractionRadius: 10

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class Plant : MonoBehaviour
 {
@@ -10,6 +7,7 @@ public class Plant : MonoBehaviour
 
     [Header("Plant Settings")]
     public float healthMultiplierWhenMature = 1.5f;
+    public Sprite plantSprite;
 
     [Header("State")]
     [SerializeField] private int plantingDay = 0;
@@ -22,7 +20,7 @@ public class Plant : MonoBehaviour
 
     protected virtual void Start()
     {
-        initialScale = Vector3.one * 0.2f;
+        initialScale = Vector3.one * 0.3f;
         transform.localScale = initialScale;
 
         plantingDay = GameManager.Instance.GetCurrentDay();

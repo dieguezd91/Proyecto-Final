@@ -131,6 +131,14 @@ public class PlayerController : MonoBehaviour
 
     void TryPlant()
     {
+        GameObject selectedPlantPrefab = PlantInventory.Instance.GetSelectedPlantPrefab();
+
+        if (selectedPlantPrefab == null)
+        {
+            Debug.Log("No hay planta seleccionada o el slot está vacío");
+            return;
+        }
+
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, plantingLayer);
 
@@ -139,9 +147,8 @@ public class PlayerController : MonoBehaviour
             PlantingSpot spot = hit.collider.GetComponent<PlantingSpot>();
             if (spot != null)
             {
-                spot.Plant(selectedSeed);
+                spot.Plant(selectedPlantPrefab);
             }
         }
     }
-
 }

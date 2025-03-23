@@ -23,6 +23,19 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject HUD;
     public Button mainMenuButton;
+    public GameObject plantSlots;
+
+    [Header("Plant Slots")]
+    [SerializeField] private GameObject[] slotObjects = new GameObject[5];
+    [SerializeField] private Image[] slotIcons = new Image[5];
+    [SerializeField] private Image[] slotBackgrounds = new Image[5];
+    [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
+
+    [Header("Selection")]
+    [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
+    [SerializeField] private Color selectedColor = Color.white;
+    [SerializeField] private float selectedScale = 1.2f;
+    [SerializeField] private float normalScale = 1.0f;
 
     private WaveSpawner waveSpawner;
     private LifeController playerLife;
@@ -58,6 +71,19 @@ public class UIManager : MonoBehaviour
             }
         }
 
+        if (PlantInventory.Instance != null)
+        {
+            PlantInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
+
+            InitializeSlotUI();
+
+            UpdateSelectedSlotUI(PlantInventory.Instance.GetSelectedSlotIndex());
+        }
+        else
+        {
+            Debug.LogError("PlantInventory instance not found!");
+        }
+
         UpdateUIElementsVisibility();
     }
 
@@ -81,6 +107,14 @@ public class UIManager : MonoBehaviour
             HUD.SetActive(false);
     }
 
+    private void OnDestroy()
+    {
+        if (PlantInventory.Instance != null)
+        {
+            PlantInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
+        }
+    }
+
     private void UpdateUIElementsVisibility()
     {
         if (GameManager.Instance != null)
@@ -90,12 +124,14 @@ public class UIManager : MonoBehaviour
                 if (timeText != null) timeText.gameObject.SetActive(true);
                 if (wavesText != null) wavesText.gameObject.SetActive(false);
                 if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(false);
+                if(plantSlots != null) plantSlots.gameObject.SetActive(true);
             }
             else if (GameManager.Instance.currentGameState == GameState.Night)
             {
                 if (timeText != null) timeText.gameObject.SetActive(false);
                 if (wavesText != null) wavesText.gameObject.SetActive(true);
                 if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(true);
+                if(plantSlots != null) plantSlots.gameObject.SetActive(false);
             }
         }
     }
@@ -137,6 +173,53 @@ public class UIManager : MonoBehaviour
                 int minutes = Mathf.FloorToInt(GameManager.Instance.currentDayTime / 60);
                 int seconds = Mathf.FloorToInt(GameManager.Instance.currentDayTime % 60);
                 timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            }
+        }
+    }
+
+    private void InitializeSlotUI()
+    {
+        for (int i = 0; i < slotObjects.Length; i++)
+        {
+            if (slotObjects[i] != null)
+            {
+                PlantSlot plantSlot = PlantInventory.Instance.GetPlantSlot(i);
+
+                if (plantSlot != null && plantSlot.plantPrefab != null)
+                {
+                    if (slotIcons[i] != null)
+                    {
+                        slotIcons[i].sprite = plantSlot.plantIcon;
+                        slotIcons[i].preserveAspect = true;
+                        slotIcons[i].gameObject.SetActive(true);
+                    }
+
+                    if (slotNumbers[i] != null)
+                    {
+                        slotNumbers[i].text = (i + 1).ToString();
+                    }
+                }
+                else
+                {
+                    if (slotIcons[i] != null)
+                    {
+                        slotIcons[i].gameObject.SetActive(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private void UpdateSelectedSlotUI(int selectedIndex)
+    {
+        for (int i = 0; i < slotObjects.Length; i++)
+        {
+            if (slotBackgrounds[i] != null)
+            {
+                slotBackgrounds[i].color = (i == selectedIndex) ? selectedColor : normalColor;
+                slotObjects[i].transform.localScale = (i == selectedIndex) ?
+                    new Vector3(selectedScale, selectedScale, 1f) :
+                    new Vector3(normalScale, normalScale, 1f);
             }
         }
     }
