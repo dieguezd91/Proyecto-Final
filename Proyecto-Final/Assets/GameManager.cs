@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.Events;
 
 public enum GameState
 {
@@ -14,15 +16,19 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    [Header("Referencias")]
+    [Header("References")]
     [SerializeField] private GameObject player;
     [SerializeField] private WaveSpawner waveSpawner;
 
-    [Header("Settings")]
+    [Header("Day/Night Settings")]
     [SerializeField] private float gameOverDelay = 2f;
     [SerializeField] private float dayDuration = 60f;
     public float currentDayTime;
     private bool isCycleRunning = false;
+
+    [Header("Day Counter")]
+    [SerializeField] private int dayCount = 0;
+    public UnityEvent<int> onNewDay;
 
     private LifeController playerLife;
     public UIManager uiManager;
@@ -40,6 +46,9 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        if (onNewDay == null)
+            onNewDay = new UnityEvent<int>();
     }
 
     void Start()
@@ -74,6 +83,7 @@ public class GameManager : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
         }
 
+        dayCount = 1;
         SetGameState(GameState.Day);
         StartDayCycle();
     }
@@ -93,7 +103,9 @@ public class GameManager : MonoBehaviour
 
         SetGameState(GameState.Day);
 
-        Debug.Log("Iniciando ciclo dia");
+        Debug.Log($"Starting day cycle. Day #{dayCount}");
+
+        onNewDay.Invoke(dayCount);
     }
 
     private void UpdateDayCycle()
@@ -116,14 +128,16 @@ public class GameManager : MonoBehaviour
 
     private void TransitionToNight()
     {
-        Debug.Log("Transicion a noche");
+        Debug.Log("Transitioning to night");
 
         SetGameState(GameState.Night);
     }
 
     private void HandleAllWavesCompleted()
     {
-        Debug.Log("Todas las oleadas completadas, transicion a día");
+        Debug.Log("All waves completed, transitioning to day");
+
+        dayCount++;
 
         SetGameState(GameState.Day);
         StartDayCycle();
@@ -139,7 +153,7 @@ public class GameManager : MonoBehaviour
         if (currentGameState == newState)
             return;
 
-        Debug.Log($"Cambiando estado del juego: {currentGameState} -> {newState}");
+        Debug.Log($"Changing game state: {currentGameState} -> {newState}");
         currentGameState = newState;
 
         switch (newState)
@@ -172,7 +186,7 @@ public class GameManager : MonoBehaviour
 
         SetGameState(GameState.GameOver);
 
-        if (uiManager.gameOverPanel != null)
+        if (uiManager != null && uiManager.gameOverPanel != null)
         {
             uiManager.gameOverPanel.SetActive(true);
         }
@@ -181,5 +195,15 @@ public class GameManager : MonoBehaviour
     public void ReturnToMainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public int GetCurrentDay()
+    {
+        return dayCount;
+    }
+
+    public void ResetDayCount()
+    {
+        dayCount = 1;
     }
 }

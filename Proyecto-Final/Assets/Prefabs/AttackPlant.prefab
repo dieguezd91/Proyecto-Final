@@ -218,7 +218,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89585a63adcd9d44baed2fc42979903, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growthTime: 5
+  daysToGrow: 2
+  growthPercentagePerDay: 0.33
+  daysPassed: 0
+  growthCompleted: 0
   projectile: {fileID: 8215708087478250761, guid: 7be1d34f96524d146b1731c0190452b8, type: 3}
   firePoint: {fileID: 5461837167220732977}
   cooldown: 2

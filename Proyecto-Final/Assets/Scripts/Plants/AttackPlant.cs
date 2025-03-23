@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AttackPlant : Plant
 {
-    [Header("Configuración de Ataque")]
+    [Header("Attack Configuration")]
     public GameObject projectile;
     public Transform firePoint;
     public float cooldown = 2f;
@@ -32,7 +32,7 @@ public class AttackPlant : Plant
     {
         base.Update();
 
-        canShoot = timer >= (growthTime * 0.5f);
+        canShoot = IsFullyGrown();
 
         if (canShoot)
         {
@@ -41,15 +41,14 @@ public class AttackPlant : Plant
             if (target != null)
             {
                 attackTimer += Time.deltaTime;
-
                 if (attackTimer >= cooldown)
                 {
                     Shoot();
                     attackTimer = 0f;
                 }
 
-                Vector3 dir = target.position - transform.position;
-                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
+                Vector3 direction = target.position - transform.position;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
                 firePoint.rotation = Quaternion.Euler(0, 0, angle);
             }
         }
@@ -58,7 +57,6 @@ public class AttackPlant : Plant
     void DetectEnemies()
     {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, detectionRange, enemyLayer);
-
         float closestDistance = Mathf.Infinity;
         Transform closestEnemy = null;
 
@@ -67,7 +65,6 @@ public class AttackPlant : Plant
             if (enemy.GetComponent<Enemy>() != null)
             {
                 float distance = Vector2.Distance(transform.position, enemy.transform.position);
-
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -84,14 +81,21 @@ public class AttackPlant : Plant
         if (projectile != null && target != null)
         {
             GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
-            Spell projectile = projectileObj.GetComponent<Spell>();
+            Spell projectileComponent = projectileObj.GetComponent<Spell>();
 
-            if (projectile != null)
+            if (projectileComponent != null)
             {
-                Vector2 direccion = (target.position - firePoint.position).normalized;
-                projectile.SetDirection(direccion);
+                Vector2 direction = (target.position - firePoint.position).normalized;
+                projectileComponent.SetDirection(direction);
             }
         }
+    }
+
+    protected override void OnMature()
+    {
+        base.OnMature();
+
+        Debug.Log("AttackPlant: Plant is now fully grown and ready to attack!");
     }
 
     void OnDrawGizmosSelected()

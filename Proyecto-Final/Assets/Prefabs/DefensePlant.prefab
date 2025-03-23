@@ -133,7 +133,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e65b7e910cf51b246bb167cb851a783b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  growthTime: 3
+  daysToGrow: 1
+  growthPercentagePerDay: 0.33
+  daysPassed: 0
+  growthCompleted: 0
   attractionRadius: 10
   reflectRadius: 0.5
   reflectDamage: 5

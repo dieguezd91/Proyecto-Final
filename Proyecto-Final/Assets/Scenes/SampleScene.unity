@@ -1315,8 +1315,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   globalLight: {fileID: 619394801}
   waveSpawner: {fileID: 0}
-  dayLightIntensity: 1
-  nightLightIntensity: 0.5
+  dayLightIntensity: 1.25
+  nightLightIntensity: 0.25
   transitionDuration: 2
   useSmoothTransition: 1
 --- !u!1 &655522971
@@ -1754,6 +1754,51 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1183111613
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1183111615}
+  - component: {fileID: 1183111614}
+  m_Layer: 0
+  m_Name: PlantManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1183111614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183111613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ddda18fe3fc68743825ba826e8a15ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notifyPlantsOnNewDay: 1
+--- !u!4 &1183111615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1183111613}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.8275137, y: 5.76946, z: -0.0073848986}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1219387010
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,8 +2485,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   player: {fileID: 0}
   gameOverPanel: {fileID: 1219387010}
-  HUD: {fileID: 0}
-  mainMenuButton: {fileID: 0}
+  HUD: {fileID: 1411225868}
+  mainMenuButton: {fileID: 1451657337}
 --- !u!1 &1451657335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3867,3 +3912,4 @@ SceneRoots:
   - {fileID: 1941896399}
   - {fileID: 1826054071}
   - {fileID: 763792347}
+  - {fileID: 1183111615}

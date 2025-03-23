@@ -33,12 +33,11 @@ public class DefensePlant : Plant
     {
         base.Update();
 
-        canReflect = timer >= (growthTime * 0.5f);
+        canReflect = IsFullyGrown();
 
         if (canReflect)
         {
             AttractEnemies();
-
             reflectTimer += Time.deltaTime;
             if (reflectTimer >= reflectInterval)
             {
@@ -51,23 +50,18 @@ public class DefensePlant : Plant
     void AttractEnemies()
     {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attractionRadius, enemyLayer);
-
         enemiesAttracted.Clear();
 
         foreach (Collider2D enemigo in enemiesInRange)
         {
             Enemy enemy = enemigo.GetComponent<Enemy>();
-
             if (enemy != null)
             {
                 if (enemy.player != transform)
                 {
                     Transform player = enemy.player;
-
                     enemy.player = transform;
-
                     enemiesAttracted.Add(enemy);
-
                     StartCoroutine(RestoreTarget(enemy, player, 10f));
                 }
             }
@@ -77,7 +71,6 @@ public class DefensePlant : Plant
     IEnumerator RestoreTarget(Enemy enemy, Transform originalTarget, float time)
     {
         yield return new WaitForSeconds(time);
-
         if (enemy != null && enemy.gameObject.activeInHierarchy)
         {
             enemy.player = originalTarget;
@@ -87,11 +80,9 @@ public class DefensePlant : Plant
     void ReflectDamage()
     {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, reflectRadius, enemyLayer);
-
         foreach (Collider2D enemy in enemiesInRange)
         {
             LifeController enemyHealth = enemy.GetComponent<LifeController>();
-
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(reflectDamage);
@@ -99,17 +90,23 @@ public class DefensePlant : Plant
         }
     }
 
-    public void TakeDamage(float daño)
+    public void TakeDamage(float damage)
     {
         if (lifeController != null)
         {
-            lifeController.TakeDamage(daño);
-
+            lifeController.TakeDamage(damage);
             if (canReflect)
             {
                 ReflectDamage();
             }
         }
+    }
+
+    protected override void OnMature()
+    {
+        base.OnMature();
+
+        Debug.Log("DefensePlant: Plant is now fully grown and ready to defend!");
     }
 
     void OnDrawGizmosSelected()
