@@ -26,12 +26,17 @@ public class AttackPlant : Plant
             point.transform.localPosition = new Vector3(0, 0.5f, 0);
             firePoint = point.transform;
         }
+
+        LifeController lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.maxHealth = 100f;
+            lifeController.currentHealth = lifeController.maxHealth;
+        }
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
-
         canShoot = IsFullyGrown();
 
         if (canShoot)
@@ -96,6 +101,9 @@ public class AttackPlant : Plant
         base.OnMature();
 
         Debug.Log("AttackPlant: Plant is now fully grown and ready to attack!");
+
+        cooldown *= 0.7f;
+        detectionRange *= 1.2f;
     }
 
     void OnDrawGizmosSelected()

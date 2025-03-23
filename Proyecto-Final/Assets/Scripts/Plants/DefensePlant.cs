@@ -13,7 +13,6 @@ public class DefensePlant : Plant
     public Color attractionColor = new Color(0.5f, 1f, 0.5f, 0.3f);
     public Color reflectColor = new Color(1f, 0.5f, 0.5f, 0.5f);
 
-    private LifeController lifeController;
     private float reflectTimer = 0f;
     private bool canReflect = false;
     private List<Enemy> enemiesAttracted = new List<Enemy>();
@@ -22,17 +21,16 @@ public class DefensePlant : Plant
     {
         base.Start();
 
-        lifeController = GetComponent<LifeController>();
-        if (lifeController == null)
+        LifeController lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
         {
-            lifeController = gameObject.AddComponent<LifeController>();
+            lifeController.maxHealth = 150f;
+            lifeController.currentHealth = lifeController.maxHealth;
         }
     }
 
-    protected override void Update()
+    private void Update()
     {
-        base.Update();
-
         canReflect = IsFullyGrown();
 
         if (canReflect)
@@ -90,23 +88,20 @@ public class DefensePlant : Plant
         }
     }
 
-    public void TakeDamage(float damage)
-    {
-        if (lifeController != null)
-        {
-            lifeController.TakeDamage(damage);
-            if (canReflect)
-            {
-                ReflectDamage();
-            }
-        }
-    }
-
     protected override void OnMature()
     {
         base.OnMature();
 
         Debug.Log("DefensePlant: Plant is now fully grown and ready to defend!");
+
+        LifeController lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.maxHealth *= 2f;
+            lifeController.currentHealth = lifeController.maxHealth;
+
+            lifeController.onHealthChanged?.Invoke(lifeController.currentHealth, lifeController.maxHealth);
+        }
     }
 
     void OnDrawGizmosSelected()

@@ -7,19 +7,28 @@ public class Enemy : MonoBehaviour
     [Header("References")]
     public Transform player;
 
-    [Header("Settings")]
+    [Header("Target Settings")]
+    public float playerPriority = 1.0f;
+    public float plantPriority = 1.2f;
+    public LayerMask plantLayer;
+
+    [Header("Movement Settings")]
     public float moveSpeed = 3f;
     public float detectionDistance = 10f;
     public float attackDistance = 1.5f;
+
+    [Header("Combat Settings")]
     public float damage = 10f;
     public float attackCooldown = 1f;
 
     [Header("State")]
     public bool canAttack = true;
-    public bool chasingPlayer = false;
+    public bool chasingTarget = false;
 
     private Rigidbody2D rb;
     private Vector2 direction;
+    private Transform currentTarget;
+    private string currentTargetType = "none";
 
     void Start()
     {
@@ -37,32 +46,81 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (player == null)
-            return;
+        FindClosestTarget();
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= detectionDistance)
+        if (currentTarget != null)
         {
-            chasingPlayer = true;
+            float distanceToTarget = Vector2.Distance(transform.position, currentTarget.position);
 
-            direction = (player.position - transform.position).normalized;
-
-            if (distanceToPlayer <= attackDistance && canAttack)
+            if (distanceToTarget <= detectionDistance)
             {
-                Attack();
+                chasingTarget = true;
+                direction = (currentTarget.position - transform.position).normalized;
+
+                if (distanceToTarget <= attackDistance && canAttack)
+                {
+                    Attack();
+                }
+            }
+            else
+            {
+                chasingTarget = false;
+                direction = Vector2.zero;
             }
         }
         else
         {
-            chasingPlayer = false;
+            chasingTarget = false;
             direction = Vector2.zero;
         }
     }
 
+    void FindClosestTarget()
+    {
+        float closestDistance = Mathf.Infinity;
+        Transform closestTarget = null;
+        string targetType = "none";
+
+        if (player != null)
+        {
+            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+            float adjustedDistance = distanceToPlayer / playerPriority;
+
+            if (adjustedDistance < closestDistance && distanceToPlayer <= detectionDistance)
+            {
+                closestDistance = adjustedDistance;
+                closestTarget = player;
+                targetType = "player";
+            }
+        }
+
+        Collider2D[] nearbyPlants = Physics2D.OverlapCircleAll(transform.position, detectionDistance, plantLayer);
+
+        foreach (Collider2D plantCollider in nearbyPlants)
+        {
+            Plant plant = plantCollider.GetComponent<Plant>();
+
+            if (plant != null)
+            {
+                float distanceToPlant = Vector2.Distance(transform.position, plantCollider.transform.position);
+                float adjustedDistance = distanceToPlant / plantPriority;
+
+                if (adjustedDistance < closestDistance)
+                {
+                    closestDistance = adjustedDistance;
+                    closestTarget = plantCollider.transform;
+                    targetType = "plant";
+                }
+            }
+        }
+
+        currentTarget = closestTarget;
+        currentTargetType = targetType;
+    }
+
     void FixedUpdate()
     {
-        if (chasingPlayer)
+        if (chasingTarget)
         {
             rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
 
@@ -76,12 +134,24 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        Debug.Log("Enemy attacking player!");
-
-        LifeController playerHealth = player.GetComponent<LifeController>();
-        if (playerHealth != null)
+        if (currentTargetType == "player")
         {
-            playerHealth.TakeDamage(damage);
+            Debug.Log("Enemy attacking player!");
+            LifeController targetHealth = currentTarget.GetComponent<LifeController>();
+            if (targetHealth != null)
+            {
+                targetHealth.TakeDamage(damage);
+            }
+        }
+        else if (currentTargetType == "plant")
+        {
+            Debug.Log("Enemy attacking plant!");
+
+            LifeController plantHealth = currentTarget.GetComponent<LifeController>();
+            if (plantHealth != null)
+            {
+                plantHealth.TakeDamage(damage);
+            }
         }
 
         StartCoroutine(AttackCooldown());
@@ -101,5 +171,15 @@ public class Enemy : MonoBehaviour
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackDistance);
+
+        if (currentTarget != null)
+        {
+            if (currentTargetType == "player")
+                Gizmos.color = Color.blue;
+            else if (currentTargetType == "plant")
+                Gizmos.color = Color.green;
+
+            Gizmos.DrawLine(transform.position, currentTarget.position);
+        }
     }
 }
