@@ -9,7 +9,6 @@ public class UIManager : MonoBehaviour
     [Header("Textos")]
     [SerializeField] TextMeshProUGUI wavesText;
     [SerializeField] TextMeshProUGUI enemiesRemainingText;
-    [SerializeField] TextMeshProUGUI timeText;
 
     [Header("Barra de Vida")]
     [SerializeField] private Slider healthBar;
@@ -24,6 +23,8 @@ public class UIManager : MonoBehaviour
     public GameObject HUD;
     public Button mainMenuButton;
     public GameObject plantSlots;
+    [SerializeField] private Button startNightButton;
+    [SerializeField] private GameObject dayControlPanel;
 
     [Header("Plant Slots")]
     [SerializeField] private GameObject[] slotObjects = new GameObject[5];
@@ -79,9 +80,10 @@ public class UIManager : MonoBehaviour
 
             UpdateSelectedSlotUI(PlantInventory.Instance.GetSelectedSlotIndex());
         }
-        else
+
+        if (startNightButton != null)
         {
-            Debug.LogError("PlantInventory instance not found!");
+            startNightButton.onClick.AddListener(OnStartNightButtonClicked);
         }
 
         UpdateUIElementsVisibility();
@@ -94,8 +96,6 @@ public class UIManager : MonoBehaviour
             wavesText.text = "OLEADA: " + waveSpawner.GetCurrentWaveIndex().ToString() + " / " + waveSpawner.totalWaves.ToString();
             enemiesRemainingText.text = "ENEMIGOS RESTANTES: " + waveSpawner.GetRemainingEnemies().ToString() + " / " + waveSpawner.GetEnemiesPerWave().ToString();
         }
-
-        UpdateTimeUI();
 
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != lastGameState)
         {
@@ -121,17 +121,19 @@ public class UIManager : MonoBehaviour
         {
             if (GameManager.Instance.currentGameState == GameState.Day)
             {
-                if (timeText != null) timeText.gameObject.SetActive(true);
                 if (wavesText != null) wavesText.gameObject.SetActive(false);
                 if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(false);
-                if(plantSlots != null) plantSlots.gameObject.SetActive(true);
+                if (plantSlots != null) plantSlots.gameObject.SetActive(true);
+                if (dayControlPanel != null) dayControlPanel.SetActive(true);
+                if (startNightButton != null) startNightButton.gameObject.SetActive(true);
             }
             else if (GameManager.Instance.currentGameState == GameState.Night)
             {
-                if (timeText != null) timeText.gameObject.SetActive(false);
                 if (wavesText != null) wavesText.gameObject.SetActive(true);
                 if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(true);
-                if(plantSlots != null) plantSlots.gameObject.SetActive(false);
+                if (plantSlots != null) plantSlots.gameObject.SetActive(false);
+                if (dayControlPanel != null) dayControlPanel.SetActive(false);
+                if (startNightButton != null) startNightButton.gameObject.SetActive(false);
             }
         }
     }
@@ -161,19 +163,6 @@ public class UIManager : MonoBehaviour
         if (fillImage != null && healthGradient != null)
         {
             fillImage.color = healthGradient.Evaluate(healthPercentage);
-        }
-    }
-
-    public void UpdateTimeUI()
-    {
-        if (timeText != null && GameManager.Instance != null)
-        {
-            if (GameManager.Instance.currentGameState == GameState.Day)
-            {
-                int minutes = Mathf.FloorToInt(GameManager.Instance.currentDayTime / 60);
-                int seconds = Mathf.FloorToInt(GameManager.Instance.currentDayTime % 60);
-                timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-            }
         }
     }
 
@@ -221,6 +210,14 @@ public class UIManager : MonoBehaviour
                     new Vector3(selectedScale, selectedScale, 1f) :
                     new Vector3(normalScale, normalScale, 1f);
             }
+        }
+    }
+
+    private void OnStartNightButtonClicked()
+    {
+        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Day)
+        {
+            GameManager.Instance.ManualTransitionToNight();
         }
     }
 }

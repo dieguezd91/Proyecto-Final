@@ -36,11 +36,6 @@ public class DayNightLightController : MonoBehaviour
 
         UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
         lastGameState = GameManager.Instance.currentGameState;
-
-        if (GameManager.Instance != null)
-        {
-            StartCoroutine(MonitorDayTimeForPreTransition());
-        }
     }
 
     void Update()
@@ -50,38 +45,6 @@ public class DayNightLightController : MonoBehaviour
             UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, useSmoothTransition);
             lastGameState = GameManager.Instance.currentGameState;
         }
-    }
-
-    private IEnumerator MonitorDayTimeForPreTransition()
-    {
-        while (true)
-        {
-            if (GameManager.Instance.currentGameState == GameState.Day &&
-                GameManager.Instance.currentDayTime <= preTransitionTime &&
-                !isTransitioning)
-            {
-                StartEarlyTransitionToNight();
-            }
-
-            yield return new WaitForSeconds(0.1f);
-        }
-    }
-
-    private void StartEarlyTransitionToNight()
-    {
-        if (isTransitioning)
-            return;
-
-        Debug.Log("Starting early transition to night lighting");
-
-        float adjustedDuration = GameManager.Instance.currentDayTime;
-
-        if (transitionCoroutine != null)
-        {
-            StopCoroutine(transitionCoroutine);
-        }
-
-        transitionCoroutine = StartCoroutine(TransitionLightIntensity(nightLightIntensity, adjustedDuration));
     }
 
     void UpdateLightBasedOnGameState(GameState gameState, bool useTransition)

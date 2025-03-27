@@ -22,9 +22,6 @@ public class GameManager : MonoBehaviour
 
     [Header("Day/Night Settings")]
     [SerializeField] private float gameOverDelay = 2f;
-    [SerializeField] private float dayDuration = 60f;
-    public float currentDayTime;
-    private bool isCycleRunning = false;
 
     [Header("Day Counter")]
     [SerializeField] private int dayCount = 0;
@@ -88,41 +85,19 @@ public class GameManager : MonoBehaviour
         StartDayCycle();
     }
 
-    void Update()
-    {
-        if (isCycleRunning && currentGameState != GameState.Paused && currentGameState != GameState.GameOver)
-        {
-            UpdateDayCycle();
-        }
-    }
-
     private void StartDayCycle()
     {
-        currentDayTime = dayDuration;
-        isCycleRunning = true;
-
         SetGameState(GameState.Day);
-
         Debug.Log($"Starting day cycle. Day #{dayCount}");
-
         onNewDay.Invoke(dayCount);
     }
 
-    private void UpdateDayCycle()
+    public void ManualTransitionToNight()
     {
         if (currentGameState == GameState.Day)
         {
-            currentDayTime -= Time.deltaTime;
-
-            if (uiManager != null)
-            {
-                uiManager.UpdateTimeUI();
-            }
-
-            if (currentDayTime <= 0)
-            {
-                TransitionToNight();
-            }
+            Debug.Log("Manual transition to night");
+            SetGameState(GameState.Night);
         }
     }
 
