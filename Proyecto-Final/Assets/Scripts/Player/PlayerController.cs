@@ -11,6 +11,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform firePoint; // Punto desde donde se dispara
     [SerializeField] private float bulletSpeed = 10f; // Velocidad de la bala
 
+    [Header("Spell Cooldown")]
+    [SerializeField] private float spellCooldown = 0.5f;
+    private float nextFireTime = 0f;
+
     [Header("Plant System")]
     [SerializeField] private GameObject attackPlantPrefab; // Prefab de planta de ataque
     [SerializeField] private GameObject defensePlantPrefab; // Prefab de planta de defensa
@@ -34,6 +38,7 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateSelectedPlant();
+
     }
 
 
@@ -66,9 +71,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
-        if (Input.GetMouseButtonDown(0)) // Click izquierdo durante la noche
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // Mantener Click izquierdo durante la noche + cooldown
         {
             Shoot();
+            nextFireTime = Time.time + spellCooldown;
         }
     }
 
