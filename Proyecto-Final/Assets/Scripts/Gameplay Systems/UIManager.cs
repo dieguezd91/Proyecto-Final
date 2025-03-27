@@ -6,10 +6,6 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Textos")]
-    [SerializeField] TextMeshProUGUI wavesText;
-    [SerializeField] TextMeshProUGUI enemiesRemainingText;
-
     [Header("Barra de Vida")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
@@ -21,7 +17,7 @@ public class UIManager : MonoBehaviour
     [Header("UI")]
     public GameObject gameOverPanel;
     public GameObject HUD;
-    public Button mainMenuButton;
+    public Button restartButton;
     public GameObject plantSlots;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
@@ -38,14 +34,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
 
-    private WaveSpawner waveSpawner;
     private LifeController playerLife;
     private GameState lastGameState = GameState.None;
 
     void Start()
     {
-        waveSpawner = FindObjectOfType<WaveSpawner>();
-
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player");
@@ -66,9 +59,9 @@ public class UIManager : MonoBehaviour
         {
             gameOverPanel.SetActive(false);
 
-            if (mainMenuButton != null)
+            if (restartButton != null)
             {
-                mainMenuButton.onClick.AddListener(GameManager.Instance.ReturnToMainMenu);
+                restartButton.onClick.AddListener(GameManager.Instance.Restart);
             }
         }
 
@@ -91,12 +84,6 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        if (waveSpawner != null)
-        {
-            wavesText.text = "OLEADA: " + waveSpawner.GetCurrentWaveIndex().ToString() + " / " + waveSpawner.totalWaves.ToString();
-            enemiesRemainingText.text = "ENEMIGOS RESTANTES: " + waveSpawner.GetRemainingEnemies().ToString() + " / " + waveSpawner.GetEnemiesPerWave().ToString();
-        }
-
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != lastGameState)
         {
             UpdateUIElementsVisibility();
@@ -121,16 +108,12 @@ public class UIManager : MonoBehaviour
         {
             if (GameManager.Instance.currentGameState == GameState.Day)
             {
-                if (wavesText != null) wavesText.gameObject.SetActive(false);
-                if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(false);
                 if (plantSlots != null) plantSlots.gameObject.SetActive(true);
                 if (dayControlPanel != null) dayControlPanel.SetActive(true);
                 if (startNightButton != null) startNightButton.gameObject.SetActive(true);
             }
             else if (GameManager.Instance.currentGameState == GameState.Night)
             {
-                if (wavesText != null) wavesText.gameObject.SetActive(true);
-                if (enemiesRemainingText != null) enemiesRemainingText.gameObject.SetActive(true);
                 if (plantSlots != null) plantSlots.gameObject.SetActive(false);
                 if (dayControlPanel != null) dayControlPanel.SetActive(false);
                 if (startNightButton != null) startNightButton.gameObject.SetActive(false);

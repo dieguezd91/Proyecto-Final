@@ -15,7 +15,6 @@ public class DayNightLightController : MonoBehaviour
     [Header("Transition")]
     public float transitionDuration = 2.0f;
     public bool useSmoothTransition = true;
-    public float preTransitionTime = 3.0f;
 
     private Coroutine transitionCoroutine;
     private GameState lastGameState = GameState.None;
@@ -87,7 +86,7 @@ public class DayNightLightController : MonoBehaviour
         isTransitioning = false;
     }
 
-    public void OnWavesCompleted()
+    public void OnHordeCompleted()
     {
         if (GameManager.Instance.currentGameState == GameState.Night)
         {

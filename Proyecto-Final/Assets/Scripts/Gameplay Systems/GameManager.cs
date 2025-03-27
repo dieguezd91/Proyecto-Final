@@ -18,9 +18,9 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject player;
-    [SerializeField] private WaveSpawner waveSpawner;
+    [SerializeField] private EnemiesSpawner waveSpawner;
 
-    [Header("Day/Night Settings")]
+    [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
 
     [Header("Day Counter")]
@@ -67,11 +67,11 @@ public class GameManager : MonoBehaviour
 
         if (waveSpawner == null)
         {
-            waveSpawner = FindObjectOfType<WaveSpawner>();
+            waveSpawner = FindObjectOfType<EnemiesSpawner>();
 
             if (waveSpawner != null)
             {
-                waveSpawner.onAllWavesCompleted.AddListener(HandleAllWavesCompleted);
+                waveSpawner.onHordeEnd.AddListener(HandleHordeCompleted);
             }
         }
 
@@ -88,7 +88,6 @@ public class GameManager : MonoBehaviour
     private void StartDayCycle()
     {
         SetGameState(GameState.Day);
-        Debug.Log($"Starting day cycle. Day #{dayCount}");
         onNewDay.Invoke(dayCount);
     }
 
@@ -96,22 +95,12 @@ public class GameManager : MonoBehaviour
     {
         if (currentGameState == GameState.Day)
         {
-            Debug.Log("Manual transition to night");
             SetGameState(GameState.Night);
         }
     }
 
-    private void TransitionToNight()
+    private void HandleHordeCompleted()
     {
-        Debug.Log("Transitioning to night");
-
-        SetGameState(GameState.Night);
-    }
-
-    private void HandleAllWavesCompleted()
-    {
-        Debug.Log("All waves completed, transitioning to day");
-
         dayCount++;
 
         SetGameState(GameState.Day);
@@ -128,7 +117,6 @@ public class GameManager : MonoBehaviour
         if (currentGameState == newState)
             return;
 
-        Debug.Log($"Changing game state: {currentGameState} -> {newState}");
         currentGameState = newState;
 
         switch (newState)
@@ -167,11 +155,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ReturnToMainMenu()
-    {
-        SceneManager.LoadScene("MainMenu");
-    }
-
     public int GetCurrentDay()
     {
         return dayCount;
@@ -180,5 +163,10 @@ public class GameManager : MonoBehaviour
     public void ResetDayCount()
     {
         dayCount = 1;
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(sceneBuildIndex:0);
     }
 }

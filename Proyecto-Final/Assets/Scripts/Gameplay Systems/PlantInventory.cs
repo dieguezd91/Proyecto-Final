@@ -55,7 +55,6 @@ public class PlantInventory : MonoBehaviour
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
         {
             selectedSlotIndex = slotIndex;
-            Debug.Log($"Selected plant slot: {slotIndex + 1} - {GetSelectedPlantName()}");
 
             onSlotSelected?.Invoke(selectedSlotIndex);
         }

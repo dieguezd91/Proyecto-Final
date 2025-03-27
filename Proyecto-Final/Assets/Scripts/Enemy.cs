@@ -136,7 +136,6 @@ public class Enemy : MonoBehaviour
     {
         if (currentTargetType == "player")
         {
-            Debug.Log("Enemy attacking player!");
             LifeController targetHealth = currentTarget.GetComponent<LifeController>();
             if (targetHealth != null)
             {
@@ -145,8 +144,6 @@ public class Enemy : MonoBehaviour
         }
         else if (currentTargetType == "plant")
         {
-            Debug.Log("Enemy attacking plant!");
-
             LifeController plantHealth = currentTarget.GetComponent<LifeController>();
             if (plantHealth != null)
             {

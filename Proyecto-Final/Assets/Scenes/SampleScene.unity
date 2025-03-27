@@ -1506,7 +1506,7 @@ MonoBehaviour:
   - {fileID: -1265987127, guid: 7cb5a37b9f73ef14bb93cd27646e13b6, type: 3}
   - {fileID: 1378811103, guid: 7cb5a37b9f73ef14bb93cd27646e13b6, type: 3}
   - {fileID: -1254528567, guid: 7cb5a37b9f73ef14bb93cd27646e13b6, type: 3}
-  randomInitialPhase: 0
+  randomInitialPhase: 1
   initialPhase: 0
   cyclicProgression: 1
   onMoonPhaseChanged:
@@ -1635,7 +1635,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 6.75
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1693,7 +1693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
-  m_AssetsPPU: 16
+  m_AssetsPPU: 12
   m_RefResolutionX: 384
   m_RefResolutionY: 216
   m_CropFrame: 0
@@ -46758,7 +46758,6 @@ MonoBehaviour:
   nightLightIntensity: 0.25
   transitionDuration: 2
   useSmoothTransition: 1
-  preTransitionTime: 3
 --- !u!1 &650316742
 GameObject:
   m_ObjectHideFlags: 0
@@ -89688,9 +89687,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5df826d0ecb382749a97e0511459e1c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wavesText: {fileID: 119787892}
-  enemiesRemainingText: {fileID: 1945777663}
-  timeText: {fileID: 0}
   healthBar: {fileID: 376833003}
   fillImage: {fileID: 493894218}
   healthGradient:
@@ -89817,7 +89813,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -50, y: 50}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1451657337
 MonoBehaviour:
@@ -90049,53 +90045,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1554365507}
-  - component: {fileID: 1554365506}
+  - component: {fileID: 1554365508}
   m_Layer: 0
-  m_Name: WaveSpawner
+  m_Name: EnemiesSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1554365506
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1554365505}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c893c09afb0fba4fbc336bd6f3f3e54, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoStartNextWave: 1
-  timeBetweenWaves: 5
-  spawnPoints:
-  - {fileID: 2144092062}
-  - {fileID: 436532928}
-  - {fileID: 1382646446}
-  - {fileID: 1840893556}
-  useRandomSpawnPoint: 1
-  dontSpawnWhenPlayerNearby: 1
-  playerCheckRadius: 20
-  onWaveStart:
-    m_PersistentCalls:
-      m_Calls: []
-  onWaveEnd:
-    m_PersistentCalls:
-      m_Calls: []
-  onAllWavesCompleted:
-    m_PersistentCalls:
-      m_Calls: []
-  onWaveProgress:
-    m_PersistentCalls:
-      m_Calls: []
-  enemyPrefab: {fileID: 654258422932643597, guid: cbec6260f6e304b499c47224480c584f, type: 3}
-  timeBetweenSpawns: 5
-  totalEnemies: 3
-  totalWaves: 3
-  currentWave: 0
 --- !u!4 &1554365507
 Transform:
   m_ObjectHideFlags: 0
@@ -90111,6 +90068,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1554365508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554365505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cc40d102b1a7a41b460bb5809d54a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useContinuousHordeSystem: 1
+  baseEnemiesPerNight: 15
+  enemiesPerNightIncrement: 5
+  difficultyScalingFactor: 1.2
+  baseSpawnInterval: 5
+  minSpawnInterval: 0.3
+  spawnIntervalDecreasePerDay: 0.1
+  spawnPoints:
+  - {fileID: 2144092062}
+  - {fileID: 436532928}
+  - {fileID: 1382646446}
+  - {fileID: 1840893556}
+  useRandomSpawnPoint: 1
+  dontSpawnWhenPlayerNearby: 1
+  playerCheckRadius: 5
+  onHordeStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHordeEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnemySpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  onHordeProgress:
+    m_PersistentCalls:
+      m_Calls: []
+  enemyPrefab: {fileID: 654258422932643597, guid: cbec6260f6e304b499c47224480c584f, type: 3}
 --- !u!1 &1671811627
 GameObject:
   m_ObjectHideFlags: 0
@@ -90700,7 +90697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: MAIN MENU
+  m_text: restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -90709,8 +90706,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -90733,7 +90730,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 17
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

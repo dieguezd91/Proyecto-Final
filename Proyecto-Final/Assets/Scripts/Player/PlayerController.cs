@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask plantingLayer; // Capa de parcelas
     private int selectedPlantType = 1;
 
-    [SerializeField] private WaveSpawner gameStateController;
+    [SerializeField] private EnemiesSpawner gameStateController;
 
     private Vector2 moveInput;
 
@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     {
         if (gameStateController == null)
         {
-            gameStateController = FindObjectOfType<WaveSpawner>();
+            gameStateController = FindObjectOfType<EnemiesSpawner>();
             if (gameStateController == null)
             {
                 Debug.Log("No se encontró el WaveSpawner");

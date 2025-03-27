@@ -37,7 +37,6 @@ public class PlantManager : MonoBehaviour
         if (lastGameState == GameState.Night && currentState == GameState.Day)
         {
             dayCounter++;
-            Debug.Log($"PlantManager: A new day has begun! Day #{dayCounter}");
 
             if (notifyPlantsOnNewDay)
             {
@@ -72,8 +71,6 @@ public class PlantManager : MonoBehaviour
         {
             plant.SendMessage("OnNewDay", dayCounter, SendMessageOptions.DontRequireReceiver);
         }
-
-        Debug.Log($"PlantManager: Notified new day to {registeredPlants.Count} plants");
     }
 
     public int GetDayCounter()
@@ -84,6 +81,5 @@ public class PlantManager : MonoBehaviour
     public void ResetDayCounter()
     {
         dayCounter = 0;
-        Debug.Log("PlantManager: Day counter reset");
     }
 }
