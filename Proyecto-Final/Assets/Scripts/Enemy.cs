@@ -6,10 +6,12 @@ public class Enemy : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
+    public Transform home; 
 
     [Header("Target Settings")]
     public float playerPriority = 1.0f;
     public float plantPriority = 1.2f;
+    public float homePriority = 1.5f; 
     public LayerMask plantLayer;
 
     [Header("Movement Settings")]
@@ -41,6 +43,13 @@ public class Enemy : MonoBehaviour
             {
                 player = playerObject.transform;
             }
+        }
+
+        
+        GameObject homeObject = GameObject.FindGameObjectWithTag("Home");
+        if (homeObject != null)
+        {
+            home = homeObject.transform;
         }
     }
 
@@ -81,6 +90,7 @@ public class Enemy : MonoBehaviour
         Transform closestTarget = null;
         string targetType = "none";
 
+        
         if (player != null)
         {
             float distanceToPlayer = Vector2.Distance(transform.position, player.position);
@@ -94,6 +104,7 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        
         Collider2D[] nearbyPlants = Physics2D.OverlapCircleAll(transform.position, detectionDistance, plantLayer);
 
         foreach (Collider2D plantCollider in nearbyPlants)
@@ -111,6 +122,20 @@ public class Enemy : MonoBehaviour
                     closestTarget = plantCollider.transform;
                     targetType = "plant";
                 }
+            }
+        }
+
+        
+        if (home != null)
+        {
+            float distanceToHome = Vector2.Distance(transform.position, home.position);
+            float adjustedDistance = distanceToHome / homePriority;
+
+            if (adjustedDistance < closestDistance && distanceToHome <= detectionDistance)
+            {
+                closestDistance = adjustedDistance;
+                closestTarget = home;
+                targetType = "home";
             }
         }
 
@@ -134,20 +159,12 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        if (currentTargetType == "player")
+        if (currentTargetType == "player" || currentTargetType == "plant" || currentTargetType == "home")
         {
             LifeController targetHealth = currentTarget.GetComponent<LifeController>();
             if (targetHealth != null)
             {
                 targetHealth.TakeDamage(damage);
-            }
-        }
-        else if (currentTargetType == "plant")
-        {
-            LifeController plantHealth = currentTarget.GetComponent<LifeController>();
-            if (plantHealth != null)
-            {
-                plantHealth.TakeDamage(damage);
             }
         }
 
@@ -175,6 +192,8 @@ public class Enemy : MonoBehaviour
                 Gizmos.color = Color.blue;
             else if (currentTargetType == "plant")
                 Gizmos.color = Color.green;
+            else if (currentTargetType == "home")
+                Gizmos.color = Color.magenta;
 
             Gizmos.DrawLine(transform.position, currentTarget.position);
         }

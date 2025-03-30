@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
 
     [Header("Game Settings")]
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent<int> onNewDay;
 
     private LifeController playerLife;
+    private LifeController HomeLife;
     public UIManager uiManager;
     public GameState currentGameState;
 
@@ -42,7 +44,7 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject); (lo que ocasionaba el bug de que se quedara en noche)
 
         if (onNewDay == null)
             onNewDay = new UnityEvent<int>();
@@ -64,6 +66,26 @@ public class GameManager : MonoBehaviour
                 playerLife.onDeath.AddListener(HandlePlayerDeath);
             }
         }
+
+
+
+
+        if (home == null)
+        {
+            home = GameObject.FindGameObjectWithTag("Home");
+        }
+
+        if (home != null)
+        {
+            HomeLife = home.GetComponent<LifeController>();
+
+            if (HomeLife != null)
+            {
+                HomeLife.onDeath.AddListener(HandleHomeDeath);
+            }
+        }
+
+
 
         if (waveSpawner == null)
         {
@@ -142,6 +164,11 @@ public class GameManager : MonoBehaviour
     {
         StartCoroutine(ShowGameOverAfterDelay());
     }
+    
+    private void HandleHomeDeath()
+    {
+        StartCoroutine(ShowGameOverAfterDelay());
+    }
 
     private IEnumerator ShowGameOverAfterDelay()
     {
@@ -167,6 +194,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
+        SetGameState(GameState.Day);
         SceneManager.LoadScene(sceneBuildIndex:0);
     }
 }
