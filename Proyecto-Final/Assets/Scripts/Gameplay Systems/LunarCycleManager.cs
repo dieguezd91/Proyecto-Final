@@ -48,7 +48,7 @@ public class LunarCycleManager : MonoBehaviour
 
 
         UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-        UnityEngine.Cursor.visible = false;
+        //UnityEngine.Cursor.visible = false;
 
 
     }
