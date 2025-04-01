@@ -51,8 +51,6 @@ public class PlayerController : MonoBehaviour
             HandleAttack();
         }
 
-        RotatePlayer();
-
         HandlePlantSelection();
 
         if (Input.GetMouseButtonDown(1) && gameStateController != null && GameManager.Instance.currentGameState == GameState.Day) //click derecho durante el dia
@@ -125,14 +123,6 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = direction * bulletSpeed;
             }
         }
-    }
-
-    void RotatePlayer()
-    {
-        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 lookDir = mousePos - rb.position;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-        rb.rotation = angle;
     }
 
     void TryPlant()
