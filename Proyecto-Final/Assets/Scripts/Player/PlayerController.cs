@@ -18,13 +18,20 @@ public class PlayerController : MonoBehaviour
     [Header("Plant System")]
     [SerializeField] private GameObject attackPlantPrefab; // Prefab de planta de ataque
     [SerializeField] private GameObject defensePlantPrefab; // Prefab de planta de defensa
+    [SerializeField] private GameObject resourcePlantPrefab; // Prefab de planta de recursos
     [SerializeField] private GameObject selectedSeed; // Semilla actualmente seleccionada
     [SerializeField] private LayerMask plantingLayer; // Capa de parcelas
     private int selectedPlantType = 1;
 
+    [Header("Harvest System")]
+    [SerializeField] private float interactionDistance = 2f; // Distancia maxima para interactuar con plantas
+    [SerializeField] private GameObject harvestInProgressIcon; // barra que aparece sobre el jugador durante la cosecha
+
     [SerializeField] private EnemiesSpawner gameStateController;
 
     private Vector2 moveInput;
+    private bool isHarvesting = false;
+    private ResourcePlant currentHarvestPlant = null;
 
     private void Start()
     {
@@ -39,12 +46,19 @@ public class PlayerController : MonoBehaviour
 
         UpdateSelectedPlant();
 
+        if (harvestInProgressIcon != null)
+        {
+            harvestInProgressIcon.SetActive(false);
+        }
     }
-
 
     void Update()
     {
-        HandleMovement();
+        // No permitir movimiento durante la cosecha
+        if (!isHarvesting)
+        {
+            HandleMovement();
+        }
 
         if (gameStateController != null && GameManager.Instance.currentGameState == GameState.Night)
         {
@@ -53,9 +67,22 @@ public class PlayerController : MonoBehaviour
 
         HandlePlantSelection();
 
-        if (Input.GetMouseButtonDown(1) && gameStateController != null && GameManager.Instance.currentGameState == GameState.Day) //click derecho durante el dia
+        // Plantar con clic derecho durante el dia
+        if (Input.GetMouseButtonDown(1) && gameStateController != null &&
+            GameManager.Instance.currentGameState == GameState.Day && !isHarvesting)
         {
             TryPlant();
+        }
+
+        // Interactuar con planta cercana con E
+        if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.currentGameState == GameState.Day && !isHarvesting)
+        {
+            TryInteractWithNearestPlant();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape) && isHarvesting)
+        {
+            CancelHarvest();
         }
     }
 
@@ -146,5 +173,116 @@ public class PlayerController : MonoBehaviour
                 spot.Plant(selectedPlantPrefab);
             }
         }
+    }
+
+    void TryInteractWithNearestPlant()
+    {
+        if (GameManager.Instance.currentGameState != GameState.Day)
+        {
+            Debug.Log("Solo puedes cosechar plantas durante el día");
+            return;
+        }
+
+        List<ResourcePlant> harvestablePlants = PlantManager.Instance.GetHarvestablePlants();
+
+        if (harvestablePlants.Count == 0)
+        {
+            Debug.Log("No hay plantas listas para cosechar");
+            return;
+        }
+
+        ResourcePlant closestPlant = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (ResourcePlant plant in harvestablePlants)
+        {
+            float distance = Vector2.Distance(transform.position, plant.transform.position);
+
+            if (distance < interactionDistance && distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPlant = plant;
+            }
+        }
+
+        if (closestPlant != null)
+        {
+            StartHarvesting(closestPlant);
+        }
+    }
+
+    void StartHarvesting(ResourcePlant plant)
+    {
+        if (plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
+            return;
+
+        currentHarvestPlant = plant;
+        isHarvesting = true;
+
+        if (harvestInProgressIcon != null)
+        {
+            harvestInProgressIcon.SetActive(true);
+        }
+
+        plant.StartHarvest();
+
+        StartCoroutine(MonitorHarvest());
+    }
+
+    private IEnumerator MonitorHarvest()
+    {
+        while (isHarvesting && currentHarvestPlant != null)
+        {
+            if (Vector2.Distance(transform.position, currentHarvestPlant.transform.position) > interactionDistance)
+            {
+                CancelHarvest();
+                yield break;
+            }
+
+            if (!currentHarvestPlant.IsBeingHarvested())
+            {
+                CompleteHarvest();
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    void CancelHarvest()
+    {
+        if (!isHarvesting || currentHarvestPlant == null)
+            return;
+
+        currentHarvestPlant.CancelHarvest();
+
+        isHarvesting = false;
+
+        if (harvestInProgressIcon != null)
+        {
+            harvestInProgressIcon.SetActive(false);
+        }
+
+        Debug.Log("Cosecha cancelada");
+        currentHarvestPlant = null;
+    }
+
+    void CompleteHarvest()
+    {
+        isHarvesting = false;
+
+        if (harvestInProgressIcon != null)
+        {
+            harvestInProgressIcon.SetActive(false);
+        }
+
+        Debug.Log("Cosecha completada");
+        currentHarvestPlant = null;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, interactionDistance);
     }
 }

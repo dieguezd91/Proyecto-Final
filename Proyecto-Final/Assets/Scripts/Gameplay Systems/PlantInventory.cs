@@ -21,7 +21,7 @@ public class PlantInventory : MonoBehaviour
     [SerializeField] private int selectedSlotIndex = 0;
 
     [Header("UI Events")]
-    public System.Action<int> onSlotSelected;
+    public Action<int> onSlotSelected;
 
     private void Awake()
     {
