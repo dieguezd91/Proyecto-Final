@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float interactionDistance = 2f; // Distancia maxima para interactuar con plantas
     [SerializeField] private GameObject harvestInProgressIcon; // barra que aparece sobre el jugador durante la cosecha
 
+    private bool movementEnabled = true;
+
     [SerializeField] private EnemiesSpawner gameStateController;
 
     private Vector2 moveInput;
@@ -88,6 +90,16 @@ public class PlayerController : MonoBehaviour
 
     void HandleMovement()
     {
+        if (!movementEnabled)
+        {
+            return;
+        }
+
+        if (isHarvesting)
+        {
+            return;
+        }
+
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
@@ -158,7 +170,7 @@ public class PlayerController : MonoBehaviour
 
         if (selectedPlantPrefab == null)
         {
-            Debug.Log("No hay planta seleccionada o el slot está vacío");
+            Debug.Log("No hay planta seleccionada o el slot esta vacio");
             return;
         }
 
@@ -179,7 +191,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState != GameState.Day)
         {
-            Debug.Log("Solo puedes cosechar plantas durante el día");
+            Debug.Log("Solo puedes cosechar plantas durante el dia");
             return;
         }
 
@@ -278,6 +290,11 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("Cosecha completada");
         currentHarvestPlant = null;
+    }
+
+    public void SetMovementEnabled(bool enabled)
+    {
+        movementEnabled = enabled;
     }
 
     private void OnDrawGizmosSelected()

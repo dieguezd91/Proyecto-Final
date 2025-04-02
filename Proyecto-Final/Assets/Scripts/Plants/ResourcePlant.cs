@@ -9,6 +9,8 @@ public class ResourcePlant : Plant
     [SerializeField] private int minimumResourceAmount = 1;
     [SerializeField] private int maximumResourceAmount = 5;
     [SerializeField] private string resourceType = "Wood";
+    [SerializeField] private Sprite resourceSprite;
+
 
     [Header("HARVEST SETTINGS")]
     [SerializeField] private float harvestDuration = 2f;
@@ -67,7 +69,7 @@ public class ResourcePlant : Plant
         isProducing = false;
         isReadyToHarvest = true;
 
-        Debug.Log($"ResourcePlant: Resources ready to harvest!");
+        Debug.Log($"Resources ready to harvest");
     }
 
     public bool IsReadyToHarvest()
@@ -87,7 +89,6 @@ public class ResourcePlant : Plant
 
         if (GameManager.Instance.currentGameState != GameState.Day)
         {
-            Debug.Log("Can only harvest plants during the day!");
             return;
         }
 
@@ -139,8 +140,6 @@ public class ResourcePlant : Plant
         {
             harvestProgressIndicator.SetActive(false);
         }
-
-        Debug.Log("Harvest canceled!");
     }
 
     private void CompleteHarvest()
@@ -152,6 +151,18 @@ public class ResourcePlant : Plant
         if (ResourceInventory.Instance != null)
         {
             ResourceInventory.Instance.AddResource(resourceType, resourceAmount);
+
+            ResourceInventoryUI inventoryUI = FindObjectOfType<ResourceInventoryUI>();
+            if (inventoryUI != null && inventoryUI.gameObject.activeInHierarchy)
+            {
+                inventoryUI.UpdateAllSlots();
+            }
+        }
+
+        Sprite resourceSprite = GetResourceSprite();
+        if (resourceSprite != null)
+        {
+            ResourceInventory.Instance.SetResourceIcon(resourceType, resourceSprite);
         }
 
         Debug.Log($"ResourcePlant: Harvested {resourceAmount} of {resourceType}");
@@ -174,6 +185,11 @@ public class ResourcePlant : Plant
         {
             GameManager.Instance.onNewDay.RemoveListener(CheckProduction);
         }
+    }
+
+    private Sprite GetResourceSprite()
+    {
+        return resourceSprite;
     }
 
     void OnMouseDown()

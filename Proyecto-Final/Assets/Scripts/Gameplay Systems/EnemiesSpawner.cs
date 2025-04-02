@@ -318,4 +318,47 @@ public class EnemiesSpawner : MonoBehaviour
             }
         }
     }
+
+    public void EndNight()
+    {
+    
+        if (GameManager.Instance.currentGameState != GameState.Night)
+        {
+            return;
+        }
+
+        Debug.Log("Terminando noche para testeo");
+
+        if (continuousSpawnCoroutine != null)
+        {
+            StopCoroutine(continuousSpawnCoroutine);
+            continuousSpawnCoroutine = null;
+        }
+
+        List<GameObject> enemiesCopy = new List<GameObject>(activeEnemies);
+        foreach (GameObject enemy in enemiesCopy)
+        {
+            if (enemy != null)
+            {
+                LifeController enemyLife = enemy.GetComponent<LifeController>();
+                if (enemyLife != null)
+                {
+                    enemyLife.Kill();
+                }
+                else
+                {
+                    Destroy(enemy);
+                    OnEnemyDeath(enemy);
+                }
+            }
+        }
+
+        totalEnemiesKilled = totalEnemiesToKill;
+        currentEnemiesAlive = 0;
+        activeEnemies.Clear();
+
+        hordeCompleted = true;
+        StopContinuousHorde(true);
+    }
+    
 }

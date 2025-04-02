@@ -67,9 +67,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
-
-
         if (home == null)
         {
             home = GameObject.FindGameObjectWithTag("Home");
@@ -84,8 +81,6 @@ public class GameManager : MonoBehaviour
                 HomeLife.onDeath.AddListener(HandleHomeDeath);
             }
         }
-
-
 
         if (waveSpawner == null)
         {
@@ -105,6 +100,18 @@ public class GameManager : MonoBehaviour
         dayCount = 1;
         SetGameState(GameState.Day);
         StartDayCycle();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            EnemiesSpawner spawner = FindObjectOfType<EnemiesSpawner>();
+            if (spawner != null)
+            {
+                spawner.EndNight();
+            }
+        }
     }
 
     private void StartDayCycle()

@@ -32,8 +32,18 @@ public class UIManager : MonoBehaviour
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
 
+    [Header("Inventory System")]
+    [SerializeField] private GameObject inventoryPanel;
+    [SerializeField] private KeyCode toggleInventoryKey = KeyCode.I;
+    [SerializeField] private KeyCode alternateToggleKey = KeyCode.Tab;
+    [SerializeField] private bool closeInventoryOnEscape = true;
+    [SerializeField] private bool disablePlayerMovementWhenOpen = true;
+    [SerializeField] private ResourceInventoryUI inventoryUI;
+
     private LifeController playerLife;
     private GameState lastGameState = GameState.None;
+    private bool isInventoryOpen = false;
+    private PlayerController playerController;
 
     void Start()
     {
@@ -45,6 +55,7 @@ public class UIManager : MonoBehaviour
         if (player != null)
         {
             playerLife = player.GetComponent<LifeController>();
+            playerController = player.GetComponent<PlayerController>();
 
             if (playerLife != null)
             {
@@ -77,6 +88,8 @@ public class UIManager : MonoBehaviour
             startNightButton.onClick.AddListener(OnStartNightButtonClicked);
         }
 
+        InitializeInventory();
+
         UpdateUIElementsVisibility();
     }
 
@@ -88,8 +101,10 @@ public class UIManager : MonoBehaviour
             lastGameState = GameManager.Instance.currentGameState;
         }
 
-        if(gameOverPanel.activeInHierarchy) 
+        if (gameOverPanel.activeInHierarchy)
             HUD.SetActive(false);
+
+        HandleInventoryInput();
     }
 
     private void OnDestroy()
@@ -199,6 +214,105 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Day)
         {
             GameManager.Instance.ManualTransitionToNight();
+        }
+    }
+
+    private void InitializeInventory()
+    {
+        if (inventoryPanel == null)
+        {
+            inventoryPanel = GameObject.FindGameObjectWithTag("InventoryPanel");
+        }
+
+        if (inventoryUI == null && inventoryPanel != null)
+        {
+            inventoryUI = inventoryPanel.GetComponent<ResourceInventoryUI>();
+        }
+
+        if (inventoryPanel != null)
+        {
+            inventoryPanel.SetActive(false);
+            isInventoryOpen = false;
+        }
+    }
+
+    private void HandleInventoryInput()
+    {
+        if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
+        {
+            ToggleInventory();
+        }
+
+        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
+        {
+            CloseInventory();
+        }
+    }
+
+    public void ToggleInventory()
+    {
+        if (isInventoryOpen)
+        {
+            CloseInventory();
+        }
+        else
+        {
+            OpenInventory();
+        }
+    }
+
+    public void OpenInventory()
+    {
+        if (inventoryPanel == null) return;
+
+        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Day)
+        {
+            Debug.Log("El inventario solo puede abrirse durante el dia");
+            return;
+        }
+
+        inventoryPanel.SetActive(true);
+        isInventoryOpen = true;
+
+        if (inventoryUI != null)
+        {
+            inventoryUI.UpdateAllSlots();
+            inventoryUI.ForceRefresh();
+        }
+
+        if (disablePlayerMovementWhenOpen && playerController != null)
+        {
+            playerController.SetMovementEnabled(false);
+        }
+
+        Debug.Log("Inventario abierto");
+    }
+
+    public void CloseInventory()
+    {
+        if (inventoryPanel == null) return;
+
+        inventoryPanel.SetActive(false);
+        isInventoryOpen = false;
+
+        if (disablePlayerMovementWhenOpen && playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
+        Debug.Log("Inventario cerrado");
+    }
+
+    public bool IsInventoryOpen() => isInventoryOpen;
+
+    public void SetInventoryOpen(bool open)
+    {
+        if (open != isInventoryOpen)
+        {
+            if (open)
+                OpenInventory();
+            else
+                CloseInventory();
         }
     }
 }

@@ -9,7 +9,6 @@ public class Item : MonoBehaviour
         if (collision.gameObject.layer == 7)
         {
             Destroy(gameObject);
-
         }
     }
 }

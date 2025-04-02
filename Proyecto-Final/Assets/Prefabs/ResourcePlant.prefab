@@ -104,10 +104,11 @@ MonoBehaviour:
   plantSprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
   plantingDay: 0
   growthCompleted: 0
-  daysToProduceResources: 1
+  daysToProduceResources: 0
   minimumResourceAmount: 1
   maximumResourceAmount: 5
   resourceType: Wood
+  resourceSprite: {fileID: -548959778, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
   harvestDuration: 3
   harvestProgressIndicator: {fileID: 15842525385593699, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
   progressFillImage: {fileID: 9017968677981647369, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}

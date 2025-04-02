@@ -101,4 +101,10 @@ public class LifeController : MonoBehaviour
     {
         return !isDead;
     }
+
+    public void Kill()
+    {
+        currentHealth = 0;
+        TakeDamage(float.MaxValue);
+    }
 }
