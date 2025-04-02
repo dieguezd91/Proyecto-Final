@@ -148,12 +148,6 @@ public class Enemy : MonoBehaviour
         if (chasingTarget)
         {
             rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
-
-            if (direction != Vector2.zero)
-            {
-                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-                rb.rotation = angle;
-            }
         }
     }
 
