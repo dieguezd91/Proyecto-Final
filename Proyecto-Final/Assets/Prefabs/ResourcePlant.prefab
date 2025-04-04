@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4770226047096915269}
   - component: {fileID: 5857128013590860986}
   - component: {fileID: 8677157461743698191}
+  - component: {fileID: 3245187508673565278}
   m_Layer: 9
   m_Name: ResourcePlant
   m_TagString: Untagged
@@ -76,8 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 1972390401
   m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Sprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,6 +105,7 @@ MonoBehaviour:
   plantSprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
   plantingDay: 0
   growthCompleted: 0
+  unityAnim: {fileID: 0}
   daysToProduceResources: 0
   minimumResourceAmount: 1
   maximumResourceAmount: 5
@@ -172,3 +174,24 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!95 &3245187508673565278
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3214456861987219935}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3abb79d5e9990b94c8769662115043c6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

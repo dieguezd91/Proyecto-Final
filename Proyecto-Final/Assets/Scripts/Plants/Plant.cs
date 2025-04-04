@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Plant : MonoBehaviour
 {
@@ -18,10 +20,19 @@ public class Plant : MonoBehaviour
     private LifeController lifeController;
     private PlantingSpot plantingSpot;
 
+    public Animator unityAnim;
+    private string currentState;
+    const string PlayStartingDay = "PlantSeed";
+    const string PlayMiddleDay = "PlantRoots";
+    const string PlayLastDay = "PlantFlowering";
+    const string PlayFullyGrown = "PlantGrown";
+
     protected virtual void Start()
     {
+        unityAnim = GetComponent<Animator>();
         initialScale = Vector3.one * 0.3f;
         transform.localScale = initialScale;
+
 
         plantingDay = GameManager.Instance.GetCurrentDay();
 
@@ -53,6 +64,13 @@ public class Plant : MonoBehaviour
         }
     }
 
+    void ChangeAnimationState(string newState)
+    {
+        if (currentState == newState) return;
+        unityAnim.Play(newState);
+        currentState = newState;
+    }
+
     private void OnNewDay(int currentDay)
     {
         UpdateGrowthStatus(currentDay);
@@ -69,6 +87,8 @@ public class Plant : MonoBehaviour
 
         transform.localScale = Vector3.Lerp(initialScale, finalScale, progress);
 
+        ChangeAnimationState(PlayMiddleDay);
+
         if (daysSincePlanting >= daysToGrow)
         {
             CompleteGrowth();
@@ -82,7 +102,7 @@ public class Plant : MonoBehaviour
         growthCompleted = true;
         transform.localScale = finalScale;
         Debug.Log("Plant: Growth completed");
-
+        ChangeAnimationState(PlayFullyGrown);
         OnMature();
     }
 
