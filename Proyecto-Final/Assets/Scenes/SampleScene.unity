@@ -441,14 +441,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5216656, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1576750221, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1130,8 +1130,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -1001860351, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1341,8 +1341,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -1001860351, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -47078,14 +47078,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5216656, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -1594061710, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -47641,14 +47641,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.5216656, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -596440827, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -47770,8 +47770,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -1001860351, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -48463,7 +48463,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -99, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &872478862
@@ -48520,8 +48520,8 @@ MonoBehaviour:
   m_fontSizeMin: 0.1
   m_fontSizeMax: 20
   m_fontStyle: 16
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -90406,7 +90406,7 @@ Tilemap:
       - {fileID: -171425245, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: -1397025881, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: 258470968, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
-      m_AnimationSpeed: 5
+      m_AnimationSpeed: 5.0000005
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -21, y: -1, z: 0}
@@ -92372,7 +92372,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -99, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1182610075
@@ -92429,8 +92429,8 @@ MonoBehaviour:
   m_fontSizeMin: 0.1
   m_fontSizeMax: 20
   m_fontStyle: 16
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -92696,7 +92696,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -99, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1264400305
@@ -92753,8 +92753,8 @@ MonoBehaviour:
   m_fontSizeMin: 0.1
   m_fontSizeMax: 20
   m_fontStyle: 16
-  m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_HorizontalAlignment: 4
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -94588,7 +94588,7 @@ MonoBehaviour:
   plantSlots:
   - plantPrefab: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
     plantName: Attack Plant
-    plantIcon: {fileID: -596440827, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    plantIcon: {fileID: -2039217953, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     daysToGrow: 2
     description: 
   - plantPrefab: {fileID: 6736001113723686055, guid: a0286c64e2e6c4a4a9c4554ba174ecd3, type: 3}
@@ -94598,7 +94598,7 @@ MonoBehaviour:
     description: 
   - plantPrefab: {fileID: 3214456861987219935, guid: a3b61fa3938157140ad7b6fa0d84403f, type: 3}
     plantName: Resource Plant
-    plantIcon: {fileID: -1480615387, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
+    plantIcon: {fileID: -473241699, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     daysToGrow: 1
     description: 
   selectedSlotIndex: 0
