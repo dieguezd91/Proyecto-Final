@@ -82,6 +82,16 @@ public class ResourcePlant : Plant
         return isBeingHarvested;
     }
 
+    public float GetHarvestDuration()
+    {
+        return harvestDuration;
+    }
+
+    public void CompletedHarvest()
+    {
+        CompleteHarvest();
+    }
+
     public void StartHarvest()
     {
         if (!isReadyToHarvest || isBeingHarvested)

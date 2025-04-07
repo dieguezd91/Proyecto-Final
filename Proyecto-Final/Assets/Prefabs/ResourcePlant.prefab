@@ -107,13 +107,14 @@ MonoBehaviour:
   growthCompleted: 0
   unityAnim: {fileID: 0}
   daysToProduceResources: 0
-  minimumResourceAmount: 1
+  minimumResourceAmount: 2
   maximumResourceAmount: 5
   resourceType: Wood
   resourceSprite: {fileID: -548959778, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
   harvestDuration: 3
   harvestProgressIndicator: {fileID: 15842525385593699, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
   progressFillImage: {fileID: 9017968677981647369, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
+  useLocalProgressBar: 0
 --- !u!114 &5857128013590860986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,8 +172,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Offset: {x: 0, y: -0.11380887}
+  m_Size: {x: 1, y: 1.7723823}
   m_Direction: 0
 --- !u!95 &3245187508673565278
 Animator:

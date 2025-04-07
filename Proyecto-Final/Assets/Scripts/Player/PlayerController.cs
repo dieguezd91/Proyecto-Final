@@ -15,25 +15,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float spellCooldown = 0.5f;
     private float nextFireTime = 0f;
 
-    [Header("Plant System")]
-    [SerializeField] private GameObject attackPlantPrefab; // Prefab de planta de ataque
-    [SerializeField] private GameObject defensePlantPrefab; // Prefab de planta de defensa
-    [SerializeField] private GameObject resourcePlantPrefab; // Prefab de planta de recursos
-    [SerializeField] private GameObject selectedSeed; // Semilla actualmente seleccionada
-    [SerializeField] private LayerMask plantingLayer; // Capa de parcelas
-    private int selectedPlantType = 1;
-
-    [Header("Harvest System")]
-    [SerializeField] private float interactionDistance = 2f; // Distancia maxima para interactuar con plantas
-    [SerializeField] private GameObject harvestInProgressIcon; // barra que aparece sobre el jugador durante la cosecha
-
-    private bool movementEnabled = true;
-
+    [Header("Referencias")]
     [SerializeField] private EnemiesSpawner gameStateController;
+    [SerializeField] private PlayerAbilitySystem abilitySystem;
 
     private Vector2 moveInput;
-    private bool isHarvesting = false;
-    private ResourcePlant currentHarvestPlant = null;
+    private bool movementEnabled = true;
 
     private void Start()
     {
@@ -46,18 +33,15 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        UpdateSelectedPlant();
-
-        if (harvestInProgressIcon != null)
+        if (abilitySystem == null)
         {
-            harvestInProgressIcon.SetActive(false);
+            abilitySystem = GetComponent<PlayerAbilitySystem>();
         }
     }
 
     void Update()
     {
-        // No permitir movimiento durante la cosecha
-        if (!isHarvesting)
+        if (!abilitySystem.IsHarvesting())
         {
             HandleMovement();
         }
@@ -66,36 +50,11 @@ public class PlayerController : MonoBehaviour
         {
             HandleAttack();
         }
-
-        HandlePlantSelection();
-
-        // Plantar con clic derecho durante el dia
-        if (Input.GetMouseButtonDown(1) && gameStateController != null &&
-            GameManager.Instance.currentGameState == GameState.Day && !isHarvesting)
-        {
-            TryPlant();
-        }
-
-        // Interactuar con planta cercana con E
-        if (Input.GetKeyDown(KeyCode.E) && GameManager.Instance.currentGameState == GameState.Day && !isHarvesting)
-        {
-            TryInteractWithNearestPlant();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape) && isHarvesting)
-        {
-            CancelHarvest();
-        }
     }
 
     void HandleMovement()
     {
         if (!movementEnabled)
-        {
-            return;
-        }
-
-        if (isHarvesting)
         {
             return;
         }
@@ -108,36 +67,10 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime) // Mantener Click izquierdo durante la noche + cooldown
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             Shoot();
             nextFireTime = Time.time + spellCooldown;
-        }
-    }
-
-    void HandlePlantSelection()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            selectedPlantType = 1;
-            UpdateSelectedPlant();
-        }
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            selectedPlantType = 2;
-            UpdateSelectedPlant();
-        }
-    }
-
-    void UpdateSelectedPlant()
-    {
-        if (selectedPlantType == 1 && attackPlantPrefab != null)
-        {
-            selectedSeed = attackPlantPrefab;
-        }
-        else if (selectedPlantType == 2 && defensePlantPrefab != null)
-        {
-            selectedSeed = defensePlantPrefab;
         }
     }
 
@@ -164,142 +97,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void TryPlant()
-    {
-        GameObject selectedPlantPrefab = PlantInventory.Instance.GetSelectedPlantPrefab();
-
-        if (selectedPlantPrefab == null)
-        {
-            Debug.Log("No hay planta seleccionada o el slot esta vacio");
-            return;
-        }
-
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, plantingLayer);
-
-        if (hit.collider != null)
-        {
-            PlantingSpot spot = hit.collider.GetComponent<PlantingSpot>();
-            if (spot != null)
-            {
-                spot.Plant(selectedPlantPrefab);
-            }
-        }
-    }
-
-    void TryInteractWithNearestPlant()
-    {
-        if (GameManager.Instance.currentGameState != GameState.Day)
-        {
-            Debug.Log("Solo puedes cosechar plantas durante el dia");
-            return;
-        }
-
-        List<ResourcePlant> harvestablePlants = PlantManager.Instance.GetHarvestablePlants();
-
-        if (harvestablePlants.Count == 0)
-        {
-            Debug.Log("No hay plantas listas para cosechar");
-            return;
-        }
-
-        ResourcePlant closestPlant = null;
-        float closestDistance = float.MaxValue;
-
-        foreach (ResourcePlant plant in harvestablePlants)
-        {
-            float distance = Vector2.Distance(transform.position, plant.transform.position);
-
-            if (distance < interactionDistance && distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestPlant = plant;
-            }
-        }
-
-        if (closestPlant != null)
-        {
-            StartHarvesting(closestPlant);
-        }
-    }
-
-    void StartHarvesting(ResourcePlant plant)
-    {
-        if (plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
-            return;
-
-        currentHarvestPlant = plant;
-        isHarvesting = true;
-
-        if (harvestInProgressIcon != null)
-        {
-            harvestInProgressIcon.SetActive(true);
-        }
-
-        plant.StartHarvest();
-
-        StartCoroutine(MonitorHarvest());
-    }
-
-    private IEnumerator MonitorHarvest()
-    {
-        while (isHarvesting && currentHarvestPlant != null)
-        {
-            if (Vector2.Distance(transform.position, currentHarvestPlant.transform.position) > interactionDistance)
-            {
-                CancelHarvest();
-                yield break;
-            }
-
-            if (!currentHarvestPlant.IsBeingHarvested())
-            {
-                CompleteHarvest();
-                yield break;
-            }
-
-            yield return null;
-        }
-    }
-
-    void CancelHarvest()
-    {
-        if (!isHarvesting || currentHarvestPlant == null)
-            return;
-
-        currentHarvestPlant.CancelHarvest();
-
-        isHarvesting = false;
-
-        if (harvestInProgressIcon != null)
-        {
-            harvestInProgressIcon.SetActive(false);
-        }
-
-        Debug.Log("Cosecha cancelada");
-        currentHarvestPlant = null;
-    }
-
-    void CompleteHarvest()
-    {
-        isHarvesting = false;
-
-        if (harvestInProgressIcon != null)
-        {
-            harvestInProgressIcon.SetActive(false);
-        }
-
-        Debug.Log("Cosecha completada");
-        currentHarvestPlant = null;
-    }
-
     public void SetMovementEnabled(bool enabled)
     {
         movementEnabled = enabled;
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactionDistance);
     }
 }
