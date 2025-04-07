@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveInput;
     private bool movementEnabled = true;
+    private GameState lastGameState = GameState.None;
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class PlayerController : MonoBehaviour
             gameStateController = FindObjectOfType<EnemiesSpawner>();
             if (gameStateController == null)
             {
-                Debug.Log("No se encontró el WaveSpawner");
+                Debug.Log("No se encontró el gameStateController");
             }
         }
 
@@ -37,10 +38,31 @@ public class PlayerController : MonoBehaviour
         {
             abilitySystem = GetComponent<PlayerAbilitySystem>();
         }
+
+        lastGameState = GameManager.Instance.currentGameState;
     }
 
     void Update()
     {
+        bool isPaused = GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused;
+
+        if (!isPaused)
+        {
+            movementEnabled = true;
+        }
+
+        if (isPaused && movementEnabled)
+        {
+            movementEnabled = false;
+        }
+
+        if (isPaused)
+        {
+            return;
+        }
+
+        lastGameState = GameManager.Instance.currentGameState;
+
         if (!abilitySystem.IsHarvesting())
         {
             HandleMovement();
@@ -99,6 +121,21 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
+        if (!enabled)
+        {
+            return;
+        }
+
+        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+        {
+            return;
+        }
+
         movementEnabled = enabled;
+    }
+
+    public bool IsMovementEnabled()
+    {
+        return movementEnabled;
     }
 }

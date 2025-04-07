@@ -19,6 +19,7 @@ public class DayNightLightController : MonoBehaviour
     private Coroutine transitionCoroutine;
     private GameState lastGameState = GameState.None;
     private bool isTransitioning = false;
+    private GameState lastState = GameState.Day;
 
     void Start()
     {
@@ -27,7 +28,6 @@ public class DayNightLightController : MonoBehaviour
             globalLight = GetComponent<Light2D>();
             if (globalLight == null)
             {
-                Debug.LogError("Light2D component not found");
                 enabled = false;
                 return;
             }
@@ -35,19 +35,40 @@ public class DayNightLightController : MonoBehaviour
 
         UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
         lastGameState = GameManager.Instance.currentGameState;
+
+        if (GameManager.Instance.currentGameState != GameState.Paused)
+        {
+            lastState = GameManager.Instance.currentGameState;
+        }
     }
 
     void Update()
     {
-        if (!isTransitioning && GameManager.Instance.currentGameState != lastGameState)
+        GameState currentState = GameManager.Instance.currentGameState;
+
+        if (!isTransitioning && currentState != lastGameState)
         {
-            UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, useSmoothTransition);
-            lastGameState = GameManager.Instance.currentGameState;
+            if (currentState != GameState.Paused)
+            {
+                lastState = currentState;
+            }
+
+            bool isPauseTransition = (currentState == GameState.Paused || lastGameState == GameState.Paused);
+
+            if (!isPauseTransition)
+            {
+                UpdateLightBasedOnGameState(currentState, useSmoothTransition);
+            }
+
+            lastGameState = currentState;
         }
     }
 
     void UpdateLightBasedOnGameState(GameState gameState, bool useTransition)
     {
+        if (gameState == GameState.Paused)
+            return;
+
         float targetIntensity = (gameState == GameState.Day) ? dayLightIntensity : nightLightIntensity;
 
         if (useTransition)
@@ -56,7 +77,6 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-
             transitionCoroutine = StartCoroutine(TransitionLightIntensity(targetIntensity, transitionDuration));
         }
         else
@@ -68,12 +88,17 @@ public class DayNightLightController : MonoBehaviour
     IEnumerator TransitionLightIntensity(float targetIntensity, float duration)
     {
         isTransitioning = true;
-
         float startIntensity = globalLight.intensity;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
         {
+            if (GameManager.Instance.currentGameState == GameState.Paused)
+            {
+                yield return null;
+                continue;
+            }
+
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
             t = Mathf.SmoothStep(0, 1, t);
@@ -94,7 +119,6 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-
             transitionCoroutine = StartCoroutine(TransitionLightIntensity(dayLightIntensity, transitionDuration));
         }
     }

@@ -91,8 +91,6 @@ public class PlantManager : MonoBehaviour
         {
             plant.SendMessage("OnNewDay", dayCounter, SendMessageOptions.DontRequireReceiver);
         }
-
-        Debug.Log($"Notified {registeredPlants.Count} plants of new day: {dayCounter}");
     }
 
     public int GetDayCounter()

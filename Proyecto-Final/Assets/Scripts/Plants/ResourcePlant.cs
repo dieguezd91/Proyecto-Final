@@ -15,7 +15,6 @@ public class ResourcePlant : Plant
     [Header("HARVEST SETTINGS")]
     [SerializeField] private float harvestDuration = 2f;
     [SerializeField] private GameObject harvestProgressIndicator;
-    [SerializeField] private Image progressFillImage;
 
     private int lastProductionDay = 0;
     private bool isProducing = false;
@@ -30,11 +29,6 @@ public class ResourcePlant : Plant
         if (harvestProgressIndicator != null)
         {
             harvestProgressIndicator.SetActive(false);
-
-            if (progressFillImage == null)
-            {
-                progressFillImage = harvestProgressIndicator.GetComponentInChildren<Image>();
-            }
         }
     }
 
@@ -111,11 +105,6 @@ public class ResourcePlant : Plant
         if (harvestProgressIndicator != null)
         {
             harvestProgressIndicator.SetActive(true);
-
-            if (progressFillImage != null)
-            {
-                progressFillImage.fillAmount = 0f;
-            }
         }
 
         float harvestTimer = 0f;
@@ -128,13 +117,6 @@ public class ResourcePlant : Plant
             }
 
             harvestTimer += Time.deltaTime;
-
-            if (progressFillImage != null)
-            {
-                float progressPercentage = Mathf.Clamp01(harvestTimer / harvestDuration);
-
-                progressFillImage.fillAmount = progressPercentage;
-            }
 
             yield return null;
         }
