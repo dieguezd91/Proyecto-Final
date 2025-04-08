@@ -89900,7 +89900,7 @@ Tilemap:
       - {fileID: -171425245, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: -1397025881, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: 258470968, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
-      m_AnimationSpeed: 5
+      m_AnimationSpeed: 5.0000005
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -22, y: -6, z: 0}
@@ -90406,7 +90406,7 @@ Tilemap:
       - {fileID: -171425245, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: -1397025881, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
       - {fileID: 258470968, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
-      m_AnimationSpeed: 5.0000005
+      m_AnimationSpeed: 5
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -21, y: -1, z: 0}
@@ -93989,8 +93989,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1432410434}
-        m_TargetAssemblyTypeName: MenuPausa, Assembly-CSharp
-        m_MethodName: Cerrar
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: Close
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
