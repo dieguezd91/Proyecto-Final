@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public class Plant : MonoBehaviour
 {
     [Header("Growth Configuration")]
-    public int daysToGrow = 3;
+    public int daysToGrow;
 
     [Header("Plant Settings")]
-    public float healthMultiplierWhenMature = 1.5f;
+    public float healthMultiplierWhenMature;
     public Sprite plantSprite;
 
     [Header("State")]
-    [SerializeField] private int plantingDay = 0;
+    [SerializeField] private int plantingDay;
     [SerializeField] private bool growthCompleted = false;
 
     private Vector3 initialScale;
@@ -20,7 +20,7 @@ public class Plant : MonoBehaviour
     private LifeController lifeController;
     private PlantingSpot plantingSpot;
 
-    public Animator unityAnim;
+    public Animator animator;
     private string currentState;
     const string PlayStartingDay = "PlantSeed";
     const string PlayMiddleDay = "PlantRoots";
@@ -29,10 +29,9 @@ public class Plant : MonoBehaviour
 
     protected virtual void Start()
     {
-        unityAnim = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         initialScale = Vector3.one * 0.3f;
         transform.localScale = initialScale;
-
 
         plantingDay = GameManager.Instance.GetCurrentDay();
 
@@ -49,6 +48,8 @@ public class Plant : MonoBehaviour
         lifeController.onDeath.AddListener(HandlePlantDeath);
 
         FindPlantingSpot();
+
+        ChangeAnimationState(PlayStartingDay);
     }
 
     protected virtual void OnDestroy()
@@ -67,7 +68,7 @@ public class Plant : MonoBehaviour
     void ChangeAnimationState(string newState)
     {
         if (currentState == newState) return;
-        unityAnim.Play(newState);
+        animator.Play(newState);
         currentState = newState;
     }
 
@@ -87,7 +88,12 @@ public class Plant : MonoBehaviour
 
         transform.localScale = Vector3.Lerp(initialScale, finalScale, progress);
 
-        ChangeAnimationState(PlayMiddleDay);
+        if (progress <= 0.33f)
+            ChangeAnimationState(PlayStartingDay);
+        else if (progress <= 0.66f)
+            ChangeAnimationState(PlayMiddleDay);
+        else if (progress < 1.0f)
+            ChangeAnimationState(PlayLastDay);
 
         if (daysSincePlanting >= daysToGrow)
         {
@@ -99,6 +105,9 @@ public class Plant : MonoBehaviour
 
     private void CompleteGrowth()
     {
+        if (growthCompleted)
+            return;
+
         growthCompleted = true;
         transform.localScale = finalScale;
         Debug.Log("Plant: Growth completed");

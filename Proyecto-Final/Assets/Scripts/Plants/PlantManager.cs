@@ -43,24 +43,9 @@ public class PlantManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        GameState currentState = GameManager.Instance.currentGameState;
-        if (lastGameState == GameState.Night && currentState == GameState.Day)
-        {
-            dayCounter++;
-            if (notifyPlantsOnNewDay)
-            {
-                NotifyAllPlantsNewDay();
-            }
-        }
-        lastGameState = currentState;
-    }
-
     private void OnGameManagerNewDay(int currentDay)
     {
         dayCounter = currentDay;
-
         if (notifyPlantsOnNewDay)
         {
             NotifyAllPlantsNewDay();
