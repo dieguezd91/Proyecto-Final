@@ -186,6 +186,8 @@ public class GameManager : MonoBehaviour
         if (uiManager != null && uiManager.gameOverPanel != null)
         {
             uiManager.gameOverPanel.SetActive(true);
+            
+            Time.timeScale = 0f;
         }
     }
 
