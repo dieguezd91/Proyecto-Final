@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f; // Velocidad de movimiento
+    [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Camera cam;
-    [SerializeField] private GameObject bulletPrefab; // Prefab de la bala
-    [SerializeField] private Transform firePoint; // Punto desde donde se dispara
-    [SerializeField] private float bulletSpeed = 10f; // Velocidad de la bala
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private Transform firePoint;
+    [SerializeField] private float bulletSpeed = 10f;
 
     [Header("Spell Cooldown")]
     [SerializeField] private float spellCooldown = 0.5f;
@@ -63,28 +63,25 @@ public class PlayerController : MonoBehaviour
 
         lastGameState = GameManager.Instance.currentGameState;
 
-        if (!abilitySystem.IsHarvesting())
-        {
-            HandleMovement();
-        }
-
         if (gameStateController != null && GameManager.Instance.currentGameState == GameState.Night)
         {
             HandleAttack();
         }
     }
 
-    void HandleMovement()
+    void FixedUpdate()
     {
-        if (!movementEnabled)
+        if (!movementEnabled || abilitySystem.IsHarvesting())
         {
+            rb.velocity = Vector2.zero;
             return;
         }
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
-        transform.position += (Vector3)moveInput * moveSpeed * Time.deltaTime;
+
+        rb.velocity = moveInput * moveSpeed;
     }
 
     void HandleAttack()

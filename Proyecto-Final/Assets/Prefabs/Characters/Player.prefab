@@ -246,12 +246,12 @@ GameObject:
   m_Component:
   - component: {fileID: 3535706038251047626}
   - component: {fileID: 3090849335543341568}
-  - component: {fileID: 9064956187856915231}
-  - component: {fileID: 1774628585642013327}
   - component: {fileID: 4875041280475820911}
+  - component: {fileID: 1099973671300293658}
   - component: {fileID: 94765001059883094}
   - component: {fileID: 4502512717715921832}
-  - component: {fileID: 1099973671300293658}
+  - component: {fileID: 9064956187856915231}
+  - component: {fileID: 1774628585642013327}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -328,78 +328,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &9064956187856915231
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429872126492704177}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 1.5}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
---- !u!50 &1774628585642013327
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429872126492704177}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 1
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
 --- !u!114 &4875041280475820911
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +349,33 @@ MonoBehaviour:
   spellCooldown: 0.5
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
+--- !u!114 &1099973671300293658
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e00f3861274012546a6317e5ef028ca3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  digSpotsContainer: {fileID: 0}
+  plantingSpotPrefab: {fileID: 2306438089456741062, guid: 6d4a969d81be94e4eb872daf7deb3553, type: 3}
+  diggableLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  digDistance: 2
+  digDuration: 1.5
+  plantingLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  interactionDistance: 2
+  progressBar: {fileID: 0}
+  progressBarTarget: {fileID: 0}
+  progressBarOffset: {x: 0, y: 1.5, z: 0}
+  plantInventory: {fileID: 0}
 --- !u!114 &94765001059883094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -467,33 +422,78 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1099973671300293658
-MonoBehaviour:
+--- !u!61 &9064956187856915231
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6429872126492704177}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e00f3861274012546a6317e5ef028ca3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  digSpotsContainer: {fileID: 0}
-  plantingSpotPrefab: {fileID: 2306438089456741062, guid: 6d4a969d81be94e4eb872daf7deb3553, type: 3}
-  diggableLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  digDistance: 2
-  digDuration: 1.5
-  plantingLayer:
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  interactionDistance: 2
-  progressBar: {fileID: 0}
-  progressBarTarget: {fileID: 0}
-  progressBarOffset: {x: 0, y: 1.5, z: 0}
-  plantInventory: {fileID: 0}
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.00047171116, y: -0.65641266}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.5, y: 1.5}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.8762157, y: 0.18942225}
+  m_EdgeRadius: 0
+--- !u!50 &1774628585642013327
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 1
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0
