@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f16b0a7a1ebc60749ab490e1f12b6e1a
+guid: 6b876b38e4597704b84b5e76e54d27a1
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: InventorySpriteSheet_0
+      name: MoonStage0
       rect:
         serializedVersion: 2
-        x: 2
-        y: 241
-        width: 12
-        height: 14
+        x: 16
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 206da083419a4d746996437f5acfb360
-      internalID: -596440827
+      spriteID: 94e19b54c2590b34eabdb19148c2b3e8
+      internalID: 1841481835
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SeedBasicPlant2
+      name: MoonStage1
       rect:
         serializedVersion: 2
-        x: 1
-        y: 193
-        width: 14
-        height: 13
+        x: 32
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ec49a2120429dc344b9c94b02e8cdfd6
-      internalID: 668908640
+      spriteID: 98f1e6d42959dc345b0ac014e988c8ca
+      internalID: -1304058712
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_2
+      name: MoonStage2
       rect:
         serializedVersion: 2
-        x: 3
-        y: 227
-        width: 10
-        height: 10
+        x: 48
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db5224558ec4772479618a1b08b11e58
-      internalID: 1957688738
+      spriteID: 279d53607d024b24089c20d99d2f8163
+      internalID: -956797572
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_3
+      name: MoonStage3
       rect:
         serializedVersion: 2
-        x: 2
-        y: 210
-        width: 11
-        height: 7
+        x: 64
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,113 +187,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d99d5a0529e11c4a8d5be7e63f6a94d
-      internalID: -1061087
+      spriteID: 09ca4119143d8e0488038d6ba410735a
+      internalID: -1032481509
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SeedBasicPlant1
+      name: MoonStage4
       rect:
         serializedVersion: 2
-        x: 19
-        y: 193
-        width: 11
-        height: 13
+        x: 80
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a525e6e8e07bc244f95672ab88845d62
-      internalID: -2039217953
+      spriteID: e15197c0c216dc147ac74bd8672fd678
+      internalID: -1529809225
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SeedBasicPlant3
+      name: UIInventorySlot
       rect:
         serializedVersion: 2
-        x: 33
-        y: 193
-        width: 14
-        height: 14
+        x: 11
+        y: 187
+        width: 26
+        height: 26
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: beeec36493661964b8a51f0dcc6d70b6
-      internalID: -473241699
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Bone
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 210
-        width: 14
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f6bc36896bd56934a9e1aed517d7da08
-      internalID: 48356350
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Shovel
-      rect:
-        serializedVersion: 2
-        x: 17
-        y: 241
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e400de34946a6b344884671c8baba6c4
-      internalID: -1576750221
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Sickle
-      rect:
-        serializedVersion: 2
-        x: 33
-        y: 241
-        width: 14
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8bd99a071734ac74b9cbee1f4cddb69c
-      internalID: -1594061710
+      spriteID: ac69ef07531eb8b49927847cbec9ec7f
+      internalID: -1001860351
       vertices: []
       indices: 
       edges: []
@@ -309,15 +246,21 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Bone: 48356350
-      InventorySpriteSheet_0: -596440827
-      InventorySpriteSheet_2: 1957688738
-      InventorySpriteSheet_3: -1061087
-      SeedBasicPlant1: -2039217953
-      SeedBasicPlant2: 668908640
-      SeedBasicPlant3: -473241699
-      Shovel: -1576750221
-      Sickle: -1594061710
+      MoonStage0: 1841481835
+      MoonStage1: -1304058712
+      MoonStage2: -956797572
+      MoonStage3: -1032481509
+      MoonStage4: -1529809225
+      UIInventorySlot: -1001860351
+      UISprites_10: -1775831014
+      UISprites_11: -1738444724
+      UISprites_12: 1118135965
+      UISprites_13: -1371413568
+      UISprites_5: -1313676576
+      UISprites_6: 1026741367
+      UISprites_7: -1902967201
+      UISprites_8: -996710981
+      UISprites_9: -2055132647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

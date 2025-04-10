@@ -136,13 +136,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PlantSpriteSheet_0
+      name: PlantSeed
       rect:
         serializedVersion: 2
-        x: 3
-        y: 227
-        width: 11
-        height: 9
+        x: 0
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -157,13 +157,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_1
+      name: PlantRoot1
       rect:
         serializedVersion: 2
-        x: 19
-        y: 227
-        width: 10
-        height: 8
+        x: 16
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -178,13 +178,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_2
+      name: PlantFlower
       rect:
         serializedVersion: 2
-        x: 53
+        x: 48
         y: 224
-        width: 22
-        height: 14
+        width: 32
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,13 +199,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_3
+      name: BasicPetalShot
       rect:
         serializedVersion: 2
         x: 5
         y: 192
         width: 22
-        height: 27
+        height: 32
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -220,13 +220,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_4
+      name: BasicSpikeRoot
       rect:
         serializedVersion: 2
         x: 36
         y: 192
         width: 24
-        height: 28
+        height: 32
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -241,13 +241,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_5
+      name: BasicGlowdust
       rect:
         serializedVersion: 2
         x: 69
         y: 192
         width: 22
-        height: 28
+        height: 32
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,7 +262,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_6
+      name: BasicSawleaf
       rect:
         serializedVersion: 2
         x: 101
@@ -283,13 +283,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSpriteSheet_7
+      name: PlantRoot2
       rect:
         serializedVersion: 2
-        x: 33
-        y: 225
-        width: 14
-        height: 11
+        x: 32
+        y: 224
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -314,14 +314,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      PlantSpriteSheet_0: 496183913
-      PlantSpriteSheet_1: 1181964190
-      PlantSpriteSheet_2: 1189134553
-      PlantSpriteSheet_3: 1611987579
-      PlantSpriteSheet_4: -1251527286
-      PlantSpriteSheet_5: -2043935357
-      PlantSpriteSheet_6: -2001277165
-      PlantSpriteSheet_7: -470206348
+      BasicGlowdust: -2043935357
+      BasicPetalShot: 1611987579
+      BasicSawleaf: -2001277165
+      BasicSpikeRoot: -1251527286
+      PlantFlower: 1189134553
+      PlantRoot1: 1181964190
+      PlantRoot2: -470206348
+      PlantSeed: 496183913
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
