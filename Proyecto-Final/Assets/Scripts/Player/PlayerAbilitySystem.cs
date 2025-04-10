@@ -120,17 +120,37 @@ public class PlayerAbilitySystem : MonoBehaviour
         }
     }
 
+    public bool TryPlant(PlantingSpot spot)
+    {
+        if (currentAbility != PlayerAbility.Planting)
+        {
+            Debug.LogWarning("No se puede plantar: la habilidad actual no es plantar");
+            return false;
+        }
+
+        if (plantInventory == null)
+            return false;
+
+        GameObject selectedPlantPrefab = plantInventory.GetSelectedPlantPrefab();
+        if (selectedPlantPrefab == null)
+            return false;
+
+        float distance = Vector2.Distance(transform.position, spot.transform.position);
+        if (distance <= interactionDistance)
+        {
+            Debug.Log($"Plantando {plantInventory.GetSelectedPlantName()}");
+            spot.Plant(selectedPlantPrefab);
+            return true;
+        }
+
+        return false;
+    }
+
     private void HandlePlanting()
     {
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Intentando plantar");
-
-            if (plantInventory == null)
-            {
-                return;
-            }
-
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, plantingLayer);
 
@@ -139,16 +159,7 @@ public class PlayerAbilitySystem : MonoBehaviour
                 PlantingSpot spot = hit.collider.GetComponent<PlantingSpot>();
                 if (spot != null)
                 {
-                    GameObject selectedPlantPrefab = plantInventory.GetSelectedPlantPrefab();
-                    if (selectedPlantPrefab != null)
-                    {
-                        float distance = Vector2.Distance(transform.position, spot.transform.position);
-                        if (distance <= interactionDistance)
-                        {
-                            Debug.Log($"Plantando {plantInventory.GetSelectedPlantName()}");
-                            spot.Plant(selectedPlantPrefab);
-                        }
-                    }
+                    TryPlant(spot);
                 }
             }
         }
@@ -175,8 +186,6 @@ public class PlayerAbilitySystem : MonoBehaviour
                     ResourcePlant plant = spot.GetPlantComponent<ResourcePlant>();
                     if (plant != null)
                     {
-                        Debug.Log($"Planta encontrada. Lista para cosechar: {plant.IsReadyToHarvest()}, Siendo cosechada: {plant.IsBeingHarvested()}");
-
                         if (plant.IsReadyToHarvest() && !plant.IsBeingHarvested())
                         {
                             float distance = Vector2.Distance(transform.position, spot.transform.position);
@@ -186,10 +195,6 @@ public class PlayerAbilitySystem : MonoBehaviour
                                 StartHarvesting(plant);
                                 return;
                             }
-                            else
-                            {
-                                Debug.Log($"Planta demasiado lejos: {distance} > {interactionDistance}");
-                            }
                         }
                     }
                 }
@@ -197,13 +202,19 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (!plantFound)
             {
-                Debug.Log("No se encontró ninguna planta cosechable en el punto del clic");
+                Debug.Log("No se encontro ninguna planta cosechable");
             }
         }
     }
 
     public void StartHarvesting(ResourcePlant plant)
     {
+        if (currentAbility != PlayerAbility.Harvesting)
+        {
+            Debug.LogWarning("No se puede cosechar: la habilidad actual no es cosechar");
+            return;
+        }
+
         if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
         {
             return;
@@ -211,7 +222,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
         {
-            Debug.LogWarning("No se puede iniciar cosecha: planta no válida o no lista");
             return;
         }
 
@@ -227,10 +237,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             progressBar.gameObject.SetActive(true);
         }
-        else
-        {
-            Debug.LogError("La barra de progreso no está asignada");
-        }
 
         plant.StartHarvest();
 
@@ -239,12 +245,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private IEnumerator MonitorHarvest()
     {
-        Debug.Log("Iniciando monitoreo de cosecha");
-
         float startTime = Time.time;
         float harvestDuration = currentHarvestPlant.GetHarvestDuration();
-
-        Debug.Log($"Duración de cosecha: {harvestDuration} segundos");
 
         while (isHarvesting && currentHarvestPlant != null)
         {
@@ -322,6 +324,42 @@ public class PlayerAbilitySystem : MonoBehaviour
         currentHarvestPlant = null;
     }
 
+    public bool TryDig(Vector2 position)
+    {
+        if (currentAbility != PlayerAbility.Digging)
+        {
+            Debug.LogWarning("No se puede cavar: la habilidad actual no es cavar");
+            return false;
+        }
+
+        if (isDigging)
+            return false;
+
+        RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero, Mathf.Infinity, diggableLayer);
+        if (hit.collider == null)
+            return false;
+
+        Collider2D[] spots = Physics2D.OverlapCircleAll(position, 0.5f, plantingLayer);
+        if (spots.Length > 0)
+        {
+            Debug.Log("Este lugar ya esta cavado");
+            return false;
+        }
+
+        float distance = Vector2.Distance(transform.position, position);
+        if (distance <= digDistance)
+        {
+            Debug.Log("Iniciando cavado");
+            StartDigging(position);
+            return true;
+        }
+        else
+        {
+            Debug.Log("El lugar está demasiado lejos");
+            return false;
+        }
+    }
+
     private void HandleDigging()
     {
         if (isDigging)
@@ -331,35 +369,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             Debug.Log("Intentando cavar...");
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, diggableLayer);
-
-            if (hit.collider != null)
-            {
-                Collider2D[] spots = Physics2D.OverlapCircleAll(mousePos, 0.5f, plantingLayer);
-
-                if (spots.Length > 0)
-                {
-                    Debug.Log($"Este lugar ya esta cavado");
-                    return;
-                }
-
-                float distance = Vector2.Distance(transform.position, mousePos);
-
-                if (distance <= digDistance)
-                {
-                    Debug.Log("Iniciando cavado");
-                    StartDigging(mousePos);
-                }
-                else
-                {
-                    Debug.Log("El lugar esta demasiado lejos");
-                }
-            }
-            else
-            {
-                Debug.Log("No se puede cavar aca");
-            }
+            TryDig(mousePos);
         }
     }
 

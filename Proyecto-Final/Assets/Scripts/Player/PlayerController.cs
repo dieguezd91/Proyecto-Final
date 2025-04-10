@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -28,10 +26,6 @@ public class PlayerController : MonoBehaviour
         if (gameStateController == null)
         {
             gameStateController = FindObjectOfType<EnemiesSpawner>();
-            if (gameStateController == null)
-            {
-                Debug.Log("No se encontró el gameStateController");
-            }
         }
 
         if (abilitySystem == null)

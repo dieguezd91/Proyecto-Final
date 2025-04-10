@@ -5,6 +5,12 @@ public class PlantingSpot : MonoBehaviour
     public bool isOccupied = false;
     private GameObject currentPlant;
     [SerializeField] private GameObject harvestIndicator;
+    private PlayerAbilitySystem playerAbilitySystem;
+
+    private void Start()
+    {
+        playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+    }
 
     private void Update()
     {
@@ -91,22 +97,47 @@ public class PlantingSpot : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (playerAbilitySystem == null)
+            return;
+
         if (currentPlant != null)
         {
             ResourcePlant resourcePlant = currentPlant.GetComponent<ResourcePlant>();
             if (resourcePlant != null && resourcePlant.IsReadyToHarvest())
             {
-                resourcePlant.StartHarvest();
+                if (playerAbilitySystem.CurrentAbility == PlayerAbility.Harvesting)
+                {
+                    playerAbilitySystem.StartHarvesting(resourcePlant);
+                }
+                else
+                {
+                    Debug.Log("Necesitas seleccionar la herramienta de cosecha para cosechar");
+                }
                 return;
             }
         }
 
         if (!isOccupied && PlantInventory.Instance != null)
         {
-            GameObject selectedPlantPrefab = PlantInventory.Instance.GetSelectedPlantPrefab();
-            if (selectedPlantPrefab != null)
+            if (playerAbilitySystem.CurrentAbility == PlayerAbility.Planting)
             {
-                Plant(selectedPlantPrefab);
+                GameObject selectedPlantPrefab = PlantInventory.Instance.GetSelectedPlantPrefab();
+                if (selectedPlantPrefab != null)
+                {
+                    float distance = Vector2.Distance(playerAbilitySystem.transform.position, transform.position);
+                    if (distance <= playerAbilitySystem.interactionDistance)
+                    {
+                        Plant(selectedPlantPrefab);
+                    }
+                    else
+                    {
+                        Debug.Log("Estas demasiado lejos para plantar");
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Necesitas seleccionar la herramienta de plantar");
             }
         }
     }
