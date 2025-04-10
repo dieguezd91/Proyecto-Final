@@ -137,7 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   daysToGrow: 1
   healthMultiplierWhenMature: 1.5
-  plantSprite: {fileID: 477540749, guid: 2b5822cec773ba24cb62f10faf98b4b2, type: 3}
+  plantSprite: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   plantingDay: 0
   growthCompleted: 0
   animator: {fileID: 0}
