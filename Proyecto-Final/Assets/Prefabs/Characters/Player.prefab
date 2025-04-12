@@ -252,6 +252,7 @@ GameObject:
   - component: {fileID: 4502512717715921832}
   - component: {fileID: 9064956187856915231}
   - component: {fileID: 1774628585642013327}
+  - component: {fileID: 477447474750530567}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -349,6 +350,8 @@ MonoBehaviour:
   spellCooldown: 0.5
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
+  manaSystem: {fileID: 0}
+  spellManaCost: 15
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -494,6 +497,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &477447474750530567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c873a838f91eb914bb6d83ad2d53f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMana: 100
+  currentMana: 0
+  dayRegenerationRate: 2
+  nightRegenerationRate: 0.5
+  manaBarFill: {fileID: 0}
+  useLunarModifiers: 1
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0

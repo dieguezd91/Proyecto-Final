@@ -9,6 +9,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
 
+    [Header("Mana Bar")]
+    [SerializeField] private Slider manaSlider;
+
     [Header("References")]
     [SerializeField] private GameObject player;
 
@@ -48,6 +51,7 @@ public class UIManager : MonoBehaviour
 
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
+    private ManaSystem manaSystem;
     private GameState lastGameState = GameState.None;
     private GameState lastState = GameState.Day;
     private bool isInventoryOpen = false;
@@ -93,6 +97,7 @@ public class UIManager : MonoBehaviour
         {
             playerLife = player.GetComponent<LifeController>();
             playerController = player.GetComponent<PlayerController>();
+            manaSystem = player.GetComponent<ManaSystem>();
         }
     }
 
@@ -445,6 +450,15 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Day)
         {
             GameManager.Instance.ManualTransitionToNight();
+        }
+    }
+
+    public void UpdateManaUI()
+    {
+        if (manaSlider != null)
+        {
+            manaSlider.maxValue = manaSystem.GetMaxMana();
+            manaSlider.value = manaSystem.GetCurrentMana();
         }
     }
 }
