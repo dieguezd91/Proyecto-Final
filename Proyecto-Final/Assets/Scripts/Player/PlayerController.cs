@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!movementEnabled || abilitySystem.IsHarvesting())
+        if (!movementEnabled || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
         {
             rb.velocity = Vector2.zero;
             return;
@@ -112,18 +112,15 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
-        if (!enabled)
-        {
-            return;
-        }
-
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+        
+        if (enabled && GameManager.Instance != null && (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused))
         {
             return;
         }
 
         movementEnabled = enabled;
     }
+
 
     public bool IsMovementEnabled()
     {

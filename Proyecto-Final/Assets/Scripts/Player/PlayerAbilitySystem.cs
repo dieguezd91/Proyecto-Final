@@ -368,6 +368,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Debug.Log("Intentando cavar...");
+            playerController.SetMovementEnabled(false);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             TryDig(mousePos);
         }
@@ -436,9 +437,9 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void CompleteDigging()
     {
         isDigging = false;
-        playerController.SetMovementEnabled(true);
+        //playerController.SetMovementEnabled(true);
         Debug.Log("Proceso de cavado completo");
-
+        playerController.SetMovementEnabled(true);
         if (progressBar != null)
         {
             progressBar.Hide();
@@ -469,6 +470,11 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             CancelDigging();
         }
+    }
+
+    public bool IsDigging()
+    {
+        return isDigging;
     }
 
     private void OnDrawGizmosSelected()
