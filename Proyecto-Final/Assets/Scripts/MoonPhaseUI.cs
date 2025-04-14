@@ -32,19 +32,10 @@ public class MoonPhaseUI : MonoBehaviour
 
     private void UpdateMoonPhaseUI(MoonPhase phase)
     {
-        Debug.Log($"Actualizando UI para fase lunar: {phase}");
-
         int phaseIndex = (int)phase;
         if (moonPhaseImage != null && moonPhaseSprites.Length > phaseIndex)
         {
             moonPhaseImage.sprite = moonPhaseSprites[phaseIndex];
-        }
-        else
-        {
-            if (moonPhaseImage == null)
-                Debug.LogError("MoonPhaseUI: moonPhaseImage es null");
-            else if (moonPhaseSprites.Length <= phaseIndex)
-                Debug.LogError($"MoonPhaseUI: No hay suficientes sprites para la fase {phase}. Array length: {moonPhaseSprites.Length}, Requested index: {phaseIndex}");
         }
     }
 

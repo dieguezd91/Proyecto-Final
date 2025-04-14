@@ -80,7 +80,6 @@ public class ManaSystem : MonoBehaviour
                     if (useLunarInfluence && lunarInfluenceManager != null)
                     {
                         UpdateMaxMana();
-                        Debug.Log("Transición a noche: Aplicando modificadores lunares al maná");
                     }
                 }
                 else
@@ -95,8 +94,6 @@ public class ManaSystem : MonoBehaviour
                     {
                         GameManager.Instance.uiManager.UpdateManaUI();
                     }
-
-                    Debug.Log($"Transición a día: Restaurando maná máximo base: {oldMax} -> {modifiedMaxMana}");
                 }
             }
 
@@ -232,15 +229,11 @@ public class ManaSystem : MonoBehaviour
             {
                 GameManager.Instance.uiManager.UpdateManaUI();
             }
-
-            Debug.Log($"Maná máximo actualizado: {oldMax} -> {modifiedMaxMana} (Modificador lunar: x{maxManaModifier})");
         }
     }
 
     public void OnMoonPhaseChanged(MoonPhase newPhase)
     {
-        Debug.Log($"Fase lunar cambiada a: {newPhase}");
-
         if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night)
         {
             if (lunarInfluenceManager != null)
@@ -249,17 +242,11 @@ public class ManaSystem : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("ManaSystem: No se pudo actualizar el maná porque LunarInfluenceManager es nulo");
-
                 lunarInfluenceManager = LunarInfluenceManager.Instance;
 
                 if (lunarInfluenceManager != null)
                 {
                     UpdateMaxMana();
-                }
-                else
-                {
-                    Debug.LogError("ManaSystem: No se pudo encontrar LunarInfluenceManager en la escena");
                 }
             }
         }

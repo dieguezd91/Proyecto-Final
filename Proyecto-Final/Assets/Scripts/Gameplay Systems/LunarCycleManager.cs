@@ -80,8 +80,6 @@ public class LunarCycleManager : MonoBehaviour
                 ShowMoon(true);
             }
         }
-
-        Debug.Log($"LunarCycleManager iniciado. Fase lunar inicial: {currentMoonPhase}");
     }
 
     private void Update()
@@ -93,13 +91,11 @@ public class LunarCycleManager : MonoBehaviour
         if (lastGameState == GameState.Day && currentState == GameState.Night)
         {
             ShowMoon(true);
-            Debug.Log($"Transición a noche. Fase lunar actual: {currentMoonPhase}");
 
             if (!isFirstNight && cyclicProgression)
             {
                 int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
                 SetMoonPhase((MoonPhase)nextPhaseIndex);
-                Debug.Log($"Avanzando a nueva fase lunar: {(MoonPhase)nextPhaseIndex}");
             }
 
             isFirstNight = false;
@@ -107,7 +103,6 @@ public class LunarCycleManager : MonoBehaviour
         else if (lastGameState == GameState.Night && currentState == GameState.Day)
         {
             ShowMoon(false);
-            Debug.Log("Transición a día. Ocultando luna.");
         }
 
         lastGameState = currentState;
@@ -129,37 +124,17 @@ public class LunarCycleManager : MonoBehaviour
             {
                 moonSpriteRenderer.sprite = moonPhaseSprites[phaseIndex];
             }
-            else
-            {
-                Debug.LogError($"LunarCycleManager: Índice de fase lunar fuera de rango: {phaseIndex}");
-            }
         }
 
         if (manaSystem != null)
         {
-            try
-            {
-                manaSystem.OnMoonPhaseChanged(currentMoonPhase);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Error al notificar al ManaSystem: {e.Message}");
-            }
+            manaSystem.OnMoonPhaseChanged(currentMoonPhase);
         }
 
         if (onMoonPhaseChanged != null)
         {
-            try
-            {
-                onMoonPhaseChanged.Invoke(currentMoonPhase);
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Error al invocar evento de cambio de fase lunar: {e.Message}");
-            }
+            onMoonPhaseChanged.Invoke(currentMoonPhase);
         }
-
-        Debug.Log($"Fase lunar establecida a: {phase}. Notificando a los sistemas...");
     }
 
     private void ShowMoon(bool show)
@@ -173,24 +148,5 @@ public class LunarCycleManager : MonoBehaviour
     public MoonPhase GetCurrentMoonPhase()
     {
         return currentMoonPhase;
-    }
-
-    public string GetCurrentPhaseDescription()
-    {
-        switch (currentMoonPhase)
-        {
-            case MoonPhase.NewMoon:
-                return "Luna Nueva: Regeneración de maná nocturno aumentada, enemigos más débiles pero en mayor cantidad.";
-            case MoonPhase.CrescentMoon:
-                return "Luna Creciente: Las esencias elementales proporcionan más maná, plantas de Hielo y Eléctrico potenciadas.";
-            case MoonPhase.HalfMoon:
-                return "Media Luna: Equilibrio neutral, sin bonificaciones ni penalizaciones especiales.";
-            case MoonPhase.GibbousMoon:
-                return "Luna Gibosa: Reducción en costo de hechizos, plantas de Fuego y Viento potenciadas.";
-            case MoonPhase.FullMoon:
-                return "Luna Llena: Mayor capacidad de maná pero regeneración reducida, enemigos potenciados.";
-            default:
-                return "Fase lunar desconocida";
-        }
     }
 }

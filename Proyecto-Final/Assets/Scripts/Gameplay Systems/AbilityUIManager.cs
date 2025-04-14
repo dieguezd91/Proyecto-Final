@@ -6,17 +6,17 @@ using TMPro;
 
 public class AbilityUIManager : MonoBehaviour
 {
-    [Header("UI Elements")]
+    [Header("UI ELEMENTS")]
     [SerializeField] private Button plantButton;
     [SerializeField] private Button harvestButton;
     [SerializeField] private Button digButton;
 
-    [Header("Icons")]
+    [Header("ICONS")]
     [SerializeField] private Sprite plantIcon;
     [SerializeField] private Sprite harvestIcon;
     [SerializeField] private Sprite digIcon;
 
-    [Header("Button Appearance")]
+    [Header("BUTTONS SETTINGS")]
     [SerializeField] private Color normalColor = Color.white;
     [SerializeField] private Color selectedColor = new Color(0.5f, 1f, 0.5f);
     [SerializeField] private Color disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);

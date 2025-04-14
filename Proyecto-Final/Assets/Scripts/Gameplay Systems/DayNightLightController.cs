@@ -5,14 +5,14 @@ using UnityEngine.Rendering.Universal;
 
 public class DayNightLightController : MonoBehaviour
 {
-    [Header("References")]
+    [Header("REFERENCES")]
     public Light2D globalLight;
 
-    [Header("Light Intensity")]
+    [Header("lIGHT INTENSITY")]
     public float dayLightIntensity = 1.0f;
     public float nightLightIntensity = 0.5f;
 
-    [Header("Transition")]
+    [Header("TRANSITION")]
     public float transitionDuration = 2.0f;
     public bool useSmoothTransition = true;
 

@@ -4,15 +4,15 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("Health Bar")]
+    [Header("HEALTH BAR")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
 
-    [Header("Mana Bar")]
+    [Header("MANA BAR")]
     [SerializeField] private Slider manaSlider;
 
-    [Header("References")]
+    [Header("REFERENCES")]
     [SerializeField] private GameObject player;
 
     [Header("UI")]
@@ -23,19 +23,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
 
-    [Header("Plant Slots")]
+    [Header("PLANT SLOTS")]
     [SerializeField] private GameObject[] slotObjects = new GameObject[5];
     [SerializeField] private Image[] slotIcons = new Image[5];
     [SerializeField] private Image[] slotBackgrounds = new Image[5];
     [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
 
-    [Header("Selection")]
+    [Header("SELECTION")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
     [SerializeField] private Color selectedColor = Color.white;
     [SerializeField] private float selectedScale = 1.2f;
     [SerializeField] private float normalScale = 1.0f;
 
-    [Header("Inventory System")]
+    [Header("INVENTORY UI")]
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private KeyCode toggleInventoryKey = KeyCode.I;
     [SerializeField] private KeyCode alternateToggleKey = KeyCode.Tab;
@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private bool disablePlayerMovementWhenOpen = true;
     [SerializeField] private ResourceInventoryUI inventoryUI;
 
-    [Header("Instructions")]
+    [Header("INSTRUCTIONS")]
     [SerializeField] private GameObject instructionsPanel;
     [SerializeField] private Button instructionsButton;
     [SerializeField] private Button closeInstructionsButton;
@@ -228,7 +228,6 @@ public class UIManager : MonoBehaviour
                 lastGameState != GameState.None)
             {
                 lastState = lastGameState;
-                Debug.Log($"Estado antes de pausar: {lastState}");
             }
 
             UpdateUIElementsVisibility();
@@ -323,7 +322,6 @@ public class UIManager : MonoBehaviour
         if (inventoryPanel == null || isInstructionsOpen) return;
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Day)
         {
-            Debug.Log("El inventario solo puede abrirse durante el dia");
             return;
         }
         inventoryPanel.SetActive(true);
@@ -374,7 +372,6 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Paused)
         {
             lastState = GameManager.Instance.currentGameState;
-            Debug.Log($"Guardando estado antes de abrir instrucciones: {lastState}");
         }
 
         if (HUD != null) HUD.SetActive(false);
@@ -400,8 +397,6 @@ public class UIManager : MonoBehaviour
         {
             playerController.SetMovementEnabled(false);
         }
-
-        Debug.Log($"Panel de instrucciones abierto desde menú de pausa: {openedFromPauseMenu}");
     }
 
     public void CloseInstructions()
@@ -421,8 +416,6 @@ public class UIManager : MonoBehaviour
             {
                 HUD.SetActive(false);
             }
-
-            Debug.Log("Volviendo al menú de pausa después de cerrar instrucciones");
         }
         else
         {

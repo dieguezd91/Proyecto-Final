@@ -57,17 +57,12 @@ public class LunarInfluenceManager : MonoBehaviour
             currentMoonPhase = lunarCycleManager.GetCurrentMoonPhase();
             UpdateLunarInfluences();
         }
-        else
-        {
-            Debug.LogError("LunarInfluenceManager: No se encontró el LunarCycleManager");
-        }
     }
 
     private void OnMoonPhaseChanged(MoonPhase newPhase)
     {
         currentMoonPhase = newPhase;
         UpdateLunarInfluences();
-        Debug.Log($"Fase lunar cambiada a: {newPhase}. Actualizando influencias...");
     }
 
     private void UpdateLunarInfluences()
@@ -78,10 +73,6 @@ public class LunarInfluenceManager : MonoBehaviour
         if (phaseIndex >= 0 && phaseIndex < 5)
         {
             ApplyManaInfluences(phaseIndex);
-        }
-        else
-        {
-            Debug.LogError($"LunarInfluenceManager: Índice de fase lunar fuera de rango: {phaseIndex}");
         }
     }
 
@@ -96,14 +87,6 @@ public class LunarInfluenceManager : MonoBehaviour
                 currentInfluences[MoonPhaseInfluence.ManaRegeneration] = manaRegenModifiers[phaseIndex];
                 currentInfluences[MoonPhaseInfluence.MaxManaCapacity] = maxManaModifiers[phaseIndex];
                 currentInfluences[MoonPhaseInfluence.ManaCost] = manaCostModifiers[phaseIndex];
-
-                Debug.Log($"Aplicando influencias lunares al maná: Regeneración x{manaRegenModifiers[phaseIndex]}, " +
-                          $"Capacidad máxima x{maxManaModifiers[phaseIndex]}, " +
-                          $"Costo de hechizos x{manaCostModifiers[phaseIndex]}");
-            }
-            else
-            {
-                Debug.LogError($"LunarInfluenceManager: Índice de fase lunar ({phaseIndex}) fuera de rango para algún array de modificadores");
             }
         }
     }

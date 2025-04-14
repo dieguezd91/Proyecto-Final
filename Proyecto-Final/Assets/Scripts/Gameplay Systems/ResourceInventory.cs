@@ -55,8 +55,6 @@ public class ResourceInventory : MonoBehaviour
         }
 
         onResourceChanged?.Invoke(resourceName, GetResourceAmount(resourceName));
-
-        Debug.Log($"Resource added: {amount} of {resourceName}. Total: {GetResourceAmount(resourceName)}");
     }
 
     public bool UseResource(string resourceName, int amount)
@@ -77,7 +75,6 @@ public class ResourceInventory : MonoBehaviour
 
             onResourceChanged?.Invoke(resourceName, GetResourceAmount(resourceName));
 
-            Debug.Log($"Resource used: {amount} of {resourceName}. Remaining: {GetResourceAmount(resourceName)}");
             return true;
         }
 
