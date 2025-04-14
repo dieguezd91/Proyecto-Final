@@ -7,7 +7,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject instructionsPanel;
     [SerializeField] private UIManager uiManager;
 
-    private bool isPaused = false;
     public static bool isGamePaused = false;
     private GameState lastState = GameState.Day;
 

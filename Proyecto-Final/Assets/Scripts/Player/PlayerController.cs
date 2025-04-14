@@ -9,13 +9,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 10f;
 
-    [Header("Spell Cooldown")]
+    [Header("SPELL SETTINGS")]
     [SerializeField] private float spellCooldown = 0.5f;
     private float nextFireTime = 0f;
 
-    [Header("Referencias")]
+    [Header("REFERENCES")]
     [SerializeField] private EnemiesSpawner gameStateController;
     [SerializeField] private PlayerAbilitySystem abilitySystem;
+
+    [Header("MANA SYSTEM")]
+    [SerializeField] private ManaSystem manaSystem;
+    [SerializeField] private float spellManaCost = 15f;
 
     private Vector2 moveInput;
     private bool movementEnabled = true;
@@ -31,6 +35,11 @@ public class PlayerController : MonoBehaviour
         if (abilitySystem == null)
         {
             abilitySystem = GetComponent<PlayerAbilitySystem>();
+        }
+
+        if (manaSystem == null)
+        {
+            manaSystem = GetComponent<ManaSystem>();
         }
 
         lastGameState = GameManager.Instance.currentGameState;
@@ -89,12 +98,15 @@ public class PlayerController : MonoBehaviour
 
     void Shoot()
     {
+        if (!manaSystem.UseMana(spellManaCost))
+        {
+            return;
+        }
+
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
-
         GameObject spell = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
-
         Spell spellComponent = spell.GetComponent<Spell>();
         if (spellComponent != null)
         {

@@ -4,24 +4,23 @@ using System.Collections;
 
 public class LifeController : MonoBehaviour
 {
-    [Header("Health Settings")]
+    [Header("HEALTH SETTINGS")]
     public float maxHealth = 100f;
     public float currentHealth;
 
-    [Header("Visual Feedback")]
+    [Header("VISUAL FEEDBACK")]
     public bool flashOnDamage = true;
     public float flashDuration = 0.1f;
     public int numberOfFlashes = 3;
     public Color flashColor = new Color(1f, 0f, 0f, 0.5f);
 
-    [Header("Events")]
+    [Header("EVENTS")]
     public UnityEvent onDeath;
     public UnityEvent<float, float> onHealthChanged;
 
 
-    [Header("ObjectDrop")]
+    [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
-
 
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
@@ -71,8 +70,6 @@ public class LifeController : MonoBehaviour
         {
             Instantiate(objetDrop, transform.position, Quaternion.identity);
         }
-
-        Debug.Log($"{gameObject.name} died");
 
         onDeath?.Invoke();
 

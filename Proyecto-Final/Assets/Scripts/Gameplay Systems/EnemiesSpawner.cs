@@ -87,7 +87,7 @@ public class EnemiesSpawner : MonoBehaviour
         currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay
         );
 
-        Debug.Log($"Iniciando horda para la noche {currentDay}. Objetivo: eliminar {totalEnemiesToKill} enemigos. Intervalo de spawn: {currentSpawnInterval}s");
+        Debug.Log($"Iniciando horda para la noche {currentDay}. Objetivo: eliminar {totalEnemiesToKill} enemigos");
 
         onHordeStart?.Invoke();
 
@@ -326,8 +326,6 @@ public class EnemiesSpawner : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("Terminando noche para testeo");
 
         if (continuousSpawnCoroutine != null)
         {
