@@ -21,13 +21,15 @@ public class EnemiesSpawner : MonoBehaviour
     public bool dontSpawnWhenPlayerNearby = true;
     public float playerCheckRadius = 5f;
 
+    [Header("Enemy Types")]
+    [SerializeField] private List<GameObject> enemyPrefabs;
+
     [Header("Events")]
     public UnityEvent onHordeStart;
     public UnityEvent onHordeEnd;
     public UnityEvent onEnemySpawned;
     public UnityEvent<int, int> onHordeProgress;
-
-    public GameObject enemyPrefab;
+    
     private int totalEnemiesKilled;
     private int currentEnemiesAlive;
     private int totalEnemiesToKill;
@@ -113,7 +115,7 @@ public class EnemiesSpawner : MonoBehaviour
 
             float adjustedInterval = AdjustSpawnIntervalByTime();
 
-            SpawnEnemy(enemyPrefab);
+            SpawnEnemy();
             totalEnemiesSpawned++;
             onEnemySpawned?.Invoke();
             onHordeProgress?.Invoke(totalEnemiesKilled, totalEnemiesToKill);
@@ -135,7 +137,6 @@ public class EnemiesSpawner : MonoBehaviour
 
     private float AdjustSpawnIntervalByTime()
     {
-        // A medida que pasa el tiempo, se acelera el ritmo de spawn
         if (currentHordeTime > 60f)
         {
             return currentSpawnInterval * 0.75f;
@@ -148,11 +149,11 @@ public class EnemiesSpawner : MonoBehaviour
         return currentSpawnInterval;
     }
 
-    void SpawnEnemy(GameObject enemyPrefab)
+    void SpawnEnemy()
     {
-        if (spawnPoints.Count == 0)
+        if (spawnPoints.Count == 0 || enemyPrefabs.Count == 0)
         {
-            Debug.Log("No hay puntos de spawn asignados");
+            Debug.Log("No hay puntos de spawn o enemigos asignados");
             return;
         }
 
@@ -172,14 +173,9 @@ public class EnemiesSpawner : MonoBehaviour
                     }
                 }
 
-                if (validSpawnPoints.Count > 0)
-                {
-                    spawnPoint = validSpawnPoints[Random.Range(0, validSpawnPoints.Count)];
-                }
-                else
-                {
-                    spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
-                }
+                spawnPoint = (validSpawnPoints.Count > 0)
+                    ? validSpawnPoints[Random.Range(0, validSpawnPoints.Count)]
+                    : spawnPoints[Random.Range(0, spawnPoints.Count)];
             }
             else
             {
@@ -191,7 +187,9 @@ public class EnemiesSpawner : MonoBehaviour
             spawnPoint = spawnPoints[totalEnemiesSpawned % spawnPoints.Count];
         }
 
-        GameObject enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        GameObject selectedEnemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+
+        GameObject enemy = Instantiate(selectedEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
         enemy.transform.SetParent(this.transform);
         currentEnemiesAlive++;
         activeEnemies.Add(enemy);

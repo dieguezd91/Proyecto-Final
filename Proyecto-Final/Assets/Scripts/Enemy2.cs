@@ -29,8 +29,6 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float bulletForce = 5f;
     private float nextTimeToFire = 0f;
 
-    
-
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
