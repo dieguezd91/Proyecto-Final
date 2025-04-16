@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
-        //DontDestroyOnLoad(gameObject); (lo que ocasionaba el bug de que se quedara en noche)
 
         if (onNewDay == null)
             onNewDay = new UnityEvent<int>();

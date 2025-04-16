@@ -10,6 +10,7 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private GameObject craftingUIPanel;
 
     private bool isPlayerNear = false;
+    public static bool isCraftingUIOpen = false;
 
     [SerializeField] private Transform recipeListContainer;
     [SerializeField] private GameObject recipeButtonPrefab;
@@ -36,12 +37,7 @@ public class CraftingUIManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                OpenCraftingUI();
-            }
-
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                CloseCraftingUI();
+                ToggleCraftingUI();
             }
         }
     }
@@ -57,20 +53,33 @@ public class CraftingUIManager : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             isPlayerNear = false;
+            if (isCraftingUIOpen)
+                CloseCraftingUI();
+        }
+    }
+
+    private void ToggleCraftingUI()
+    {
+        if (isCraftingUIOpen)
+        {
             CloseCraftingUI();
+        }
+        else
+        {
+            OpenCraftingUI();
         }
     }
 
     private void OpenCraftingUI()
     {
         craftingUIPanel.SetActive(true);
-        Time.timeScale = 0f;
+        isCraftingUIOpen = true;
     }
 
     private void CloseCraftingUI()
     {
         craftingUIPanel.SetActive(false);
-        Time.timeScale = 1f;
+        isCraftingUIOpen = false;
     }
 
     private void PopulateRecipeList()

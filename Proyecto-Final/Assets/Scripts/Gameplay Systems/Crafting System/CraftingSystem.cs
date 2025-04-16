@@ -57,7 +57,6 @@ public class CraftingSystem : MonoBehaviour
     {
         if (craftingRecipes == null)
         {
-            Debug.LogError("craftingRecipes is null");
             return;
         }
 
@@ -65,7 +64,6 @@ public class CraftingSystem : MonoBehaviour
 
         if (recipe == null)
         {
-            Debug.LogWarning($"No recipe found for {seedToCraft}");
             return;
         }
 
@@ -92,21 +90,12 @@ public class CraftingSystem : MonoBehaviour
                     GameManager.Instance.uiManager.InitializeSlotUI();
                 }
 
-                Debug.Log($"Seed {seedToCraft} crafted and plant unlocked in slot {slotIndex}");
-            }
-            else
-            {
-                Debug.LogWarning($"No plant data found for seed {seedToCraft}");
             }
 
             if (GameManager.Instance?.uiManager?.inventoryUI != null)
             {
                 GameManager.Instance.uiManager.inventoryUI.UpdateAllSlots();
             }
-        }
-        else
-        {
-            Debug.Log("Not enough materials to craft the item");
         }
     }
 
