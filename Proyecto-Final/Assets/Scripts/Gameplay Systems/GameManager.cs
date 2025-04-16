@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject player;
-    [SerializeField] private GameObject home;
+    [SerializeField] public GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
 
     [Header("Game Settings")]

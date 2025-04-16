@@ -18,7 +18,6 @@ public class LifeController : MonoBehaviour
     public UnityEvent onDeath;
     public UnityEvent<float, float> onHealthChanged;
 
-
     [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
 

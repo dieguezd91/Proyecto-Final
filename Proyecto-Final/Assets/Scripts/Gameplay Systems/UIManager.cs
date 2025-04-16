@@ -9,6 +9,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
 
+    [Header("HOME HEALTH BAR")]
+    [SerializeField] private Slider homeHealthBar;
+    [SerializeField] private Image homeFillImage;
+    [SerializeField] private Gradient homeHealthGradient;
+
     [Header("MANA BAR")]
     [SerializeField] private Slider manaSlider;
 
@@ -98,6 +103,16 @@ public class UIManager : MonoBehaviour
             playerLife = player.GetComponent<LifeController>();
             playerController = player.GetComponent<PlayerController>();
             manaSystem = player.GetComponent<ManaSystem>();
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.home != null)
+        {
+            LifeController homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+            if (homeLife != null)
+            {
+                homeLife.onHealthChanged.AddListener(UpdateHomeHealthBar);
+                InitializeHomeHealthBar(homeLife);
+            }
         }
     }
 
@@ -216,6 +231,36 @@ public class UIManager : MonoBehaviour
             healthBar.maxValue = playerLife.maxHealth;
             healthBar.value = playerLife.currentHealth;
             UpdateFillColor(playerLife.GetHealthPercentage());
+        }
+    }
+
+    private void InitializeHomeHealthBar(LifeController homeLife)
+    {
+        if (homeHealthBar != null)
+        {
+            homeHealthBar.minValue = 0;
+            homeHealthBar.maxValue = homeLife.maxHealth;
+            homeHealthBar.value = homeLife.currentHealth;
+            UpdateHomeFillColor(homeLife.GetHealthPercentage());
+        }
+    }
+
+    public void UpdateHomeHealthBar(float currentHealth, float maxHealth)
+    {
+        Debug.Log($"Home Health Updated: {currentHealth}/{maxHealth}");
+
+        if (homeHealthBar != null)
+        {
+            homeHealthBar.value = currentHealth;
+            UpdateHomeFillColor(currentHealth / maxHealth);
+        }
+    }
+
+    private void UpdateHomeFillColor(float healthPercentage)
+    {
+        if (homeFillImage != null && homeHealthGradient != null)
+        {
+            homeFillImage.color = homeHealthGradient.Evaluate(healthPercentage);
         }
     }
 
