@@ -15,7 +15,11 @@ MonoBehaviour:
   plantName: Cyclonic Vine
   plantPrefab: {fileID: 3214456861987219935, guid: 75acd991917173c4d8b5670cf92d69cb, type: 3}
   plantIcon: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 0
+  startingDaySprite: {fileID: 496183913, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  daysToGrow: 2
   description: 
   seedType: 6
   slotIndex: 0

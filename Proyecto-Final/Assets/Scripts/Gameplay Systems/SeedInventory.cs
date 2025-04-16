@@ -4,6 +4,7 @@ using UnityEngine;
 [Serializable]
 public class PlantSlot
 {
+    public SeedsEnum seedType;
     public GameObject plantPrefab;
     public string plantName;
     public Sprite plantIcon;
@@ -13,8 +14,7 @@ public class PlantSlot
 
 public class SeedInventory : MonoBehaviour
 {
-    private static SeedInventory _instance;
-    public static SeedInventory Instance { get { return _instance; } }
+    public static SeedInventory Instance;
 
     [Header("SEED INVENTORY")]
     [SerializeField] private PlantSlot[] plantSlots = new PlantSlot[5];
@@ -25,13 +25,21 @@ public class SeedInventory : MonoBehaviour
 
     private void Awake()
     {
-        if (_instance != null && _instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        _instance = this;
+        Instance = this;
+
+        for (int i = 0; i < plantSlots.Length; i++)
+        {
+            if (plantSlots[i] == null)
+                plantSlots[i] = new PlantSlot();
+        }
+
+        Debug.Log("SeedInventory initialized");
     }
 
     private void Start()
@@ -55,7 +63,6 @@ public class SeedInventory : MonoBehaviour
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
         {
             selectedSlotIndex = slotIndex;
-
             onSlotSelected?.Invoke(selectedSlotIndex);
         }
     }
@@ -94,17 +101,25 @@ public class SeedInventory : MonoBehaviour
         return selectedSlotIndex;
     }
 
-    public void UnlockPlant(GameObject plantPrefab, string plantName, Sprite plantIcon, int slotIndex, int daysToGrow, string description = "")
+    public void UnlockPlant(
+        SeedsEnum seedType,
+        GameObject plantPrefab,
+        string plantName,
+        Sprite plantIcon,
+        int slotIndex,
+        int daysToGrow,
+        string description = "")
     {
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
         {
+            plantSlots[slotIndex].seedType = seedType;
             plantSlots[slotIndex].plantPrefab = plantPrefab;
             plantSlots[slotIndex].plantName = plantName;
             plantSlots[slotIndex].plantIcon = plantIcon;
             plantSlots[slotIndex].daysToGrow = daysToGrow;
             plantSlots[slotIndex].description = description;
 
-            Debug.Log($"Unlocked new plant: {plantName} in slot {slotIndex + 1}");
+            Debug.Log($"Unlocked new plant: {plantName} (Seed: {seedType}) in slot {slotIndex + 1}");
         }
     }
 }

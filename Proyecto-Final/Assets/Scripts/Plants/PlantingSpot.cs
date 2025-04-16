@@ -52,8 +52,9 @@ public class PlantingSpot : MonoBehaviour
         isOccupied = true;
 
         Plant plantComponent = currentPlant.GetComponent<Plant>();
-        if (plantComponent != null && PlantManager.Instance != null)
+        if (plantComponent != null)
         {
+            plantComponent.plantingDay = GameManager.Instance.GetCurrentDay();
             PlantManager.Instance.RegisterPlant(plantComponent);
         }
 
@@ -138,21 +139,6 @@ public class PlantingSpot : MonoBehaviour
             else
             {
                 Debug.Log("Necesitas seleccionar la herramienta de plantar");
-            }
-        }
-    }
-
-    public void RegisterPlant(GameObject plant)
-    {
-        if (plant != null && !isOccupied)
-        {
-            currentPlant = plant;
-            isOccupied = true;
-
-            Plant plantComponent = currentPlant.GetComponent<Plant>();
-            if (plantComponent != null && PlantManager.Instance != null)
-            {
-                PlantManager.Instance.RegisterPlant(plantComponent);
             }
         }
     }

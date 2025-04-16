@@ -140,11 +140,13 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             Debug.Log($"Plantando {plantInventory.GetSelectedPlantName()}");
             spot.Plant(selectedPlantPrefab);
+
             return true;
         }
 
         return false;
     }
+
 
     private void HandlePlanting()
     {

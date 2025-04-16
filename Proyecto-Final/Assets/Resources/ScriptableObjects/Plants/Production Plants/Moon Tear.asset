@@ -15,7 +15,11 @@ MonoBehaviour:
   plantName: Moon Tear
   plantPrefab: {fileID: 3214456861987219935, guid: 58362acd7d0951f468b7eb8a4190a2be, type: 3}
   plantIcon: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 0
+  startingDaySprite: {fileID: 496183913, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  daysToGrow: 2
   description: 
   seedType: 1
   slotIndex: 0

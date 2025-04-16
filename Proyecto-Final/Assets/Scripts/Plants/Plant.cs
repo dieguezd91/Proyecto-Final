@@ -2,40 +2,51 @@ using UnityEngine;
 
 public class Plant : MonoBehaviour
 {
-    [Header("Growth Configuration")]
-    public int daysToGrow;
-
-    [Header("Plant Settings")]
-    public float healthMultiplierWhenMature;
-    public Sprite plantSprite;
+    [Header("Plant Data")]
+    [SerializeField] protected PlantDataSO plantData;
 
     [Header("State")]
-    [SerializeField] private int plantingDay;
+    [SerializeField] public int plantingDay;
     [SerializeField] private bool growthCompleted = false;
 
-    private Vector3 initialScale;
-    private Vector3 finalScale = Vector3.one;
+    protected int daysToGrow;
+    protected Sprite plantSprite;
+
     private LifeController lifeController;
     private PlantingSpot plantingSpot;
 
-    public Animator animator;
-    private string currentState;
-    const string PlayStartingDay = "PlantSeed";
-    const string PlayMiddleDay = "PlantRoots";
-    const string PlayLastDay = "PlantFlowering";
-    const string PlayFullyGrown = "PlantGrown";
+    private SpriteRenderer spriteRenderer;
+
+    protected Sprite startingDaySprite;
+    protected Sprite middleDaySprite;
+    protected Sprite lastDaySprite;
+    protected Sprite fullyGrownSprite;
 
     protected virtual void Start()
     {
-        animator = GetComponent<Animator>();
-        initialScale = Vector3.one * 0.3f;
-        transform.localScale = initialScale;
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         plantingDay = GameManager.Instance.GetCurrentDay();
-
         GameManager.Instance.onNewDay.AddListener(OnNewDay);
 
-        UpdateGrowthStatus(GameManager.Instance.GetCurrentDay());
+        if (plantData != null)
+        {
+            daysToGrow = plantData.daysToGrow;
+            plantSprite = plantData.plantIcon;
+
+            startingDaySprite = plantData.startingDaySprite;
+            middleDaySprite = plantData.middleDaySprite;
+            lastDaySprite = plantData.lastDaySprite;
+            fullyGrownSprite = plantData.fullyGrownSprite;
+
+            ChangeSprite(startingDaySprite);
+        }
+        else
+        {
+            Debug.LogWarning($"[Plant] No PlantDataSO assigned on {gameObject.name}");
+        }
+
+        FindPlantingSpot();
 
         lifeController = GetComponent<LifeController>();
         if (lifeController == null)
@@ -44,10 +55,6 @@ public class Plant : MonoBehaviour
         }
 
         lifeController.onDeath.AddListener(HandlePlantDeath);
-
-        FindPlantingSpot();
-
-        ChangeAnimationState(PlayStartingDay);
     }
 
     protected virtual void OnDestroy()
@@ -63,13 +70,6 @@ public class Plant : MonoBehaviour
         }
     }
 
-    void ChangeAnimationState(string newState)
-    {
-        if (currentState == newState) return;
-        animator.Play(newState);
-        currentState = newState;
-    }
-
     private void OnNewDay(int currentDay)
     {
         UpdateGrowthStatus(currentDay);
@@ -82,23 +82,29 @@ public class Plant : MonoBehaviour
 
         int daysSincePlanting = currentDay - plantingDay;
 
-        float progress = Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
+        if (daysSincePlanting <= 0)
+        {
+            ChangeSprite(startingDaySprite);
+            return;
+        }
 
-        transform.localScale = Vector3.Lerp(initialScale, finalScale, progress);
-
-        if (progress <= 0.33f)
-            ChangeAnimationState(PlayStartingDay);
-        else if (progress <= 0.66f)
-            ChangeAnimationState(PlayMiddleDay);
-        else if (progress < 1.0f)
-            ChangeAnimationState(PlayLastDay);
+        Debug.Log($"Planta: {gameObject.name}, Días desde plantación: {daysSincePlanting}, Días para crecer: {daysToGrow}");
 
         if (daysSincePlanting >= daysToGrow)
         {
             CompleteGrowth();
+            return;
         }
 
-        Debug.Log($"Plant: Growth updated. Day {currentDay}, Days since planting: {daysSincePlanting}/{daysToGrow}, Progress: {(progress * 100):F0}%");
+        float progress = Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
+        Debug.Log($"Progreso de crecimiento: {progress:F2}");
+
+        if (progress <= 0.33f)
+            ChangeSprite(startingDaySprite);
+        else if (progress <= 0.66f)
+            ChangeSprite(middleDaySprite);
+        else if (progress < 1.0f)
+            ChangeSprite(lastDaySprite);
     }
 
     private void CompleteGrowth()
@@ -107,24 +113,19 @@ public class Plant : MonoBehaviour
             return;
 
         growthCompleted = true;
-        transform.localScale = finalScale;
         Debug.Log("Plant: Growth completed");
-        ChangeAnimationState(PlayFullyGrown);
+        ChangeSprite(fullyGrownSprite);
         OnMature();
     }
 
     protected virtual void OnMature()
     {
-        if (lifeController != null && healthMultiplierWhenMature > 1.0f)
+        if (lifeController != null)
         {
-            float newMaxHealth = lifeController.maxHealth * healthMultiplierWhenMature;
-            float healthPercentage = lifeController.currentHealth / lifeController.maxHealth;
-
+            float newMaxHealth = lifeController.maxHealth * 1.5f;
             lifeController.maxHealth = newMaxHealth;
-            lifeController.currentHealth = newMaxHealth * healthPercentage;
-
+            lifeController.currentHealth = newMaxHealth;
             lifeController.onHealthChanged?.Invoke(lifeController.currentHealth, lifeController.maxHealth);
-
             Debug.Log($"Plant matured: Health increased to {lifeController.maxHealth}");
         }
     }
@@ -141,6 +142,9 @@ public class Plant : MonoBehaviour
 
         int currentDay = GameManager.Instance.GetCurrentDay();
         int daysSincePlanting = currentDay - plantingDay;
+
+        if (daysSincePlanting <= 0)
+            return 0f;
 
         return Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
     }
@@ -166,6 +170,14 @@ public class Plant : MonoBehaviour
                 plantingSpot = spot;
                 break;
             }
+        }
+    }
+
+    private void ChangeSprite(Sprite newSprite)
+    {
+        if (spriteRenderer != null && newSprite != null)
+        {
+            spriteRenderer.sprite = newSprite;
         }
     }
 

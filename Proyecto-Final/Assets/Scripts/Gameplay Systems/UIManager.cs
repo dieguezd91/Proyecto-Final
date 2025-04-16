@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void InitializeSlotUI()
+    public void InitializeSlotUI()
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {

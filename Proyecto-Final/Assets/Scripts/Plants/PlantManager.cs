@@ -74,7 +74,10 @@ public class PlantManager : MonoBehaviour
 
         foreach (Plant plant in registeredPlants)
         {
-            plant.SendMessage("OnNewDay", dayCounter, SendMessageOptions.DontRequireReceiver);
+            if (plant != null && plant.plantingDay > 0)
+            {
+                plant.SendMessage("OnNewDay", dayCounter, SendMessageOptions.DontRequireReceiver);
+            }
         }
     }
 
