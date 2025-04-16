@@ -22,12 +22,16 @@ public class Plant : MonoBehaviour
     protected Sprite lastDaySprite;
     protected Sprite fullyGrownSprite;
 
+    protected PlayerAbilitySystem abilitySystem;
+
     protected virtual void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         plantingDay = GameManager.Instance.GetCurrentDay();
         GameManager.Instance.onNewDay.AddListener(OnNewDay);
+
+        abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
 
         if (plantData != null)
         {

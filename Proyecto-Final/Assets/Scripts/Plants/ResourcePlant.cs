@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ResourcePlant : Plant
 {
@@ -15,6 +16,11 @@ public class ResourcePlant : Plant
     [SerializeField] private float harvestDuration = 2f;
     [SerializeField] private GameObject harvestProgressIndicator;
 
+    private SpriteRenderer plantRenderer;
+    private Color originalColor;
+    public Color highlightColor;
+    public Color clickColor;
+
     private int lastProductionDay = 0;
     private bool isProducing = false;
     private bool isReadyToHarvest = false;
@@ -23,6 +29,10 @@ public class ResourcePlant : Plant
     protected override void Start()
     {
         base.Start();
+
+        plantRenderer = GetComponent<SpriteRenderer>();
+        originalColor = plantRenderer.color;
+
         lastProductionDay = GameManager.Instance.GetCurrentDay();
 
         if (harvestProgressIndicator != null)
@@ -181,11 +191,53 @@ public class ResourcePlant : Plant
         return materialSprite;
     }
 
-    void OnMouseDown()
+    void OnMouseOver()
     {
-        if (isReadyToHarvest && !isBeingHarvested)
+        if (isReadyToHarvest)
         {
-            StartHarvest();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                float distance = Vector2.Distance(transform.position, player.transform.position);
+                if (abilitySystem != null && distance <= abilitySystem.interactionDistance)
+                {
+                    plantRenderer.color = highlightColor;
+                }
+                else
+                {
+                    plantRenderer.color = originalColor;
+                }
+            }
         }
     }
+
+    void OnMouseExit()
+    {
+        if (!isBeingHarvested)
+        {
+            plantRenderer.color = originalColor;
+        }
+    }
+
+    //void OnMouseDown()
+    //{
+    //    if (!isReadyToHarvest || isBeingHarvested || abilitySystem == null) return;
+
+    //    GameObject player = GameObject.FindGameObjectWithTag("Player");
+    //    if (player != null)
+    //    {
+    //        float distance = Vector2.Distance(transform.position, player.transform.position);
+    //        if (distance <= abilitySystem.interactionDistance)
+    //        {
+    //            plantRenderer.color = clickColor;
+
+    //            StartHarvest();
+    //        }
+    //        else
+    //        {
+    //            plantRenderer.color = originalColor;
+    //        }
+    //    }
+    //}
+
 }

@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 3090849335543341568}
   - component: {fileID: 4875041280475820911}
   - component: {fileID: 1099973671300293658}
+  - component: {fileID: 477447474750530567}
   - component: {fileID: 94765001059883094}
   - component: {fileID: 4502512717715921832}
   - component: {fileID: 9064956187856915231}
   - component: {fileID: 1774628585642013327}
-  - component: {fileID: 477447474750530567}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -137,11 +137,29 @@ MonoBehaviour:
   plantingLayer:
     serializedVersion: 2
     m_Bits: 64
-  interactionDistance: 1
+  interactionDistance: 1.5
   progressBar: {fileID: 0}
   progressBarTarget: {fileID: 3535706038251047626}
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
+--- !u!114 &477447474750530567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c873a838f91eb914bb6d83ad2d53f82f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseMaxMana: 100
+  currentMana: 0
+  baseDayRegenerationRate: 2
+  baseNightRegenerationRate: 0.5
+  modifiedMaxMana: 0
+  useLunarInfluence: 1
 --- !u!114 &94765001059883094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,24 +278,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &477447474750530567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429872126492704177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c873a838f91eb914bb6d83ad2d53f82f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseMaxMana: 100
-  currentMana: 0
-  baseDayRegenerationRate: 2
-  baseNightRegenerationRate: 0.5
-  modifiedMaxMana: 0
-  useLunarInfluence: 1
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0

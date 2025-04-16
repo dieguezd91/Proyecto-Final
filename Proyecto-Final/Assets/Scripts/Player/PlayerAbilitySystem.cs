@@ -231,6 +231,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         isHarvesting = true;
         playerController.SetMovementEnabled(false);
 
+        currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
+
         if (progressBar != null)
         {
             Debug.Log("Mostrando barra de progreso para cosecha");
