@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class ProgressBar : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Image fillImage;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private TextMeshProUGUI interactionText;
 
     [Header("Settings")]
     [SerializeField] private float fadeSpeed = 5f;
@@ -24,6 +26,9 @@ public class ProgressBar : MonoBehaviour
 
         if (fillImage == null)
             fillImage = transform.Find("Fill").GetComponent<Image>();
+
+        if (interactionText == null)
+            interactionText = transform.Find("InteractionText").GetComponent<TextMeshProUGUI>();
 
         canvasGroup.alpha = 0f;
     }
@@ -59,6 +64,8 @@ public class ProgressBar : MonoBehaviour
     {
         isActive = true;
         fillImage.color = isHarvesting ? harvestColor : digColor;
+
+        interactionText.text = isHarvesting ? "Harvesting..." : "Digging...";
     }
 
     public void Hide()

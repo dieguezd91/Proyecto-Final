@@ -439,8 +439,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void CompleteDigging()
     {
         isDigging = false;
-        //playerController.SetMovementEnabled(true);
-        Debug.Log("Proceso de cavado completo");
+        Debug.Log("cavado completo");
         playerController.SetMovementEnabled(true);
         if (progressBar != null)
         {
