@@ -8,13 +8,18 @@ public class ResourcePlant : Plant
     [SerializeField] private int daysToProduceResources = 2;
     [SerializeField] private int minimumResourceAmount = 1;
     [SerializeField] private int maximumResourceAmount = 5;
-    [SerializeField] private string resourceType = "Wood";
-    [SerializeField] private Sprite resourceSprite;
+    [SerializeField] private MaterialType materialType;
+    [SerializeField] private Sprite materialSprite;
 
 
     [Header("HARVEST SETTINGS")]
     [SerializeField] private float harvestDuration = 2f;
     [SerializeField] private GameObject harvestProgressIndicator;
+
+    private SpriteRenderer plantRenderer;
+    private Color originalColor;
+    public Color highlightColor;
+    public Color clickColor;
 
     private int lastProductionDay = 0;
     private bool isProducing = false;
@@ -24,6 +29,10 @@ public class ResourcePlant : Plant
     protected override void Start()
     {
         base.Start();
+
+        plantRenderer = GetComponent<SpriteRenderer>();
+        originalColor = plantRenderer.color;
+
         lastProductionDay = GameManager.Instance.GetCurrentDay();
 
         if (harvestProgressIndicator != null)
@@ -140,11 +149,11 @@ public class ResourcePlant : Plant
 
         int resourceAmount = Random.Range(minimumResourceAmount, maximumResourceAmount + 1);
 
-        if (ResourceInventory.Instance != null)
+        if (InventoryManager.Instance != null)
         {
-            ResourceInventory.Instance.AddResource(resourceType, resourceAmount);
+            InventoryManager.Instance.AddMaterial(materialType, resourceAmount);
 
-            ResourceInventoryUI inventoryUI = FindObjectOfType<ResourceInventoryUI>();
+            InventoryUI inventoryUI = FindObjectOfType<InventoryUI>();
             if (inventoryUI != null && inventoryUI.gameObject.activeInHierarchy)
             {
                 inventoryUI.UpdateAllSlots();
@@ -154,10 +163,8 @@ public class ResourcePlant : Plant
         Sprite resourceSprite = GetResourceSprite();
         if (resourceSprite != null)
         {
-            ResourceInventory.Instance.SetResourceIcon(resourceType, resourceSprite);
+            InventoryManager.Instance.SetMaterialIcon(materialType, resourceSprite);
         }
-
-        Debug.Log($"ResourcePlant: Harvested {resourceAmount} of {resourceType}");
 
         if (harvestProgressIndicator != null)
         {
@@ -181,14 +188,56 @@ public class ResourcePlant : Plant
 
     private Sprite GetResourceSprite()
     {
-        return resourceSprite;
+        return materialSprite;
     }
 
-    void OnMouseDown()
+    void OnMouseOver()
     {
-        if (isReadyToHarvest && !isBeingHarvested)
+        if (isReadyToHarvest)
         {
-            StartHarvest();
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                float distance = Vector2.Distance(transform.position, player.transform.position);
+                if (abilitySystem != null && distance <= abilitySystem.interactionDistance)
+                {
+                    plantRenderer.color = highlightColor;
+                }
+                else
+                {
+                    plantRenderer.color = originalColor;
+                }
+            }
         }
     }
+
+    void OnMouseExit()
+    {
+        if (!isBeingHarvested)
+        {
+            plantRenderer.color = originalColor;
+        }
+    }
+
+    //void OnMouseDown()
+    //{
+    //    if (!isReadyToHarvest || isBeingHarvested || abilitySystem == null) return;
+
+    //    GameObject player = GameObject.FindGameObjectWithTag("Player");
+    //    if (player != null)
+    //    {
+    //        float distance = Vector2.Distance(transform.position, player.transform.position);
+    //        if (distance <= abilitySystem.interactionDistance)
+    //        {
+    //            plantRenderer.color = clickColor;
+
+    //            StartHarvest();
+    //        }
+    //        else
+    //        {
+    //            plantRenderer.color = originalColor;
+    //        }
+    //    }
+    //}
+
 }

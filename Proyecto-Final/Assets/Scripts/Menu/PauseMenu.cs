@@ -20,7 +20,11 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !IsInstructionsPanelActive() && GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.GameOver)
+        if (Input.GetKeyDown(KeyCode.Escape) &&
+            !IsInstructionsPanelActive() &&
+            !CraftingUIManager.isCraftingUIOpen &&
+            GameManager.Instance != null &&
+            GameManager.Instance.currentGameState != GameState.GameOver)
         {
             if (isGamePaused)
             {

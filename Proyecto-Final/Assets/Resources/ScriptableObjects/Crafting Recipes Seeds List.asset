@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576401c99434a3944869f81f19ce2eb3, type: 3}
+  m_Name: Crafting Recipes Seeds List
+  m_EditorClassIdentifier: 
+  recipes:
+  - {fileID: 11400000, guid: bce6d2dcdc32b7c4fbc2c8e05db98087, type: 2}
+  - {fileID: 11400000, guid: 9aaa82d2dde3b3e4b872c0fc6840ecfb, type: 2}
+  - {fileID: 11400000, guid: aba85f3225505c846a56457dd9190017, type: 2}
+  - {fileID: 11400000, guid: 59df159452fba50458e6057d0e9df80b, type: 2}

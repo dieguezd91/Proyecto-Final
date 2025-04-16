@@ -27,7 +27,7 @@ public class InventorySlotUI : MonoBehaviour
         Clear();
     }
 
-    public void Setup(string name, int amount, Sprite icon)
+    public void Setup(MaterialType type, int amount, Sprite icon)
     {
         resourceName = name;
         resourceAmount = amount;

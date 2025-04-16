@@ -30,7 +30,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] private Vector3 progressBarOffset = new Vector3(0, 1.5f, 0);
 
     [Header("References")]
-    [SerializeField] private PlantInventory plantInventory;
+    [SerializeField] private SeedInventory plantInventory;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
@@ -61,7 +61,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (plantInventory == null)
         {
-            plantInventory = FindObjectOfType<PlantInventory>();
+            plantInventory = FindObjectOfType<SeedInventory>();
         }
     }
 
@@ -140,11 +140,13 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             Debug.Log($"Plantando {plantInventory.GetSelectedPlantName()}");
             spot.Plant(selectedPlantPrefab);
+
             return true;
         }
 
         return false;
     }
+
 
     private void HandlePlanting()
     {
@@ -228,6 +230,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         currentHarvestPlant = plant;
         isHarvesting = true;
         playerController.SetMovementEnabled(false);
+
+        currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
 
         if (progressBar != null)
         {
@@ -437,8 +441,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void CompleteDigging()
     {
         isDigging = false;
-        //playerController.SetMovementEnabled(true);
-        Debug.Log("Proceso de cavado completo");
+        Debug.Log("cavado completo");
         playerController.SetMovementEnabled(true);
         if (progressBar != null)
         {
