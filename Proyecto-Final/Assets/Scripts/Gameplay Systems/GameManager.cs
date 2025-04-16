@@ -12,6 +12,16 @@ public enum GameState
     Night
 }
 
+public enum ElementEnum
+{
+    Ice,
+    Wind,
+    Electric,
+    Fire,
+    Stellar,
+    Lunar
+}
+
 public class GameManager : MonoBehaviour
 {
     [Header("References")]

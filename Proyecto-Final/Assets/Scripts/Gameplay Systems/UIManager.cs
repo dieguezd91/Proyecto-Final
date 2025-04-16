@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private KeyCode alternateToggleKey = KeyCode.Tab;
     [SerializeField] private bool closeInventoryOnEscape = true;
     [SerializeField] private bool disablePlayerMovementWhenOpen = true;
-    [SerializeField] private ResourceInventoryUI inventoryUI;
+    [SerializeField] public InventoryUI inventoryUI;
 
     [Header("INSTRUCTIONS")]
     [SerializeField] private GameObject instructionsPanel;
@@ -167,7 +167,7 @@ public class UIManager : MonoBehaviour
 
         if (inventoryUI == null && inventoryPanel != null)
         {
-            inventoryUI = inventoryPanel.GetComponent<ResourceInventoryUI>();
+            inventoryUI = inventoryPanel.GetComponent<InventoryUI>();
         }
 
         if (inventoryPanel != null)

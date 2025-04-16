@@ -8,8 +8,8 @@ public class ResourcePlant : Plant
     [SerializeField] private int daysToProduceResources = 2;
     [SerializeField] private int minimumResourceAmount = 1;
     [SerializeField] private int maximumResourceAmount = 5;
-    [SerializeField] private string resourceType = "Wood";
-    [SerializeField] private Sprite resourceSprite;
+    [SerializeField] private MaterialType materialType;
+    [SerializeField] private Sprite materialSprite;
 
 
     [Header("HARVEST SETTINGS")]
@@ -140,11 +140,11 @@ public class ResourcePlant : Plant
 
         int resourceAmount = Random.Range(minimumResourceAmount, maximumResourceAmount + 1);
 
-        if (ResourceInventory.Instance != null)
+        if (InventoryManager.Instance != null)
         {
-            ResourceInventory.Instance.AddResource(resourceType, resourceAmount);
+            InventoryManager.Instance.AddMaterial(materialType, resourceAmount);
 
-            ResourceInventoryUI inventoryUI = FindObjectOfType<ResourceInventoryUI>();
+            InventoryUI inventoryUI = FindObjectOfType<InventoryUI>();
             if (inventoryUI != null && inventoryUI.gameObject.activeInHierarchy)
             {
                 inventoryUI.UpdateAllSlots();
@@ -154,10 +154,8 @@ public class ResourcePlant : Plant
         Sprite resourceSprite = GetResourceSprite();
         if (resourceSprite != null)
         {
-            ResourceInventory.Instance.SetResourceIcon(resourceType, resourceSprite);
+            InventoryManager.Instance.SetMaterialIcon(materialType, resourceSprite);
         }
-
-        Debug.Log($"ResourcePlant: Harvested {resourceAmount} of {resourceType}");
 
         if (harvestProgressIndicator != null)
         {
@@ -181,7 +179,7 @@ public class ResourcePlant : Plant
 
     private Sprite GetResourceSprite()
     {
-        return resourceSprite;
+        return materialSprite;
     }
 
     void OnMouseDown()
