@@ -30,7 +30,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] private Vector3 progressBarOffset = new Vector3(0, 1.5f, 0);
 
     [Header("References")]
-    [SerializeField] private PlantInventory plantInventory;
+    [SerializeField] private SeedInventory plantInventory;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
@@ -61,7 +61,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (plantInventory == null)
         {
-            plantInventory = FindObjectOfType<PlantInventory>();
+            plantInventory = FindObjectOfType<SeedInventory>();
         }
     }
 

@@ -14,8 +14,12 @@ public class InventoryManager : MonoBehaviour
 {
     private static InventoryManager _instance;
     public static InventoryManager Instance { get { return _instance; } }
+
     [Header("MATERIALS INVENTORY")]
     [SerializeField] private List<MaterialItem> materials = new();
+
+    [Header("DATABASE")]
+    [SerializeField] private MaterialDatabaseSO materialDatabase;
 
     public Action<MaterialType, int> onMaterialChanged;
 
@@ -42,11 +46,20 @@ public class InventoryManager : MonoBehaviour
         }
         else
         {
+            Sprite icon = null;
+
+            if (materialDatabase != null)
+            {
+                CraftingMaterialSO data = materialDatabase.GetMaterial(type);
+                if (data != null)
+                    icon = data.materialIcon;
+            }
+
             materials.Add(new MaterialItem
             {
                 type = type,
                 amount = amount,
-                icon = null
+                icon = icon
             });
         }
 

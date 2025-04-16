@@ -11,16 +11,16 @@ public class PlantSlot
     public string description;
 }
 
-public class PlantInventory : MonoBehaviour
+public class SeedInventory : MonoBehaviour
 {
-    private static PlantInventory _instance;
-    public static PlantInventory Instance { get { return _instance; } }
+    private static SeedInventory _instance;
+    public static SeedInventory Instance { get { return _instance; } }
 
-    [Header("Plant Inventory")]
+    [Header("SEED INVENTORY")]
     [SerializeField] private PlantSlot[] plantSlots = new PlantSlot[5];
     [SerializeField] private int selectedSlotIndex = 0;
 
-    [Header("UI Events")]
+    [Header("UI EVENTS")]
     public Action<int> onSlotSelected;
 
     private void Awake()

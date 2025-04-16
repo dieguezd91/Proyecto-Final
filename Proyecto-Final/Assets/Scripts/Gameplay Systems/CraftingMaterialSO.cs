@@ -26,7 +26,7 @@ public enum RarityEnum
     rare
 }
 
-[CreateAssetMenu(fileName = "New Material Data", menuName = "Scriptable Object/Material Data")]
+[CreateAssetMenu(fileName = "New Material Data", menuName = "Crafting/Material Data")]
 public class CraftingMaterialSO : ScriptableObject
 {
     public string materialName;

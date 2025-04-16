@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CraftingRecipes", menuName = "Crafting/CraftingSeedsRecipes")]
+[CreateAssetMenu(fileName = "Crafting Recipes", menuName = "Crafting/Crafting Seeds Recipes")]
 public class CraftingRecipesSeedsListSO : ScriptableObject
 {
     public List<CraftingRecipeSeedData> recipes;

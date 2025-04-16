@@ -75,9 +75,9 @@ public class UIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (PlantInventory.Instance != null)
+        if (SeedInventory.Instance != null)
         {
-            PlantInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
+            SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
         }
     }
 
@@ -109,9 +109,9 @@ public class UIManager : MonoBehaviour
             InitializeHealthBar();
         }
 
-        if (PlantInventory.Instance != null)
+        if (SeedInventory.Instance != null)
         {
-            PlantInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
+            SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
         }
 
         if (startNightButton != null)
@@ -148,10 +148,10 @@ public class UIManager : MonoBehaviour
             isInstructionsOpen = false;
         }
 
-        if (PlantInventory.Instance != null)
+        if (SeedInventory.Instance != null)
         {
             InitializeSlotUI();
-            UpdateSelectedSlotUI(PlantInventory.Instance.GetSelectedSlotIndex());
+            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
         }
 
         InitializeInventory();
@@ -183,7 +183,7 @@ public class UIManager : MonoBehaviour
         {
             if (slotObjects[i] != null)
             {
-                PlantSlot plantSlot = PlantInventory.Instance.GetPlantSlot(i);
+                PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
                 if (plantSlot != null && plantSlot.plantPrefab != null)
                 {
                     if (slotIcons[i] != null)

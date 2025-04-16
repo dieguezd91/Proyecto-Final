@@ -117,11 +117,11 @@ public class PlantingSpot : MonoBehaviour
             }
         }
 
-        if (!isOccupied && PlantInventory.Instance != null)
+        if (!isOccupied && SeedInventory.Instance != null)
         {
             if (playerAbilitySystem.CurrentAbility == PlayerAbility.Planting)
             {
-                GameObject selectedPlantPrefab = PlantInventory.Instance.GetSelectedPlantPrefab();
+                GameObject selectedPlantPrefab = SeedInventory.Instance.GetSelectedPlantPrefab();
                 if (selectedPlantPrefab != null)
                 {
                     float distance = Vector2.Distance(playerAbilitySystem.transform.position, transform.position);
