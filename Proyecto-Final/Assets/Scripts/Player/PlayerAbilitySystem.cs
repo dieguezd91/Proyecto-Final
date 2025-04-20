@@ -106,6 +106,34 @@ public class PlayerAbilitySystem : MonoBehaviour
                 HandleDigging();
                 break;
         }
+
+        HandleMouseScroll();
+    }
+
+    private void HandleMouseScroll()
+    {
+        if (isDigging || isHarvesting)
+            return;
+
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (Mathf.Abs(scroll) > 0.01f)
+        {
+            PlayerAbility[] validAbilities = new PlayerAbility[]
+            {
+            PlayerAbility.Planting,
+            PlayerAbility.Harvesting,
+            PlayerAbility.Digging
+            };
+
+            int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
+            if (currentIndex == -1) currentIndex = 0;
+
+            int nextIndex = scroll > 0
+                ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length
+                : (currentIndex + 1) % validAbilities.Length;
+
+            SetAbility(validAbilities[nextIndex]);
+        }
     }
 
     public void SetAbility(PlayerAbility ability)

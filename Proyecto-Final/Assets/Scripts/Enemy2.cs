@@ -45,6 +45,8 @@ public class Enemy2 : MonoBehaviour
     {
         if (currentTarget == null) return;
 
+        Debug.Log("FixedUpdate activo para " + gameObject.name);
+
         float dist = Vector2.Distance(transform.position, currentTarget.position);
         if (dist > detectRange) return;
 
@@ -123,6 +125,8 @@ public class Enemy2 : MonoBehaviour
 
         currentTarget = best;
         currentTargetType = bestType;
+
+        Debug.Log($"[{gameObject.name}] Target actual: {currentTargetType}");
     }
 
     private void Shoot()
