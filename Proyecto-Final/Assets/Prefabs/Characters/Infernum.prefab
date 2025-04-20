@@ -252,6 +252,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   objetDrop: {fileID: 0}
+  manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
+  manaDropChance: 1
 --- !u!58 &2233657917444059624
 CircleCollider2D:
   m_ObjectHideFlags: 0

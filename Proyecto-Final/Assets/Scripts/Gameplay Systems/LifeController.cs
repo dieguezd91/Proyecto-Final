@@ -20,6 +20,10 @@ public class LifeController : MonoBehaviour
 
     [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
+    
+    [Header("MANA DROP")]
+    [SerializeField] private GameObject manaPickupPrefab;
+    [SerializeField] private float manaDropChance = 1f;
 
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
@@ -68,6 +72,11 @@ public class LifeController : MonoBehaviour
         if (objetDrop != null && Random.value < 0.5f)
         {
             Instantiate(objetDrop, transform.position, Quaternion.identity);
+        }
+
+        if (manaPickupPrefab != null && Random.value < manaDropChance)
+        {
+            Instantiate(manaPickupPrefab, transform.position, Quaternion.identity);
         }
 
         onDeath?.Invoke();
