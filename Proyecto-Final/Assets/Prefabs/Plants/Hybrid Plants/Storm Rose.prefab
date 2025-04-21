@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 2015212756354474771}
   m_Layer: 9
   m_Name: Storm Rose
-  m_TagString: Untagged
+  m_TagString: Plant
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -219,6 +219,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   objetDrop: {fileID: 0}
+  manaPickupPrefab: {fileID: 0}
+  manaDropChance: 1
 --- !u!61 &2015212756354474771
 BoxCollider2D:
   m_ObjectHideFlags: 0

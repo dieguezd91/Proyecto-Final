@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 10f;
 
+
     [Header("SPELL SETTINGS")]
     [SerializeField] private float spellCooldown = 0.5f;
     private float nextFireTime = 0f;
@@ -16,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("REFERENCES")]
     [SerializeField] private EnemiesSpawner gameStateController;
     [SerializeField] private PlayerAbilitySystem abilitySystem;
+   
 
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;

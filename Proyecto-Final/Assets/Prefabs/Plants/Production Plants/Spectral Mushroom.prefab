@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7829583524592923926}
   m_Layer: 9
   m_Name: Spectral Mushroom
-  m_TagString: Untagged
+  m_TagString: Plant
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,6 +137,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   objetDrop: {fileID: 0}
+  manaPickupPrefab: {fileID: 0}
+  manaDropChance: 1
 --- !u!61 &6625974310736771145
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -18,6 +18,8 @@ public class FireBullet : MonoBehaviour
 
     private float trailTimer;
 
+    [SerializeField] private GameObject DamagedScreen;
+
 
     void Awake()
     {
@@ -49,6 +51,9 @@ public class FireBullet : MonoBehaviour
             if (Health != null)
             {
                 Health.TakeDamage(damage);
+                DamagedScreen.SetActive(true);
+                StartCoroutine(DamagedScreenOff());
+
             }
 
             Destroy(gameObject);
@@ -68,5 +73,11 @@ public class FireBullet : MonoBehaviour
     void SpawnTrail()
     {
         Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
+    }
+
+    IEnumerator DamagedScreenOff()
+    {
+        yield return new WaitForSeconds(0.5f);
+        DamagedScreen.SetActive(false);
     }
 }
