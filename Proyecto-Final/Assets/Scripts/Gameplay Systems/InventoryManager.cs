@@ -103,4 +103,17 @@ public class InventoryManager : MonoBehaviour
         if (mat != null)
             mat.icon = icon;
     }
+
+    public string GetMaterialName(MaterialType type)
+    {
+        if (materialDatabase != null)
+        {
+            CraftingMaterialSO data = materialDatabase.GetMaterial(type);
+            if (data != null)
+            {
+                return data.materialName;
+            }
+        }
+        return type.ToString();
+    }
 }

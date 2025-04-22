@@ -6,6 +6,7 @@ public class InventorySlotUI : MonoBehaviour
 {
     [Header("UI Components")]
     [SerializeField] private Image iconImage;
+    [SerializeField] private TextMeshProUGUI materialNameText;
     [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Image backgroundImage;
 
@@ -29,7 +30,10 @@ public class InventorySlotUI : MonoBehaviour
 
     public void Setup(MaterialType type, int amount, Sprite icon)
     {
-        resourceName = name;
+        resourceName = InventoryManager.Instance != null
+            ? InventoryManager.Instance.GetMaterialName(type)
+            : type.ToString();
+
         resourceAmount = amount;
 
         if (iconImage != null)
@@ -42,6 +46,12 @@ public class InventorySlotUI : MonoBehaviour
         {
             amountText.text = amount.ToString();
             amountText.enabled = true;
+        }
+
+        if (materialNameText != null)
+        {
+            materialNameText.text = resourceName;
+            materialNameText.enabled = true;
         }
 
         isOccupied = true;
@@ -73,6 +83,12 @@ public class InventorySlotUI : MonoBehaviour
         {
             amountText.text = string.Empty;
             amountText.enabled = false;
+        }
+
+        if (materialNameText != null)
+        {
+            materialNameText.text = string.Empty;
+            materialNameText.enabled = false;
         }
 
         isOccupied = false;
