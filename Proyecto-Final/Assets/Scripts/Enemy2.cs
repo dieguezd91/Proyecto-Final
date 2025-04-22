@@ -45,6 +45,9 @@ public class Enemy2 : MonoBehaviour
     {
         if (currentTarget == null) return;
 
+        if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
+            return;
+
         Debug.Log("FixedUpdate activo para " + gameObject.name);
 
         float dist = Vector2.Distance(transform.position, currentTarget.position);

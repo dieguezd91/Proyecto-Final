@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 8724874942684101647}
   - component: {fileID: 935879750160187858}
   - component: {fileID: 2233657917444059624}
+  - component: {fileID: 259869561657676236}
   m_Layer: 8
   m_Name: Infernum
   m_TagString: Enemy
@@ -289,3 +290,17 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.1
+--- !u!114 &259869561657676236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4654744101768285803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackResistance: 0.5
+  knockbackDuration: 0.2

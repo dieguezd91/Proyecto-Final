@@ -7,8 +7,8 @@ public class MoveCamera : MonoBehaviour
 
     private void Update()
     {
-        Vector3 aux = Vector3.Lerp(transform.position, mainChar.position, vel * Time.deltaTime);
-        aux.z = transform.position.z;
-        transform.position = aux;
+        Vector3 targetPos = Vector3.Lerp(transform.position, mainChar.position, vel * Time.deltaTime);
+        targetPos.z = transform.position.z;
+        transform.position = targetPos;
     }
 }

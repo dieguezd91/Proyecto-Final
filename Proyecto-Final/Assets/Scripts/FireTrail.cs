@@ -5,7 +5,6 @@ public class FireTrail : MonoBehaviour
 {
     public float duration = 2f;
     public float damagePerSecond = 10f;
-    [SerializeField] private GameObject DamagedScreen;
 
     private void Start()
     {

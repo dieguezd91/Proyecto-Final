@@ -146,6 +146,9 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
+            return;
+
         if (chasingTarget)
         {
             rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);

@@ -9,6 +9,8 @@ public class Spell : MonoBehaviour
 
     private Vector2 direction;
     private Rigidbody2D rb;
+    [SerializeField] private GameObject floatingDamagePrefab;
+    [SerializeField] private GameObject impactParticlesPrefab;
 
     void Awake()
     {
@@ -33,6 +35,23 @@ public class Spell : MonoBehaviour
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(damage);
+
+                if (impactParticlesPrefab != null)
+                {
+                    Instantiate(impactParticlesPrefab, collision.transform.position, Quaternion.identity);
+                }
+
+                GameObject floatingText = Instantiate(floatingDamagePrefab, collision.transform.position + Vector3.up * 0.5f, Quaternion.identity);
+                floatingText.GetComponent<FloatingDamageText>().SetText(damage);
+
+                CameraShaker.Instance?.Shake(0.2f, 0.2f);
+
+                KnockbackReceiver knockback = collision.GetComponent<KnockbackReceiver>();
+                if (knockback != null)
+                {
+                    Vector2 knockDir = collision.transform.position - transform.position;
+                    knockback.ApplyKnockback(knockDir, 3f);
+                }
             }
 
             Destroy(gameObject);
