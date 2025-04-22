@@ -155,7 +155,7 @@ public class Enemy : MonoBehaviour
 
     void Attack()
     {
-        if (currentTargetType == "player" || currentTargetType == "plant" || currentTargetType == "home")
+        if (currentTargetType == "player")
         {
             LifeController targetHealth = currentTarget.GetComponent<LifeController>();
             if (targetHealth != null)
@@ -163,6 +163,16 @@ public class Enemy : MonoBehaviour
                 targetHealth.TakeDamage(damage);
                 DamagedScreen.SetActive(true);
                 StartCoroutine(DamagedScreenOff());
+            }
+        }
+        else if(currentTargetType == "plant" || currentTargetType == "home")
+        {
+            LifeController targetHealth = currentTarget.GetComponent<LifeController>();
+            if (targetHealth != null)
+            {
+                targetHealth.TakeDamage(damage);
+                
+                
             }
         }
 
