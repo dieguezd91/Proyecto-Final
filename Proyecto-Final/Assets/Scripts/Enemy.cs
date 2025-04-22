@@ -22,7 +22,6 @@ public class Enemy : MonoBehaviour
     [Header("Combat Settings")]
     public float damage = 10f;
     public float attackCooldown = 1f;
-    [SerializeField] private GameObject DamagedScreen;
 
     [Header("State")]
     public bool canAttack = true;
@@ -161,8 +160,10 @@ public class Enemy : MonoBehaviour
             if (targetHealth != null)
             {
                 targetHealth.TakeDamage(damage);
-                DamagedScreen.SetActive(true);
-                StartCoroutine(DamagedScreenOff());
+                if (GameManager.Instance.uiManager != null)
+                {
+                    GameManager.Instance.uiManager.ShowDamagedScreen();
+                }
             }
         }
         else if(currentTargetType == "plant" || currentTargetType == "home")
@@ -184,12 +185,6 @@ public class Enemy : MonoBehaviour
         canAttack = false;
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
-    }
-    
-    IEnumerator DamagedScreenOff()
-    {
-        yield return new WaitForSeconds(0.5f);
-        DamagedScreen.SetActive(false);
     }
 
     void OnDrawGizmosSelected()

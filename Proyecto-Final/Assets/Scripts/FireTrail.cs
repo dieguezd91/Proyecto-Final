@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FireTrail : MonoBehaviour
@@ -22,18 +21,11 @@ public class FireTrail : MonoBehaviour
             if (life != null && life.IsAlive())
             {
                 life.TakeDamage(damagePerSecond * Time.deltaTime);
-                DamagedScreen.SetActive(true);
-                StartCoroutine(DamagedScreenOff());
-
+                if (GameManager.Instance.uiManager != null)
+                {
+                    GameManager.Instance.uiManager.ShowDamagedScreen();
+                }
             }
         }
     }
-
-    IEnumerator DamagedScreenOff()
-    {
-        yield return new WaitForSeconds(0.5f);
-        DamagedScreen.SetActive(false);
-    }
 }
-
-

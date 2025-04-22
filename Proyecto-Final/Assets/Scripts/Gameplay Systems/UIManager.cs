@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,6 +54,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button instructionsButton;
     [SerializeField] private Button closeInstructionsButton;
     [SerializeField] private Button continueButton;
+
+    [Header("FEEDBACK")]
+    [SerializeField] private GameObject damagedScreen;
 
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
@@ -498,5 +502,19 @@ public class UIManager : MonoBehaviour
             manaSlider.maxValue = manaSystem.GetMaxMana();
             manaSlider.value = manaSystem.GetCurrentMana();
         }
+    }
+
+    public void ShowDamagedScreen()
+    {
+        if (damagedScreen == null) return;
+        damagedScreen.SetActive(true);
+        StopCoroutine(nameof(HideDamagedScreen));
+        StartCoroutine(HideDamagedScreen());
+    }
+
+    private IEnumerator HideDamagedScreen()
+    {
+        yield return new WaitForSeconds(0.5f);
+        damagedScreen.SetActive(false);
     }
 }

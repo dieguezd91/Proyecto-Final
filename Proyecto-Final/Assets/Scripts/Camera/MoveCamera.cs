@@ -1,14 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
     [SerializeField] Transform mainChar;
     [SerializeField] float vel;
-
-
-
 
     private void Update()
     {

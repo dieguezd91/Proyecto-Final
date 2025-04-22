@@ -51,9 +51,10 @@ public class FireBullet : MonoBehaviour
             if (Health != null)
             {
                 Health.TakeDamage(damage);
-                DamagedScreen.SetActive(true);
-                StartCoroutine(DamagedScreenOff());
-
+                if (GameManager.Instance.uiManager != null)
+                {
+                    GameManager.Instance.uiManager.ShowDamagedScreen();
+                }
             }
 
             Destroy(gameObject);
@@ -73,11 +74,5 @@ public class FireBullet : MonoBehaviour
     void SpawnTrail()
     {
         Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
-    }
-
-    IEnumerator DamagedScreenOff()
-    {
-        yield return new WaitForSeconds(0.5f);
-        DamagedScreen.SetActive(false);
     }
 }
