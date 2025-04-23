@@ -89,14 +89,33 @@ public class CraftingUIManager : MonoBehaviour
         foreach (var recipe in recipes)
         {
             var btn = Instantiate(recipeButtonPrefab, recipeListContainer);
-            btn.GetComponentInChildren<TextMeshProUGUI>().text = recipe.SeedToCraft.ToString();
+            var plantData = craftingSystem.GetPlantData(recipe.SeedToCraft);
 
-            btn.GetComponent<Button>().onClick.AddListener(() =>
+            if (plantData != null)
             {
-                SelectRecipe(recipe);
-            });
+                var nameText = btn.GetComponentInChildren<TextMeshProUGUI>();
+                if (nameText != null)
+                    nameText.text = plantData.plantName;
+
+                var iconTransform = btn.transform.Find("PlantImage");
+                if (iconTransform != null)
+                {
+                    var iconImage = iconTransform.GetComponent<Image>();
+                    if (iconImage != null)
+                    {
+                        iconImage.sprite = plantData.plantIcon;
+                        iconImage.preserveAspect = true;
+                    }
+                }
+
+                btn.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    SelectRecipe(recipe);
+                });
+            }
         }
     }
+
 
     private void SelectRecipe(CraftingRecipeSeedData recipe)
     {
@@ -113,7 +132,10 @@ public class CraftingUIManager : MonoBehaviour
         foreach (var mat in recipe.MaterialsRequired)
         {
             var reqUI = Instantiate(materialRequirementPrefab, materialListContainer);
-            reqUI.GetComponentInChildren<TextMeshProUGUI>().text = $"{mat.materialType} x{mat.quantity}";
+
+            var materialName= InventoryManager.Instance.GetMaterialName(mat.materialType);
+
+            reqUI.GetComponentInChildren<TextMeshProUGUI>().text = $"{materialName} x{mat.quantity}";
         }
 
         craftButton.interactable = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
