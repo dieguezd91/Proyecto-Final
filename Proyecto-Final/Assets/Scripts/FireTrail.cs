@@ -14,7 +14,7 @@ public class FireTrail : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         
-        if (collision.CompareTag("Player") || collision.CompareTag("Plant") || collision.CompareTag("Home"))
+        if (collision.CompareTag("Player"))
         {
             LifeController life = collision.GetComponent<LifeController>();
             if (life != null && life.IsAlive())
@@ -24,6 +24,16 @@ public class FireTrail : MonoBehaviour
                 {
                     GameManager.Instance.uiManager.ShowDamagedScreen();
                 }
+            }
+        }
+        
+        
+        if (collision.CompareTag("Plant") || collision.CompareTag("Home"))
+        {
+            LifeController life = collision.GetComponent<LifeController>();
+            if (life != null && life.IsAlive())
+            {
+                life.TakeDamage(damagePerSecond * Time.deltaTime);
             }
         }
     }

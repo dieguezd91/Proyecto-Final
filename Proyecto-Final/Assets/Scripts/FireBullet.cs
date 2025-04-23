@@ -45,7 +45,7 @@ public class FireBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Plant"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             LifeController Health = collision.GetComponent<LifeController>();
             if (Health != null)
@@ -55,6 +55,19 @@ public class FireBullet : MonoBehaviour
                 {
                     GameManager.Instance.uiManager.ShowDamagedScreen();
                 }
+            }
+
+            Destroy(gameObject);
+        }
+
+
+        if (collision.gameObject.CompareTag("Plant"))
+        {
+            LifeController Health = collision.GetComponent<LifeController>();
+            if (Health != null)
+            {
+                Health.TakeDamage(damage);
+                
             }
 
             Destroy(gameObject);

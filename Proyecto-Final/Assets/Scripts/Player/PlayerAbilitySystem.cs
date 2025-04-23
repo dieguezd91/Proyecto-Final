@@ -232,6 +232,10 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (isDigging) return;
 
+        Collider2D roofHit = Physics2D.OverlapPoint(transform.position, LayerMask.GetMask("House"));
+        if (roofHit != null)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             playerController.SetMovementEnabled(false);
@@ -246,6 +250,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero, Mathf.Infinity, diggableLayer);
         if (hit.collider == null) return false;
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("House")) return false;
+
 
         float distance = Vector2.Distance(transform.position, position);
         if (distance > digDistance)

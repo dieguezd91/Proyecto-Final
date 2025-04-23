@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94d99bd08008b6540855787a6530758e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manaAmountMin: 5
-  manaAmountMax: 15
-  attractionRadius: 1.5
+  manaAmountMin: 20
+  manaAmountMax: 35
+  attractionRadius: 1.7
   attractionSpeed: 5
