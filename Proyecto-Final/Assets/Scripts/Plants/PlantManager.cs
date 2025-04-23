@@ -7,6 +7,8 @@ public class PlantManager : MonoBehaviour
     private static PlantManager _instance;
     public static PlantManager Instance { get { return _instance; } }
 
+    private Dictionary<Vector3Int, Plant> tilePlants;
+
     [Header("SETTINGS")]
     [SerializeField] private bool notifyPlantsOnNewDay = true;
 

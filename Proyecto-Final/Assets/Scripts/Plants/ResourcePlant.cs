@@ -26,6 +26,7 @@ public class ResourcePlant : Plant
     private bool isReadyToHarvest = false;
     private bool isBeingHarvested = false;
 
+
     protected override void Start()
     {
         base.Start();

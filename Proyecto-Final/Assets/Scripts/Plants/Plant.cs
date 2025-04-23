@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public class TilePlantInfo
+{
+    public bool isOccupied;
+    public Plant currentPlant;
+}
+
 public class Plant : MonoBehaviour
 {
     [Header("Plant Data")]
@@ -13,7 +19,7 @@ public class Plant : MonoBehaviour
     protected Sprite plantSprite;
 
     private LifeController lifeController;
-    private PlantingSpot plantingSpot;
+    [HideInInspector] public Vector3Int tilePosition;
 
     private SpriteRenderer spriteRenderer;
 
@@ -49,8 +55,6 @@ public class Plant : MonoBehaviour
         {
             Debug.LogWarning($"[Plant] No PlantDataSO assigned on {gameObject.name}");
         }
-
-        FindPlantingSpot();
 
         lifeController = GetComponent<LifeController>();
         if (lifeController == null)
@@ -155,26 +159,8 @@ public class Plant : MonoBehaviour
 
     private void HandlePlantDeath()
     {
-        if (plantingSpot != null)
-        {
-            plantingSpot.isOccupied = false;
-        }
-
+        TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         Debug.Log("Plant has been destroyed!");
-    }
-
-    private void FindPlantingSpot()
-    {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 0.1f);
-        foreach (Collider2D collider in colliders)
-        {
-            PlantingSpot spot = collider.GetComponent<PlantingSpot>();
-            if (spot != null)
-            {
-                plantingSpot = spot;
-                break;
-            }
-        }
     }
 
     private void ChangeSprite(Sprite newSprite)

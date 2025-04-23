@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum PlayerAbility
 {
@@ -13,16 +14,15 @@ public class PlayerAbilitySystem : MonoBehaviour
 {
     [Header("Dig System")]
     [SerializeField] private GameObject digSpotsContainer;
-    [SerializeField] private GameObject plantingSpotPrefab;
     [SerializeField] private LayerMask diggableLayer;
     [SerializeField] private float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
 
     [Header("Plant System")]
-    [SerializeField] public LayerMask plantingLayer; // Capa de parcelas
+    [SerializeField] public LayerMask plantingLayer;
 
     [Header("Harvest System")]
-    [SerializeField] public float interactionDistance = 2f; // Distancia maxima para interactuar con plantas
+    [SerializeField] public float interactionDistance = 2f;
 
     [Header("Progress Visualization")]
     [SerializeField] private ProgressBar progressBar;
@@ -31,6 +31,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private SeedInventory plantInventory;
+    [SerializeField] private TileBase tilledSoilTile;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
@@ -48,23 +49,10 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
-
-        if (progressBar == null)
-        {
-            progressBar = FindObjectOfType<ProgressBar>();
-        }
-
-        if (progressBarTarget == null)
-        {
-            progressBarTarget = transform;
-        }
-
-        if (plantInventory == null)
-        {
-            plantInventory = FindObjectOfType<SeedInventory>();
-        }
+        progressBar ??= FindObjectOfType<ProgressBar>();
+        progressBarTarget ??= transform;
+        plantInventory ??= FindObjectOfType<SeedInventory>();
     }
-
 
     private void Start()
     {
@@ -76,17 +64,11 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if ((isDigging || isHarvesting) && progressBar != null && progressBarTarget != null)
         {
-            progressBar.transform.position = Camera.main.WorldToScreenPoint(
-                progressBarTarget.position + progressBarOffset);
+            progressBar.transform.position = Camera.main.WorldToScreenPoint(progressBarTarget.position + progressBarOffset);
         }
 
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
-        {
-            return;
-        }
-
-        if (GameManager.Instance.currentGameState != GameState.Day)
-            return;
+        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;
+        if (GameManager.Instance.currentGameState != GameState.Day) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -112,26 +94,14 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleMouseScroll()
     {
-        if (isDigging || isHarvesting)
-            return;
+        if (isDigging || isHarvesting) return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.01f)
         {
-            PlayerAbility[] validAbilities = new PlayerAbility[]
-            {
-            PlayerAbility.Planting,
-            PlayerAbility.Harvesting,
-            PlayerAbility.Digging
-            };
-
+            PlayerAbility[] validAbilities = { PlayerAbility.Planting, PlayerAbility.Harvesting, PlayerAbility.Digging };
             int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
-            if (currentIndex == -1) currentIndex = 0;
-
-            int nextIndex = scroll > 0
-                ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length
-                : (currentIndex + 1) % validAbilities.Length;
-
+            int nextIndex = scroll > 0 ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length : (currentIndex + 1) % validAbilities.Length;
             SetAbility(validAbilities[nextIndex]);
         }
     }
@@ -141,55 +111,27 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (currentAbility != ability)
         {
             CancelCurrentAction();
-
             currentAbility = ability;
-
             OnAbilityChanged?.Invoke(currentAbility);
         }
     }
-
-    public bool TryPlant(PlantingSpot spot)
-    {
-        if (currentAbility != PlayerAbility.Planting)
-        {
-            Debug.LogWarning("No se puede plantar: la habilidad actual no es plantar");
-            return false;
-        }
-
-        if (plantInventory == null)
-            return false;
-
-        GameObject selectedPlantPrefab = plantInventory.GetSelectedPlantPrefab();
-        if (selectedPlantPrefab == null)
-            return false;
-
-        float distance = Vector2.Distance(transform.position, spot.transform.position);
-        if (distance <= interactionDistance)
-        {
-            Debug.Log($"Plantando {plantInventory.GetSelectedPlantName()}");
-            spot.Plant(selectedPlantPrefab);
-
-            return true;
-        }
-
-        return false;
-    }
-
 
     private void HandlePlanting()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Intentando plantar");
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, plantingLayer);
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
-            if (hit.collider != null)
+            GameObject selectedPlant = plantInventory.GetSelectedPlantPrefab();
+            if (selectedPlant == null) return;
+
+            if (Vector2.Distance(transform.position, TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos)) <= interactionDistance)
             {
-                PlantingSpot spot = hit.collider.GetComponent<PlantingSpot>();
-                if (spot != null)
+                bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant);
+                if (!planted)
                 {
-                    TryPlant(spot);
+                    Debug.Log("Ya hay una planta en esa casilla.");
                 }
             }
         }
@@ -197,81 +139,41 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleHarvesting()
     {
-        if (isHarvesting)
-            return;
+        if (isHarvesting) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Intentando cosechar");
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(mousePos, 0.5f);
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
-            bool plantFound = false;
-
-            foreach (Collider2D collider in colliders)
+            Plant possiblePlant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+            if (possiblePlant is ResourcePlant harvestablePlant)
             {
-                PlantingSpot spot = collider.GetComponent<PlantingSpot>();
-                if (spot != null)
+                if (harvestablePlant.IsReadyToHarvest() && !harvestablePlant.IsBeingHarvested())
                 {
-                    ResourcePlant plant = spot.GetPlantComponent<ResourcePlant>();
-                    if (plant != null)
+                    if (Vector2.Distance(transform.position, harvestablePlant.transform.position) <= interactionDistance)
                     {
-                        if (plant.IsReadyToHarvest() && !plant.IsBeingHarvested())
-                        {
-                            float distance = Vector2.Distance(transform.position, spot.transform.position);
-                            if (distance <= interactionDistance)
-                            {
-                                plantFound = true;
-                                StartHarvesting(plant);
-                                return;
-                            }
-                        }
+                        StartHarvesting(harvestablePlant);
                     }
                 }
-            }
-
-            if (!plantFound)
-            {
-                Debug.Log("No se encontro ninguna planta cosechable");
             }
         }
     }
 
     public void StartHarvesting(ResourcePlant plant)
     {
-        if (currentAbility != PlayerAbility.Harvesting)
-        {
-            Debug.LogWarning("No se puede cosechar: la habilidad actual no es cosechar");
-            return;
-        }
-
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
-        {
-            return;
-        }
-
-        if (plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
-        {
-            return;
-        }
+        if (currentAbility != PlayerAbility.Harvesting || plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested()) return;
 
         currentHarvestPlant = plant;
         isHarvesting = true;
         playerController.SetMovementEnabled(false);
-
         currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
 
-        if (progressBar != null)
-        {
-            Debug.Log("Mostrando barra de progreso para cosecha");
-            progressBar.SetImmediateProgress(0f);
-            progressBar.Show(true);
-
-            progressBar.gameObject.SetActive(true);
-        }
+        progressBar?.SetImmediateProgress(0f);
+        progressBar?.Show(true);
+        progressBar?.gameObject.SetActive(true);
 
         plant.StartHarvest();
-
         StartCoroutine(MonitorHarvest());
     }
 
@@ -288,28 +190,17 @@ public class PlayerAbilitySystem : MonoBehaviour
                 continue;
             }
 
-            if (progressBar != null)
-            {
-                float elapsed = Time.time - startTime;
-                float progress = Mathf.Clamp01(elapsed / harvestDuration);
-                progressBar.SetProgress(progress);
-
-                if (Time.frameCount % 60 == 0)
-                {
-                    Debug.Log($"Progreso de cosecha: {progress:F2}");
-                }
-            }
+            float elapsed = Time.time - startTime;
+            progressBar?.SetProgress(Mathf.Clamp01(elapsed / harvestDuration));
 
             if (Vector2.Distance(transform.position, currentHarvestPlant.transform.position) > interactionDistance)
             {
-                Debug.Log("Cosecha cancelada: jugador fuera de rango");
                 CancelHarvest();
                 yield break;
             }
 
             if (!currentHarvestPlant.IsBeingHarvested())
             {
-                Debug.Log("Cosecha completada naturalmente");
                 CompleteHarvest();
                 yield break;
             }
@@ -320,108 +211,62 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void CancelHarvest()
     {
-        if (!isHarvesting || currentHarvestPlant == null)
-            return;
+        if (!isHarvesting || currentHarvestPlant == null) return;
 
         currentHarvestPlant.CancelHarvest();
-
         isHarvesting = false;
         playerController.SetMovementEnabled(true);
-
-        if (progressBar != null)
-        {
-            progressBar.Hide();
-        }
-
-        Debug.Log("Cosecha cancelada");
+        progressBar?.Hide();
         currentHarvestPlant = null;
-    }
-
-    public bool IsHarvesting()
-    {
-        return isHarvesting;
     }
 
     void CompleteHarvest()
     {
         isHarvesting = false;
         playerController.SetMovementEnabled(true);
-
-        if (progressBar != null)
-        {
-            progressBar.Hide();
-        }
-
-        Debug.Log("Cosecha completada");
+        progressBar?.Hide();
         currentHarvestPlant = null;
-    }
-
-    public bool TryDig(Vector2 position)
-    {
-        if (currentAbility != PlayerAbility.Digging)
-        {
-            Debug.LogWarning("No se puede cavar: la habilidad actual no es cavar");
-            return false;
-        }
-
-        if (isDigging)
-            return false;
-
-        RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero, Mathf.Infinity, diggableLayer);
-        if (hit.collider == null)
-            return false;
-
-        Collider2D[] spots = Physics2D.OverlapCircleAll(position, 0.5f, plantingLayer);
-        if (spots.Length > 0)
-        {
-            Debug.Log("Este lugar ya esta cavado");
-            return false;
-        }
-
-        float distance = Vector2.Distance(transform.position, position);
-        if (distance <= digDistance)
-        {
-            Debug.Log("Iniciando cavado");
-            StartDigging(position);
-            return true;
-        }
-        else
-        {
-            Debug.Log("El lugar está demasiado lejos");
-            return false;
-        }
     }
 
     private void HandleDigging()
     {
-        if (isDigging)
-            return;
+        if (isDigging) return;
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Intentando cavar...");
             playerController.SetMovementEnabled(false);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             TryDig(mousePos);
         }
     }
 
+    public bool TryDig(Vector2 position)
+    {
+        if (currentAbility != PlayerAbility.Digging || isDigging) return false;
+
+        RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero, Mathf.Infinity, diggableLayer);
+        if (hit.collider == null) return false;
+
+        float distance = Vector2.Distance(transform.position, position);
+        if (distance > digDistance)
+        {
+            Debug.Log("El lugar está demasiado lejos");
+            return false;
+        }
+
+        StartDigging(position);
+        return true;
+    }
+
     private void StartDigging(Vector2 position)
     {
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
-        {
-            return;
-        }
+        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;
 
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
         playerController.SetMovementEnabled(false);
-
-        if (progressBar != null)
-        {
-            progressBar.SetImmediateProgress(0f);
-            progressBar.Show(false);
-        }
+        progressBar?.SetImmediateProgress(0f);
+        progressBar?.Show(false);
 
         StartCoroutine(DiggingProcess());
     }
@@ -439,15 +284,10 @@ public class PlayerAbilitySystem : MonoBehaviour
             }
 
             timer += Time.deltaTime;
-
-            if (progressBar != null)
-            {
-                progressBar.SetProgress(timer / digDuration);
-            }
+            progressBar?.SetProgress(timer / digDuration);
 
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("cancelando cavado");
                 CancelDigging();
                 yield break;
             }
@@ -455,64 +295,38 @@ public class PlayerAbilitySystem : MonoBehaviour
             yield return null;
         }
 
-        if (plantingSpotPrefab != null)
-        {
-            if (digSpotsContainer != null)
-            {
-                GameObject newSpot = Instantiate(plantingSpotPrefab, digPosition, Quaternion.identity, digSpotsContainer.transform);
-            }
-        }
-
         CompleteDigging();
     }
 
     private void CompleteDigging()
     {
+        Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(digPosition);
+        TilePlantingSystem.Instance.PlantingTilemap.SetTile(cell, tilledSoilTile);
         isDigging = false;
-        Debug.Log("cavado completo");
         playerController.SetMovementEnabled(true);
-        if (progressBar != null)
-        {
-            progressBar.Hide();
-        }
+        progressBar?.Hide();
     }
 
     private void CancelDigging()
     {
         isDigging = false;
         playerController.SetMovementEnabled(true);
-
-        if (progressBar != null)
-        {
-            progressBar.Hide();
-        }
-
-        Debug.Log("Cavado cancelado");
+        progressBar?.Hide();
     }
 
     private void CancelCurrentAction()
     {
-        if (isHarvesting)
-        {
-            CancelHarvest();
-        }
-
-        if (isDigging)
-        {
-            CancelDigging();
-        }
+        if (isHarvesting) CancelHarvest();
+        if (isDigging) CancelDigging();
     }
 
-    public bool IsDigging()
-    {
-        return isDigging;
-    }
+    public bool IsDigging() => isDigging;
+    public bool IsHarvesting() => isHarvesting;
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactionDistance);
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, digDistance);
     }

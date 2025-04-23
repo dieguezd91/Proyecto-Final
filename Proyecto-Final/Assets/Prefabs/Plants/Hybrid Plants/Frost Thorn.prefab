@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  m_Color: {r: 0.07674295, g: 0.4433962, b: 0, a: 1}
+  m_Color: {r: 0.07674295, g: 0.4433962, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -187,6 +187,7 @@ MonoBehaviour:
   plantData: {fileID: 11400000, guid: 7706c49d722e2f348a6ef0ec0be6ffcb, type: 2}
   plantingDay: 0
   growthCompleted: 0
+  tilePosition: {x: 0, y: 0, z: 0}
   projectile: {fileID: 8215708087478250761, guid: 7be1d34f96524d146b1731c0190452b8, type: 3}
   firePoint: {fileID: 5461837167220732977}
   cooldown: 2
