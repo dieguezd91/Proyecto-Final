@@ -252,6 +252,13 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (hit.collider == null) return false;
         if (hit.collider.gameObject.layer == LayerMask.NameToLayer("House")) return false;
 
+        Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(position);
+        TileBase existingTile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cell);
+        if (existingTile == tilledSoilTile)
+        {
+            Debug.Log("Ya hay tierra cavada en esta posición.");
+            return false;
+        }
 
         float distance = Vector2.Distance(transform.position, position);
         if (distance > digDistance)
