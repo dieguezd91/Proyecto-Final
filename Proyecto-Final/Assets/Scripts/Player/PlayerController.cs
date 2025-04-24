@@ -26,9 +26,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool movementEnabled = true;
     private GameState lastGameState = GameState.None;
+    private Animator animator;
+    private int lastHorizontalDirection = 0;
+    private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
         if (gameStateController == null)
         {
             gameStateController = FindObjectOfType<EnemiesSpawner>();
@@ -81,6 +87,48 @@ public class PlayerController : MonoBehaviour
             rb.velocity = Vector2.zero;
             return;
         }
+
+        if (animator != null && spriteRenderer != null)
+        {
+            bool isMoving = moveInput.magnitude > 0.01f;
+
+            if (isMoving)
+            {
+                if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
+                {
+                    if (moveInput.x > 0)
+                    {
+                        lastHorizontalDirection = 1;
+                        spriteRenderer.flipX = true;
+                    }
+                    else
+                    {
+                        lastHorizontalDirection = -1;
+                        spriteRenderer.flipX = false;
+                    }
+
+                    animator.Play("Walk_Side");
+                }
+                else if (moveInput.y < 0)
+                {
+                    animator.Play("Walk_Down");
+                    lastHorizontalDirection = 0;
+                }
+            }
+            else
+            {
+                if (lastHorizontalDirection == 1 || lastHorizontalDirection == -1)
+                {
+                    spriteRenderer.flipX = lastHorizontalDirection == 1;
+                    animator.Play("Idle_Side");
+                }
+                else
+                {
+                    animator.Play("Idle_Down");
+                }
+            }
+        }
+
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
