@@ -23,7 +23,6 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float speed = 0.3f;
 
     [Header("Shooting")]
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firingPoint;
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float bulletForce = 5f;
@@ -37,23 +36,17 @@ public class Enemy2 : MonoBehaviour
 
     private void Update()
     {
-        // Actualizar objetivo cada frame
         FindClosestTarget();
     }
 
     private void FixedUpdate()
     {
         if (currentTarget == null) return;
-
-        if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
-            return;
-
-        Debug.Log("FixedUpdate activo para " + gameObject.name);
+        if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true) return;
 
         float dist = Vector2.Distance(transform.position, currentTarget.position);
         if (dist > detectRange) return;
 
-        // Si está fuera de rango de disparo, moverse hacia el objetivo
         if (dist > shootingRange)
         {
             Vector2 dir = (currentTarget.position - transform.position).normalized;
@@ -63,12 +56,10 @@ public class Enemy2 : MonoBehaviour
         }
         else
         {
-            // Dentro de rango de disparo: disparar
             LookDir(currentTarget.position, transform.position);
             if (Time.time >= nextTimeToFire)
             {
                 Shoot();
-                Debug.Log("Disparando");
                 nextTimeToFire = Time.time + 1f / fireRate;
             }
         }
@@ -78,9 +69,8 @@ public class Enemy2 : MonoBehaviour
     {
         float closestScore = Mathf.Infinity;
         Transform best = null;
-        string bestType = "none";
 
-        // 1) Jugador
+        // Jugador
         GameObject pObj = GameObject.FindGameObjectWithTag("Player");
         if (pObj != null)
         {
@@ -88,13 +78,11 @@ public class Enemy2 : MonoBehaviour
             float score = d / playerPriority;
             if (d <= detectRange && score < closestScore)
             {
-                closestScore = score;
-                best = pObj.transform;
-                bestType = "player";
+                closestScore = score; best = pObj.transform;
             }
         }
 
-        // 2) Plantas
+        // Plantas
         Collider2D[] plants = Physics2D.OverlapCircleAll(transform.position, detectRange, plantLayer);
         foreach (var col in plants)
         {
@@ -105,14 +93,12 @@ public class Enemy2 : MonoBehaviour
                 float score = d / plantPriority;
                 if (score < closestScore)
                 {
-                    closestScore = score;
-                    best = col.transform;
-                    bestType = "plant";
+                    closestScore = score; best = col.transform;
                 }
             }
         }
 
-        // 3) Home
+        // Home
         GameObject hObj = GameObject.FindGameObjectWithTag("Home");
         if (hObj != null)
         {
@@ -120,29 +106,23 @@ public class Enemy2 : MonoBehaviour
             float score = d / homePriority;
             if (d <= detectRange && score < closestScore)
             {
-                closestScore = score;
-                best = hObj.transform;
-                bestType = "home";
+                closestScore = score; best = hObj.transform;
             }
         }
 
         currentTarget = best;
-        currentTargetType = bestType;
-
-        Debug.Log($"[{gameObject.name}] Target actual: {currentTargetType}");
     }
 
     private void Shoot()
     {
-        if (bulletPrefab == null || firingPoint == null) return;
-
-        GameObject bullet = Instantiate(bulletPrefab, firingPoint.position, firingPoint.rotation);
-        Rigidbody2D rbBullet = bullet.GetComponent<Rigidbody2D>();
-        if (rbBullet != null)
-        {
-            rbBullet.AddForce(firingPoint.up * bulletForce, ForceMode2D.Impulse);
-        }
+        FireBullet b = BulletPool.Instance.GetBullet();
+        b.transform.position = firingPoint.position;
+        b.transform.rotation = firingPoint.rotation;
+        b.SetDirection((currentTarget.position - transform.position).normalized);
+        // NO llames a b.gameObject.SetActive(false) aquí
     }
+
+
 
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
@@ -155,10 +135,8 @@ public class Enemy2 : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
-
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, shootingRange);
-
         if (currentTarget != null)
         {
             Gizmos.color = Color.magenta;

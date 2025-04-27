@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class FireBullet : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class FireBullet : MonoBehaviour
 
     private Vector2 direction;
     private Rigidbody2D rb;
+    private float lifeTimer;
 
     [Header("FireTrail Settings")]
     public GameObject fireTrailPrefab;
@@ -20,58 +20,60 @@ public class FireBullet : MonoBehaviour
 
     [SerializeField] private GameObject DamagedScreen;
 
-
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        Destroy(gameObject, lifeTime);
     }
+
+    void OnEnable()
+    {
+        lifeTimer = lifeTime;    
+        trailTimer = 0f;         
+    }
+
 
     void Update()
     {
+        // Rotación
         if (rb.velocity.magnitude > 0.1f)
         {
             float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg - 90f;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
+        // Trail
         trailTimer += Time.deltaTime;
         if (trailTimer >= trailSpawnRate)
         {
             SpawnTrail();
             trailTimer = 0f;
         }
+
+        // Caducidad
+        lifeTimer -= Time.deltaTime;
+        if (lifeTimer <= 0f)
+        {
+            BulletPool.Instance.ReturnBullet(this);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.CompareTag("Player") || collision.CompareTag("Plant"))
         {
-            LifeController Health = collision.GetComponent<LifeController>();
-            if (Health != null)
+            var health = collision.GetComponent<LifeController>();
+            if (health != null)
             {
-                Health.TakeDamage(damage);
-                if (GameManager.Instance.uiManager != null)
-                {
+                health.TakeDamage(damage);
+                if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
                     GameManager.Instance.uiManager.ShowDamagedScreen();
-                }
             }
+            // Al colisión, devolver bala
 
-            Destroy(gameObject);
+            BulletPool.Instance.ReturnBullet(this);
         }
 
-
-        if (collision.gameObject.CompareTag("Plant"))
-        {
-            LifeController Health = collision.GetComponent<LifeController>();
-            if (Health != null)
-            {
-                Health.TakeDamage(damage);
-                
-            }
-
-            Destroy(gameObject);
-        }
+        
     }
 
     public void SetDirection(Vector2 newDirection)
@@ -83,9 +85,13 @@ public class FireBullet : MonoBehaviour
         }
     }
 
-
     void SpawnTrail()
     {
         Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
+    }
+
+    private void OnDisable()
+    {
+        Debug.Log($"FireBullet disabled at time {Time.time}", this);
     }
 }

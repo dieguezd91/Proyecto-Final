@@ -224,7 +224,6 @@ MonoBehaviour:
   detectRange: 20
   shootingRange: 9
   speed: 1.2
-  bulletPrefab: {fileID: 8215708087478250761, guid: 8646afd90fa27654c90ac6f241405cb6, type: 3}
   firingPoint: {fileID: 1303027347511237169}
   fireRate: 1
   bulletForce: 5
