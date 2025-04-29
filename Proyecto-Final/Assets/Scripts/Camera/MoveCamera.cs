@@ -1,26 +1,49 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
     [SerializeField] Transform mainChar;
-    [SerializeField] float vel = 5f;
+    [SerializeField] float followSpeed = 3f;
+    [SerializeField] float maxOffsetDistance = 3f;
+    [SerializeField] float deadzoneRadius = 2f;
 
-    Camera cam;
+    private Camera cam;
 
-    private void Start()
+
+    void Start()
     {
         cam = Camera.main;
     }
 
-    private void Update()
+    void LateUpdate()
     {
+        
+        Vector3 playerPos = mainChar.position;
+        playerPos.z = transform.position.z;
 
+        
         Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
         mouseWorld.z = 0f;
-        Vector3 playerPos = mainChar.position;
-        playerPos.z = 0f;
-        Vector3 midPoint = (playerPos + mouseWorld) / 2f;
-        midPoint.z = transform.position.z;
-        transform.position = Vector3.Lerp(transform.position, midPoint, vel * Time.deltaTime);
+
+        
+        Vector3 toMouse = mouseWorld - playerPos;
+        float distToMouse = toMouse.magnitude;
+
+       
+        if (distToMouse <= deadzoneRadius)
+        {
+            transform.position = playerPos;
+            return;
+        }
+
+        
+        Vector3 dir = toMouse.normalized;
+        float effectiveDist = Mathf.Min(distToMouse - deadzoneRadius, maxOffsetDistance);
+        Vector3 offset = dir * effectiveDist;
+
+        Vector3 targetPos = playerPos + offset;
+        targetPos.z = transform.position.z;
+
+        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
     }
 }
