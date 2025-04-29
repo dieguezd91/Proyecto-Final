@@ -2,48 +2,96 @@
 
 public class MoveCamera : MonoBehaviour
 {
-    [SerializeField] Transform mainChar;
-    [SerializeField] float followSpeed = 3f;
-    [SerializeField] float maxOffsetDistance = 3f;
-    [SerializeField] float deadzoneRadius = 2f;
+    [Header("References")]
+    [SerializeField] private Transform mainChar;
+
+    [Header("Offset Settings")]
+    [SerializeField] private float maxOffsetDistance = 5f;
+    [SerializeField] private float deadZoneRadius = 1.5f;
+    [SerializeField] private float softZoneRadius = 3f;
+
+    [Header("Speed Settings")]
+    [SerializeField] private float softFollowSpeed = 2f;
+    [SerializeField] private float hardFollowSpeed = 6f;
+
+    [Header("Gizmos Settings")]
+    [SerializeField] private bool showGizmos = true;
+    [SerializeField] private Color deadZoneColor = new Color(0f, 1f, 0f, 0.3f);
+    [SerializeField] private Color softZoneColor = new Color(1f, 1f, 0f, 0.3f);
+    [SerializeField] private Color maxOffsetColor = new Color(1f, 0f, 0f, 0.3f);
+    [SerializeField] private Color directionArrowColor = Color.cyan;
+    [SerializeField] private float arrowHeadLength = 0.5f;
+    [SerializeField] private float arrowHeadAngle = 20f;
 
     private Camera cam;
 
-
-    void Start()
+    private void Start()
     {
         cam = Camera.main;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        
+        if (mainChar == null || cam == null) return;
+
         Vector3 playerPos = mainChar.position;
         playerPos.z = transform.position.z;
 
-        
         Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-        mouseWorld.z = 0f;
+        mouseWorld.z = playerPos.z;
 
-        
         Vector3 toMouse = mouseWorld - playerPos;
-        float distToMouse = toMouse.magnitude;
+        float dist = toMouse.magnitude;
 
-       
-        if (distToMouse <= deadzoneRadius)
+        Vector3 offset = Vector3.zero;
+
+        if (dist > deadZoneRadius)
         {
-            transform.position = playerPos;
-            return;
+            float effectiveDist = Mathf.Min(dist - deadZoneRadius, maxOffsetDistance);
+            offset = toMouse.normalized * effectiveDist;
         }
-
-        
-        Vector3 dir = toMouse.normalized;
-        float effectiveDist = Mathf.Min(distToMouse - deadzoneRadius, maxOffsetDistance);
-        Vector3 offset = dir * effectiveDist;
 
         Vector3 targetPos = playerPos + offset;
         targetPos.z = transform.position.z;
 
-        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+        float speed = (dist < softZoneRadius) ? softFollowSpeed : hardFollowSpeed;
+
+        transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!showGizmos || mainChar == null) return;
+
+        Gizmos.color = deadZoneColor;
+        Gizmos.DrawWireSphere(mainChar.position, deadZoneRadius);
+
+        Gizmos.color = softZoneColor;
+        Gizmos.DrawWireSphere(mainChar.position, softZoneRadius);
+
+        Gizmos.color = maxOffsetColor;
+        Gizmos.DrawWireSphere(mainChar.position, deadZoneRadius + maxOffsetDistance);
+
+        if (Application.isPlaying && cam != null)
+        {
+            Vector3 playerPos = mainChar.position;
+            playerPos.z = 0;
+
+            Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = 0;
+
+            Vector3 direction = (mouseWorld - playerPos).normalized;
+            float distance = Mathf.Min((mouseWorld - playerPos).magnitude, deadZoneRadius + maxOffsetDistance);
+
+            Vector3 endPos = playerPos + direction * distance;
+
+            Gizmos.color = directionArrowColor;
+            Gizmos.DrawLine(playerPos, endPos);
+
+            Vector3 right = Quaternion.LookRotation(Vector3.forward, direction) * Quaternion.Euler(0, 0, arrowHeadAngle) * Vector3.down;
+            Vector3 left = Quaternion.LookRotation(Vector3.forward, direction) * Quaternion.Euler(0, 0, -arrowHeadAngle) * Vector3.down;
+            Gizmos.DrawLine(endPos, endPos + right * arrowHeadLength);
+            Gizmos.DrawLine(endPos, endPos + left * arrowHeadLength);
+        }
     }
 }

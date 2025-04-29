@@ -34,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 6429872126492704177}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.15251909, y: -1.6678278, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -129,7 +129,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   digSpotsContainer: {fileID: 0}
-  plantingSpotPrefab: {fileID: 2306438089456741062, guid: 6d4a969d81be94e4eb872daf7deb3553, type: 3}
   diggableLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -143,6 +142,7 @@ MonoBehaviour:
   progressBarTarget: {fileID: 3535706038251047626}
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
+  tilledSoilTile: {fileID: 11400000, guid: 31ae4693baac07040a38b0bb31f46c8b, type: 2}
 --- !u!114 &477447474750530567
 MonoBehaviour:
   m_ObjectHideFlags: 0

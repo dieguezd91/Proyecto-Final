@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class DayNightLightController : MonoBehaviour
 {
     [Header("REFERENCES")]
     public Light2D globalLight;
+    public Volume globalVolume;
+    private Bloom bloomComponent;
 
     [Header("lIGHT INTENSITY")]
     public float dayLightIntensity = 1.0f;
     public float nightLightIntensity = 0.5f;
+    public float dayGlobalVolumeIntensity = 0f;
+    public float nightGlobalVolumeIntensity = 5f;
 
     [Header("TRANSITION")]
     public float transitionDuration = 2.0f;
@@ -31,6 +36,17 @@ public class DayNightLightController : MonoBehaviour
                 enabled = false;
                 return;
             }
+        }
+
+        if (globalVolume.profile.TryGet<Bloom>(out bloomComponent))
+        {
+            bloomComponent.intensity.value = (GameManager.Instance.currentGameState == GameState.Day)
+                ? dayGlobalVolumeIntensity
+                : nightGlobalVolumeIntensity;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el componente Bloom en el Volume.");
         }
 
         UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
@@ -69,7 +85,8 @@ public class DayNightLightController : MonoBehaviour
         if (gameState == GameState.Paused)
             return;
 
-        float targetIntensity = (gameState == GameState.Day) ? dayLightIntensity : nightLightIntensity;
+        float targetLight = (gameState == GameState.Day) ? dayLightIntensity : nightLightIntensity;
+        float targetBloom = (gameState == GameState.Day) ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
 
         if (useTransition)
         {
@@ -77,18 +94,25 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionLightIntensity(targetIntensity, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionLightAndBloom(targetLight, targetBloom, transitionDuration));
         }
         else
         {
-            globalLight.intensity = targetIntensity;
+            globalLight.intensity = targetLight;
+            if (bloomComponent != null)
+            {
+                bloomComponent.intensity.value = targetBloom;
+            }
         }
     }
 
-    IEnumerator TransitionLightIntensity(float targetIntensity, float duration)
+    IEnumerator TransitionLightAndBloom(float targetLight, float targetBloom, float duration)
     {
         isTransitioning = true;
-        float startIntensity = globalLight.intensity;
+
+        float startLight = globalLight.intensity;
+        float startBloom = bloomComponent != null ? bloomComponent.intensity.value : 0f;
+
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -102,11 +126,22 @@ public class DayNightLightController : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
             t = Mathf.SmoothStep(0, 1, t);
-            globalLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+
+            globalLight.intensity = Mathf.Lerp(startLight, targetLight, t);
+            if (bloomComponent != null)
+            {
+                bloomComponent.intensity.value = Mathf.Lerp(startBloom, targetBloom, t);
+            }
+
             yield return null;
         }
 
-        globalLight.intensity = targetIntensity;
+        globalLight.intensity = targetLight;
+        if (bloomComponent != null)
+        {
+            bloomComponent.intensity.value = targetBloom;
+        }
+
         transitionCoroutine = null;
         isTransitioning = false;
     }
@@ -119,7 +154,7 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionLightIntensity(dayLightIntensity, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionLightAndBloom(dayLightIntensity, dayGlobalVolumeIntensity, transitionDuration));
         }
     }
 }
