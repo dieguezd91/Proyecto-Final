@@ -8,33 +8,34 @@ public class Spell : MonoBehaviour
     public float speed = 10f;
 
     private Vector2 direction;
-    private Rigidbody2D rb;
     [SerializeField] private GameObject floatingDamagePrefab;
     [SerializeField] private GameObject impactParticlesPrefab;
 
     void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
         Destroy(gameObject, lifeTime);
     }
 
     void Update()
     {
-        if (rb.velocity.magnitude > 0.1f)
+        transform.position += (Vector3)(direction * speed * Time.deltaTime);
+
+        if (direction != Vector2.zero)
         {
-            float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg - 90f;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        float r = Random.Range(damage, damage + 5);
         if (collision.gameObject.CompareTag("Enemy"))
         {
             LifeController enemyHealth = collision.GetComponent<LifeController>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(damage);
+                enemyHealth.TakeDamage(r);
 
                 if (impactParticlesPrefab != null)
                 {
@@ -42,7 +43,7 @@ public class Spell : MonoBehaviour
                 }
 
                 GameObject floatingText = Instantiate(floatingDamagePrefab, collision.transform.position + Vector3.up * 0.5f, Quaternion.identity);
-                floatingText.GetComponent<FloatingDamageText>().SetText(damage);
+                floatingText.GetComponent<FloatingDamageText>().SetText(r);
 
                 CameraShaker.Instance?.Shake(0.2f, 0.2f);
 
@@ -61,9 +62,5 @@ public class Spell : MonoBehaviour
     public void SetDirection(Vector2 newDirection)
     {
         direction = newDirection.normalized;
-        if (rb != null)
-        {
-            rb.velocity = direction * speed;
-        }
     }
 }

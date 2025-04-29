@@ -10,12 +10,24 @@ public class DayNightLightController : MonoBehaviour
     public Light2D globalLight;
     public Volume globalVolume;
     private Bloom bloomComponent;
+    private ColorAdjustments colorAdjustmentsComponent;
+    private Vignette vignetteComponent;
 
-    [Header("lIGHT INTENSITY")]
+    [Header("LIGHT INTENSITY")]
     public float dayLightIntensity = 1.0f;
     public float nightLightIntensity = 0.5f;
     public float dayGlobalVolumeIntensity = 0f;
     public float nightGlobalVolumeIntensity = 5f;
+
+    [Header("VIGNETTE")]
+    public float dayVignetteIntensity = 0f;
+    public float nightVignetteIntensity = 0.4f;
+
+    [Header("COLOR ADJUSTMENTS")]
+    public float dayExposure = 0f;
+    public float nightExposure = -0.5f;
+    public Color dayColorFilter = Color.white;
+    public Color nightColorFilter = new Color(0.4f, 0.5f, 0.9f);
 
     [Header("TRANSITION")]
     public float transitionDuration = 2.0f;
@@ -44,9 +56,16 @@ public class DayNightLightController : MonoBehaviour
                 ? dayGlobalVolumeIntensity
                 : nightGlobalVolumeIntensity;
         }
-        else
+
+        if (globalVolume.profile.TryGet<Vignette>(out vignetteComponent))
         {
-            Debug.LogWarning("No se encontró el componente Bloom en el Volume.");
+            vignetteComponent.intensity.overrideState = true;
+        }
+
+        if (globalVolume.profile.TryGet<ColorAdjustments>(out colorAdjustmentsComponent))
+        {
+            colorAdjustmentsComponent.colorFilter.overrideState = true;
+            colorAdjustmentsComponent.postExposure.overrideState = true;
         }
 
         UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
@@ -87,6 +106,9 @@ public class DayNightLightController : MonoBehaviour
 
         float targetLight = (gameState == GameState.Day) ? dayLightIntensity : nightLightIntensity;
         float targetBloom = (gameState == GameState.Day) ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
+        float targetExposure = (gameState == GameState.Day) ? dayExposure : nightExposure;
+        Color targetColorFilter = (gameState == GameState.Day) ? dayColorFilter : nightColorFilter;
+        float targetVignette = (gameState == GameState.Day) ? dayVignetteIntensity : nightVignetteIntensity;
 
         if (useTransition)
         {
@@ -94,24 +116,35 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionLightAndBloom(targetLight, targetBloom, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetColorFilter, targetVignette, transitionDuration));
         }
         else
         {
             globalLight.intensity = targetLight;
+
             if (bloomComponent != null)
-            {
                 bloomComponent.intensity.value = targetBloom;
+
+            if (colorAdjustmentsComponent != null)
+            {
+                colorAdjustmentsComponent.postExposure.value = targetExposure;
+                colorAdjustmentsComponent.colorFilter.value = targetColorFilter;
             }
+
+            if (vignetteComponent != null)
+                vignetteComponent.intensity.value = targetVignette;
         }
     }
 
-    IEnumerator TransitionLightAndBloom(float targetLight, float targetBloom, float duration)
+    IEnumerator TransitionVisuals(float targetLight, float targetBloom, float targetExposure, Color targetColorFilter, float targetVignette, float duration)
     {
         isTransitioning = true;
 
         float startLight = globalLight.intensity;
         float startBloom = bloomComponent != null ? bloomComponent.intensity.value : 0f;
+        float startExposure = colorAdjustmentsComponent != null ? colorAdjustmentsComponent.postExposure.value : 0f;
+        Color startColorFilter = colorAdjustmentsComponent != null ? colorAdjustmentsComponent.colorFilter.value : Color.white;
+        float startVignette = vignetteComponent != null ? vignetteComponent.intensity.value : 0f;
 
         float elapsedTime = 0f;
 
@@ -124,25 +157,25 @@ public class DayNightLightController : MonoBehaviour
             }
 
             elapsedTime += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsedTime / duration);
-            t = Mathf.SmoothStep(0, 1, t);
+            float t = Mathf.SmoothStep(0, 1, elapsedTime / duration);
 
             globalLight.intensity = Mathf.Lerp(startLight, targetLight, t);
+
             if (bloomComponent != null)
-            {
                 bloomComponent.intensity.value = Mathf.Lerp(startBloom, targetBloom, t);
+
+            if (colorAdjustmentsComponent != null)
+            {
+                colorAdjustmentsComponent.postExposure.value = Mathf.Lerp(startExposure, targetExposure, t);
+                colorAdjustmentsComponent.colorFilter.value = Color.Lerp(startColorFilter, targetColorFilter, t);
             }
+
+            if (vignetteComponent != null)
+                vignetteComponent.intensity.value = Mathf.Lerp(startVignette, targetVignette, t);
 
             yield return null;
         }
 
-        globalLight.intensity = targetLight;
-        if (bloomComponent != null)
-        {
-            bloomComponent.intensity.value = targetBloom;
-        }
-
-        transitionCoroutine = null;
         isTransitioning = false;
     }
 
@@ -154,7 +187,7 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionLightAndBloom(dayLightIntensity, dayGlobalVolumeIntensity, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayGlobalVolumeIntensity, dayExposure, dayColorFilter, dayVignetteIntensity, transitionDuration));
         }
     }
 }
