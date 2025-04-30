@@ -94,22 +94,16 @@ public class PlayerController : MonoBehaviour
 
             if (isMoving)
             {
-                if (Mathf.Abs(moveInput.x) > Mathf.Abs(moveInput.y))
-                {
-                    if (moveInput.x > 0)
-                    {
-                        lastHorizontalDirection = 1;
-                        spriteRenderer.flipX = true;
-                    }
-                    else
-                    {
-                        lastHorizontalDirection = -1;
-                        spriteRenderer.flipX = false;
-                    }
+                Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 toMouse = mouseWorld - transform.position;
 
+                if (Mathf.Abs(toMouse.x) > 0.5f)
+                {
                     animator.Play("Walk_Side");
+                    spriteRenderer.flipX = toMouse.x > 0;
+                    lastHorizontalDirection = 1;
                 }
-                else if (moveInput.y < 0)
+                else
                 {
                     animator.Play("Walk_Down");
                     lastHorizontalDirection = 0;
@@ -117,14 +111,19 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                if (lastHorizontalDirection == 1 || lastHorizontalDirection == -1)
+                Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 toMouse = mouseWorld - transform.position;
+
+                if (Mathf.Abs(toMouse.x) > Mathf.Abs(toMouse.y))
                 {
-                    spriteRenderer.flipX = lastHorizontalDirection == 1;
+                    spriteRenderer.flipX = toMouse.x > 0;
                     animator.Play("Idle_Side");
+                    lastHorizontalDirection = 1;
                 }
                 else
                 {
                     animator.Play("Idle_Down");
+                    lastHorizontalDirection = 0;
                 }
             }
         }

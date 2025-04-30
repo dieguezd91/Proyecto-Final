@@ -112,11 +112,11 @@ MonoBehaviour:
     m_Bits: 512
   moveSpeed: 1.25
   detectionDistance: 20
-  attackDistance: 1.5
+  attackDistance: 1
   damage: 10
   attackCooldown: 2
   attackPoint: {fileID: 7171890095304449723}
-  attackRange: 0.7
+  attackRange: 0.5
   attackableLayers:
     serializedVersion: 2
     m_Bits: 2688
