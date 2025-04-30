@@ -343,7 +343,6 @@ public class EnemiesSpawner : MonoBehaviour
                 }
                 else
                 {
-                    Destroy(enemy);
                     OnEnemyDeath(enemy);
                 }
             }

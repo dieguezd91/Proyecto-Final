@@ -28,9 +28,12 @@ public class LifeController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isDead = false;
+    [SerializeField] private bool isEnemy;
+    private Animator animator;
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         currentHealth = maxHealth;
 
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -68,20 +71,12 @@ public class LifeController : MonoBehaviour
     {
         isDead = true;
 
-        // 50% de probabilidad de dropear el objeto(Abierto a ser modificado)
-        if (objetDrop != null && Random.value < 0.5f)
-        {
-            Instantiate(objetDrop, transform.position, Quaternion.identity);
-        }
-
-        if (manaPickupPrefab != null && Random.value < manaDropChance)
-        {
-            Instantiate(manaPickupPrefab, transform.position, Quaternion.identity);
-        }
-
         onDeath?.Invoke();
 
-        Destroy(gameObject);
+        if (isEnemy)
+        {
+            animator.SetTrigger("Death");
+        }
     }
 
     IEnumerator FlashRoutine()
@@ -111,5 +106,25 @@ public class LifeController : MonoBehaviour
     {
         currentHealth = 0;
         TakeDamage(float.MaxValue);
+    }
+
+    public void OnDeathAnimationEnd()
+    {
+        Drop();
+        Destroy(gameObject);
+    }
+
+    public void Drop()
+    {
+        // 50% de probabilidad de dropear el objeto(Abierto a ser modificado)
+        if (objetDrop != null && Random.value < 0.5f)
+        {
+            Instantiate(objetDrop, transform.position, Quaternion.identity);
+        }
+
+        if (manaPickupPrefab != null && Random.value < manaDropChance)
+        {
+            Instantiate(manaPickupPrefab, transform.position, Quaternion.identity);
+        }
     }
 }

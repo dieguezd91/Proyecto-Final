@@ -22,12 +22,17 @@ public class Enemy : MonoBehaviour
     [Header("Combat Settings")]
     public float damage = 10f;
     public float attackCooldown = 1f;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float attackRange = 0.7f;
+    [SerializeField] private LayerMask attackableLayers;
 
     [Header("State")]
-    public bool canAttack = true;
+    //public bool canAttack = true;
     public bool chasingTarget = false;
 
     private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer spriteRenderer;
     private Vector2 direction;
     private Transform currentTarget;
     private string currentTargetType = "none";
@@ -35,6 +40,8 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         if (player == null)
         {
@@ -67,10 +74,7 @@ public class Enemy : MonoBehaviour
                 chasingTarget = true;
                 direction = (currentTarget.position - transform.position).normalized;
 
-                if (distanceToTarget <= attackDistance && canAttack)
-                {
-                    Attack();
-                }
+                anim.SetBool("isAttacking", distanceToTarget <= attackDistance);
             }
             else
             {
@@ -149,45 +153,44 @@ public class Enemy : MonoBehaviour
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
             return;
 
-        if (chasingTarget)
+        float distanceToTarget = currentTarget != null ? Vector2.Distance(transform.position, currentTarget.position) : Mathf.Infinity;
+
+        if (chasingTarget && distanceToTarget > attackDistance)
         {
             rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+
+            if (anim != null)
+                anim.SetBool("isMoving", true);
+
+            if (direction.x > 0.1f)
+                spriteRenderer.flipX = true;
+            else if (direction.x < -0.1f)
+                spriteRenderer.flipX = false;
+        }
+        else
+        {
+            if (anim != null)
+                anim.SetBool("isMoving", false);
         }
     }
 
-    void Attack()
+    public void PerformSwordHit()
     {
-        if (currentTargetType == "player")
+        Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
+
+        foreach (Collider2D target in hitTargets)
         {
-            LifeController targetHealth = currentTarget.GetComponent<LifeController>();
-            if (targetHealth != null)
+            LifeController life = target.GetComponent<LifeController>();
+            if (life != null)
             {
-                targetHealth.TakeDamage(damage);
-                if (GameManager.Instance.uiManager != null)
+                life.TakeDamage(damage);
+
+                if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
                 {
                     GameManager.Instance.uiManager.ShowDamagedScreen();
                 }
             }
         }
-        else if(currentTargetType == "plant" || currentTargetType == "home")
-        {
-            LifeController targetHealth = currentTarget.GetComponent<LifeController>();
-            if (targetHealth != null)
-            {
-                targetHealth.TakeDamage(damage);
-                
-                
-            }
-        }
-
-        StartCoroutine(AttackCooldown());
-    }
-
-    IEnumerator AttackCooldown()
-    {
-        canAttack = false;
-        yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
     }
 
     void OnDrawGizmosSelected()
@@ -208,6 +211,12 @@ public class Enemy : MonoBehaviour
                 Gizmos.color = Color.magenta;
 
             Gizmos.DrawLine(transform.position, currentTarget.position);
+        }
+
+        if (attackPoint != null)
+        {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireSphere(attackPoint.position, attackRange);
         }
     }
 }

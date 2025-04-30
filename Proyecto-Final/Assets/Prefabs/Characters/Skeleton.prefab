@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2499588623824434881}
   - component: {fileID: 7032376136951143001}
   m_Layer: 8
-  m_Name: Enemy
+  m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,8 @@ Transform:
   m_LocalPosition: {x: -7.41, y: -6.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7171890095304449723}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7641452158320399227
@@ -114,7 +115,11 @@ MonoBehaviour:
   attackDistance: 1.5
   damage: 10
   attackCooldown: 2
-  canAttack: 1
+  attackPoint: {fileID: 7171890095304449723}
+  attackRange: 0.7
+  attackableLayers:
+    serializedVersion: 2
+    m_Bits: 2688
   chasingTarget: 0
 --- !u!114 &8855017348105390996
 MonoBehaviour:
@@ -141,6 +146,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   objetDrop: {fileID: 1768544347340343859, guid: fe6532703752be5499a1180381f39d28, type: 3}
+  manaPickupPrefab: {fileID: 0}
+  manaDropChance: 1
+  isEnemy: 1
 --- !u!50 &7254879103260252798
 Rigidbody2D:
   serializedVersion: 4
@@ -224,3 +232,34 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &8721149203837629037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7171890095304449723}
+  m_Layer: 8
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7171890095304449723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8721149203837629037}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6626894155934146607}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
