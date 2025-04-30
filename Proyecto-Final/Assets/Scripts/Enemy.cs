@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     //public bool canAttack = true;
     private bool isDead = false;
     public bool chasingTarget = false;
+    private bool isCurrentlyAttacking = false;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -77,7 +78,11 @@ public class Enemy : MonoBehaviour
                 chasingTarget = true;
                 direction = (currentTarget.position - transform.position).normalized;
 
-                anim.SetBool("isAttacking", distanceToTarget <= attackDistance);
+                if (distanceToTarget <= attackDistance && !isCurrentlyAttacking)
+                {
+                    anim.SetBool("isAttacking", true);
+                    isCurrentlyAttacking = true;
+                }
             }
             else
             {
@@ -205,6 +210,13 @@ public class Enemy : MonoBehaviour
         anim.SetBool("isMoving", false);
         anim.SetBool("isAttacking", false);
     }
+
+    public void OnAttackAnimationEnd()
+    {
+        anim.SetBool("isAttacking", false);
+        isCurrentlyAttacking = false;
+    }
+
 
     void OnDrawGizmosSelected()
     {
