@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8855017348105390996}
   - component: {fileID: 7254879103260252798}
   - component: {fileID: 2499588623824434881}
-  - component: {fileID: 8371102562611709545}
+  - component: {fileID: 7032376136951143001}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Enemy
@@ -141,8 +141,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   objetDrop: {fileID: 1768544347340343859, guid: fe6532703752be5499a1180381f39d28, type: 3}
-  manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
-  manaDropChance: 1
 --- !u!50 &7254879103260252798
 Rigidbody2D:
   serializedVersion: 4
@@ -166,7 +164,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -205,17 +203,24 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &8371102562611709545
-MonoBehaviour:
+--- !u!95 &7032376136951143001
+Animator:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 654258422932643597}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  knockbackResistance: 0
-  knockbackDuration: 0.2
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 26dcd47ff80d89740a12925b9132d061, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

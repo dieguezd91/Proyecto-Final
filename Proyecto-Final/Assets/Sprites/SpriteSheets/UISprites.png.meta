@@ -235,6 +235,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: InventoryPlaceholder
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 146
+        width: 125
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5e93f9a91c671443a2b428025c5d1e8
+      internalID: 450073570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrosshairPlantIcon
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 158
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a469f6810c0184543978e44b1cd30569
+      internalID: 1710208436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrosshairDigIcon
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 158
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a07d7a3a8005ad4c8d91c7e17063073
+      internalID: 125339148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrosshairGatherIcon
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 158
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3f16e2e5a47e164f9c850d2be89599a
+      internalID: 861525276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -246,6 +330,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      CrosshairDigIcon: 125339148
+      CrosshairGatherIcon: 861525276
+      CrosshairPlantIcon: 1710208436
+      InventoryPlaceholder: 450073570
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572
