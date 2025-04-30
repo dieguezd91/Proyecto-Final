@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
 
     [Header("State")]
     //public bool canAttack = true;
+    private bool isDead = false;
     public bool chasingTarget = false;
 
     private Rigidbody2D rb;
@@ -63,6 +64,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if (isDead) return;
+
         FindClosestTarget();
 
         if (currentTarget != null)
@@ -150,6 +153,8 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) return;
+
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
             return;
 
@@ -191,6 +196,14 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnDeath()
+    {
+        isDead = true;
+        rb.velocity = Vector2.zero;
+        anim.SetBool("isMoving", false);
+        anim.SetBool("isAttacking", false);
     }
 
     void OnDrawGizmosSelected()

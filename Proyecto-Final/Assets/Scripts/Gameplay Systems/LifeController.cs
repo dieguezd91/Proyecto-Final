@@ -69,13 +69,23 @@ public class LifeController : MonoBehaviour
 
     public virtual void Die()
     {
+        Enemy enemy = GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.OnDeath();
+        }
+
         isDead = true;
 
         onDeath?.Invoke();
 
-        if (isEnemy)
+        if (isEnemy && animator != null)
         {
             animator.SetTrigger("Death");
+        }
+        else
+        {
+            OnDeathAnimationEnd();
         }
     }
 
