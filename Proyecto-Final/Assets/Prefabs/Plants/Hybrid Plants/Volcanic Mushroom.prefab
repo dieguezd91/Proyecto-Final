@@ -160,7 +160,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 2
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -187,6 +187,7 @@ MonoBehaviour:
   plantData: {fileID: 11400000, guid: 57190e9e1a6a8694ab2eb9ee977af22b, type: 2}
   plantingDay: 0
   growthCompleted: 0
+  tilePosition: {x: 0, y: 0, z: 0}
   projectile: {fileID: 8215708087478250761, guid: 7be1d34f96524d146b1731c0190452b8, type: 3}
   firePoint: {fileID: 5461837167220732977}
   cooldown: 2
@@ -221,6 +222,7 @@ MonoBehaviour:
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  isEnemy: 0
 --- !u!61 &2015212756354474771
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -257,7 +259,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.25}
-    oldSize: {x: 1.375, y: 2}
+    oldSize: {x: 1.1, y: 1.6}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
