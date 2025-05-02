@@ -119,10 +119,7 @@ public class Enemy2 : MonoBehaviour
         b.transform.position = firingPoint.position;
         b.transform.rotation = firingPoint.rotation;
         b.SetDirection((currentTarget.position - transform.position).normalized);
-        // NO llames a b.gameObject.SetActive(false) aquí
     }
-
-
 
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
