@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class FloatingPickupText : MonoBehaviour
 {
@@ -7,8 +8,7 @@ public class FloatingPickupText : MonoBehaviour
     [SerializeField] private float displayTime = 1.5f;
 
     private float timer;
-    private string currentMaterialName = "";
-    private int currentAmount = 0;
+    private Dictionary<string, int> pickups = new();
 
     void Start()
     {
@@ -22,19 +22,18 @@ public class FloatingPickupText : MonoBehaviour
     {
         if (pickupText == null) return;
 
-        if (materialName == currentMaterialName)
+        if (pickups.ContainsKey(materialName))
         {
-            currentAmount += amount;
+            pickups[materialName] += amount;
         }
         else
         {
-            currentMaterialName = materialName;
-            currentAmount = amount;
+            pickups[materialName] = amount;
         }
 
-        pickupText.text = $"+{currentAmount} {currentMaterialName}";
-        pickupText.alpha = 1f;
         timer = displayTime;
+
+        UpdateText();
     }
 
     void Update()
@@ -45,10 +44,27 @@ public class FloatingPickupText : MonoBehaviour
 
             if (timer <= 0f)
             {
-                pickupText.text = "";
-                currentMaterialName = "";
-                currentAmount = 0;
+                ClearText();
             }
         }
+    }
+
+    private void UpdateText()
+    {
+        System.Text.StringBuilder sb = new();
+
+        foreach (var kvp in pickups)
+        {
+            sb.AppendLine($"+{kvp.Value} {kvp.Key}");
+        }
+
+        pickupText.text = sb.ToString();
+        pickupText.alpha = 1f;
+    }
+
+    private void ClearText()
+    {
+        pickupText.text = "";
+        pickups.Clear();
     }
 }
