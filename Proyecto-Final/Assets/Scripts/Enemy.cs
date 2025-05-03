@@ -29,8 +29,9 @@ public class Enemy : MonoBehaviour
     [Header("State")]
     //public bool canAttack = true;
     public bool chasingTarget = false;
+    private bool isDead = false;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private Vector2 direction;
@@ -153,6 +154,8 @@ public class Enemy : MonoBehaviour
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
             return;
 
+        if (isDead) return;
+
         float distanceToTarget = currentTarget != null ? Vector2.Distance(transform.position, currentTarget.position) : Mathf.Infinity;
 
         if (chasingTarget && distanceToTarget > attackDistance)
@@ -177,9 +180,11 @@ public class Enemy : MonoBehaviour
     public void PerformSwordHit()
     {
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
+        Debug.Log(hitTargets.Length);  
 
         foreach (Collider2D target in hitTargets)
         {
+            Debug.Log(target.name);
             LifeController life = target.GetComponent<LifeController>();
             if (life != null)
             {
@@ -191,6 +196,13 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void MarkAsDead()
+    {
+        isDead = true;
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
     }
 
     void OnDrawGizmosSelected()

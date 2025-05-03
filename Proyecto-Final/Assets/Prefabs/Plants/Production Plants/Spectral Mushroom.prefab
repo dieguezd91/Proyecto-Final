@@ -108,7 +108,7 @@ MonoBehaviour:
   daysToProduceResources: 2
   minimumResourceAmount: 1
   maximumResourceAmount: 5
-  materialType: 11
+  materialType: 0
   materialSprite: {fileID: -548959778, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
   harvestDuration: 3
   harvestProgressIndicator: {fileID: 15842525385593699, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
