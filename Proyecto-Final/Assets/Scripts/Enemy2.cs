@@ -28,6 +28,8 @@ public class Enemy2 : MonoBehaviour
     [SerializeField] private float bulletForce = 5f;
     private float nextTimeToFire = 0f;
 
+    private bool isDead = false;
+
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -43,6 +45,7 @@ public class Enemy2 : MonoBehaviour
     {
         if (currentTarget == null) return;
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true) return;
+        if (isDead) return;
 
         float dist = Vector2.Distance(transform.position, currentTarget.position);
         if (dist > detectRange) return;
@@ -119,16 +122,20 @@ public class Enemy2 : MonoBehaviour
         b.transform.position = firingPoint.position;
         b.transform.rotation = firingPoint.rotation;
         b.SetDirection((currentTarget.position - transform.position).normalized);
-        // NO llames a b.gameObject.SetActive(false) aquí
     }
-
-
 
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
         Vector2 lookDir = targetPos - currentPos;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
         rb.rotation = angle;
+    }
+
+    public void MarkAsDead()
+    {
+        isDead = true;
+        rb.velocity = Vector2.zero;
+        rb.isKinematic = true;
     }
 
     private void OnDrawGizmosSelected()

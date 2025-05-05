@@ -9,7 +9,13 @@ public enum GameState
     Paused,
     GameOver,
     Day,
-    Night
+    Night,
+    Digging,
+    Planting,
+    Harvesting,
+    OnInventory,
+    OnCrafting,
+    MainMenu
 }
 
 public enum ElementEnum

@@ -77,11 +77,40 @@ public class LifeController : MonoBehaviour
 
         isDead = true;
 
+        foreach (var col in GetComponents<Collider2D>())
+        {
+            col.enabled = false;
+            Enemy enemy = GetComponent<Enemy>();
+            Enemy2 enemy2 = GetComponent<Enemy2>();
+
+            if (enemy != null)
+            {
+                enemy.MarkAsDead();
+            }
+            if (enemy2 != null)
+            {
+                enemy2.MarkAsDead();
+            }
+        }
+
         onDeath?.Invoke();
 
         if (isEnemy && animator != null)
         {
-            animator.SetTrigger("Death");
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Death");
+            }
+            else
+            {
+                Drop();
+                Destroy(gameObject);
+            }
+        }
+        else
+        {
+            Drop();
+            Destroy(gameObject);
         }
         else
         {

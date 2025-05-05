@@ -16,7 +16,16 @@ public class DropEnemyMaterial : MonoBehaviour
             if (InventoryManager.Instance != null)
             {
                 InventoryManager.Instance.AddMaterial(materialData.materialType, 1);
-                Debug.Log($"Jugador recogio: {materialData.materialName})");
+            }
+
+            var player = collision.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                var pickupHandler = player.GetComponentInChildren<FloatingPickupText>();
+                if (pickupHandler != null)
+                {
+                    pickupHandler.ShowPickup(materialData.materialName, 1);
+                }
             }
 
             Destroy(gameObject);

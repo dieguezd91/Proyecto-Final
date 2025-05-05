@@ -44,6 +44,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     public delegate void AbilityChangedHandler(PlayerAbility newAbility);
     public event AbilityChangedHandler OnAbilityChanged;
 
+    [SerializeField] private GameObject digCursorVisual;
+
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()
@@ -65,6 +67,21 @@ public class PlayerAbilitySystem : MonoBehaviour
         if ((isDigging || isHarvesting) && progressBar != null && progressBarTarget != null)
         {
             progressBar.transform.position = Camera.main.WorldToScreenPoint(progressBarTarget.position + progressBarOffset);
+        }
+
+        if (currentAbility == PlayerAbility.Digging && !isDigging)
+        {
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
+            Vector3 cellWorldPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
+
+            float dist = Vector2.Distance(transform.position, cellWorldPos);
+            digCursorVisual.SetActive(dist <= digDistance);
+            digCursorVisual.transform.position = new Vector3(cellWorldPos.x, cellWorldPos.y, 0);
+        }
+        else
+        {
+            digCursorVisual.SetActive(false);
         }
 
         if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;

@@ -28,11 +28,10 @@ public class Enemy : MonoBehaviour
 
     [Header("State")]
     //public bool canAttack = true;
-    private bool isDead = false;
     public bool chasingTarget = false;
-    private bool isCurrentlyAttacking = false;
+    private bool isDead = false;
 
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer spriteRenderer;
     private Vector2 direction;
@@ -65,8 +64,6 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (isDead) return;
-
         FindClosestTarget();
 
         if (currentTarget != null)
@@ -78,11 +75,7 @@ public class Enemy : MonoBehaviour
                 chasingTarget = true;
                 direction = (currentTarget.position - transform.position).normalized;
 
-                if (distanceToTarget <= attackDistance && !isCurrentlyAttacking)
-                {
-                    anim.SetBool("isAttacking", true);
-                    isCurrentlyAttacking = true;
-                }
+                anim.SetBool("isAttacking", distanceToTarget <= attackDistance);
             }
             else
             {
@@ -158,10 +151,10 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead) return;
-
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
             return;
+
+        if (isDead) return;
 
         float distanceToTarget = currentTarget != null ? Vector2.Distance(transform.position, currentTarget.position) : Mathf.Infinity;
 
@@ -187,9 +180,11 @@ public class Enemy : MonoBehaviour
     public void PerformSwordHit()
     {
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
+        Debug.Log(hitTargets.Length);  
 
         foreach (Collider2D target in hitTargets)
         {
+            Debug.Log(target.name);
             LifeController life = target.GetComponent<LifeController>();
             if (life != null)
             {
@@ -203,20 +198,12 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void OnDeath()
+    public void MarkAsDead()
     {
         isDead = true;
         rb.velocity = Vector2.zero;
-        anim.SetBool("isMoving", false);
-        anim.SetBool("isAttacking", false);
+        rb.isKinematic = true;
     }
-
-    public void OnAttackAnimationEnd()
-    {
-        anim.SetBool("isAttacking", false);
-        isCurrentlyAttacking = false;
-    }
-
 
     void OnDrawGizmosSelected()
     {
