@@ -513,6 +513,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Infernum
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 129
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cb3ad42bcedc594e87d99a56d1bfb83
+      internalID: -2141980523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumShot
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 1
+        width: 9
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a34644d0909c36c408bb3d458204c973
+      internalID: -541236709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GroundFire
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 1
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd66504ab89122248962c78dedbcad77
+      internalID: 159559732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -541,6 +604,9 @@ TextureImporter:
       EnemySprites_7: -902189555
       EnemySprites_8: 4241320
       EnemySprites_9: 179335318
+      GroundFire: 159559732
+      Infernum: -2141980523
+      InfernumShot: -541236709
       Skeleton: -1222204734
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

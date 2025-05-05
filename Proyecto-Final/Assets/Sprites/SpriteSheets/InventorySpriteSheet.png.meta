@@ -155,10 +155,10 @@ TextureImporter:
       name: BasicMagicAttack
       rect:
         serializedVersion: 2
-        x: 3
-        y: 227
-        width: 10
-        height: 10
+        x: 5
+        y: 228
+        width: 7
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -298,6 +298,174 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PlantShot
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 227
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0c6bbf8e6dde584dadbc3e651006cb2
+      internalID: -1175123755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_0
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 209
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80f7a5e47872c3a4fa413398718ede84
+      internalID: 1950191755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_1
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 209
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2f9ada9f8aac90439fbdbda63927059
+      internalID: 1807988885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_2
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 208
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 391e6b667c9fb5d448ac5da08bfdce1d
+      internalID: -39267108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_3
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 209
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d04c1f77bd58854ab769224bef9fc93
+      internalID: 2061505305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_4
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 209
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9125d447e7756fb4cb8e00e6c3e9c3dc
+      internalID: -37685797
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_5
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 210
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5a92751efd03404095a003b2dc20795
+      internalID: 79329245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventorySpriteSheet_6
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 224
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e7a0994f827ebb44967c65072a1dfe3
+      internalID: 2015496169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -313,6 +481,14 @@ TextureImporter:
       BoneResource: 48356350
       GlowdustResource: -1061087
       InventoryBag: -596440827
+      InventorySpriteSheet_0: 1950191755
+      InventorySpriteSheet_1: 1807988885
+      InventorySpriteSheet_2: -39267108
+      InventorySpriteSheet_3: 2061505305
+      InventorySpriteSheet_4: -37685797
+      InventorySpriteSheet_5: 79329245
+      InventorySpriteSheet_6: 2015496169
+      PlantShot: -1175123755
       SeedGlowdust: -473241699
       SeedPetalshot: -2039217953
       SeedSpikeroot: 668908640

@@ -106,32 +106,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -346,13 +320,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UISprites_0
+      name: PotCraftingUI
       rect:
         serializedVersion: 2
-        x: 1
-        y: 11
-        width: 122
-        height: 90
+        x: 15
+        y: 39
+        width: 141
+        height: 65
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -360,113 +334,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7190703ba963fc64e9e04a2225d046ab
-      internalID: -1618415147
+      spriteID: f77c5205a944a8145bb0adcad9b10541
+      internalID: 14847357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UISprites_1
+      name: NightPlayerBars
       rect:
         serializedVersion: 2
-        x: 159
-        y: 111
-        width: 18
-        height: 18
+        x: 16
+        y: 14
+        width: 65
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f71e8fcd9ddc684f9c2f1fc2f937eaa
-      internalID: -292118732
+      spriteID: 985bd2aea3ea21048acbb0abf911b115
+      internalID: 1508131376
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UISprites_2
+      name: DayPlayerBars
       rect:
         serializedVersion: 2
-        x: 178
-        y: 111
-        width: 18
-        height: 18
+        x: 83
+        y: 20
+        width: 65
+        height: 8
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7dac1ec592b06d42a746b8448b1c3ab
-      internalID: -1490624798
+      spriteID: e46a9a883726661449a07a6efac3ba5c
+      internalID: -1991438594
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UISprites_3
+      name: CrosshairCollectIcon
       rect:
         serializedVersion: 2
-        x: 159
-        y: 92
+        x: 47
+        y: 127
         width: 18
-        height: 18
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3afd9f83beba7d442a3d03ff70e9bb18
-      internalID: -655091199
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UISprites_4
-      rect:
-        serializedVersion: 2
-        x: 178
-        y: 92
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1cd793d7abe360445b85df53d83e6ffd
-      internalID: -102082517
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: UISprites_5
-      rect:
-        serializedVersion: 2
-        x: 197
-        y: 92
-        width: 18
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b388106a1275c345bfcee268120685c
-      internalID: -1313676576
+      spriteID: 5fc307e7e67ceba428fb8a07b8185ccf
+      internalID: 2120552150
       vertices: []
       indices: 
       edges: []
@@ -482,25 +414,24 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      CrosshairCollectIcon: 2120552150
       CrosshairDigIcon: 125339148
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
+      DayPlayerBars: -1991438594
       InventoryPlaceholder: 450073570
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572
       MoonStage3: -1032481509
       MoonStage4: -1529809225
+      NightPlayerBars: 1508131376
+      PotCraftingUI: 14847357
       UIInventorySlot: -1001860351
-      UISprites_0: -1618415147
-      UISprites_1: -292118732
       UISprites_10: -1775831014
       UISprites_11: -1738444724
       UISprites_12: 1118135965
       UISprites_13: -1371413568
-      UISprites_2: -1490624798
-      UISprites_3: -655091199
-      UISprites_4: -102082517
       UISprites_5: -1313676576
       UISprites_6: 1026741367
       UISprites_7: -1902967201
