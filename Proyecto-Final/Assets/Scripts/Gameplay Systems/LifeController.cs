@@ -20,7 +20,7 @@ public class LifeController : MonoBehaviour
 
     [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
-    
+
     [Header("MANA DROP")]
     [SerializeField] private GameObject manaPickupPrefab;
     [SerializeField] private float manaDropChance = 1f;
@@ -69,12 +69,6 @@ public class LifeController : MonoBehaviour
 
     public virtual void Die()
     {
-        Enemy enemy = GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            enemy.OnDeath();
-        }
-
         isDead = true;
 
         foreach (var col in GetComponents<Collider2D>())
@@ -95,7 +89,7 @@ public class LifeController : MonoBehaviour
 
         onDeath?.Invoke();
 
-        if (isEnemy && animator != null)
+        if (isEnemy)
         {
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -111,10 +105,6 @@ public class LifeController : MonoBehaviour
         {
             Drop();
             Destroy(gameObject);
-        }
-        else
-        {
-            OnDeathAnimationEnd();
         }
     }
 
