@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] slotIcons = new Image[5];
     [SerializeField] private Image[] slotBackgrounds = new Image[5];
     [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
+    [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[5];
 
     [Header("SELECTION")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
@@ -203,6 +204,8 @@ public class UIManager : MonoBehaviour
             if (slotObjects[i] != null)
             {
                 PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
+                int count = plantSlot.seedCount;
+                seedCount[i].text = count > 0 ? count.ToString() : "-";
                 if (plantSlot != null && plantSlot.plantPrefab != null)
                 {
                     if (slotIcons[i] != null)
@@ -501,6 +504,18 @@ public class UIManager : MonoBehaviour
         {
             manaSlider.maxValue = manaSystem.GetMaxMana();
             manaSlider.value = manaSystem.GetCurrentMana();
+        }
+    }
+
+    public void UpdateSeedCountsUI()
+    {
+        for (int i = 0; i < seedCount.Length; i++)
+        {
+            var slot = SeedInventory.Instance.GetPlantSlot(i);
+            if (slot != null)
+            {
+                seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "-";
+            }
         }
     }
 
