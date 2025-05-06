@@ -25,7 +25,8 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject HUD;
     public GameObject pausePanel;
-    public GameObject plantSlots;
+    public GameObject seedSlots;
+    [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
 
@@ -34,6 +35,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] slotIcons = new Image[5];
     [SerializeField] private Image[] slotBackgrounds = new Image[5];
     [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
+    [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[5];
 
     [Header("SELECTION")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
@@ -67,6 +69,7 @@ public class UIManager : MonoBehaviour
     private bool isInstructionsOpen = false;
     private PlayerController playerController;
     private PauseMenu pauseMenu;
+    private Coroutine fadeCoroutine;
 
     void Start()
     {
@@ -87,6 +90,11 @@ public class UIManager : MonoBehaviour
         if (SeedInventory.Instance != null)
         {
             SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
+        }
+
+        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
+        {
+            abilitySystem.OnAbilityChanged -= OnAbilityChanged;
         }
     }
 
@@ -152,10 +160,22 @@ public class UIManager : MonoBehaviour
         {
             continueButton.onClick.AddListener(pauseMenu.Resume);
         }
+
+        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
+        {
+            abilitySystem.OnAbilityChanged += OnAbilityChanged;
+        }
     }
 
     private void InitializeUI()
     {
+        if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
+        {
+            seedSlotsCanvasGroup.alpha = 0f;
+            seedSlotsCanvasGroup.interactable = false;
+            seedSlotsCanvasGroup.blocksRaycasts = false;
+        }
+
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(false);
@@ -203,6 +223,8 @@ public class UIManager : MonoBehaviour
             if (slotObjects[i] != null)
             {
                 PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
+                int count = plantSlot.seedCount;
+                seedCount[i].text = count > 0 ? count.ToString() : "-";
                 if (plantSlot != null && plantSlot.plantPrefab != null)
                 {
                     if (slotIcons[i] != null)
@@ -298,13 +320,13 @@ public class UIManager : MonoBehaviour
         {
             if (GameManager.Instance.currentGameState == GameState.Day)
             {
-                if (plantSlots != null) plantSlots.gameObject.SetActive(true && !isInstructionsOpen);
+                if (seedSlots != null) seedSlots.gameObject.SetActive(true && !isInstructionsOpen);
                 if (dayControlPanel != null) dayControlPanel.SetActive(true && !isInstructionsOpen);
                 if (startNightButton != null) startNightButton.gameObject.SetActive(true && !isInstructionsOpen);
             }
             else if (GameManager.Instance.currentGameState == GameState.Night)
             {
-                if (plantSlots != null) plantSlots.gameObject.SetActive(false);
+                if (seedSlots != null) seedSlots.gameObject.SetActive(false);
                 if (dayControlPanel != null) dayControlPanel.SetActive(false);
                 if (startNightButton != null) startNightButton.gameObject.SetActive(false);
             }
@@ -424,7 +446,7 @@ public class UIManager : MonoBehaviour
         }
 
         if (HUD != null) HUD.SetActive(false);
-        if (plantSlots != null) plantSlots.SetActive(false);
+        if (seedSlots != null) seedSlots.SetActive(false);
         if (dayControlPanel != null) dayControlPanel.SetActive(false);
         if (inventoryPanel != null && isInventoryOpen) inventoryPanel.SetActive(false);
         if (startNightButton != null) startNightButton.gameObject.SetActive(false);
@@ -504,6 +526,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void UpdateSeedCountsUI()
+    {
+        for (int i = 0; i < seedCount.Length; i++)
+        {
+            var slot = SeedInventory.Instance.GetPlantSlot(i);
+            if (slot != null)
+            {
+                seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "-";
+            }
+        }
+    }
+
     public void ShowDamagedScreen()
     {
         if (damagedScreen == null) return;
@@ -516,5 +550,34 @@ public class UIManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.5f);
         damagedScreen.SetActive(false);
+    }
+
+    private void OnAbilityChanged(PlayerAbility newAbility)
+    {
+        if (seedSlotsCanvasGroup == null) return;
+
+        bool show = newAbility == PlayerAbility.Planting;
+        if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+        fadeCoroutine = StartCoroutine(FadePlantSlots(show));
+    }
+
+    private IEnumerator FadePlantSlots(bool fadeIn)
+    {
+        float duration = 0.5f;
+        float startAlpha = seedSlotsCanvasGroup.alpha;
+        float targetAlpha = fadeIn ? 1f : 0f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+            seedSlotsCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+            yield return null;
+        }
+
+        seedSlotsCanvasGroup.alpha = targetAlpha;
+        seedSlotsCanvasGroup.interactable = fadeIn;
+        seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
     }
 }

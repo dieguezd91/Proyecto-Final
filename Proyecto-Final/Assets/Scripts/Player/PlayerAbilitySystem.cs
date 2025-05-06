@@ -58,8 +58,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void Start()
     {
-        currentAbility = PlayerAbility.Digging;
-        OnAbilityChanged?.Invoke(currentAbility);
+        SetAbility(PlayerAbility.Digging);
     }
 
     private void Update()
@@ -125,12 +124,10 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void SetAbility(PlayerAbility ability)
     {
-        if (currentAbility != ability)
-        {
-            CancelCurrentAction();
-            currentAbility = ability;
-            OnAbilityChanged?.Invoke(currentAbility);
-        }
+        CancelCurrentAction();
+
+        currentAbility = ability;
+        OnAbilityChanged?.Invoke(currentAbility);
     }
 
     private void HandlePlanting()
@@ -143,10 +140,22 @@ public class PlayerAbilitySystem : MonoBehaviour
             GameObject selectedPlant = plantInventory.GetSelectedPlantPrefab();
             if (selectedPlant == null) return;
 
+            if (!plantInventory.HasSeedsInSelectedSlot())
+            {
+                Debug.Log("No quedan semillas para esta planta.");
+                return;
+            }
+
             if (Vector2.Distance(transform.position, TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos)) <= interactionDistance)
             {
                 bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant);
-                if (!planted)
+                if (planted)
+                {
+                    plantInventory.ConsumeSeedInSelectedSlot();
+                    GameManager.Instance.uiManager.UpdateSeedCountsUI();
+                    GameManager.Instance.uiManager.InitializeSlotUI();
+                }
+                else
                 {
                     Debug.Log("Ya hay una planta en esa casilla.");
                 }

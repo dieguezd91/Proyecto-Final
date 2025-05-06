@@ -75,15 +75,29 @@ public class CraftingSystem : MonoBehaviour
             {
                 int slotIndex = FindFreeSlotOrSpecific(plantData);
 
-                SeedInventory.Instance.UnlockPlant(
-                    plantData.seedType,
-                    plantData.plantPrefab,
-                    plantData.seedType.ToString(),
-                    plantData.plantIcon,
-                    slotIndex,
-                    plantData.daysToGrow,
-                    plantData.description
-                );
+                var existingSlot = FindSlotBySeed(seedToCraft);
+                if (existingSlot == -1)
+                {
+                    if (slotIndex != -1)
+                    {
+                        SeedInventory.Instance.UnlockPlant(
+                            plantData.seedType,
+                            plantData.plantPrefab,
+                            plantData.plantName,
+                            plantData.plantIcon,
+                            slotIndex,
+                            plantData.daysToGrow,
+                            plantData.description
+                        );
+                        SeedInventory.Instance.GetPlantSlot(slotIndex).seedCount = 1;
+                    }
+                }
+                else
+                {
+                    SeedInventory.Instance.GetPlantSlot(existingSlot).seedCount++;
+                    GameManager.Instance.uiManager.UpdateSeedCountsUI();
+                }
+
 
                 if (GameManager.Instance?.uiManager != null)
                 {
@@ -162,5 +176,16 @@ public class CraftingSystem : MonoBehaviour
             return data;
 
         return null;
+    }
+
+    private int FindSlotBySeed(SeedsEnum seed)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            var slot = SeedInventory.Instance.GetPlantSlot(i);
+            if (slot != null && slot.seedType == seed && slot.plantPrefab != null)
+                return i;
+        }
+        return -1;
     }
 }

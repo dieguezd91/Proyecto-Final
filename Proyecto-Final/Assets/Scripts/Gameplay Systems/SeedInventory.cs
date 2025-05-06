@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [Serializable]
@@ -10,6 +11,8 @@ public class PlantSlot
     public Sprite plantIcon;
     public int daysToGrow;
     public string description;
+
+    public int seedCount = 0;
 }
 
 public class SeedInventory : MonoBehaviour
@@ -44,6 +47,12 @@ public class SeedInventory : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(DelayedSelectFirstSlot());
+    }
+
+    private IEnumerator DelayedSelectFirstSlot()
+    {
+        yield return null;
         SelectSlot(0);
     }
 
@@ -65,6 +74,7 @@ public class SeedInventory : MonoBehaviour
             selectedSlotIndex = slotIndex;
             onSlotSelected?.Invoke(selectedSlotIndex);
         }
+        GameManager.Instance.uiManager.UpdateSeedCountsUI();
     }
 
     public GameObject GetSelectedPlantPrefab()
@@ -101,6 +111,28 @@ public class SeedInventory : MonoBehaviour
         return selectedSlotIndex;
     }
 
+    public bool HasSeedsInSelectedSlot()
+    {
+        var slot = GetSelectedPlantSlot();
+        return slot != null && slot.seedCount > 0;
+    }
+
+    public void ConsumeSeedInSelectedSlot()
+    {
+        var slot = GetSelectedPlantSlot();
+        if (slot != null && slot.seedCount > 0)
+        {
+            slot.seedCount--;
+            Debug.Log($"Semillas restantes de {slot.plantName}: {slot.seedCount}");
+        }
+    }
+
+    public int GetSeedCountInSlot(int index)
+    {
+        var slot = GetPlantSlot(index);
+        return slot != null ? slot.seedCount : 0;
+    }
+
     public void UnlockPlant(
         SeedsEnum seedType,
         GameObject plantPrefab,
@@ -121,5 +153,6 @@ public class SeedInventory : MonoBehaviour
 
             Debug.Log($"Unlocked new plant: {plantName} (Seed: {seedType}) in slot {slotIndex + 1}");
         }
+        GameManager.Instance.uiManager.UpdateSeedCountsUI();
     }
 }
