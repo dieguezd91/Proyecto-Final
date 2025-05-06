@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [Serializable]
@@ -46,6 +47,12 @@ public class SeedInventory : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(DelayedSelectFirstSlot());
+    }
+
+    private IEnumerator DelayedSelectFirstSlot()
+    {
+        yield return null;
         SelectSlot(0);
     }
 

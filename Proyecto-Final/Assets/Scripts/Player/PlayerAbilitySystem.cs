@@ -58,8 +58,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void Start()
     {
-        currentAbility = PlayerAbility.Digging;
-        OnAbilityChanged?.Invoke(currentAbility);
+        SetAbility(PlayerAbility.Digging);
     }
 
     private void Update()
@@ -125,12 +124,10 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void SetAbility(PlayerAbility ability)
     {
-        if (currentAbility != ability)
-        {
-            CancelCurrentAction();
-            currentAbility = ability;
-            OnAbilityChanged?.Invoke(currentAbility);
-        }
+        CancelCurrentAction();
+
+        currentAbility = ability;
+        OnAbilityChanged?.Invoke(currentAbility);
     }
 
     private void HandlePlanting()
