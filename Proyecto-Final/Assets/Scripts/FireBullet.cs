@@ -59,14 +59,18 @@ public class FireBullet : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player") || collision.CompareTag("Plant"))
+        if (collision.CompareTag("Player") || collision.CompareTag("Plant") || collision.CompareTag("Home"))
         {
             var health = collision.GetComponent<LifeController>();
             if (health != null)
             {
                 health.TakeDamage(damage);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
+                {
                     GameManager.Instance.uiManager.ShowDamagedScreen();
+                    CameraShaker.Instance?.Shake(0.2f, 0.2f);
+                }
+
             }
             // Al colisión, devolver bala
 
@@ -74,6 +78,8 @@ public class FireBullet : MonoBehaviour
         }
 
         
+
+
     }
 
     public void SetDirection(Vector2 newDirection)
