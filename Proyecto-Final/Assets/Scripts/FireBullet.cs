@@ -66,7 +66,11 @@ public class FireBullet : MonoBehaviour
             {
                 health.TakeDamage(damage);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
+                {
                     GameManager.Instance.uiManager.ShowDamagedScreen();
+                    CameraShaker.Instance?.Shake(0.2f, 0.2f);
+                }
+
             }
             // Al colisión, devolver bala
 

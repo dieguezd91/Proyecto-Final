@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e3bd58e133ba6243971320e1eb6dd42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 15
   lifeTime: 3
   speed: 10
   fireTrailPrefab: {fileID: 7107417348711863447, guid: d4df0593a01e4b748bb632cec5a50143, type: 3}
