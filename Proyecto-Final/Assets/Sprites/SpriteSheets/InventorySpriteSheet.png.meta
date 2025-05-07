@@ -454,7 +454,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -462,6 +462,48 @@ TextureImporter:
       bones: []
       spriteID: 9e7a0994f827ebb44967c65072a1dfe3
       internalID: 2015496169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SawShot
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 224
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62405dcdaf0378d4ab3977a10aad76b1
+      internalID: 1701969414
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpellParticle
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 180
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b9a3d4c310504e49a57be351162b3ef
+      internalID: 298098152
       vertices: []
       indices: 
       edges: []
@@ -489,11 +531,13 @@ TextureImporter:
       InventorySpriteSheet_5: 79329245
       InventorySpriteSheet_6: 2015496169
       PlantShot: -1175123755
+      SawShot: 1701969414
       SeedGlowdust: -473241699
       SeedPetalshot: -2039217953
       SeedSpikeroot: 668908640
       ShovelInventory: -1576750221
       SickleInventory: -1594061710
+      SpellParticle: 298098152
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -333,7 +333,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 2
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 1428125574, guid: 6e4d064e35076ec49a8b325c3c05573a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -395,6 +395,7 @@ MonoBehaviour:
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 31ae4693baac07040a38b0bb31f46c8b, type: 2}
+  digCursorVisual: {fileID: 0}
 --- !u!114 &477447474750530567
 MonoBehaviour:
   m_ObjectHideFlags: 0
