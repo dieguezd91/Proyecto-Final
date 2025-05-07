@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
+    [SerializeField] private TextMeshProUGUI playerHealthText;
 
     [Header("HOME HEALTH BAR")]
     [SerializeField] private Slider homeHealthBar;
@@ -59,6 +60,9 @@ public class UIManager : MonoBehaviour
 
     [Header("FEEDBACK")]
     [SerializeField] private GameObject damagedScreen;
+
+    [Header("PLAYER ABILITY UI")]
+    [SerializeField] private GameObject abilityPanel;
 
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
@@ -302,6 +306,7 @@ public class UIManager : MonoBehaviour
             }
 
             UpdateUIElementsVisibility();
+            UpdateAbilityUIVisibility();
             lastGameState = GameManager.Instance.currentGameState;
         }
     }
@@ -340,6 +345,11 @@ public class UIManager : MonoBehaviour
             healthBar.value = currentHealth;
             UpdateFillColor(currentHealth / maxHealth);
         }
+
+        if (playerHealthText != null)
+        {
+            playerHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+        }
     }
 
     private void UpdateFillColor(float healthPercentage)
@@ -362,6 +372,17 @@ public class UIManager : MonoBehaviour
                     new Vector3(normalScale, normalScale, 1f);
             }
         }
+    }
+
+    private void UpdateAbilityUIVisibility()
+    {
+        if (abilityPanel == null || GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.currentGameState == GameState.Day)
+            abilityPanel.SetActive(true);
+        else if (GameManager.Instance.currentGameState == GameState.Night)
+            abilityPanel.SetActive(false);
     }
 
     private void HandleInventoryInput()
