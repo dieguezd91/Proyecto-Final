@@ -9,6 +9,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
+    [SerializeField] private TextMeshProUGUI playerHealthText;
+
 
     [Header("HOME HEALTH BAR")]
     [SerializeField] private Slider homeHealthBar;
@@ -28,6 +30,9 @@ public class UIManager : MonoBehaviour
     public GameObject plantSlots;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
+
+    [Header("PLAYER ABILITY UI")]
+    [SerializeField] private GameObject abilityPanel;
 
     [Header("PLANT SLOTS")]
     [SerializeField] private GameObject[] slotObjects = new GameObject[5];
@@ -280,6 +285,7 @@ public class UIManager : MonoBehaviour
             }
 
             UpdateUIElementsVisibility();
+            UpdateAbilityUIVisibility();
             lastGameState = GameManager.Instance.currentGameState;
         }
     }
@@ -317,6 +323,11 @@ public class UIManager : MonoBehaviour
         {
             healthBar.value = currentHealth;
             UpdateFillColor(currentHealth / maxHealth);
+        }
+
+        if (playerHealthText != null)
+        {
+            playerHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
         }
     }
 
@@ -511,6 +522,19 @@ public class UIManager : MonoBehaviour
         StopCoroutine(nameof(HideDamagedScreen));
         StartCoroutine(HideDamagedScreen());
     }
+
+
+    private void UpdateAbilityUIVisibility()
+    {
+        if (abilityPanel == null || GameManager.Instance == null)
+            return;
+
+        if (GameManager.Instance.currentGameState == GameState.Day)
+            abilityPanel.SetActive(true);
+        else if (GameManager.Instance.currentGameState == GameState.Night)
+            abilityPanel.SetActive(false);
+    }
+
 
     private IEnumerator HideDamagedScreen()
     {

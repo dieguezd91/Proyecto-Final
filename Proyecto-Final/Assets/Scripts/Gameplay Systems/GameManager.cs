@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int dayCount = 0;
     public UnityEvent<int> onNewDay;
 
+    
+
+
     private LifeController playerLife;
     private LifeController HomeLife;
     public UIManager uiManager;
@@ -219,4 +222,8 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.Day);
         SceneManager.LoadScene(sceneBuildIndex:0);
     }
+
+
+   
+
 }
