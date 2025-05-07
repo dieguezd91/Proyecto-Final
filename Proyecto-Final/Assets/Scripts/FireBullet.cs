@@ -72,8 +72,6 @@ public class FireBullet : MonoBehaviour
                 }
 
             }
-            // Al colisión, devolver bala
-
             BulletPool.Instance.ReturnBullet(this);
         }
 

@@ -5,7 +5,7 @@ public class Enemy2 : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Animator Enemy2Anim;
+    [SerializeField] private SpriteRenderer Enemy2Sprite;
 
     [Header("Target Settings")]
     [SerializeField] private float playerPriority = 1.0f;
@@ -33,7 +33,7 @@ public class Enemy2 : MonoBehaviour
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
-        if (Enemy2Anim == null) Enemy2Anim = GetComponent<Animator>();
+        if (Enemy2Sprite == null) Enemy2Sprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -127,8 +127,13 @@ public class Enemy2 : MonoBehaviour
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
         Vector2 lookDir = targetPos - currentPos;
-        float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-        rb.rotation = angle;
+
+        if (lookDir.x != 0f)
+        {
+            Vector3 scale = Enemy2Sprite.transform.localScale;
+            scale.x = -Mathf.Sign(lookDir.x) * Mathf.Abs(scale.x);
+            Enemy2Sprite.transform.localScale = scale;
+        }
     }
 
     public void MarkAsDead()
