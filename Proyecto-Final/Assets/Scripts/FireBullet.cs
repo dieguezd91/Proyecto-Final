@@ -93,9 +93,4 @@ public class FireBullet : MonoBehaviour
     {
         Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
     }
-
-    private void OnDisable()
-    {
-        Debug.Log($"FireBullet disabled at time {Time.time}", this);
-    }
 }

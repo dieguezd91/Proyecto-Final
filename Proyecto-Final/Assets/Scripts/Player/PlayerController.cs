@@ -85,55 +85,44 @@ public class PlayerController : MonoBehaviour
         if (!movementEnabled || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
         {
             rb.velocity = Vector2.zero;
+            animator.SetBool("IsMoving", false);
             return;
         }
-
-        if (animator != null && spriteRenderer != null)
-        {
-            bool isMoving = moveInput.magnitude > 0.01f;
-
-            if (isMoving)
-            {
-                Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 toMouse = mouseWorld - transform.position;
-
-                if (Mathf.Abs(toMouse.x) > 0.5f)
-                {
-                    animator.Play("Walk_Side");
-                    spriteRenderer.flipX = toMouse.x > 0;
-                    lastHorizontalDirection = 1;
-                }
-                else
-                {
-                    animator.Play("Walk_Down");
-                    lastHorizontalDirection = 0;
-                }
-            }
-            else
-            {
-                Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-                Vector2 toMouse = mouseWorld - transform.position;
-
-                if (Mathf.Abs(toMouse.x) > Mathf.Abs(toMouse.y))
-                {
-                    spriteRenderer.flipX = toMouse.x > 0;
-                    animator.Play("Idle_Side");
-                    lastHorizontalDirection = 1;
-                }
-                else
-                {
-                    animator.Play("Idle_Down");
-                    lastHorizontalDirection = 0;
-                }
-            }
-        }
-
 
         moveInput.x = Input.GetAxisRaw("Horizontal");
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
         rb.velocity = moveInput * moveSpeed;
+
+        if (animator != null && spriteRenderer != null)
+        {
+            if (moveInput != Vector2.zero)
+            {
+                float animAimX = moveInput.x;
+                float animAimY = moveInput.y;
+
+                if (moveInput.x > 0.01f)
+                {
+                    spriteRenderer.flipX = true;
+                    animAimX = -moveInput.x;
+                }
+                else if (moveInput.x < -0.01f)
+                {
+                    spriteRenderer.flipX = false;
+                }
+
+                animator.SetBool("IsMoving", true);
+                animator.SetFloat("aimX", animAimX);
+                animator.SetFloat("aimY", animAimY);
+            }
+            else
+            {
+                animator.SetBool("IsMoving", false);
+            }
+        }
+
+        Debug.Log($"moveX: {moveInput.x}, flipX: {spriteRenderer.flipX}");
     }
 
     void HandleAttack()
