@@ -205,7 +205,7 @@ TextureImporter:
         x: 5
         y: 192
         width: 22
-        height: 27
+        height: 28
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,7 +247,7 @@ TextureImporter:
         x: 69
         y: 192
         width: 22
-        height: 32
+        height: 28
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -312,7 +312,9 @@ TextureImporter:
     indices: 
     edges: []
     weights: []
-    secondaryTextures: []
+    secondaryTextures:
+    - texture: {fileID: 2800000, guid: 5b8b791cc9a7adf4d9ddd05a06119516, type: 3}
+      name: _Glow
     nameFileIdTable:
       BasicGlowdust: -2043935357
       BasicPetalShot: 1611987579
