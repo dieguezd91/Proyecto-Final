@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class Enemy2 : MonoBehaviour
@@ -15,7 +15,7 @@ public class Enemy2 : MonoBehaviour
     private Transform currentTarget;
     private string currentTargetType = "none";
 
-    [Header("Detecci�n de rango")]
+    [Header("Detección de rango")]
     [SerializeField] private float detectRange;
     [SerializeField] private float shootingRange;
 
@@ -127,12 +127,22 @@ public class Enemy2 : MonoBehaviour
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
         Vector2 lookDir = targetPos - currentPos;
+        LookAtDirection(lookDir);
+    }
 
-        if (lookDir.x != 0f)
+    private void LookAtDirection(Vector2 direction)
+    {
+        if (direction.x > 0.1f)
         {
-            Vector3 scale = Enemy2Sprite.transform.localScale;
-            scale.x = -Mathf.Sign(lookDir.x) * Mathf.Abs(scale.x);
-            Enemy2Sprite.transform.localScale = scale;
+            Enemy2Sprite.flipX = true;
+            if (firingPoint != null)
+                firingPoint.localPosition = new Vector2(Mathf.Abs(firingPoint.localPosition.x), firingPoint.localPosition.y);
+        }
+        else if (direction.x < -0.1f)
+        {
+            Enemy2Sprite.flipX = false;
+            if (firingPoint != null)
+                firingPoint.localPosition = new Vector2(-Mathf.Abs(firingPoint.localPosition.x), firingPoint.localPosition.y);
         }
     }
 

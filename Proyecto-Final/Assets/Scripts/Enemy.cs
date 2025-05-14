@@ -168,16 +168,7 @@ public class Enemy : MonoBehaviour
             if (anim != null)
                 anim.SetBool("isMoving", true);
 
-            if (direction.x > 0.1f)
-            {
-                spriteRenderer.flipX = true;
-                attackPoint.localPosition = new Vector2(Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
-            }
-            else if (direction.x < -0.1f)
-            {
-                spriteRenderer.flipX = false;
-                attackPoint.localPosition = new Vector2(-Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
-            }
+            LookAtDirection(direction);
         }
         else
         {
@@ -205,6 +196,22 @@ public class Enemy : MonoBehaviour
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }
+        }
+    }
+
+    private void LookAtDirection(Vector2 direction)
+    {
+        if (direction.x > 0.1f)
+        {
+            spriteRenderer.flipX = true;
+            if (attackPoint != null)
+                attackPoint.localPosition = new Vector2(Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
+        }
+        else if (direction.x < -0.1f)
+        {
+            spriteRenderer.flipX = false;
+            if (attackPoint != null)
+                attackPoint.localPosition = new Vector2(-Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
         }
     }
 
