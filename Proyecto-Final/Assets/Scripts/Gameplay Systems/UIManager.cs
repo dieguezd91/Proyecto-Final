@@ -15,6 +15,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider homeHealthBar;
     [SerializeField] private Image homeFillImage;
     [SerializeField] private Gradient homeHealthGradient;
+    [SerializeField] private TextMeshProUGUI homeHealthText;
+
+    [Header("FLOATING DAMAGE")]
+    [SerializeField] private GameObject floatingDamagePrefab;
+    private float lastPlayerHealth;
+
 
     [Header("MANA BAR")]
     [SerializeField] private Slider manaSlider;
@@ -119,6 +125,8 @@ public class UIManager : MonoBehaviour
             playerLife = player.GetComponent<LifeController>();
             playerController = player.GetComponent<PlayerController>();
             manaSystem = player.GetComponent<ManaSystem>();
+            lastPlayerHealth = playerLife.currentHealth;
+
         }
 
         if (GameManager.Instance != null && GameManager.Instance.home != null)
@@ -284,6 +292,11 @@ public class UIManager : MonoBehaviour
             homeHealthBar.value = currentHealth;
             UpdateHomeFillColor(currentHealth / maxHealth);
         }
+
+        if (homeHealthText != null)
+        {
+            homeHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+        }
     }
 
     private void UpdateHomeFillColor(float healthPercentage)
@@ -340,17 +353,31 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
+        
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
             UpdateFillColor(currentHealth / maxHealth);
         }
 
+
+
+       
+        float damageTaken = lastPlayerHealth - currentHealth;
+        if (damageTaken > 0f && floatingDamagePrefab != null)
+        {
+            Vector3 spawnPos = player.transform.position + Vector3.up * 0.5f;
+            GameObject txt = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
+            txt.GetComponent<FloatingDamageText>()?.SetText(damageTaken);
+        }
+        lastPlayerHealth = currentHealth;
+
         if (playerHealthText != null)
         {
             playerHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
         }
     }
+
 
     private void UpdateFillColor(float healthPercentage)
     {
