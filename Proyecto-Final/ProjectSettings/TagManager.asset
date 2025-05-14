@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Home
   - Plant
+  - Door
   layers:
   - Default
   - TransparentFX

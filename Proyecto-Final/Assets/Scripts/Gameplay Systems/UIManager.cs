@@ -443,17 +443,23 @@ public class UIManager : MonoBehaviour
         {
             return;
         }
+
         inventoryPanel.SetActive(true);
         isInventoryOpen = true;
+
         if (inventoryUI != null)
         {
             inventoryUI.UpdateAllSlots();
             inventoryUI.ForceRefresh();
         }
+
         if (disablePlayerMovementWhenOpen && playerController != null)
         {
             playerController.SetMovementEnabled(false);
         }
+
+        GameManager.Instance?.SetGameState(GameState.OnInventory);
+
         Debug.Log("Inventario abierto");
     }
 
@@ -462,10 +468,17 @@ public class UIManager : MonoBehaviour
         if (inventoryPanel == null) return;
         inventoryPanel.SetActive(false);
         isInventoryOpen = false;
+
         if (disablePlayerMovementWhenOpen && playerController != null)
         {
             playerController.SetMovementEnabled(true);
         }
+
+        if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
+        {
+            GameManager.Instance.SetGameState(GameState.Day);
+        }
+
         Debug.Log("Inventario cerrado");
     }
 

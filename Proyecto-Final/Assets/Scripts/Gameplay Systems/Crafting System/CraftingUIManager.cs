@@ -71,12 +71,19 @@ public class CraftingUIManager : MonoBehaviour
     {
         craftingUIPanel.SetActive(true);
         isCraftingUIOpen = true;
+
+        GameManager.Instance?.SetGameState(GameState.OnCrafting);
     }
 
     private void CloseCraftingUI()
     {
         craftingUIPanel.SetActive(false);
         isCraftingUIOpen = false;
+
+        if (GameManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
+        {
+            GameManager.Instance.SetGameState(GameState.Day);
+        }
     }
 
     private void PopulateRecipeList()

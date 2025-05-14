@@ -20,6 +20,9 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        if (uiManager != null && uiManager.IsInventoryOpen())
+            return;
+
         if (Input.GetKeyDown(KeyCode.Escape) &&
             !IsInstructionsPanelActive() &&
             !CraftingUIManager.isCraftingUIOpen &&

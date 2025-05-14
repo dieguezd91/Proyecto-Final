@@ -121,8 +121,6 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("IsMoving", false);
             }
         }
-
-        Debug.Log($"moveX: {moveInput.x}, flipX: {spriteRenderer.flipX}");
     }
 
     void HandleAttack()

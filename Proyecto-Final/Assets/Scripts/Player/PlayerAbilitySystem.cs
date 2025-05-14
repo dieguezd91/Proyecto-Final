@@ -68,7 +68,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             progressBar.transform.position = Camera.main.WorldToScreenPoint(progressBarTarget.position + progressBarOffset);
         }
 
-        if (currentAbility == PlayerAbility.Digging && !isDigging)
+        if (currentAbility == PlayerAbility.Digging && !isDigging && GameManager.Instance.currentGameState == GameState.Day)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
@@ -113,6 +113,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (isDigging || isHarvesting) return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
+
         if (Mathf.Abs(scroll) > 0.01f)
         {
             PlayerAbility[] validAbilities = { PlayerAbility.Planting, PlayerAbility.Harvesting, PlayerAbility.Digging };
