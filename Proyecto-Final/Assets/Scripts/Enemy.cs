@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private LayerMask attackableLayers;
 
     [Header("State")]
-    //public bool canAttack = true;
+    private bool isCurrentlyAttacking = false;
     public bool chasingTarget = false;
     private bool isDead = false;
 
@@ -75,7 +75,11 @@ public class Enemy : MonoBehaviour
                 chasingTarget = true;
                 direction = (currentTarget.position - transform.position).normalized;
 
-                anim.SetBool("isAttacking", distanceToTarget <= attackDistance);
+                if (distanceToTarget <= attackDistance && !isCurrentlyAttacking)
+                {
+                    anim.SetBool("isAttacking", true);
+                    isCurrentlyAttacking = true;
+                }
             }
             else
             {
@@ -130,7 +134,6 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-
         
         if (home != null)
         {
@@ -166,9 +169,15 @@ public class Enemy : MonoBehaviour
                 anim.SetBool("isMoving", true);
 
             if (direction.x > 0.1f)
+            {
                 spriteRenderer.flipX = true;
+                attackPoint.localPosition = new Vector2(Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
+            }
             else if (direction.x < -0.1f)
+            {
                 spriteRenderer.flipX = false;
+                attackPoint.localPosition = new Vector2(-Mathf.Abs(attackPoint.localPosition.x), attackPoint.localPosition.y);
+            }
         }
         else
         {
@@ -204,6 +213,12 @@ public class Enemy : MonoBehaviour
         isDead = true;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        anim.SetBool("isAttacking", false);
+        isCurrentlyAttacking = false;
     }
 
     void OnDrawGizmosSelected()
