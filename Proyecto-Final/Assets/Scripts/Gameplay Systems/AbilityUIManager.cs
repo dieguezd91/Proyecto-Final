@@ -50,11 +50,20 @@ public class AbilityUIManager : MonoBehaviour
     private void SetupButtons()
     {
         if (plantButton == null || harvestButton == null || digButton == null)
-        {
             return;
-        }
+
+        DisableButtonNavigation(plantButton);
+        DisableButtonNavigation(harvestButton);
+        DisableButtonNavigation(digButton);
 
         AssignButtonEvents();
+    }
+
+    private void DisableButtonNavigation(Button button)
+    {
+        Navigation nav = button.navigation;
+        nav.mode = Navigation.Mode.None;
+        button.navigation = nav;
     }
 
     private void AssignButtonEvents()
