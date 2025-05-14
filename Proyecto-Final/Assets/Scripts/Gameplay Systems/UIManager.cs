@@ -21,9 +21,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject floatingDamagePrefab;
     private float lastPlayerHealth;
 
-
     [Header("MANA BAR")]
-    [SerializeField] private Slider manaSlider;
+    [SerializeField] private Slider manaBar;
+    [SerializeField] private Image manaFillImage;
+    [SerializeField] private Gradient manaGradient;
+    [SerializeField] private TextMeshProUGUI manaText;
 
     [Header("REFERENCES")]
     [SerializeField] private GameObject player;
@@ -86,6 +88,18 @@ public class UIManager : MonoBehaviour
         InitializeReferences();
         SetupListeners();
         InitializeUI();
+
+        if (playerLife != null)
+            UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+
+        if (GameManager.Instance?.home != null)
+        {
+            LifeController homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+            if (homeLife != null)
+                UpdateHomeHealthBar(homeLife.currentHealth, homeLife.maxHealth);
+        }
+
+        UpdateManaUI();
     }
 
     void Update()
@@ -126,7 +140,6 @@ public class UIManager : MonoBehaviour
             playerController = player.GetComponent<PlayerController>();
             manaSystem = player.GetComponent<ManaSystem>();
             lastPlayerHealth = playerLife.currentHealth;
-
         }
 
         if (GameManager.Instance != null && GameManager.Instance.home != null)
@@ -359,9 +372,6 @@ public class UIManager : MonoBehaviour
             healthBar.value = currentHealth;
             UpdateFillColor(currentHealth / maxHealth);
         }
-
-
-
        
         float damageTaken = lastPlayerHealth - currentHealth;
         if (damageTaken > 0f && floatingDamagePrefab != null)
@@ -580,10 +590,24 @@ public class UIManager : MonoBehaviour
 
     public void UpdateManaUI()
     {
-        if (manaSlider != null)
+        if (manaBar != null && manaSystem != null)
         {
-            manaSlider.maxValue = manaSystem.GetMaxMana();
-            manaSlider.value = manaSystem.GetCurrentMana();
+            float current = manaSystem.GetCurrentMana();
+            float max = manaSystem.GetMaxMana();
+            float percent = current / max;
+
+            manaBar.maxValue = max;
+            manaBar.value = current;
+
+            if (manaFillImage != null && manaGradient != null)
+            {
+                manaFillImage.color = manaGradient.Evaluate(percent);
+            }
+
+            if (manaText != null)
+            {
+                manaText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
+            }
         }
     }
 
