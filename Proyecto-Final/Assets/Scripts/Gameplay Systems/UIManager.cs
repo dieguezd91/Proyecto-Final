@@ -196,7 +196,7 @@ public class UIManager : MonoBehaviour
     {
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
-            seedSlotsCanvasGroup.alpha = 0f;
+            seedSlotsCanvasGroup.alpha = 0.5f;
             seedSlotsCanvasGroup.interactable = false;
             seedSlotsCanvasGroup.blocksRaycasts = false;
         }
@@ -648,9 +648,9 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator FadePlantSlots(bool fadeIn)
     {
-        float duration = 0.5f;
+        float duration = 0.35f;
         float startAlpha = seedSlotsCanvasGroup.alpha;
-        float targetAlpha = fadeIn ? 1f : 0f;
+        float targetAlpha = fadeIn ? 1f : 0.5f;
         float time = 0f;
 
         while (time < duration)
