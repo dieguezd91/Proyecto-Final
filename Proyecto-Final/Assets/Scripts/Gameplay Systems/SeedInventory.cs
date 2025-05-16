@@ -67,6 +67,22 @@ public class SeedInventory : MonoBehaviour
         }
     }
 
+    public void RemoveSeedFromSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < plantSlots.Length)
+        {
+            plantSlots[slotIndex].seedType = SeedsEnum.None;
+            plantSlots[slotIndex].plantPrefab = null;
+            plantSlots[slotIndex].plantName = "";
+            plantSlots[slotIndex].plantIcon = null;
+            plantSlots[slotIndex].daysToGrow = 0;
+            plantSlots[slotIndex].description = "";
+            plantSlots[slotIndex].seedCount = 0;
+
+            Debug.Log($"Slot {slotIndex + 1} vaciado");
+        }
+    }
+
     public void SelectSlot(int slotIndex)
     {
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
@@ -124,6 +140,15 @@ public class SeedInventory : MonoBehaviour
         {
             slot.seedCount--;
             Debug.Log($"Semillas restantes de {slot.plantName}: {slot.seedCount}");
+
+            if (slot.seedCount <= 0)
+            {
+                int index = selectedSlotIndex;
+                RemoveSeedFromSlot(index);
+            }
+
+            GameManager.Instance.uiManager.UpdateSeedCountsUI();
+            GameManager.Instance.uiManager.InitializeSeedSlotsUI();
         }
     }
 

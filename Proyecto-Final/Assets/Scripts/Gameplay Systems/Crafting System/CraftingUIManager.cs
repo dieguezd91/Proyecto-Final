@@ -120,7 +120,6 @@ public class CraftingUIManager : MonoBehaviour
         }
     }
 
-
     private void SelectRecipe(CraftingRecipeSeedData recipe)
     {
         selectedSeed = recipe.SeedToCraft;

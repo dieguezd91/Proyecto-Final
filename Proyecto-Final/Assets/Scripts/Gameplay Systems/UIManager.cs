@@ -214,7 +214,7 @@ public class UIManager : MonoBehaviour
 
         if (SeedInventory.Instance != null)
         {
-            InitializeSlotUI();
+            InitializeSeedSlotsUI();
             UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
         }
 
@@ -241,16 +241,15 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void InitializeSlotUI()
+    public void InitializeSeedSlotsUI()
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
             if (slotObjects[i] != null)
             {
                 PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
-                int count = plantSlot.seedCount;
-                seedCount[i].text = count > 0 ? count.ToString() : "-";
-                if (plantSlot != null && plantSlot.plantPrefab != null)
+
+                if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
                 {
                     if (slotIcons[i] != null)
                     {
@@ -258,17 +257,22 @@ public class UIManager : MonoBehaviour
                         slotIcons[i].preserveAspect = true;
                         slotIcons[i].gameObject.SetActive(true);
                     }
+
                     if (slotNumbers[i] != null)
                     {
                         slotNumbers[i].text = (i + 1).ToString();
                     }
+
+                    if (seedCount[i] != null)
+                    {
+                        seedCount[i].text = plantSlot.seedCount.ToString();
+                    }
                 }
                 else
                 {
-                    if (slotIcons[i] != null)
-                    {
-                        slotIcons[i].gameObject.SetActive(false);
-                    }
+                    if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
+                    if (slotNumbers[i] != null) slotNumbers[i].text = "";
+                    if (seedCount[i] != null) seedCount[i].text = "";
                 }
             }
         }

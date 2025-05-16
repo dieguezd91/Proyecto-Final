@@ -101,7 +101,7 @@ public class CraftingSystem : MonoBehaviour
 
                 if (GameManager.Instance?.uiManager != null)
                 {
-                    GameManager.Instance.uiManager.InitializeSlotUI();
+                    GameManager.Instance.uiManager.InitializeSeedSlotsUI();
                 }
 
             }

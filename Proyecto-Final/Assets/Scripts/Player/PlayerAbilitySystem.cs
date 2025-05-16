@@ -154,7 +154,7 @@ public class PlayerAbilitySystem : MonoBehaviour
                 {
                     plantInventory.ConsumeSeedInSelectedSlot();
                     GameManager.Instance.uiManager.UpdateSeedCountsUI();
-                    GameManager.Instance.uiManager.InitializeSlotUI();
+                    GameManager.Instance.uiManager.InitializeSeedSlotsUI();
                 }
                 else
                 {
