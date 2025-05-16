@@ -84,6 +84,13 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    public void ClearAllMaterials()
+    {
+        materials.Clear();
+        onMaterialChanged?.Invoke(MaterialType.None, 0);
+    }
+
+
     public int GetMaterialAmount(MaterialType type)
     {
         MaterialItem mat = materials.Find(m => m.type == type);

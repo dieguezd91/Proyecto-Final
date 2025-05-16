@@ -135,7 +135,7 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-    public void Close()
+    public void GoToMainMenu()
     {
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);

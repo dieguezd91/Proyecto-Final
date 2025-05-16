@@ -217,6 +217,42 @@ public class GameManager : MonoBehaviour
     public void Restart()
     {
         SetGameState(GameState.Day);
+        ResetGameData();
         SceneManager.LoadScene(sceneBuildIndex:0);
+    }
+
+    public void ResetGameData()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.ClearAllMaterials();
+        }
+
+        if (SeedInventory.Instance != null)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                SeedInventory.Instance.RemoveSeedFromSlot(i);
+            }
+        }
+
+        ResetDayCount();
+
+        if (playerLife != null)
+        {
+            playerLife.currentHealth = playerLife.maxHealth;
+            playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
+        }
+
+        if (HomeLife != null)
+        {
+            HomeLife.currentHealth = HomeLife.maxHealth;
+            HomeLife.onHealthChanged?.Invoke(HomeLife.currentHealth, HomeLife.maxHealth);
+        }
+
+        uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+        uiManager?.UpdateHomeHealthBar(HomeLife.currentHealth, HomeLife.maxHealth);
+        uiManager?.UpdateManaUI();
+        uiManager?.InitializeSeedSlotsUI();
     }
 }
