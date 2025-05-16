@@ -104,11 +104,16 @@ public class DayNightLightController : MonoBehaviour
         if (gameState == GameState.Paused)
             return;
 
-        float targetLight = (gameState == GameState.Day) ? dayLightIntensity : nightLightIntensity;
-        float targetBloom = (gameState == GameState.Day) ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
-        float targetExposure = (gameState == GameState.Day) ? dayExposure : nightExposure;
-        Color targetColorFilter = (gameState == GameState.Day) ? dayColorFilter : nightColorFilter;
-        float targetVignette = (gameState == GameState.Day) ? dayVignetteIntensity : nightVignetteIntensity;
+        // Tratar inventario o crafting como Day
+        bool isDayState = gameState == GameState.Day
+                       || gameState == GameState.OnInventory
+                       || gameState == GameState.OnCrafting;
+
+        float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
+        float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
+        float targetExposure = isDayState ? dayExposure : nightExposure;
+        Color targetColorFilter = isDayState ? dayColorFilter : nightColorFilter;
+        float targetVignette = isDayState ? dayVignetteIntensity : nightVignetteIntensity;
 
         if (useTransition)
         {
