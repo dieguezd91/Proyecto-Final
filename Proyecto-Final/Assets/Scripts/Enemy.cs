@@ -59,7 +59,6 @@ public class Enemy : MonoBehaviour
         {
             home = homeObject.transform;
         }
-
     }
 
     void Update()
@@ -100,27 +99,28 @@ public class Enemy : MonoBehaviour
         Transform closestTarget = null;
         string targetType = "none";
 
-        
-        if (player != null)
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
         {
-            float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-            float adjustedDistance = distanceToPlayer / playerPriority;
-
-            if (adjustedDistance < closestDistance && distanceToPlayer <= detectionDistance)
+            LifeController playerLife = playerObj.GetComponent<LifeController>();
+            if (playerLife != null && !playerLife.isRespawning)
             {
-                closestDistance = adjustedDistance;
-                closestTarget = player;
-                targetType = "player";
+                float distanceToPlayer = Vector2.Distance(transform.position, playerObj.transform.position);
+                float adjustedDistance = distanceToPlayer / playerPriority;
+
+                if (adjustedDistance < closestDistance && distanceToPlayer <= detectionDistance)
+                {
+                    closestDistance = adjustedDistance;
+                    closestTarget = playerObj.transform;
+                    targetType = "player";
+                }
             }
         }
 
-        
         Collider2D[] nearbyPlants = Physics2D.OverlapCircleAll(transform.position, detectionDistance, plantLayer);
-
         foreach (Collider2D plantCollider in nearbyPlants)
         {
             Plant plant = plantCollider.GetComponent<Plant>();
-
             if (plant != null)
             {
                 float distanceToPlant = Vector2.Distance(transform.position, plantCollider.transform.position);
@@ -134,16 +134,17 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
-        
-        if (home != null)
+
+        GameObject homeObj = GameObject.FindGameObjectWithTag("Home");
+        if (homeObj != null)
         {
-            float distanceToHome = Vector2.Distance(transform.position, home.position);
+            float distanceToHome = Vector2.Distance(transform.position, homeObj.transform.position);
             float adjustedDistance = distanceToHome / homePriority;
 
             if (adjustedDistance < closestDistance && distanceToHome <= detectionDistance)
             {
                 closestDistance = adjustedDistance;
-                closestTarget = home;
+                closestTarget = homeObj.transform;
                 targetType = "home";
             }
         }

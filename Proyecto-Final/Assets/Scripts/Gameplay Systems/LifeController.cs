@@ -28,6 +28,7 @@ public class LifeController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isDead = false;
+    public bool isRespawning = false;
     [SerializeField] private bool isEnemy;
     private Animator animator;
 
@@ -74,17 +75,6 @@ public class LifeController : MonoBehaviour
         foreach (var col in GetComponents<Collider2D>())
         {
             col.enabled = false;
-            Enemy enemy = GetComponent<Enemy>();
-            Enemy2 enemy2 = GetComponent<Enemy2>();
-
-            if (enemy != null)
-            {
-                enemy.MarkAsDead();
-            }
-            if (enemy2 != null)
-            {
-                enemy2.MarkAsDead();
-            }
         }
 
         onDeath?.Invoke();
@@ -104,7 +94,7 @@ public class LifeController : MonoBehaviour
         else
         {
             Drop();
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -155,5 +145,48 @@ public class LifeController : MonoBehaviour
         {
             Instantiate(manaPickupPrefab, transform.position, Quaternion.identity);
         }
+    }
+
+    public void ResetLife()
+    {
+        isDead = false;
+        currentHealth = maxHealth;
+
+        foreach (var col in GetComponents<Collider2D>())
+        {
+            col.enabled = true;
+        }
+
+        onHealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
+    public IEnumerator StartInvulnerability(float duration)
+    {
+        isRespawning = true;
+        float elapsed = 0f;
+        bool toggle = false;
+
+        while (elapsed < duration)
+        {
+            if (spriteRenderer != null)
+            {
+                Color color = spriteRenderer.color;
+                color.a = toggle ? 0.3f : 1f;
+                spriteRenderer.color = color;
+                toggle = !toggle;
+            }
+
+            elapsed += 0.2f;
+            yield return new WaitForSeconds(0.2f);
+        }
+
+        if (spriteRenderer != null)
+        {
+            Color finalColor = spriteRenderer.color;
+            finalColor.a = 1f;
+            spriteRenderer.color = finalColor;
+        }
+
+        isRespawning = false;
     }
 }

@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int dayCount = 0;
     public UnityEvent<int> onNewDay;
 
+    [Header("Respawn")]
+    [SerializeField] private float playerRespawnTime;
+    [SerializeField] private Transform playerRespawnPoint;
+
     private LifeController playerLife;
     private LifeController HomeLife;
     public UIManager uiManager;
@@ -179,12 +183,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private void HandlePlayerDeath()
     {
-        StartCoroutine(ShowGameOverAfterDelay());
+        StartCoroutine(RespawnPlayer());
     }
-    
+
     private void HandleHomeDeath()
     {
         StartCoroutine(ShowGameOverAfterDelay());
@@ -212,6 +215,25 @@ public class GameManager : MonoBehaviour
     public void ResetDayCount()
     {
         dayCount = 1;
+    }
+
+    private IEnumerator RespawnPlayer()
+    {
+        player.SetActive(false);
+
+        yield return new WaitForSeconds(playerRespawnTime);
+
+        player.transform.position = playerRespawnPoint.position;
+        player.SetActive(true);
+
+        var controller = player.GetComponent<PlayerController>();
+        controller.SetMovementEnabled(true);
+        controller.SetCanAct(false);
+
+        var life = player.GetComponent<LifeController>();
+        life.ResetLife();
+        yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
+        controller.SetCanAct(true);
     }
 
     public void Restart()

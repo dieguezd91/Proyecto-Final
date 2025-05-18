@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [Header("REFERENCES")]
     [SerializeField] private EnemiesSpawner gameStateController;
     [SerializeField] private PlayerAbilitySystem abilitySystem;
-   
+
 
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 moveInput;
     private bool movementEnabled = true;
+    private bool canAct = true;
     private GameState lastGameState = GameState.None;
     private Animator animator;
     private int lastHorizontalDirection = 0;
@@ -125,6 +126,8 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
+        if (!canAct) return;
+
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
             Shoot();
@@ -160,7 +163,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
-        
+
         if (enabled && GameManager.Instance != null && (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused))
         {
             return;
@@ -169,9 +172,19 @@ public class PlayerController : MonoBehaviour
         movementEnabled = enabled;
     }
 
-
     public bool IsMovementEnabled()
     {
         return movementEnabled;
     }
+
+    public void SetCanAct(bool value)
+    {
+        canAct = value;
+    }
+
+    public bool CanAct()
+    {
+        return canAct;
+    }
+
 }

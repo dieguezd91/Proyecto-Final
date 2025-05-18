@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -24,7 +25,7 @@ public class KnockbackReceiver : MonoBehaviour
         StartCoroutine(RecoverFromKnockback());
     }
 
-    private System.Collections.IEnumerator RecoverFromKnockback()
+    private IEnumerator RecoverFromKnockback()
     {
         isKnockedBack = true;
         yield return new WaitForSeconds(knockbackDuration);

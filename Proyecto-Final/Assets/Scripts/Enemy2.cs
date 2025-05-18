@@ -75,13 +75,19 @@ public class Enemy2 : MonoBehaviour
 
         // Jugador
         GameObject pObj = GameObject.FindGameObjectWithTag("Player");
+
         if (pObj != null)
         {
-            float d = Vector2.Distance(transform.position, pObj.transform.position);
-            float score = d / playerPriority;
-            if (d <= detectRange && score < closestScore)
+            LifeController playerLife = pObj.GetComponent<LifeController>();
+            if (playerLife == null || !playerLife.isRespawning)
             {
-                closestScore = score; best = pObj.transform;
+                float d = Vector2.Distance(transform.position, pObj.transform.position);
+                float score = d / playerPriority;
+                if (d <= detectRange && score < closestScore)
+                {
+                    closestScore = score;
+                    best = pObj.transform;
+                }
             }
         }
 
