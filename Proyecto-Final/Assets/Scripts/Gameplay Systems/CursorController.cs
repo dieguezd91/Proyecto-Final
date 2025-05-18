@@ -60,4 +60,50 @@ public class CursorController : MonoBehaviour
 
         Cursor.SetCursor(cursorToUse.cursorTexture, cursorToUse.hotSpot, cursorToUse.cursorMode);
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying || Camera.main == null) return;
+
+        CursorData activeCursor = GetCurrentCursorData();
+        Vector3 mouseScreenPos = Input.mousePosition;
+
+        Vector3 adjustedScreenPos = mouseScreenPos + (Vector3)activeCursor.hotSpot;
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(new Vector3(adjustedScreenPos.x, adjustedScreenPos.y, Camera.main.nearClipPlane + 1f));
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(worldPos, Vector3.one * 0.2f);
+    }
+#endif
+
+    private CursorData GetCurrentCursorData()
+    {
+        switch (GameManager.Instance.currentGameState)
+        {
+            case GameState.MainMenu:
+            case GameState.Paused:
+            case GameState.OnInventory:
+            case GameState.OnCrafting:
+                return menuCursor;
+
+            case GameState.Day:
+                return dayCursor;
+
+            case GameState.Night:
+                return nightCursor;
+
+            case GameState.Digging:
+                return diggingCursor;
+
+            case GameState.Planting:
+                return plantingCursor;
+
+            case GameState.Harvesting:
+                return harvestingCursor;
+
+            default:
+                return defaultCursor;
+        }
+    }
 }

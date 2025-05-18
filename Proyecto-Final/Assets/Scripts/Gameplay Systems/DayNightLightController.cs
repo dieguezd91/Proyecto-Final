@@ -52,7 +52,7 @@ public class DayNightLightController : MonoBehaviour
 
         if (globalVolume.profile.TryGet<Bloom>(out bloomComponent))
         {
-            bloomComponent.intensity.value = (GameManager.Instance.currentGameState == GameState.Day)
+            bloomComponent.intensity.value = (GameManager.Instance.currentGameState != GameState.Night)
                 ? dayGlobalVolumeIntensity
                 : nightGlobalVolumeIntensity;
         }
@@ -105,9 +105,7 @@ public class DayNightLightController : MonoBehaviour
             return;
 
         // Tratar inventario o crafting como Day
-        bool isDayState = gameState == GameState.Day
-                       || gameState == GameState.OnInventory
-                       || gameState == GameState.OnCrafting;
+        bool isDayState = gameState != GameState.Night;
 
         float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
         float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;

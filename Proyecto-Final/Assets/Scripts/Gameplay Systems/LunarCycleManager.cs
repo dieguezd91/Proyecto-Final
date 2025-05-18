@@ -45,8 +45,7 @@ public class LunarCycleManager : MonoBehaviour
         if (onMoonPhaseChanged == null)
             onMoonPhaseChanged = new MoonPhaseChangedEvent();
 
-        UnityEngine.Cursor.lockState = CursorLockMode.Confined;
-        //UnityEngine.Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Start()
@@ -71,7 +70,7 @@ public class LunarCycleManager : MonoBehaviour
             GameManager.Instance.onNewDay.AddListener(OnNewDay);
             lastGameState = GameManager.Instance.currentGameState;
 
-            if (GameManager.Instance.currentGameState == GameState.Day)
+            if (GameManager.Instance.currentGameState != GameState.Night)
             {
                 ShowMoon(false);
             }
@@ -88,7 +87,7 @@ public class LunarCycleManager : MonoBehaviour
 
         GameState currentState = GameManager.Instance.currentGameState;
 
-        if (lastGameState == GameState.Day && currentState == GameState.Night)
+        if (lastGameState != GameState.Night && currentState == GameState.Night)
         {
             ShowMoon(true);
 
@@ -100,7 +99,7 @@ public class LunarCycleManager : MonoBehaviour
 
             isFirstNight = false;
         }
-        else if (lastGameState == GameState.Night && currentState == GameState.Day)
+        else if (lastGameState == GameState.Night && currentState != GameState.Night)
         {
             ShowMoon(false);
         }

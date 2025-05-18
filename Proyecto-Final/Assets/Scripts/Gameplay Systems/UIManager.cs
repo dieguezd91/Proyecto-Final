@@ -353,7 +353,7 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            if (GameManager.Instance.currentGameState == GameState.Day)
+            if (GameManager.Instance.currentGameState != GameState.Night)
             {
                 if (seedSlots != null) seedSlots.gameObject.SetActive(true && !isInstructionsOpen);
                 if (dayControlPanel != null) dayControlPanel.SetActive(true && !isInstructionsOpen);
@@ -420,7 +420,7 @@ public class UIManager : MonoBehaviour
         if (abilityPanel == null || GameManager.Instance == null)
             return;
 
-        if (GameManager.Instance.currentGameState == GameState.Day)
+        if (GameManager.Instance.currentGameState != GameState.Night)
             abilityPanel.SetActive(true);
         else if (GameManager.Instance.currentGameState == GameState.Night)
             abilityPanel.SetActive(false);
@@ -453,7 +453,7 @@ public class UIManager : MonoBehaviour
     public void OpenInventory()
     {
         if (inventoryPanel == null || isInstructionsOpen) return;
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Day)
+        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night)
         {
             return;
         }
@@ -586,7 +586,7 @@ public class UIManager : MonoBehaviour
 
     private void OnStartNightButtonClicked()
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Day)
+        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Night)
         {
             GameManager.Instance.ManualTransitionToNight();
         }

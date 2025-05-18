@@ -44,8 +44,6 @@ public class PlayerAbilitySystem : MonoBehaviour
     public delegate void AbilityChangedHandler(PlayerAbility newAbility);
     public event AbilityChangedHandler OnAbilityChanged;
 
-    [SerializeField] private GameObject digCursorVisual;
-
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()
@@ -68,23 +66,17 @@ public class PlayerAbilitySystem : MonoBehaviour
             progressBar.transform.position = Camera.main.WorldToScreenPoint(progressBarTarget.position + progressBarOffset);
         }
 
-        if (currentAbility == PlayerAbility.Digging && !isDigging && GameManager.Instance.currentGameState == GameState.Day)
+        if (currentAbility == PlayerAbility.Digging && !isDigging)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
             Vector3 cellWorldPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
 
             float dist = Vector2.Distance(transform.position, cellWorldPos);
-            digCursorVisual.SetActive(dist <= digDistance);
-            digCursorVisual.transform.position = new Vector3(cellWorldPos.x, cellWorldPos.y, 0);
-        }
-        else
-        {
-            digCursorVisual.SetActive(false);
         }
 
         if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;
-        if (GameManager.Instance.currentGameState != GameState.Day) return;
+        if (!IsAbilityGameState()) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -129,6 +121,22 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         currentAbility = ability;
         OnAbilityChanged?.Invoke(currentAbility);
+
+        switch (currentAbility)
+        {
+            case PlayerAbility.Digging:
+                GameManager.Instance.SetGameState(GameState.Digging);
+                break;
+            case PlayerAbility.Planting:
+                GameManager.Instance.SetGameState(GameState.Planting);
+                break;
+            case PlayerAbility.Harvesting:
+                GameManager.Instance.SetGameState(GameState.Harvesting);
+                break;
+            default:
+                GameManager.Instance.SetGameState(GameState.Day);
+                break;
+        }
     }
 
     private void HandlePlanting()
@@ -362,6 +370,15 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public bool IsDigging() => isDigging;
     public bool IsHarvesting() => isHarvesting;
+
+    private bool IsAbilityGameState()
+    {
+        var state = GameManager.Instance.currentGameState;
+        return state == GameState.Day ||
+               state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting;
+    }
 
     private void OnDrawGizmosSelected()
     {

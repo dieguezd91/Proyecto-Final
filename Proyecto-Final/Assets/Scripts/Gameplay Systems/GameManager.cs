@@ -135,10 +135,7 @@ public class GameManager : MonoBehaviour
 
     public void ManualTransitionToNight()
     {
-        if (currentGameState == GameState.Day)
-        {
-            SetGameState(GameState.Night);
-        }
+        SetGameState(GameState.Night);
     }
 
     private void HandleHordeCompleted()
@@ -161,24 +158,27 @@ public class GameManager : MonoBehaviour
 
         currentGameState = newState;
 
+        CursorController cursorController = FindObjectOfType<CursorController>();
+
+        if (cursorController != null)
+        {
+            cursorController.SetCursorForGameState(newState);
+        }
+
         switch (newState)
         {
             case GameState.Day:
-                Time.timeScale = 1f;
-                break;
-
             case GameState.Night:
                 Time.timeScale = 1f;
                 break;
-
             case GameState.Paused:
                 Time.timeScale = 0f;
                 break;
-
             case GameState.GameOver:
                 break;
         }
     }
+
 
     private void HandlePlayerDeath()
     {

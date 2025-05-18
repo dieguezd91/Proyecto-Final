@@ -108,7 +108,7 @@ public class AbilityUIManager : MonoBehaviour
 
     void Update()
     {
-        bool isDaytime = GameManager.Instance.currentGameState == GameState.Day;
+        bool isDaytime = GameManager.Instance.currentGameState != GameState.Night;
 
         if (plantButton != null)
             plantButton.interactable = isDaytime;
