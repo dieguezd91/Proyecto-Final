@@ -56,26 +56,28 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        bool isPaused = GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused;
+        GameState state = GameManager.Instance.currentGameState;
+        bool inInventory = state == GameState.OnInventory;
+        bool inCrafting = state == GameState.OnCrafting;
 
-        if (!isPaused)
-        {
-            movementEnabled = true;
-        }
-
-        if (isPaused && movementEnabled)
+        if (inInventory || inCrafting)
         {
             movementEnabled = false;
-        }
-
-        if (isPaused)
-        {
             return;
         }
 
-        lastGameState = GameManager.Instance.currentGameState;
+        movementEnabled = true;
 
-        if (gameStateController != null && GameManager.Instance.currentGameState == GameState.Night)
+        bool isPaused = state == GameState.Paused || PauseMenu.isGamePaused;
+        if (isPaused)
+        {
+            movementEnabled = false;
+            return;
+        }
+
+        lastGameState = state;
+
+        if (gameStateController != null && state == GameState.Night)
         {
             HandleAttack();
         }
@@ -83,6 +85,24 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        
+        GameState state = GameManager.Instance.currentGameState;
+        if (state == GameState.OnInventory || state == GameState.OnCrafting
+            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
+        {
+            rb.velocity = Vector2.zero;
+            animator.SetBool("IsMoving", false);
+            return;
+        }
+
+        if (!movementEnabled)
+        {
+            rb.velocity = Vector2.zero;
+            animator.SetBool("IsMoving", false);
+            return;
+        }
+
         if (!movementEnabled || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
         {
             rb.velocity = Vector2.zero;

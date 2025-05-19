@@ -32,6 +32,11 @@ public class MoveCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        // 1) Si estamos en inventory o crafting, no mover la cámara
+        var state = GameManager.Instance.currentGameState;
+        if (state == GameState.OnInventory || state == GameState.OnCrafting)
+            return;
+
         if (mainChar == null || cam == null) return;
 
         Vector3 playerPos = mainChar.position;
@@ -44,7 +49,6 @@ public class MoveCamera : MonoBehaviour
         float dist = toMouse.magnitude;
 
         Vector3 offset = Vector3.zero;
-
         if (dist > deadZoneRadius)
         {
             float effectiveDist = Mathf.Min(dist - deadZoneRadius, maxOffsetDistance);
@@ -55,9 +59,9 @@ public class MoveCamera : MonoBehaviour
         targetPos.z = transform.position.z;
 
         float speed = (dist < softZoneRadius) ? softFollowSpeed : hardFollowSpeed;
-
         transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);
     }
+
 
     private void OnDrawGizmos()
     {
