@@ -1,7 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] public GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
+    [SerializeField] private List<HouseController> houseControllers = new List<HouseController>();
 
     [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
@@ -163,7 +165,6 @@ public class GameManager : MonoBehaviour
         currentGameState = newState;
 
         CursorController cursorController = FindObjectOfType<CursorController>();
-
         if (cursorController != null)
         {
             cursorController.SetCursorForGameState(newState);
@@ -180,6 +181,14 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameOver:
                 break;
+        }
+
+        bool isNight = newState == GameState.Night;
+
+        foreach (var house in houseControllers)
+        {
+            if (house != null)
+                house.SetNightMode(isNight);
         }
     }
 

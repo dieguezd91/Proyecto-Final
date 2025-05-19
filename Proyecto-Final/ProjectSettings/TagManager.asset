@@ -51,3 +51,6 @@ TagManager:
   - name: Characters
     uniqueID: 1972390401
     locked: 0
+  - name: Roof
+    uniqueID: 930632891
+    locked: 0

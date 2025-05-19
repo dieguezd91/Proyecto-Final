@@ -1,17 +1,23 @@
 using System.Collections;
+using UnityEngine.Rendering.Universal;
 using UnityEngine;
 
 public class HouseController : MonoBehaviour
 {
     [Header("REFERENCES")]
     public SpriteRenderer roofSprite;
+    public Light2D[] nightLights;
+    public ShadowCaster2D[] shadowCastersToDisable;
 
     [Header("SETTINGS")]
     public float fadeSpeed = 2.0f;
     public float delayBeforeFade = 0.2f;
+    [SerializeField] private float nightIntensity = 1.5f;
 
     private bool isInside = false;
     private Coroutine fadeCoroutine;
+    private Coroutine nightTransitionCoroutine;
+
 
     private void Start()
     {
@@ -73,6 +79,19 @@ public class HouseController : MonoBehaviour
             roofSprite.color = color;
 
             yield return null;
+        }
+    }
+
+    public void SetNightMode(bool isNight)
+    {
+        foreach (var light in nightLights)
+        {
+            light.intensity = isNight ? nightIntensity : 0f;
+        }
+
+        foreach (var shadowCaster in shadowCastersToDisable)
+        {
+            shadowCaster.enabled = !isNight;
         }
     }
 }
