@@ -332,7 +332,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 1428125574, guid: 6e4d064e35076ec49a8b325c3c05573a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -394,8 +394,7 @@ MonoBehaviour:
   progressBarTarget: {fileID: 3535706038251047626}
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
-  tilledSoilTile: {fileID: 11400000, guid: 31ae4693baac07040a38b0bb31f46c8b, type: 2}
-  digCursorVisual: {fileID: 0}
+  tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
 --- !u!114 &477447474750530567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -441,6 +440,7 @@ MonoBehaviour:
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  isRespawning: 0
   isEnemy: 0
 --- !u!95 &4502512717715921832
 Animator:
