@@ -48,6 +48,9 @@ TagManager:
   - name: Ground
     uniqueID: 4224725103
     locked: 0
+  - name: Effects
+    uniqueID: 1273933235
+    locked: 0
   - name: Characters
     uniqueID: 1972390401
     locked: 0
