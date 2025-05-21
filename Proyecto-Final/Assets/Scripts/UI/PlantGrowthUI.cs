@@ -4,28 +4,45 @@ using UnityEngine.UI;
 public class PlantGrowthUI : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-    private Plant plant;
+    [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, 0);
+
+    private ResourcePlant resourcePlant;
     private Camera cam;
+    private Canvas canvas;
 
     private void Start()
     {
         cam = Camera.main;
-        plant = GetComponentInParent<Plant>();
-        UpdateGrowth();
+        resourcePlant = GetComponentInParent<ResourcePlant>();
+        canvas = GetComponentInParent<Canvas>();
+
+        if (resourcePlant == null || fillImage == null || cam == null)
+        {
+            Debug.LogWarning("PlantGrowthUI missing references or is not on a ResourcePlant.");
+            enabled = false;
+            return;
+        }
+
+        UpdateProgressUI();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        UpdateGrowth();
+        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace)
+        {
+            transform.rotation = cam.transform.rotation;
+        }
+
+        transform.position = resourcePlant.transform.position + offset;
+
+        UpdateProgressUI();
     }
 
-    private void UpdateGrowth()
+    private void UpdateProgressUI()
     {
-        if (plant == null || fillImage == null) return;
+        float progress = resourcePlant.GetTotalProgress();
+        fillImage.fillAmount = progress;
 
-        float growthPercent = plant.GetGrowthPercentage();
-        fillImage.fillAmount = growthPercent;
-
-        fillImage.enabled = growthPercent < 1f;
+        fillImage.enabled = !resourcePlant.IsBeingHarvested();
     }
 }

@@ -78,7 +78,7 @@ public class Plant : MonoBehaviour
         }
     }
 
-    private void OnNewDay(int currentDay)
+    protected virtual void OnNewDay(int currentDay)
     {
         UpdateGrowthStatus(currentDay);
     }

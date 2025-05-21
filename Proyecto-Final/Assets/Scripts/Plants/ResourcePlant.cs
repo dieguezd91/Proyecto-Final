@@ -11,7 +11,6 @@ public class ResourcePlant : Plant
     [SerializeField] private MaterialType materialType;
     [SerializeField] private Sprite materialSprite;
 
-
     [Header("HARVEST SETTINGS")]
     [SerializeField] private float harvestDuration = 2f;
     [SerializeField] private GameObject harvestProgressIndicator;
@@ -21,11 +20,10 @@ public class ResourcePlant : Plant
     public Color highlightColor;
     public Color clickColor;
 
-    private int lastProductionDay = 0;
     private bool isProducing = false;
     private bool isReadyToHarvest = false;
     private bool isBeingHarvested = false;
-
+    private int cycleStartDay = -1;
 
     protected override void Start()
     {
@@ -34,7 +32,7 @@ public class ResourcePlant : Plant
         plantRenderer = GetComponent<SpriteRenderer>();
         originalColor = plantRenderer.color;
 
-        lastProductionDay = GameManager.Instance.GetCurrentDay();
+        cycleStartDay = GameManager.Instance.GetCurrentDay();
 
         if (harvestProgressIndicator != null)
         {
@@ -45,18 +43,24 @@ public class ResourcePlant : Plant
     protected override void OnMature()
     {
         base.OnMature();
-        GameManager.Instance.onNewDay.AddListener(CheckProduction);
+        cycleStartDay = GameManager.Instance.GetCurrentDay();
+    }
+
+    protected override void OnNewDay(int currentDay)
+    {
+        base.OnNewDay(currentDay);
+        CheckProduction(currentDay);
     }
 
     private void CheckProduction(int currentDay)
     {
-        if (IsFullyGrown() && !isProducing && !isReadyToHarvest && !isBeingHarvested)
+        if (!IsFullyGrown() || isProducing || isReadyToHarvest || isBeingHarvested)
+            return;
+
+        int daysSinceCycleStart = currentDay - cycleStartDay;
+        if (daysSinceCycleStart >= daysToProduceResources)
         {
-            int daysSinceLastProduction = currentDay - lastProductionDay;
-            if (daysSinceLastProduction >= daysToProduceResources)
-            {
-                ProduceResources();
-            }
+            ProduceResources();
         }
     }
 
@@ -101,7 +105,7 @@ public class ResourcePlant : Plant
         if (!isReadyToHarvest || isBeingHarvested)
             return;
 
-        if (GameManager.Instance.currentGameState != GameState.Day)
+        if (GameManager.Instance.currentGameState != GameState.Harvesting)
         {
             return;
         }
@@ -120,7 +124,7 @@ public class ResourcePlant : Plant
         float harvestTimer = 0f;
         while (harvestTimer < harvestDuration)
         {
-            if (GameManager.Instance.currentGameState != GameState.Day)
+            if (GameManager.Instance.currentGameState != GameState.Harvesting)
             {
                 CancelHarvest();
                 yield break;
@@ -174,7 +178,7 @@ public class ResourcePlant : Plant
 
         isReadyToHarvest = false;
         isBeingHarvested = false;
-        lastProductionDay = GameManager.Instance.GetCurrentDay();
+        cycleStartDay = GameManager.Instance.GetCurrentDay();
     }
 
     protected override void OnDestroy()
@@ -218,6 +222,32 @@ public class ResourcePlant : Plant
         {
             plantRenderer.color = originalColor;
         }
+    }
+
+    public int GetLastProductionDay()
+    {
+        return cycleStartDay;
+    }
+
+    public int GetDaysToProduce()
+    {
+        return daysToProduceResources;
+    }
+
+    public float GetTotalProgress()
+    {
+        if (cycleStartDay < 0)
+            return 0f;
+
+        if (isReadyToHarvest)
+            return 1f;
+
+        int currentDay = GameManager.Instance.GetCurrentDay();
+        int elapsed = currentDay - cycleStartDay;
+
+        int required = IsFullyGrown() ? daysToProduceResources : plantData.daysToGrow;
+
+        return Mathf.Clamp01((float)elapsed / required);
     }
 
     //void OnMouseDown()
