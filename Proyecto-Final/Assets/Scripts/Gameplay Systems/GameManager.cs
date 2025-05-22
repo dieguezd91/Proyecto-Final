@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
 
         currentGameState = newState;
 
-        CursorController cursorController = FindObjectOfType<CursorController>();
+        UICursor cursorController = FindObjectOfType<UICursor>();
         if (cursorController != null)
         {
             cursorController.SetCursorForGameState(newState);

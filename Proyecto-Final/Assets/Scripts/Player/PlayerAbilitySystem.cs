@@ -15,7 +15,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [Header("Dig System")]
     [SerializeField] private GameObject digSpotsContainer;
     [SerializeField] private LayerMask diggableLayer;
-    [SerializeField] private float digDistance = 2f;
+    [SerializeField] public float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
 
     [Header("Plant System")]
