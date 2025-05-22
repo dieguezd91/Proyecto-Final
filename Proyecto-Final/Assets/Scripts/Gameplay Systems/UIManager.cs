@@ -453,7 +453,7 @@ public class UIManager : MonoBehaviour
     public void OpenInventory()
     {
         if (inventoryPanel == null || isInstructionsOpen) return;
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night)
+        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night || GameManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.currentGameState == GameState.OnCrafting || GameManager.Instance.currentGameState == GameState.GameOver)
         {
             return;
         }
