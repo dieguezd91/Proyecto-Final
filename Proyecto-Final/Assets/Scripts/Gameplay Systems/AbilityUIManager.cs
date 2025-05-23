@@ -9,12 +9,14 @@ public class AbilityUIManager : MonoBehaviour
     [Header("UI ELEMENTS")]
     [SerializeField] private Button plantButton;
     [SerializeField] private Button harvestButton;
-    [SerializeField] private Button digButton;
+    [SerializeField] private Button digButton; 
+    [SerializeField] private Button removeButton;
 
     [Header("ICONS")]
     [SerializeField] private Sprite plantIcon;
     [SerializeField] private Sprite harvestIcon;
     [SerializeField] private Sprite digIcon;
+    [SerializeField] private Sprite removeIcon;
 
     [Header("BUTTONS SETTINGS")]
     [SerializeField] private Color normalColor = Color.white;
@@ -49,12 +51,13 @@ public class AbilityUIManager : MonoBehaviour
 
     private void SetupButtons()
     {
-        if (plantButton == null || harvestButton == null || digButton == null)
+        if (plantButton == null || harvestButton == null || digButton == null || removeButton == null)
             return;
 
         DisableButtonNavigation(plantButton);
         DisableButtonNavigation(harvestButton);
         DisableButtonNavigation(digButton);
+        DisableButtonNavigation(removeButton);
 
         AssignButtonEvents();
     }
@@ -71,10 +74,12 @@ public class AbilityUIManager : MonoBehaviour
         plantButton.onClick.RemoveAllListeners();
         harvestButton.onClick.RemoveAllListeners();
         digButton.onClick.RemoveAllListeners();
+        removeButton.onClick.RemoveAllListeners();
 
         plantButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Planting));
         harvestButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Harvesting));
         digButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Digging));
+        removeButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Removing));
     }
 
     private void OnAbilityChanged(PlayerAbility newAbility)
@@ -104,6 +109,13 @@ public class AbilityUIManager : MonoBehaviour
         {
             digButtonImage.color = (currentAbility == PlayerAbility.Digging) ? selectedColor : normalColor;
         }
+
+        //Remover
+        Image removeButtonImage = removeButton.GetComponent<Image>();
+        if (removeButtonImage != null)
+        {
+            removeButtonImage.color = (currentAbility == PlayerAbility.Removing) ? selectedColor : normalColor;
+        }
     }
 
     void Update()
@@ -118,5 +130,8 @@ public class AbilityUIManager : MonoBehaviour
 
         if (digButton != null)
             digButton.interactable = isDaytime;
+
+        if (removeButton != null)
+            removeButton.interactable = isDaytime;
     }
 }

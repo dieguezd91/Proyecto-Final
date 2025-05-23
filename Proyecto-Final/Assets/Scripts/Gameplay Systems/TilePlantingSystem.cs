@@ -41,7 +41,6 @@ public class TilePlantingSystem : MonoBehaviour
 
         plantedTiles[cellPos] = plant;
         PlantManager.Instance.RegisterPlant(plant);
-
         return true;
     }
 
@@ -51,6 +50,10 @@ public class TilePlantingSystem : MonoBehaviour
         {
             PlantManager.Instance.UnregisterPlant(plant);
             plantedTiles.Remove(cellPos);
+        }
+        else
+        {
+            Debug.LogWarning($"No se encontró planta para eliminar en {cellPos}");
         }
     }
 

@@ -7,19 +7,16 @@ public enum PlayerAbility
     None,
     Planting,
     Harvesting,
-    Digging
+    Digging,
+    Removing
 }
 
 public class PlayerAbilitySystem : MonoBehaviour
 {
     [Header("Dig System")]
-    [SerializeField] private GameObject digSpotsContainer;
     [SerializeField] private LayerMask diggableLayer;
     [SerializeField] public float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
-
-    [Header("Plant System")]
-    [SerializeField] public LayerMask plantingLayer;
 
     [Header("Harvest System")]
     [SerializeField] public float interactionDistance = 2f;
@@ -95,7 +92,11 @@ public class PlayerAbilitySystem : MonoBehaviour
             case PlayerAbility.Digging:
                 HandleDigging();
                 break;
+            case PlayerAbility.Removing:
+                HandleRemoving();
+                break;
         }
+
 
         HandleMouseScroll();
     }
@@ -108,10 +109,23 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (Mathf.Abs(scroll) > 0.01f)
         {
-            PlayerAbility[] validAbilities = { PlayerAbility.Planting, PlayerAbility.Harvesting, PlayerAbility.Digging };
+            PlayerAbility[] validAbilities = {
+                PlayerAbility.Digging,
+                PlayerAbility.Planting,
+                PlayerAbility.Harvesting,
+                PlayerAbility.Removing
+            };
+
+
             int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
-            int nextIndex = scroll > 0 ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length : (currentIndex + 1) % validAbilities.Length;
+            if (currentIndex == -1) currentIndex = 0;
+
+            int nextIndex = scroll > 0
+                ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length
+                : (currentIndex + 1) % validAbilities.Length;
+
             SetAbility(validAbilities[nextIndex]);
+
         }
     }
 
@@ -132,6 +146,9 @@ public class PlayerAbilitySystem : MonoBehaviour
                 break;
             case PlayerAbility.Harvesting:
                 GameManager.Instance.SetGameState(GameState.Harvesting);
+                break;
+            case PlayerAbility.Removing:
+                GameManager.Instance.SetGameState(GameState.Removing);
                 break;
             default:
                 GameManager.Instance.SetGameState(GameState.Day);
@@ -190,6 +207,26 @@ public class PlayerAbilitySystem : MonoBehaviour
                     {
                         StartHarvesting(harvestablePlant);
                     }
+                }
+            }
+        }
+    }
+
+    private void HandleRemoving()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
+
+            Plant plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+            if (plant != null)
+            {
+                if (Vector2.Distance(transform.position, plant.transform.position) <= interactionDistance)
+                {
+                    TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
+                    Destroy(plant.gameObject);
+                    Debug.Log("Planta removida.");
                 }
             }
         }
@@ -377,7 +414,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         return state == GameState.Day ||
                state == GameState.Digging ||
                state == GameState.Planting ||
-               state == GameState.Harvesting;
+               state == GameState.Harvesting ||
+               state == GameState.Removing;
     }
 
     private void OnDrawGizmosSelected()

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class UICursor : MonoBehaviour
     [SerializeField] private CursorData diggingCursor;
     [SerializeField] private CursorData plantingCursor;
     [SerializeField] private CursorData harvestingCursor;
+    [SerializeField] private CursorData removingCursor;
 
     [Header("UI Components")]
     [SerializeField] private Image cursorImage;
@@ -93,6 +95,10 @@ public class UICursor : MonoBehaviour
             case GameState.Harvesting:
                 cursorToUse = harvestingCursor;
                 break;
+
+            case GameState.Removing:
+                cursorToUse = removingCursor;
+                break;
         }
 
         if (cursorImage != null)
@@ -127,13 +133,16 @@ public class UICursor : MonoBehaviour
             case GameState.Harvesting:
                 return harvestingCursor;
 
+            case GameState.Removing:
+                return removingCursor;
+
             default:
                 return defaultCursor;
         }
     }
     private bool IsUsingTileSnap(GameState state)
     {
-        return state == GameState.Digging || state == GameState.Planting || state == GameState.Harvesting;
+        return state == GameState.Digging || state == GameState.Planting || state == GameState.Harvesting || state == GameState.Removing;
     }
 
     private bool IsTargetInRange(GameState state)
@@ -153,6 +162,9 @@ public class UICursor : MonoBehaviour
                 break;
             case GameState.Planting:
             case GameState.Harvesting:
+                range = playerAbilitySystem.interactionDistance;
+                break;
+            case GameState.Removing:
                 range = playerAbilitySystem.interactionDistance;
                 break;
             default:

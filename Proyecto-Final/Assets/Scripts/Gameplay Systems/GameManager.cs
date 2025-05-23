@@ -16,7 +16,8 @@ public enum GameState
     Harvesting,
     OnInventory,
     OnCrafting,
-    MainMenu
+    MainMenu,
+    Removing
 }
 
 public enum ElementEnum
