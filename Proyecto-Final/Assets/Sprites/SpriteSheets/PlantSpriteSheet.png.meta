@@ -143,8 +143,8 @@ TextureImporter:
         y: 227
         width: 11
         height: 9
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.45454547, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,9 +163,9 @@ TextureImporter:
         x: 19
         y: 227
         width: 10
-        height: 8
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 9
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -184,9 +184,9 @@ TextureImporter:
         x: 53
         y: 224
         width: 22
-        height: 14
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 15
+      alignment: 9
+      pivot: {x: 0.5, y: 0.40000004}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -204,10 +204,10 @@ TextureImporter:
         serializedVersion: 2
         x: 5
         y: 192
-        width: 22
-        height: 28
+        width: 24
+        height: 32
       alignment: 9
-      pivot: {x: 0.5, y: 0.25}
+      pivot: {x: 0.45833334, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -226,7 +226,7 @@ TextureImporter:
         x: 36
         y: 192
         width: 24
-        height: 28
+        height: 29
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -247,7 +247,7 @@ TextureImporter:
         x: 69
         y: 192
         width: 22
-        height: 28
+        height: 29
       alignment: 9
       pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -286,11 +286,11 @@ TextureImporter:
       name: PlantRoot2
       rect:
         serializedVersion: 2
-        x: 33
+        x: 32
         y: 225
-        width: 14
-        height: 11
-      alignment: 0
+        width: 16
+        height: 12
+      alignment: 9
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -299,6 +299,48 @@ TextureImporter:
       bones: []
       spriteID: 8ba614f2928490246b0bbb43bf1af236
       internalID: -470206348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PetalShotShoot
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 160
+        width: 24
+        height: 32
+      alignment: 9
+      pivot: {x: 0.45833334, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c08adc314a50dec49800c15b7d397efb
+      internalID: 61620554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GrowingGlowdust
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 160
+        width: 22
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7bef72a7907fea448b88cf416bd72fc
+      internalID: 1459562942
       vertices: []
       indices: 
       edges: []
@@ -320,6 +362,8 @@ TextureImporter:
       BasicPetalShot: 1611987579
       BasicSawleaf: -2001277165
       BasicSpikeRoot: -1251527286
+      GrowingGlowdust: 1459562942
+      PetalShotShoot: 61620554
       PlantFlower: 1189134553
       PlantRoot1: 1181964190
       PlantRoot2: -470206348
