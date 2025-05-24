@@ -14,7 +14,8 @@ public enum MaterialType
     AstralRoots,           // RaicesAstrales
     VoltaicPollen,         // PolenVoltaico
     FrostSpores,           // EsporasGelidas
-    EtherealTendrils       // ZarcillosEtereos
+    EtherealTendrils,       // ZarcillosEtereos
+    HouseHealingPotion
 }
 
 

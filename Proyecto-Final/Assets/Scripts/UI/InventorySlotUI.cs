@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class InventorySlotUI : MonoBehaviour
+public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
 {
     [Header("UI Components")]
     [SerializeField] private Image iconImage;
@@ -14,26 +15,29 @@ public class InventorySlotUI : MonoBehaviour
     [SerializeField] private Color emptyColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
     [SerializeField] private Color occupiedColor = new Color(1f, 1f, 1f, 1f);
 
+    private MaterialType typeHeld;
     private string resourceName;
     private int resourceAmount;
     private bool isOccupied;
 
     private void Start()
     {
-        if (iconImage == null || amountText == null)
+        if (iconImage == null || amountText == null || materialNameText == null || backgroundImage == null)
         {
-            Debug.LogError($"faltan referencias en {gameObject.name}");
+            Debug.LogError($"Faltan referencias UI en {gameObject.name}");
         }
-
         Clear();
     }
 
+    /// <summary>
+    /// Inicializa el slot con un material (incluida la poción de curar la casa).
+    /// </summary>
     public void Setup(MaterialType type, int amount, Sprite icon)
     {
+        typeHeld = type;
         resourceName = InventoryManager.Instance != null
-            ? InventoryManager.Instance.GetMaterialName(type)
-            : type.ToString();
-
+                         ? InventoryManager.Instance.GetMaterialName(type)
+                         : type.ToString();
         resourceAmount = amount;
 
         if (iconImage != null)
@@ -58,18 +62,24 @@ public class InventorySlotUI : MonoBehaviour
         UpdateVisualState();
     }
 
+    /// <summary>
+    /// Actualiza solo la cantidad mostrada.
+    /// </summary>
     public void UpdateAmount(int newAmount)
     {
         resourceAmount = newAmount;
-
         if (amountText != null)
         {
             amountText.text = newAmount.ToString();
         }
     }
 
+    /// <summary>
+    /// Limpia el slot dejándolo vacío.
+    /// </summary>
     public void Clear()
     {
+        typeHeld = MaterialType.None;
         resourceName = string.Empty;
         resourceAmount = 0;
 
@@ -107,9 +117,37 @@ public class InventorySlotUI : MonoBehaviour
     public string GetResourceName() => resourceName;
     public int GetResourceAmount() => resourceAmount;
 
-    public void OnSlotClicked()
+    /// <summary>
+    /// Detecta clicks en el slot. Click derecho usa poción, click izquierdo loggea.
+    /// </summary>
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (isOccupied)
+        if (!isOccupied) return;
+
+        // Click derecho: si es poción de curar la casa, úsala
+        if (eventData.button == PointerEventData.InputButton.Right
+         && typeHeld == MaterialType.HouseHealingPotion)
+        {
+            bool used = InventoryManager.Instance.UseMaterial(MaterialType.HouseHealingPotion, 1);
+            if (used)
+            {
+                // Cura la casa: invierte daño
+                var homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+                if (homeLife != null)
+                {
+                    homeLife.TakeDamage(-50f); // ajusta el valor de curación aquí
+                    GameManager.Instance.uiManager.UpdateHomeHealthBar(
+                        homeLife.currentHealth, homeLife.maxHealth);
+                }
+                UpdateAmount(InventoryManager.Instance.GetMaterialAmount(MaterialType.HouseHealingPotion));
+                if (resourceAmount <= 0)
+                {
+                    Clear();
+                }
+            }
+        }
+        // Click izquierdo: comportamiento genérico
+        else if (eventData.button == PointerEventData.InputButton.Left)
         {
             Debug.Log($"Slot clicked: {resourceName} x{resourceAmount}");
         }
