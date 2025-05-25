@@ -3211,6 +3211,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: LandscapeSpriteSheet_57
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 160
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2345b3f75877abd4db30b2fa0ed037ac
+      internalID: 279943686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -3326,6 +3347,7 @@ TextureImporter:
       LandscapeSpriteSheet_54: 1849857251
       LandscapeSpriteSheet_55: 261592263
       LandscapeSpriteSheet_56: -860128424
+      LandscapeSpriteSheet_57: 279943686
       LandscapeSpriteSheet_58: -1309074898
       LandscapeSpriteSheet_59: 1586879748
       LandscapeSpriteSheet_6: 96297739

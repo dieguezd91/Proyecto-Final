@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: WaterFlow
+  m_Shader: {fileID: 4800000, guid: c62980c7f6b4ef1409d0395dc8be07c5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _Texture0:
+        m_Texture: {fileID: 2800000, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture1:
+        m_Texture: {fileID: 2800000, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _AmplitudeY: 16
+    - _CrossWaveFrequency: 1
+    - _Float1: 16
+    - _NoiseScale: 4
+    - _PixelSize: 16
+    - _PixelSize1: 1
+    - _Pixelation: 16
+    - _Speed: 0.3
+    - _VertFrequency: 1
+    - _VoroBaseScale: 3.5
+    - _VoroTimeScale: 3.5
+    - _WaveAmplitude: 1
+    - _WaveAmplitude1: 1
+    - _WaveFrequency: 1
+    - _WaveFrequency1: 0.5
+    - _Worm: 0.96
+    - __dirty: 0
+    m_Colors:
+    - _Color0: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 1, g: 1, b: 1, a: 0}
+    - _DeepWater: {r: 0.32549015, g: 0.7529413, b: 0.9254903, a: 1}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainWater: {r: 0.2287736, g: 0.29345977, b: 0.5, a: 1}
+    - _Opacity: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+    - _ShallowWater: {r: 0, g: 1, b: 0.5809541, a: 0}
+    - _Water: {r: 1, g: 1, b: 1, a: 0}
+    - _Water1: {r: 0.09344962, g: 0.6377298, b: 0.9433962, a: 1}
+    - _WaveHighlight: {r: 0.7028302, g: 0.9108611, b: 1, a: 1}
+    - _WaveShadow: {r: 0.69855815, g: 0.86432374, b: 0.8867924, a: 1}
+    - _WaveShadow1: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
+  m_BuildTextureStacks: []

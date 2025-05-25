@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: CloudShadows
+  m_Shader: {fileID: 4800000, guid: d9d121691d71dc8489ea3885e3a3a9b9, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _AlphaCutoff: 0.5
+    - _DarkPart: 0.331
+    - _DarkSize: 0.738
+    - _EdgeNoise: 0.1
+    - _EdgeSmooth: 0.32
+    - _MainNoise: 0.1
+    - _NoiseScale: 4
+    - _PixelSize: 16
+    - _PixelSize1: 476
+    - _ShadowDark1: 0.125
+    - _ShadowDark2: 0.05
+    - _ShadowDark3: 0.075
+    - _ShadowSize1: 0.654
+    - _ShadowSize2: 0.652
+    - _ShadowSize3: 0.65
+    - _SoftPart: 0.515
+    - _SoftSize: 0.703
+    - _Speed: 0.1
+    - _VoroBaseScale: 3.5
+    - _VoroTimeScale: 3.5
+    - _Worm: 0.5
+    m_Colors:
+    - _CloudColor: {r: 0, g: 0, b: 0, a: 0.9843137}
+    - _CloudSpeed: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MainWater: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
+    - _Water1: {r: 0.32549015, g: 0.7529413, b: 0.9254903, a: 1}
+    - _WaveHighlight: {r: 1, g: 1, b: 1, a: 1}
+    - _WaveShadow: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
+  m_BuildTextureStacks: []
