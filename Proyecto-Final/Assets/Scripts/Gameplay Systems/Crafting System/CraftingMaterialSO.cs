@@ -15,9 +15,9 @@ public enum MaterialType
     VoltaicPollen,         // PolenVoltaico
     FrostSpores,           // EsporasGelidas
     EtherealTendrils,       // ZarcillosEtereos
-    HouseHealingPotion
+    HouseHealingPotion,
+    Gold
 }
-
 
 public enum RarityEnum
 {

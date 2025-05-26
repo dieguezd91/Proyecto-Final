@@ -17,7 +17,8 @@ public enum GameState
     OnInventory,
     OnCrafting,
     MainMenu,
-    Removing
+    Removing,
+    OnAltarRestoration
 }
 
 public enum ElementEnum

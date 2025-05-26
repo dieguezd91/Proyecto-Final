@@ -90,7 +90,6 @@ public class InventoryManager : MonoBehaviour
         onMaterialChanged?.Invoke(MaterialType.None, 0);
     }
 
-
     public int GetMaterialAmount(MaterialType type)
     {
         MaterialItem mat = materials.Find(m => m.type == type);

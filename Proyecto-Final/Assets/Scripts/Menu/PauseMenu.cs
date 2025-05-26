@@ -25,7 +25,7 @@ public class PauseMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape) &&
             !IsInstructionsPanelActive() &&
-            !CraftingUIManager.isCraftingUIOpen &&
+            !CraftingUIManager.isCraftingUIOpen && !HouseRestorationUIManager.isUIOpen &&
             GameManager.Instance != null &&
             GameManager.Instance.currentGameState != GameState.GameOver)
         {
