@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
@@ -8,6 +9,8 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform slotsContainer;
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private int maxDisplayedResources = 12;
+
+    [SerializeField] private TextMeshProUGUI goldText;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
     private Dictionary<MaterialType, InventorySlotUI> resourceToSlot = new Dictionary<MaterialType, InventorySlotUI>();
@@ -25,6 +28,10 @@ public class InventoryUI : MonoBehaviour
         {
             InventoryManager.Instance.onMaterialChanged += OnMaterialChanged;
         }
+
+        InventoryManager.Instance.onGoldChanged += UpdateGoldDisplay;
+
+        UpdateGoldDisplay(InventoryManager.Instance.GetGold());
     }
 
     private void OnEnable()
@@ -189,5 +196,11 @@ public class InventoryUI : MonoBehaviour
                 UpdateAllSlots();
             }
         }
+    }
+
+    private void UpdateGoldDisplay(int newAmount)
+    {
+        if (goldText != null)
+            goldText.text = $"GOLD: " + newAmount.ToString();
     }
 }

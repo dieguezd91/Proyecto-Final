@@ -21,6 +21,10 @@ public class InventoryManager : MonoBehaviour
     [Header("DATABASE")]
     [SerializeField] private MaterialDatabaseSO materialDatabase;
 
+    [Header("GOLD")]
+    [SerializeField] private int goldAmount = 0;
+    public Action<int> onGoldChanged;
+
     public Action<MaterialType, int> onMaterialChanged;
 
     private void Awake()
@@ -122,4 +126,29 @@ public class InventoryManager : MonoBehaviour
         }
         return type.ToString();
     }
+
+    public void AddGold(int amount)
+    {
+        goldAmount += Mathf.Max(0, amount);
+        onGoldChanged?.Invoke(goldAmount);
+    }
+
+    public bool SpendGold(int amount)
+    {
+        if (goldAmount >= amount)
+        {
+            goldAmount -= amount;
+            onGoldChanged?.Invoke(goldAmount);
+            return true;
+        }
+        return false;
+    }
+
+    public void SetGold(int amount)
+    {
+        goldAmount = Mathf.Max(0, amount);
+        onGoldChanged?.Invoke(goldAmount);
+    }
+
+    public int GetGold() => goldAmount;
 }

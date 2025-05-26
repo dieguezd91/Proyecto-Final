@@ -160,6 +160,7 @@ public class Plant : MonoBehaviour
     private void HandlePlantDeath()
     {
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
+        TributeSystem.Instance?.NotifyPlantDestroyed();
         Debug.Log("Plant has been destroyed!");
     }
 

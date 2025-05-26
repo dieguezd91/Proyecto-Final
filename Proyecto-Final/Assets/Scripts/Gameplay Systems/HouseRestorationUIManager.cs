@@ -19,8 +19,6 @@ public class HouseRestorationUIManager : MonoBehaviour
 
     private void Start()
     {
-        InventoryManager.Instance.AddMaterial(MaterialType.Gold, 999);
-
         restorationSystem = FindObjectOfType<HouseRestorationSystem>();
 
         for (int i = 0; i < optionButtons.Length; i++)
@@ -75,7 +73,7 @@ public class HouseRestorationUIManager : MonoBehaviour
         altarUIPanel.SetActive(true);
         GameManager.Instance?.SetGameState(GameState.OnAltarRestoration);
 
-        int currentGold = InventoryManager.Instance.GetMaterialAmount(MaterialType.Gold);
+        int currentGold = InventoryManager.Instance.GetGold()   ;
         goldSlider.maxValue = currentGold;
         goldSlider.minValue = 0;
         goldSlider.wholeNumbers = true;

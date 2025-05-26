@@ -28,13 +28,15 @@ public class HouseRestorationSystem : MonoBehaviour
         var opt = options[optionIndex];
 
         if (InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1) &&
-            InventoryManager.Instance.UseMaterial(MaterialType.Gold, opt.goldCost))
+            InventoryManager.Instance.SpendGold(opt.goldCost))
         {
             InventoryManager.Instance.UseMaterial(opt.materialRequired, 1);
 
             var house = GameManager.Instance.home.GetComponent<LifeController>();
-            float restoreAmount = house.maxHealth * (opt.restorePercentage / 100f);
-            house.TakeDamage(-restoreAmount);
+            float missingHealth = house.maxHealth - house.currentHealth;
+            float desiredRestore = house.maxHealth * (opt.restorePercentage / 100f);
+            float finalRestore = Mathf.Min(desiredRestore, missingHealth);
+            house.TakeDamage(-finalRestore);
             GameManager.Instance.uiManager.UpdateHomeHealthBar(house.currentHealth, house.maxHealth);
 
             hasRestoredToday = true;

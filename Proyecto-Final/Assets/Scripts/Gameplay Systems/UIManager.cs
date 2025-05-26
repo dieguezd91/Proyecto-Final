@@ -384,6 +384,12 @@ public class UIManager : MonoBehaviour
             GameObject txt = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
             txt.GetComponent<FloatingDamageText>()?.SetText(damageTaken);
         }
+
+        if (currentHealth < lastPlayerHealth)
+        {
+            TributeSystem.Instance?.NotifyPlayerDamaged();
+        }
+
         lastPlayerHealth = currentHealth;
 
         if (playerHealthText != null)
