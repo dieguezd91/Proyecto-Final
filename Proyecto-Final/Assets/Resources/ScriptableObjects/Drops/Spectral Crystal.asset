@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Spectral Crystal
   m_EditorClassIdentifier: 
   materialName: Spectral Crystal
-  materialIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  materialIcon: {fileID: 1950191755, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 1
   materialDescription: 
   rarity: 1

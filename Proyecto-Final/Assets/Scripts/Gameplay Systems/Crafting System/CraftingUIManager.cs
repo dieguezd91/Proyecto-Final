@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
+    using UnityEngine;
+    using UnityEngine.UI;
 
 public class CraftingUIManager : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private GameObject materialRequirementPrefab;
 
     [SerializeField] private Button craftButton;
+    [SerializeField] private List<Image> materialIconSlots;
 
     private CraftingSystem craftingSystem;
     private SeedsEnum selectedSeed;
@@ -129,18 +131,59 @@ public class CraftingUIManager : MonoBehaviour
         selectedPlantIcon.sprite = plantData.plantIcon;
         selectedPlantIcon.preserveAspect = true;
 
+        // Limpiar lista de materiales visuales (texto)
         foreach (Transform child in materialListContainer)
             Destroy(child.gameObject);
 
-        foreach (var mat in recipe.MaterialsRequired)
+        // Mostrar solo textos de requerimientos en la lista
+        for (int i = 0; i < recipe.MaterialsRequired.Count; i++)
         {
+            var mat = recipe.MaterialsRequired[i];
             var reqUI = Instantiate(materialRequirementPrefab, materialListContainer);
 
-            var materialName= InventoryManager.Instance.GetMaterialName(mat.materialType);
-
-            reqUI.GetComponentInChildren<TextMeshProUGUI>().text = $"{materialName} x{mat.quantity}";
+            CraftingMaterialSO materialData = InventoryManager.Instance.GetMaterialData(mat.materialType);
+            if (materialData != null)
+            {
+                var textComponent = reqUI.GetComponentInChildren<TextMeshProUGUI>();
+                if (textComponent != null)
+                {
+                    textComponent.text = $"{materialData.materialName} x{mat.quantity}";
+                }
+            }
         }
 
+        // Mostrar íconos separados (fuera de los slots)
+        for (int i = 0; i < materialIconSlots.Count; i++)
+        {
+            if (materialIconSlots[i] == null)
+                continue;
+
+            if (i < recipe.MaterialsRequired.Count)
+            {
+                var mat = recipe.MaterialsRequired[i];
+                var materialData = InventoryManager.Instance.GetMaterialData(mat.materialType);
+
+                if (materialData != null && materialData.materialIcon != null)
+                {
+                    materialIconSlots[i].sprite = materialData.materialIcon;
+                    materialIconSlots[i].preserveAspect = true;
+                    materialIconSlots[i].SetNativeSize();
+                    materialIconSlots[i].enabled = true;
+                }
+                else
+                {
+                    materialIconSlots[i].sprite = null;
+                    materialIconSlots[i].enabled = false;
+                }
+            }
+            else
+            {
+                materialIconSlots[i].sprite = null;
+                materialIconSlots[i].enabled = false;
+            }
+        }
+
+        // Habilitar o deshabilitar botón de crafteo
         craftButton.interactable = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
     }
 

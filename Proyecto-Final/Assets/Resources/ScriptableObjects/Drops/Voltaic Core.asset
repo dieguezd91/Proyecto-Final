@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Voltaic Core
   m_EditorClassIdentifier: 
   materialName: Voltaic Core
-  materialIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  materialIcon: {fileID: -37685797, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 3
   materialDescription: 
   rarity: 2

@@ -127,6 +127,25 @@ public class InventoryManager : MonoBehaviour
         return type.ToString();
     }
 
+    public Sprite GetMaterialIcon(MaterialType type)
+    {
+        if (materialDatabase != null)
+        {
+            var data = materialDatabase.GetMaterial(type);
+            return data != null ? data.materialIcon : null;
+        }
+        return null;
+    }
+
+    public CraftingMaterialSO GetMaterialData(MaterialType type)
+    {
+        if (materialDatabase != null)
+        {
+            return materialDatabase.GetMaterial(type);
+        }
+        return null;
+    } 
+
     public void AddGold(int amount)
     {
         goldAmount += Mathf.Max(0, amount);

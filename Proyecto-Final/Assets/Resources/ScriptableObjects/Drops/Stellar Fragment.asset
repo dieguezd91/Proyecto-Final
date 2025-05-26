@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stellar Fragment
   m_EditorClassIdentifier: 
   materialName: Stellar Fragment
-  materialIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  materialIcon: {fileID: 79329245, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 5
   materialDescription: 
   rarity: 3

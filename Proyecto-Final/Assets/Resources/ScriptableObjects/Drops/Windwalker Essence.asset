@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Windwalker Essence
   m_EditorClassIdentifier: 
   materialName: Windwalker Essence
-  materialIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  materialIcon: {fileID: 2061505305, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 2
   materialDescription: 
   rarity: 1

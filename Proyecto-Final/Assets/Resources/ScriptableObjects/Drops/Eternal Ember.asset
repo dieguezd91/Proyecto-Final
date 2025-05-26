@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Eternal Ember
   m_EditorClassIdentifier: 
   materialName: Eternal Ember
-  materialIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  materialIcon: {fileID: 1807988885, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 4
   materialDescription: 
   rarity: 2

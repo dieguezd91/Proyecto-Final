@@ -403,6 +403,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: UISprites_0
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 92
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 849521f11b0557c45a3b05057aaf2633
+      internalID: -292080825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -428,6 +449,7 @@ TextureImporter:
       NightPlayerBars: 1508131376
       PotCraftingUI: 14847357
       UIInventorySlot: -1001860351
+      UISprites_0: -292080825
       UISprites_10: -1775831014
       UISprites_11: -1738444724
       UISprites_12: 1118135965
