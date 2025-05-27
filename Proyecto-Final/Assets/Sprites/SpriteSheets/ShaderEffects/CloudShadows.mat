@@ -26,11 +26,12 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
+    - _ClusterSpeed: 0.05
     - _DarkPart: 0.331
     - _DarkSize: 0.738
     - _EdgeNoise: 0.1
-    - _EdgeSmooth: 0.32
-    - _MainNoise: 0.1
+    - _EdgeSmooth: 0.5
+    - _MainNoise: 0.7
     - _NoiseScale: 4
     - _PixelSize: 16
     - _PixelSize1: 476

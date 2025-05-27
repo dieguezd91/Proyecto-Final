@@ -60,12 +60,12 @@ Material:
     - _Color1: {r: 1, g: 1, b: 1, a: 0}
     - _DeepWater: {r: 0.32549015, g: 0.7529413, b: 0.9254903, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainWater: {r: 0.2287736, g: 0.29345977, b: 0.5, a: 1}
-    - _Opacity: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+    - _MainWater: {r: 0.015352436, g: 0.17932211, b: 0.6509434, a: 1}
+    - _Opacity: {r: 0.5943396, g: 0.5943396, b: 0.5943396, a: 1}
     - _ShallowWater: {r: 0, g: 1, b: 0.5809541, a: 0}
-    - _Water: {r: 1, g: 1, b: 1, a: 0}
+    - _Water: {r: 1, g: 1, b: 1, a: 1}
     - _Water1: {r: 0.09344962, g: 0.6377298, b: 0.9433962, a: 1}
-    - _WaveHighlight: {r: 0.7028302, g: 0.9108611, b: 1, a: 1}
-    - _WaveShadow: {r: 0.69855815, g: 0.86432374, b: 0.8867924, a: 1}
+    - _WaveHighlight: {r: 1, g: 1, b: 1, a: 1}
+    - _WaveShadow: {r: 0.6462264, g: 0.9748523, b: 1, a: 1}
     - _WaveShadow1: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
   m_BuildTextureStacks: []
