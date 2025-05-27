@@ -257,76 +257,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CrosshairPlantIcon
-      rect:
-        serializedVersion: 2
-        x: 15
-        y: 158
-        width: 18
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a469f6810c0184543978e44b1cd30569
-      internalID: 1710208436
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CrosshairDigIcon
-      rect:
-        serializedVersion: 2
-        x: 47
-        y: 158
-        width: 18
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7a07d7a3a8005ad4c8d91c7e17063073
-      internalID: 125339148
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CrosshairGatherIcon
-      rect:
-        serializedVersion: 2
-        x: 79
-        y: 158
-        width: 18
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d3f16e2e5a47e164f9c850d2be89599a
-      internalID: 861525276
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: PotCraftingUI
       rect:
         serializedVersion: 2
-        x: 15
-        y: 39
-        width: 141
-        height: 65
+        x: 1
+        y: 34
+        width: 155
+        height: 70
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -341,13 +278,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: NightPlayerBars
+      name: HiddenBars
       rect:
         serializedVersion: 2
         x: 16
-        y: 14
-        width: 65
-        height: 19
+        y: 8
+        width: 63
+        height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,13 +299,76 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: DayPlayerBars
+      name: Shadow
       rect:
         serializedVersion: 2
-        x: 83
+        x: 240
+        y: 129
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8da195a2afc1cef4890eaefaf8e17079
+      internalID: 340849173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowBig
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 96
+        width: 32
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18c60ecfbeedbc747ae9863f3de61264
+      internalID: 1234631462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Timer
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 189
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95e4bdc0ac619de4fad92bb753613769
+      internalID: 1953002121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FillHouse
+      rect:
+        serializedVersion: 2
+        x: 97
         y: 20
-        width: 65
-        height: 8
+        width: 59
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -376,20 +376,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e46a9a883726661449a07a6efac3ba5c
-      internalID: -1991438594
+      spriteID: dbaeed16e2853614cbb18d7470a5d713
+      internalID: -1423815668
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CrosshairCollectIcon
+      name: FillHP
       rect:
         serializedVersion: 2
-        x: 47
-        y: 127
-        width: 18
-        height: 19
+        x: 97
+        y: 14
+        width: 59
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -397,20 +397,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5fc307e7e67ceba428fb8a07b8185ccf
-      internalID: 2120552150
+      spriteID: 35c188aa5c501f94d85c7d5cf1983277
+      internalID: 1365419780
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: UISprites_0
+      name: FillMana
       rect:
         serializedVersion: 2
-        x: 159
-        y: 92
-        width: 18
-        height: 18
+        x: 97
+        y: 11
+        width: 59
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 798b55e55d3e588478fbe3d954660deb
+      internalID: -359895768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseBar
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 21
+        width: 63
+        height: 7
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -418,8 +439,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 849521f11b0557c45a3b05057aaf2633
-      internalID: -292080825
+      spriteID: 5a6498406c27b95448284fd05118dbc7
+      internalID: -1551444634
       vertices: []
       indices: 
       edges: []
@@ -440,16 +461,22 @@ TextureImporter:
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
+      FillHP: 1365419780
+      FillHouse: -1423815668
+      FillMana: -359895768
+      HiddenBars: 1508131376
+      HouseBar: -1551444634
       InventoryPlaceholder: 450073570
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572
       MoonStage3: -1032481509
       MoonStage4: -1529809225
-      NightPlayerBars: 1508131376
       PotCraftingUI: 14847357
+      Shadow: 340849173
+      ShadowBig: 1234631462
+      Timer: -292080825
       UIInventorySlot: -1001860351
-      UISprites_0: -292080825
       UISprites_10: -1775831014
       UISprites_11: -1738444724
       UISprites_12: 1118135965
