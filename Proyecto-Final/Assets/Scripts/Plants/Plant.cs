@@ -30,9 +30,17 @@ public class Plant : MonoBehaviour
 
     protected PlayerAbilitySystem abilitySystem;
 
+    private Collider2D plantCollider;
+
     protected virtual void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        plantCollider = GetComponent<Collider2D>();
+        if (plantCollider != null)
+        {
+            plantCollider.enabled = false;
+        }
 
         plantingDay = GameManager.Instance.GetCurrentDay();
         GameManager.Instance.onNewDay.AddListener(OnNewDay);
@@ -124,6 +132,10 @@ public class Plant : MonoBehaviour
         Debug.Log("Plant: Growth completed");
         ChangeSprite(fullyGrownSprite);
         OnMature();
+        if (plantCollider != null)
+        {
+            plantCollider.enabled = true;
+        }
     }
 
     protected virtual void OnMature()
