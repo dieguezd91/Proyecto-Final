@@ -151,7 +151,7 @@ public class PlayerAbilitySystem : MonoBehaviour
                 GameManager.Instance.SetGameState(GameState.Removing);
                 break;
             default:
-                GameManager.Instance.SetGameState(GameState.Day);
+                GameManager.Instance.SetGameState(GameState.Digging);
                 break;
         }
     }

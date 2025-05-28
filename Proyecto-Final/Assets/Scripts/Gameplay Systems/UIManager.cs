@@ -496,7 +496,7 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
         {
-            GameManager.Instance.SetGameState(GameState.Day);
+            GameManager.Instance.SetGameState(GameState.Digging);
         }
 
         Debug.Log("Inventario cerrado");

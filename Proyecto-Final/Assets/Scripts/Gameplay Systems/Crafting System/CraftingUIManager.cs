@@ -84,7 +84,7 @@ public class CraftingUIManager : MonoBehaviour
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
         {
-            GameManager.Instance.SetGameState(GameState.Day);
+            GameManager.Instance.SetGameState(GameState.Digging);
         }
     }
 

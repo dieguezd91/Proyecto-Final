@@ -257,7 +257,7 @@ public class EnemiesSpawner : MonoBehaviour
 
             onHordeEnd?.Invoke();
 
-            GameManager.Instance.currentGameState = GameState.Day;
+            GameManager.Instance.currentGameState = GameState.Digging;
         }
     }
 

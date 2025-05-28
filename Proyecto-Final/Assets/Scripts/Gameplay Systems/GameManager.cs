@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
         }
 
         dayCount = 1;
-        SetGameState(GameState.Day);
+        SetGameState(GameState.Digging);
         StartDayCycle();
     }
 
@@ -143,7 +143,7 @@ public class GameManager : MonoBehaviour
 
     private void StartDayCycle()
     {
-        SetGameState(GameState.Day);
+        SetGameState(GameState.Digging);
         onNewDay.Invoke(dayCount);
     }
 
@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
     {
         dayCount++;
 
-        SetGameState(GameState.Day);
+        SetGameState(GameState.Digging);
         TributeSystem.Instance?.EvaluateAndGrantReward();
         StartDayCycle();
     }
@@ -173,6 +173,15 @@ public class GameManager : MonoBehaviour
             return;
 
         currentGameState = newState;
+
+        if (newState == GameState.Digging)
+        {
+            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+            if (abilitySystem != null && abilitySystem.CurrentAbility != PlayerAbility.Digging)
+            {
+                abilitySystem.SetAbility(PlayerAbility.Digging);
+            }
+        }
 
         UICursor cursorController = FindObjectOfType<UICursor>();
         if (cursorController != null)
@@ -257,7 +266,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        SetGameState(GameState.Day);
+        SetGameState(GameState.Digging);
         ResetGameData();
         SceneManager.LoadScene(sceneBuildIndex:0);
     }

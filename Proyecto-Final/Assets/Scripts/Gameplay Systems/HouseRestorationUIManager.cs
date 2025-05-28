@@ -88,7 +88,7 @@ public class HouseRestorationUIManager : MonoBehaviour
         altarUIPanel.SetActive(false);
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
-            GameManager.Instance.SetGameState(GameState.Day);
+            GameManager.Instance.SetGameState(GameState.Digging);
     }
 
     private void TryRestore(int index)

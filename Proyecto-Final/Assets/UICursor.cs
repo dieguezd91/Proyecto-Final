@@ -30,7 +30,7 @@ public class UICursor : MonoBehaviour
     private void Start()
     {
         Cursor.visible = false;
-        SetCursorForGameState(GameState.Day);
+        SetCursorForGameState(GameState.Digging);
         playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         cursorImage.transform.SetAsLastSibling();
     }
