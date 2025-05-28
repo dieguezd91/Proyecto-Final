@@ -12,24 +12,24 @@ public class HouseDamageNotifier : MonoBehaviour
     {
         if (houseLife != null)
         {
-            lastHealth = houseLife.currentHealth;
-            houseLife.onHealthChanged.AddListener(OnHouseHealthChanged);
+            houseLife.onDamaged.AddListener(OnHouseDamaged);
         }
     }
 
-    void OnHouseHealthChanged(float currentHealth, float maxHealth)
+    void OnDestroy()
     {
-        if (currentHealth < lastHealth)
+        if (houseLife != null)
         {
-            // La casa recibió daño
-            dangerIndicator?.Activate();
-
-            // Opcional: desactivar después de unos segundos
-            CancelInvoke(nameof(DeactivateIndicator));
-            Invoke(nameof(DeactivateIndicator), 3f);
+            houseLife.onDamaged.RemoveListener(OnHouseDamaged);
         }
+    }
 
-        lastHealth = currentHealth;
+    void OnHouseDamaged(float damage)
+    {
+        dangerIndicator?.Activate();
+
+        CancelInvoke(nameof(DeactivateIndicator));
+        Invoke(nameof(DeactivateIndicator), 3f);
     }
 
     void DeactivateIndicator()

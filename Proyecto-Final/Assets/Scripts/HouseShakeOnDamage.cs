@@ -22,24 +22,28 @@ public class HouseShakeOnDamage : MonoBehaviour
 
     private void OnEnable()
     {
-        // arrancamos con full vida
-        lastHealth = life.currentHealth;
-        life.onHealthChanged.AddListener(OnHealthChanged);
+        life.onDamaged.AddListener(OnDamaged);
     }
 
     private void OnDisable()
     {
-        life.onHealthChanged.RemoveListener(OnHealthChanged);
+        life.onDamaged.RemoveListener(OnDamaged);
+    }
+
+    private void OnDamaged(float damage)
+    {
+        StopAllCoroutines();
+        StartCoroutine(Shake());
     }
 
     private void OnHealthChanged(float current, float max)
     {
-        // si perdió salud, sacudimos
         if (current < lastHealth)
         {
             StopAllCoroutines();
             StartCoroutine(Shake());
         }
+
         lastHealth = current;
     }
 

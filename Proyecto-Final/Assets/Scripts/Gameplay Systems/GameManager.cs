@@ -133,6 +133,15 @@ public class GameManager : MonoBehaviour
                 spawner.EndNight();
             }
         }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                InventoryManager.Instance.AddGold(100);
+                Debug.Log("+100 oro agregado");
+            }
+        }
     }
 
     private void StartDayCycle()

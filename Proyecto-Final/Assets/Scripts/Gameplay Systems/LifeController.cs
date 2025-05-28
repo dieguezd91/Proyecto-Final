@@ -17,6 +17,7 @@ public class LifeController : MonoBehaviour
     [Header("EVENTS")]
     public UnityEvent onDeath;
     public UnityEvent<float, float> onHealthChanged;
+    public UnityEvent<float> onDamaged;
 
     [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
@@ -52,12 +53,16 @@ public class LifeController : MonoBehaviour
             return;
 
         currentHealth -= damage;
-
         currentHealth = Mathf.Max(0f, currentHealth);
 
-        if (flashOnDamage && spriteRenderer != null)
+        if (damage > 0)
         {
-            StartCoroutine(FlashRoutine());
+            onDamaged?.Invoke(damage);
+
+            if (flashOnDamage && spriteRenderer != null)
+            {
+                StartCoroutine(FlashRoutine());
+            }
         }
 
         onHealthChanged?.Invoke(currentHealth, maxHealth);
@@ -67,6 +72,7 @@ public class LifeController : MonoBehaviour
             Die();
         }
     }
+
 
     public virtual void Die()
     {
