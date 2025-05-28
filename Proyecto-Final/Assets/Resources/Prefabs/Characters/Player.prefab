@@ -4912,7 +4912,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -8, z: 0}
-  m_LocalScale: {x: 28, y: 23, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7658780563616903740}
@@ -5041,7 +5041,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: -1557011483, guid: 4475a5d971e73d04cb06cd9ee9b45a86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5113,8 +5113,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1972390401
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &8142097974388357481
 MonoBehaviour:
@@ -5389,7 +5389,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_Sprite: {fileID: 1428125574, guid: 6e4d064e35076ec49a8b325c3c05573a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5413,7 +5413,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a34d0be1b9cb746bf4ec15035781ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 4.5
   rb: {fileID: 1774628585642013327}
   cam: {fileID: 0}
   bulletPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
@@ -5619,7 +5619,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.003677085, y: -0.08457166}
+  m_Offset: {x: -0.0036770701, y: -0.53085136}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -5630,7 +5630,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.9190297, y: 1.3308567}
+  m_Size: {x: 0.9190297, y: 0.43829727}
   m_EdgeRadius: 0
 --- !u!1 &7795105065535252630
 GameObject:
@@ -10617,9 +10617,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1972390401
+  m_SortingLayer: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 340849173, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
