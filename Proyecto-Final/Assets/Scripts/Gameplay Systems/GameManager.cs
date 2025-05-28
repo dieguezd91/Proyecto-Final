@@ -134,13 +134,10 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        void Update()
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                InventoryManager.Instance.AddGold(100);
-                Debug.Log("+100 oro agregado");
-            }
+            InventoryManager.Instance.AddGold(100);
+            Debug.Log("+100 oro agregado");
         }
     }
 
