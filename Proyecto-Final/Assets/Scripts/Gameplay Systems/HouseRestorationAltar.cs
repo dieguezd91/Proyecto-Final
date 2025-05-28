@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class HouseRestorationSystem : MonoBehaviour
@@ -15,6 +16,11 @@ public class HouseRestorationSystem : MonoBehaviour
     public RestorationOption[] options;
 
     private bool hasRestoredToday = false;
+
+    private void Start()
+    {
+        GameManager.Instance.onNewDay.AddListener(OnNewDayStarted);
+    }
 
     public bool CanRestore() => !hasRestoredToday;
 
@@ -49,6 +55,16 @@ public class HouseRestorationSystem : MonoBehaviour
     public RestorationOption GetOption(int index)
     {
         return options[index];
+    }
+
+    private void OnNewDayStarted(int day)
+    {
+        ResetForNewDay();
+    }
+
+    public bool HasRestoredToday()
+    {
+        return hasRestoredToday;
     }
 
     public int OptionCount => options.Length;

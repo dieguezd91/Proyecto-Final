@@ -67,8 +67,6 @@ public class HouseRestorationUIManager : MonoBehaviour
 
     private void OpenUI()
     {
-        if (!restorationSystem.CanRestore()) return;
-
         isUIOpen = true;
         altarUIPanel.SetActive(true);
         GameManager.Instance?.SetGameState(GameState.OnAltarRestoration);
@@ -115,6 +113,7 @@ public class HouseRestorationUIManager : MonoBehaviour
                 var opt = restorationSystem.GetOption(i);
                 optionLabels[i].text = $"{opt.label}: {opt.restorePercentage}% vida\n{opt.goldCost} oro + 1 {opt.materialRequired}";
             }
+            optionButtons[i].interactable = !restorationSystem.HasRestoredToday();
         }
     }
 
