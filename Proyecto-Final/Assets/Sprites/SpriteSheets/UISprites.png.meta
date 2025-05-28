@@ -341,13 +341,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Timer
+      name: TimerSprite
       rect:
         serializedVersion: 2
         x: 60
-        y: 189
-        width: 23
-        height: 23
+        y: 155
+        width: 25
+        height: 25
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -433,7 +433,7 @@ TextureImporter:
         width: 63
         height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -441,6 +441,90 @@ TextureImporter:
       bones: []
       spriteID: 5a6498406c27b95448284fd05118dbc7
       internalID: -1551444634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Warning
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 114
+        width: 8
+        height: 37
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb9877ce73810244188fc756903fde6b
+      internalID: -1111590628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TimerFill
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 191
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae6070f40c96278439d814f4a9d952bd
+      internalID: 1418655247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowSmall2
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 121
+        width: 16
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7f130fa8489b074ba841b021dd4fa00
+      internalID: 1868388143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ShadowXS
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 113
+        width: 12
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b8d8d3baac45424cba3b81202c4118b
+      internalID: 1967343564
       vertices: []
       indices: 
       edges: []
@@ -475,7 +559,10 @@ TextureImporter:
       PotCraftingUI: 14847357
       Shadow: 340849173
       ShadowBig: 1234631462
-      Timer: -292080825
+      ShadowSmall2: 1868388143
+      ShadowXS: 1967343564
+      TimerFill: 1418655247
+      TimerSprite: 1953002121
       UIInventorySlot: -1001860351
       UISprites_10: -1775831014
       UISprites_11: -1738444724
@@ -486,6 +573,7 @@ TextureImporter:
       UISprites_7: -1902967201
       UISprites_8: -996710981
       UISprites_9: -2055132647
+      Warning: -1111590628
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
