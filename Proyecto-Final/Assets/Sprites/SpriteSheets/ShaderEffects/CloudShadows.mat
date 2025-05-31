@@ -25,6 +25,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _AlphaCutoff: 0.5
     - _ClusterSpeed: 0.05
     - _DarkPart: 0.331
