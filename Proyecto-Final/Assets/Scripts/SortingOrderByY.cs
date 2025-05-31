@@ -4,13 +4,14 @@ using UnityEngine;
 public class SortingOrderByY : MonoBehaviour
 {
     [SerializeField] private float referenceY = 0f;
-
     [SerializeField] private int sortingOffset = 0;
 
     [SerializeField] private int immaturePlantSortingOrder = -500;
+    [SerializeField] private int maturePlantSortingOrder = 5;
 
     private SpriteRenderer spriteRenderer;
     private Plant plant;
+    private bool hasMatured = false;
 
     private void Awake()
     {
@@ -26,7 +27,19 @@ public class SortingOrderByY : MonoBehaviour
             return;
         }
 
-        int order = Mathf.RoundToInt((referenceY - transform.position.y) * 100) + sortingOffset;
-        spriteRenderer.sortingOrder = order;
+
+        if (plant != null && plant.IsFullyGrown() && !hasMatured)
+        {
+            spriteRenderer.sortingOrder = maturePlantSortingOrder;
+            hasMatured = true;
+            return;
+        }
+
+
+        if (plant == null)
+        {
+            int order = Mathf.RoundToInt((referenceY - transform.position.y) * 100) + sortingOffset;
+            spriteRenderer.sortingOrder = order;
+        }
     }
 }

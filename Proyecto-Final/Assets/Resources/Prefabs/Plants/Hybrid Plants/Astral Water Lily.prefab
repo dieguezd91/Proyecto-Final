@@ -286,5 +286,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   referenceY: 0
-  sortingOffset: 3
+  sortingOffset: 0
   immaturePlantSortingOrder: -500
+  maturePlantSortingOrder: 5
