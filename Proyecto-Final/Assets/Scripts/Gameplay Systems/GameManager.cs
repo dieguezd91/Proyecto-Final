@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -56,6 +57,12 @@ public class GameManager : MonoBehaviour
     public GameState currentGameState;
 
     public static GameManager Instance { get; private set; }
+
+    // ----------------------------
+    // 1) AÑADIDO: Evento para notificar cambios de estado
+    // ----------------------------
+    public event Action<GameState> OnGameStateChanged;
+    // ----------------------------
 
     private void Awake()
     {
@@ -174,6 +181,12 @@ public class GameManager : MonoBehaviour
 
         currentGameState = newState;
 
+        // ----------------------------
+        // 2) Disparar el evento cuando cambie de estado
+        // ----------------------------
+        OnGameStateChanged?.Invoke(currentGameState);
+        // ----------------------------
+
         if (newState == GameState.Digging)
         {
             var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
@@ -230,7 +243,7 @@ public class GameManager : MonoBehaviour
         if (uiManager != null && uiManager.gameOverPanel != null)
         {
             uiManager.gameOverPanel.SetActive(true);
-            
+
             Time.timeScale = 0f;
         }
     }
@@ -268,7 +281,7 @@ public class GameManager : MonoBehaviour
     {
         SetGameState(GameState.Digging);
         ResetGameData();
-        SceneManager.LoadScene(sceneBuildIndex:0);
+        SceneManager.LoadScene(sceneBuildIndex: 0);
     }
 
     public void ResetGameData()
