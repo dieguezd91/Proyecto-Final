@@ -15,11 +15,20 @@ public class HouseRestorationUIManager : MonoBehaviour
     private bool isPlayerNear = false;
     public static bool isUIOpen = false;
 
+    [SerializeField] private GameObject interactionPromptCanvas;
+    [SerializeField] private float promptDistance = 2.5f;
+    private Transform player;
+
+
     private HouseRestorationSystem restorationSystem;
 
     private void Start()
     {
         restorationSystem = FindObjectOfType<HouseRestorationSystem>();
+
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (interactionPromptCanvas != null)
+            interactionPromptCanvas.SetActive(false);
 
         for (int i = 0; i < optionButtons.Length; i++)
         {
@@ -38,6 +47,12 @@ public class HouseRestorationUIManager : MonoBehaviour
         if (isPlayerNear && Input.GetKeyDown(KeyCode.E))
         {
             ToggleUI();
+        }
+
+        if (player != null && interactionPromptCanvas != null)
+        {
+            float dist = Vector2.Distance(transform.position, player.position);
+            interactionPromptCanvas.SetActive(dist <= promptDistance);
         }
     }
 

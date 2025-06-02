@@ -21,12 +21,21 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private Button craftButton;
     [SerializeField] private List<Image> materialIconSlots;
 
+    [SerializeField] private GameObject interactionPromptCanvas;
+    [SerializeField] private float promptDistance = 2.5f;
+    private Transform player;
+
     private CraftingSystem craftingSystem;
     private SeedsEnum selectedSeed;
 
     private void Start()
     {
         craftingSystem = FindObjectOfType<CraftingSystem>();
+
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (interactionPromptCanvas != null)
+            interactionPromptCanvas.SetActive(false);
+
         PopulateRecipeList();
     }
 
@@ -39,6 +48,10 @@ public class CraftingUIManager : MonoBehaviour
                 ToggleCraftingUI();
             }
         }
+
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        if (interactionPromptCanvas != null)
+            interactionPromptCanvas.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
