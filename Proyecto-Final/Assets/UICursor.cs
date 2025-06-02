@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,7 +24,7 @@ public class UICursor : MonoBehaviour
     [SerializeField] private Image cursorImage;
 
     [SerializeField] private Grid grid;
-    PlayerAbilitySystem playerAbilitySystem;
+    private PlayerAbilitySystem playerAbilitySystem;
 
     private void Start()
     {
@@ -37,21 +36,72 @@ public class UICursor : MonoBehaviour
 
     private void Update()
     {
-        CursorData activeCursor = GetCurrentCursorData();
         GameState state = GameManager.Instance.currentGameState;
-
         bool useTileSnap = IsUsingTileSnap(state);
         bool inRange = IsTargetInRange(state);
 
-        CursorData cursorToUse = useTileSnap && inRange ? activeCursor : defaultCursor;
+        CursorData cursorToUse = defaultCursor;
+        CursorData activeCursor = GetCurrentCursorData();
 
         if (useTileSnap && inRange)
+        {
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = grid.WorldToCell(mouseWorld);
+            var plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+
+            switch (state)
+            {
+                case GameState.Digging:
+                    if (plant != null)
+                    {
+                        cursorToUse = dayCursor;
+                    }
+                    else
+                    {
+                        RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero, Mathf.Infinity, playerAbilitySystem.diggableLayer);
+                        cursorToUse = hit.collider != null ? activeCursor : dayCursor;
+                    }
+                    break;
+
+                case GameState.Planting:
+                    var tile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cellPos);
+                    if (plant != null)
+                    {
+                        cursorToUse = dayCursor;
+                    }
+                    else
+                    {
+                        cursorToUse = tile == playerAbilitySystem.tilledSoilTile ? activeCursor : dayCursor;
+                    }
+                    break;
+
+                case GameState.Harvesting:
+                    var harvestPlant = plant as ResourcePlant;
+                    cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? activeCursor : dayCursor;
+                    break;
+
+                case GameState.Removing:
+                    cursorToUse = plant != null ? activeCursor : dayCursor;
+                    break;
+
+                default:
+                    cursorToUse = activeCursor;
+                    break;
+            }
+        }
+        else
+        {
+            cursorToUse = defaultCursor;
+        }
+
+        bool shouldSnap = useTileSnap && inRange && cursorToUse.cursorSprite != dayCursor.cursorSprite;
+
+        if (shouldSnap)
         {
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = grid.WorldToCell(worldPos);
             Vector3 snappedWorldPos = grid.GetCellCenterWorld(cellPos);
             Vector3 screenPos = Camera.main.WorldToScreenPoint(snappedWorldPos);
-
             cursorImage.rectTransform.position = screenPos + (Vector3)cursorToUse.hotSpot;
         }
         else
@@ -65,41 +115,7 @@ public class UICursor : MonoBehaviour
 
     public void SetCursorForGameState(GameState state)
     {
-        CursorData cursorToUse = defaultCursor;
-
-        switch (state)
-        {
-            case GameState.MainMenu:
-            case GameState.Paused:
-            case GameState.OnInventory:
-            case GameState.OnCrafting:
-                cursorToUse = menuCursor;
-                break;
-
-            case GameState.Day:
-                cursorToUse = dayCursor;
-                break;
-
-            case GameState.Night:
-                cursorToUse = nightCursor;
-                break;
-
-            case GameState.Digging:
-                cursorToUse = diggingCursor;
-                break;
-
-            case GameState.Planting:
-                cursorToUse = plantingCursor;
-                break;
-
-            case GameState.Harvesting:
-                cursorToUse = harvestingCursor;
-                break;
-
-            case GameState.Removing:
-                cursorToUse = removingCursor;
-                break;
-        }
+        CursorData cursorToUse = GetCursorForState(state);
 
         if (cursorImage != null)
         {
@@ -108,9 +124,9 @@ public class UICursor : MonoBehaviour
         }
     }
 
-    private CursorData GetCurrentCursorData()
+    private CursorData GetCursorForState(GameState state)
     {
-        switch (GameManager.Instance.currentGameState)
+        switch (state)
         {
             case GameState.MainMenu:
             case GameState.Paused:
@@ -140,6 +156,12 @@ public class UICursor : MonoBehaviour
                 return defaultCursor;
         }
     }
+
+    private CursorData GetCurrentCursorData()
+    {
+        return GetCursorForState(GameManager.Instance.currentGameState);
+    }
+
     private bool IsUsingTileSnap(GameState state)
     {
         return state == GameState.Digging || state == GameState.Planting || state == GameState.Harvesting || state == GameState.Removing;
@@ -147,11 +169,11 @@ public class UICursor : MonoBehaviour
 
     private bool IsTargetInRange(GameState state)
     {
+        if (playerAbilitySystem == null) return false;
+
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int cell = grid.WorldToCell(mouseWorld);
         Vector3 cellWorld = grid.GetCellCenterWorld(cell);
-
-        if (playerAbilitySystem == null) return false;
 
         float range = 0f;
 
@@ -162,8 +184,6 @@ public class UICursor : MonoBehaviour
                 break;
             case GameState.Planting:
             case GameState.Harvesting:
-                range = playerAbilitySystem.interactionDistance;
-                break;
             case GameState.Removing:
                 range = playerAbilitySystem.interactionDistance;
                 break;

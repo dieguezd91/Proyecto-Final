@@ -14,7 +14,7 @@ public enum PlayerAbility
 public class PlayerAbilitySystem : MonoBehaviour
 {
     [Header("Dig System")]
-    [SerializeField] private LayerMask diggableLayer;
+    [SerializeField] public LayerMask diggableLayer;
     [SerializeField] public float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
 
@@ -28,7 +28,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private SeedInventory plantInventory;
-    [SerializeField] private TileBase tilledSoilTile;
+    [SerializeField] public TileBase tilledSoilTile;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
