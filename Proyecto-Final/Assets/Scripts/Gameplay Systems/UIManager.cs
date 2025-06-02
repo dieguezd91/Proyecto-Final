@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject HUD;
     public GameObject pausePanel;
-    public GameObject seedSlots;                       // Contenedor general de los slots de semillas
+    public GameObject seedSlots;                       
     [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
@@ -89,13 +89,13 @@ public class UIManager : MonoBehaviour
     private PauseMenu pauseMenu;
     private Coroutine fadeCoroutine;
 
-    // --- Variables para detectar “doble pulsación” en teclas 1..5 ---
-    private int lastPressSlot = -1;            // Índice del slot (0..4) presionado en la última tecla
-    private float lastPressTime = 0f;          // Momento de la última pulsación
-    [SerializeField] private float doublePressThreshold = 0.3f; // Intervalo máximo (segundos) para reconocer doble pulsación
+   
+    private int lastPressSlot = -1;            
+    private float lastPressTime = 0f;          
+    [SerializeField] private float doublePressThreshold = 0.3f; 
 
-    // --- Variables para el “intercambio” de slots ---
-    private int pendingSwapSlot = -1;          // Índice del primer slot seleccionado para intercambio, o -1 si ninguno
+    
+    private int pendingSwapSlot = -1;         
 
     void Start()
     {
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
         CheckGameStateChanges();
         HandleGameOverState();
         HandleInventoryInput();
-        HandleSeedSlotInput(); // Ahora maneja selección única y doble pulsación para intercambio
+        HandleSeedSlotInput(); 
     }
 
     private void OnDestroy()
@@ -189,7 +189,7 @@ public class UIManager : MonoBehaviour
 
     private void InitializeUI()
     {
-        // Desactivar parcialmente los slots si no está en modo “Planting”
+        
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
             seedSlotsCanvasGroup.alpha = 0.5f;
@@ -231,9 +231,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Llena los 5 slots según lo que tenga SeedInventory. 
-    /// </summary>
+   
     public void InitializeSeedSlotsUI()
     {
         for (int i = 0; i < slotObjects.Length; i++)
@@ -617,22 +615,12 @@ public class UIManager : MonoBehaviour
         seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
     }
 
-    // ----------------------------------------
-    // MÉTODOS PARA SELECCIÓN / INTERCAMBIO
-    // ----------------------------------------
-
-    /// <summary>
-    /// Detecta pulsaciones de teclas 1..5. 
-    /// - Una pulsación “simple” (out of double-press threshold) selecciona el slot (modo plantación). 
-    /// - Dos pulsaciones consecutivas del mismo número (dentro del threshold) activan “modo intercambio” para ese slot.
-    /// - Si ya está en “modo intercambio”, la siguiente tecla 1–5 (distinta o igual) define el segundo slot a intercambiar.
-    /// </summary>
+    
     private void HandleSeedSlotInput()
     {
         if (GameManager.Instance == null) return;
         GameState state = GameManager.Instance.currentGameState;
 
-        // Solo se puede seleccionar/intercambiar en estados diurnos/plantación
         bool validState = state == GameState.Day
                         || state == GameState.Digging
                         || state == GameState.Planting
@@ -651,24 +639,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Lógica interna al pulsar el número de slot i:
-    /// - Si hay un pendingSwapSlot >= 0: se está en modo intercambio; intercambia con i.
-    /// - Si no hay pendingSwapSlot:
-    ///     • Si i == lastPressSlot y (Time.time – lastPressTime) < threshold: entra en modo intercambio, pendingSwapSlot = i.
-    ///     • Si no, hace “selección normal” de semilla i.
-    /// </summary>
+    
     private void OnSlotKeyPressed(int i)
     {
         float now = Time.time;
 
-        // Si está en modo “intercambio” (pendingSwapSlot != -1), hacemos swap con este i
         if (pendingSwapSlot >= 0)
         {
             int first = pendingSwapSlot;
             int second = i;
 
-            // Si presiona de nuevo el mismo índice, cancelamos modo intercambio
             if (first == second)
             {
                 HighlightSlot(first, false);
@@ -677,12 +657,10 @@ public class UIManager : MonoBehaviour
                 return;
             }
 
-            // Realizamos intercambio y salimos del modo
             SwapSeedSlots(first, second);
             HighlightSlot(first, false);
             pendingSwapSlot = -1;
 
-            // Refrescar UI
             InitializeSeedSlotsUI();
             UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
 
@@ -690,30 +668,24 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        // Si no estamos en modo intercambio, comprobamos doble pulsación:
         if (i == lastPressSlot && (now - lastPressTime) < doublePressThreshold)
         {
-            // DOS PULSACIONES RÁPIDAS => entramos en modo intercambio
             pendingSwapSlot = i;
             HighlightSlot(i, true);
             Debug.Log($"Modo intercambio ACTIVADO para slot {i + 1}. Elige otro (1–5).");
         }
         else
         {
-            // Una sola pulsación => selección normal de semilla
             SeedInventory.Instance.SelectSlot(i);
             UpdateSelectedSlotUI(i);
             Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
         }
 
-        // Actualizamos datos de “última pulsación” para detectar un posible doble clic
         lastPressSlot = i;
         lastPressTime = now;
     }
 
-    /// <summary>
-    /// Resalta o quita resaltado del slot idx (cambia color y escala).
-    /// </summary>
+    
     private void HighlightSlot(int idx, bool highlight)
     {
         if (idx < 0 || idx >= slotObjects.Length) return;
@@ -730,9 +702,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Intercambia dos PlantSlot (índices a y b) dentro de SeedInventory.
-    /// </summary>
+    
     private void SwapSeedSlots(int a, int b)
     {
         PlantSlot slotA = SeedInventory.Instance.GetPlantSlot(a);
@@ -740,7 +710,6 @@ public class UIManager : MonoBehaviour
 
         if (slotA == null || slotB == null) return;
 
-        // Guardar datos de slotA en temporales
         SeedsEnum tmpSeedType = slotA.seedType;
         GameObject tmpPrefab = slotA.plantPrefab;
         Sprite tmpIcon = slotA.plantIcon;
@@ -748,7 +717,6 @@ public class UIManager : MonoBehaviour
         int tmpDaysToGrow = slotA.daysToGrow;
         string tmpDescription = slotA.description;
 
-        // Asignar datos de slotB a slotA
         slotA.seedType = slotB.seedType;
         slotA.plantPrefab = slotB.plantPrefab;
         slotA.plantIcon = slotB.plantIcon;
@@ -756,7 +724,6 @@ public class UIManager : MonoBehaviour
         slotA.daysToGrow = slotB.daysToGrow;
         slotA.description = slotB.description;
 
-        // Asignar datos de slotA temporales a slotB
         slotB.seedType = tmpSeedType;
         slotB.plantPrefab = tmpPrefab;
         slotB.plantIcon = tmpIcon;

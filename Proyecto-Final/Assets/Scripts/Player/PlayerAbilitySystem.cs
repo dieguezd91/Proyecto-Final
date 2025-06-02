@@ -49,6 +49,19 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         plantInventory ??= FindObjectOfType<SeedInventory>();
+
+        if (plantInventory != null)
+        {
+            plantInventory.onSlotSelected += OnSeedSlotSelected;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (plantInventory != null)
+        {
+            plantInventory.onSlotSelected -= OnSeedSlotSelected;
+        }
     }
 
     private void Start()
@@ -60,7 +73,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if ((isDigging || isHarvesting) && progressBar != null && progressBarTarget != null)
         {
-            progressBar.transform.position = Camera.main.WorldToScreenPoint(progressBarTarget.position + progressBarOffset);
+            progressBar.transform.position = Camera.main.WorldToScreenPoint(
+                progressBarTarget.position + progressBarOffset);
         }
 
         if (currentAbility == PlayerAbility.Digging && !isDigging)
@@ -68,12 +82,13 @@ public class PlayerAbilitySystem : MonoBehaviour
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
             Vector3 cellWorldPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
-
             float dist = Vector2.Distance(transform.position, cellWorldPos);
         }
 
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;
-        if (!IsAbilityGameState()) return;
+        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            return;
+        if (!IsAbilityGameState())
+            return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -97,16 +112,15 @@ public class PlayerAbilitySystem : MonoBehaviour
                 break;
         }
 
-
         HandleMouseScroll();
     }
 
     private void HandleMouseScroll()
     {
-        if (isDigging || isHarvesting) return;
+        if (isDigging || isHarvesting)
+            return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-
         if (Mathf.Abs(scroll) > 0.01f)
         {
             PlayerAbility[] validAbilities = {
@@ -116,7 +130,6 @@ public class PlayerAbilitySystem : MonoBehaviour
                 PlayerAbility.Removing
             };
 
-
             int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
             if (currentIndex == -1) currentIndex = 0;
 
@@ -125,8 +138,12 @@ public class PlayerAbilitySystem : MonoBehaviour
                 : (currentIndex + 1) % validAbilities.Length;
 
             SetAbility(validAbilities[nextIndex]);
-
         }
+    }
+
+    private void OnSeedSlotSelected(int slotIndex)
+    {
+        SetAbility(PlayerAbility.Planting);
     }
 
     public void SetAbility(PlayerAbility ability)
@@ -172,7 +189,8 @@ public class PlayerAbilitySystem : MonoBehaviour
                 return;
             }
 
-            if (Vector2.Distance(transform.position, TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos)) <= interactionDistance)
+            Vector3 center = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
+            if (Vector2.Distance(transform.position, center) <= interactionDistance)
             {
                 bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant);
                 if (planted)
@@ -191,7 +209,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleHarvesting()
     {
-        if (isHarvesting) return;
+        if (isHarvesting)
+            return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -234,7 +253,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void StartHarvesting(ResourcePlant plant)
     {
-        if (currentAbility != PlayerAbility.Harvesting || plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested()) return;
+        if (currentAbility != PlayerAbility.Harvesting || plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
+            return;
 
         currentHarvestPlant = plant;
         isHarvesting = true;
@@ -283,7 +303,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void CancelHarvest()
     {
-        if (!isHarvesting || currentHarvestPlant == null) return;
+        if (!isHarvesting || currentHarvestPlant == null)
+            return;
 
         currentHarvestPlant.CancelHarvest();
         isHarvesting = false;
@@ -292,7 +313,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         currentHarvestPlant = null;
     }
 
-    void CompleteHarvest()
+    private void CompleteHarvest()
     {
         isHarvesting = false;
         playerController.SetMovementEnabled(true);
@@ -302,8 +323,10 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleDigging()
     {
-        if (isDigging) return;
+        if (isDigging)
+            return;
 
+        // Si estoy sobre la “Casa” (capa “House”), no cavar
         Collider2D roofHit = Physics2D.OverlapPoint(transform.position, LayerMask.GetMask("House"));
         if (roofHit != null)
             return;
@@ -318,11 +341,14 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public bool TryDig(Vector2 position)
     {
-        if (currentAbility != PlayerAbility.Digging || isDigging) return false;
+        if (currentAbility != PlayerAbility.Digging || isDigging)
+            return false;
 
         RaycastHit2D hit = Physics2D.Raycast(position, Vector2.zero, Mathf.Infinity, diggableLayer);
-        if (hit.collider == null) return false;
-        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("House")) return false;
+        if (hit.collider == null)
+            return false;
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("House"))
+            return false;
 
         Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(position);
         TileBase existingTile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cell);
@@ -345,7 +371,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void StartDigging(Vector2 position)
     {
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused) return;
+        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            return;
 
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
@@ -401,8 +428,10 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void CancelCurrentAction()
     {
-        if (isHarvesting) CancelHarvest();
-        if (isDigging) CancelDigging();
+        if (isHarvesting)
+            CancelHarvest();
+        if (isDigging)
+            CancelDigging();
     }
 
     public bool IsDigging() => isDigging;
