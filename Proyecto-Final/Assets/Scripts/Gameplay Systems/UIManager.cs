@@ -353,13 +353,19 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            if (GameManager.Instance.currentGameState != GameState.Night)
+            bool isDayOrAbilityState = GameManager.Instance.currentGameState == GameState.Day ||
+                                       GameManager.Instance.currentGameState == GameState.Digging ||
+                                       GameManager.Instance.currentGameState == GameState.Planting ||
+                                       GameManager.Instance.currentGameState == GameState.Harvesting ||
+                                       GameManager.Instance.currentGameState == GameState.Removing;
+
+            if (isDayOrAbilityState)
             {
                 if (seedSlots != null) seedSlots.gameObject.SetActive(true && !isInstructionsOpen);
                 if (dayControlPanel != null) dayControlPanel.SetActive(true && !isInstructionsOpen);
                 if (startNightButton != null) startNightButton.gameObject.SetActive(true && !isInstructionsOpen);
             }
-            else if (GameManager.Instance.currentGameState == GameState.Night)
+            else
             {
                 if (seedSlots != null) seedSlots.gameObject.SetActive(false);
                 if (dayControlPanel != null) dayControlPanel.SetActive(false);
