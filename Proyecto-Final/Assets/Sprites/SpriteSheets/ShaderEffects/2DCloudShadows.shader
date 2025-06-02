@@ -4,8 +4,8 @@ Shader "2DCloudShadows"
 {
 	Properties
 	{
-		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[HideInInspector] _EmissionColor("Emission Color", Color) = (1,1,1,1)
+		[HideInInspector] _AlphaCutoff("Alpha Cutoff ", Range(0, 1)) = 0.5
 		[ASEBegin]_ShadowDark2("ShadowDark2", Range( 0 , 1)) = 1
 		_CloudColor("CloudColor", Color) = (0.6462264,0.9748523,1,1)
 		_ShadowDark3("ShadowDark3", Range( 0 , 1)) = 0.7068362
@@ -18,7 +18,9 @@ Shader "2DCloudShadows"
 		_MainNoise("MainNoise", Range( 0 , 10)) = 0.2
 		_EdgeSmooth("EdgeSmooth", Range( 0 , 2)) = 0.5
 		_CloudSpeed("CloudSpeed", Vector) = (0.2,0.2,0,0)
-		[ASEEnd]_Alpha("Alpha", Range( 0 , 1)) = 1
+		_Alpha("Alpha", Range( 0 , 1)) = 1
+		[ASEEnd]_Texture0("Texture 0", 2D) = "white" {}
+		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 		//_TransmissionShadow( "Transmission Shadow", Range( 0, 1 ) ) = 0.5
 		//_TransStrength( "Trans Strength", Range( 0, 50 ) ) = 1
@@ -237,12 +239,13 @@ Shader "2DCloudShadows"
 				#if defined(ASE_NEEDS_FRAG_SCREEN_POSITION)
 				float4 screenPos : TEXCOORD6;
 				#endif
-				
+				float4 ase_texcoord7 : TEXCOORD7;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -276,7 +279,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -355,7 +359,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord7.xy = v.texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord7.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -541,10 +548,13 @@ Shader "2DCloudShadows"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord7.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -563,14 +573,14 @@ Shader "2DCloudShadows"
 				voroi285 /= rest285;
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
-				float3 Albedo = ( temp_output_230_0 * _CloudColor ).rgb;
+				float3 Albedo = ( temp_output_307_0 * ( temp_output_230_0 * _CloudColor ) ).rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -763,7 +773,7 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -776,12 +786,13 @@ Shader "2DCloudShadows"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 				float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -815,7 +826,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -896,7 +908,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -939,7 +954,8 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -956,7 +972,7 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -995,7 +1011,7 @@ Shader "2DCloudShadows"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1041,10 +1057,13 @@ Shader "2DCloudShadows"
 					#endif
 				#endif
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord2.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -1063,7 +1082,7 @@ Shader "2DCloudShadows"
 				voroi285 /= rest285;
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
@@ -1129,7 +1148,7 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1142,12 +1161,13 @@ Shader "2DCloudShadows"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 				float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -1181,7 +1201,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -1260,7 +1281,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -1296,7 +1320,8 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1313,7 +1338,7 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -1352,7 +1377,7 @@ Shader "2DCloudShadows"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1397,10 +1422,13 @@ Shader "2DCloudShadows"
 					#endif
 				#endif
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord2.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -1419,7 +1447,7 @@ Shader "2DCloudShadows"
 				voroi285 /= rest285;
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -1482,7 +1510,7 @@ Shader "2DCloudShadows"
 				float3 ase_normal : NORMAL;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1495,12 +1523,13 @@ Shader "2DCloudShadows"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 				float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -1534,7 +1563,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -1613,7 +1643,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -1651,7 +1684,8 @@ Shader "2DCloudShadows"
 				float3 ase_normal : NORMAL;
 				float4 texcoord1 : TEXCOORD1;
 				float4 texcoord2 : TEXCOORD2;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1670,7 +1704,7 @@ Shader "2DCloudShadows"
 				o.ase_normal = v.ase_normal;
 				o.texcoord1 = v.texcoord1;
 				o.texcoord2 = v.texcoord2;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -1711,7 +1745,7 @@ Shader "2DCloudShadows"
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
 				o.texcoord1 = patch[0].texcoord1 * bary.x + patch[1].texcoord1 * bary.y + patch[2].texcoord1 * bary.z;
 				o.texcoord2 = patch[0].texcoord2 * bary.x + patch[1].texcoord2 * bary.y + patch[2].texcoord2 * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -1747,10 +1781,13 @@ Shader "2DCloudShadows"
 					#endif
 				#endif
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord2.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -1770,9 +1807,9 @@ Shader "2DCloudShadows"
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
 				
-				float3 Albedo = ( temp_output_230_0 * _CloudColor ).rgb;
+				float3 Albedo = ( temp_output_307_0 * ( temp_output_230_0 * _CloudColor ) ).rgb;
 				float3 Emission = 0;
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 
 				#ifdef _ALPHATEST_ON
@@ -1832,7 +1869,7 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -1845,12 +1882,13 @@ Shader "2DCloudShadows"
 				#if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR) && defined(ASE_NEEDS_FRAG_SHADOWCOORDS)
 				float4 shadowCoord : TEXCOORD1;
 				#endif
-				
+				float4 ase_texcoord2 : TEXCOORD2;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -1884,7 +1922,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -1963,7 +2002,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID( v, o );
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO( o );
 
+				o.ase_texcoord2.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord2.zw = 0;
 				
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
@@ -2002,7 +2044,8 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2019,7 +2062,7 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -2058,7 +2101,7 @@ Shader "2DCloudShadows"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -2094,10 +2137,13 @@ Shader "2DCloudShadows"
 					#endif
 				#endif
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord2.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -2117,8 +2163,8 @@ Shader "2DCloudShadows"
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
 				
-				float3 Albedo = ( temp_output_230_0 * _CloudColor ).rgb;
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float3 Albedo = ( temp_output_307_0 * ( temp_output_230_0 * _CloudColor ) ).rgb;
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 
 				half4 color = half4( Albedo, Alpha );
@@ -2172,7 +2218,7 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : POSITION;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2186,12 +2232,13 @@ Shader "2DCloudShadows"
 				float4 shadowCoord : TEXCOORD1;
 				#endif
 				float3 worldNormal : TEXCOORD2;
-				
+				float4 ase_texcoord3 : TEXCOORD3;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -2225,7 +2272,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -2304,7 +2352,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord3.xy = v.ase_texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord3.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -2343,7 +2394,8 @@ Shader "2DCloudShadows"
 			{
 				float4 vertex : INTERNALTESSPOS;
 				float3 ase_normal : NORMAL;
-				
+				float4 ase_texcoord : TEXCOORD0;
+
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 			};
 
@@ -2360,7 +2412,7 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				o.vertex = v.vertex;
 				o.ase_normal = v.ase_normal;
-				
+				o.ase_texcoord = v.ase_texcoord;
 				return o;
 			}
 
@@ -2399,7 +2451,7 @@ Shader "2DCloudShadows"
 				VertexInput o = (VertexInput) 0;
 				o.vertex = patch[0].vertex * bary.x + patch[1].vertex * bary.y + patch[2].vertex * bary.z;
 				o.ase_normal = patch[0].ase_normal * bary.x + patch[1].ase_normal * bary.y + patch[2].ase_normal * bary.z;
-				
+				o.ase_texcoord = patch[0].ase_texcoord * bary.x + patch[1].ase_texcoord * bary.y + patch[2].ase_texcoord * bary.z;
 				#if defined(ASE_PHONG_TESSELLATION)
 				float3 pp[3];
 				for (int i = 0; i < 3; ++i)
@@ -2444,10 +2496,13 @@ Shader "2DCloudShadows"
 					#endif
 				#endif
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord3.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -2466,7 +2521,7 @@ Shader "2DCloudShadows"
 				voroi285 /= rest285;
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 				#ifdef ASE_DEPTH_WRITE_ON
 				float DepthValue = 0;
@@ -2573,12 +2628,13 @@ Shader "2DCloudShadows"
 				#if defined(ASE_NEEDS_FRAG_SCREEN_POSITION)
 				float4 screenPos : TEXCOORD6;
 				#endif
-				
+				float4 ase_texcoord7 : TEXCOORD7;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
 
 			CBUFFER_START(UnityPerMaterial)
+			float4 _Texture0_ST;
 			float4 _CloudColor;
 			float2 _CloudSpeed;
 			float _MainNoise;
@@ -2612,7 +2668,8 @@ Shader "2DCloudShadows"
 				float _TessMaxDisp;
 			#endif
 			CBUFFER_END
-			
+			sampler2D _Texture0;
+
 
 			inline float noise_randomValue (float2 uv) { return frac(sin(dot(uv, float2(12.9898, 78.233)))*43758.5453); }
 			inline float noise_interpolate (float a, float b, float t) { return (1.0-t)*a + (t*b); }
@@ -2691,7 +2748,10 @@ Shader "2DCloudShadows"
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 
+				o.ase_texcoord7.xy = v.texcoord.xy;
 				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord7.zw = 0;
 				#ifdef ASE_ABSOLUTE_VERTEX_POS
 					float3 defaultVertexValue = v.vertex.xyz;
 				#else
@@ -2876,10 +2936,13 @@ Shader "2DCloudShadows"
 	
 				WorldViewDirection = SafeNormalize( WorldViewDirection );
 
-				float2 temp_cast_0 = (_CloudSpeed.x).xx;
+				float4 color308 = IsGammaSpace() ? float4(1,0,1,0) : float4(1,0,1,0);
+				float2 uv_Texture0 = IN.ase_texcoord7.xy * _Texture0_ST.xy + _Texture0_ST.zw;
+				float temp_output_307_0 = saturate( ( 1.0 - ( ( distance( color308.rgb , tex2D( _Texture0, uv_Texture0 ).rgb ) - 0.0 ) / max( 0.0 , 1E-05 ) ) ) );
+				float2 temp_cast_2 = (_CloudSpeed.x).xx;
 				float temp_output_209_0 = ( 1.0 / 16.0 );
 				float3 temp_output_217_0 = ( floor( ( WorldPosition / temp_output_209_0 ) ) * temp_output_209_0 );
-				float2 panner296 = ( _TimeParameters.x * temp_cast_0 + temp_output_217_0.xy);
+				float2 panner296 = ( _TimeParameters.x * temp_cast_2 + temp_output_217_0.xy);
 				float simpleNoise219 = SimpleNoise( panner296*_MainNoise );
 				float time285 = 2.0;
 				float voronoiSmooth0 = _EdgeSmooth;
@@ -2898,14 +2961,14 @@ Shader "2DCloudShadows"
 				voroi285 /= rest285;
 				float temp_output_230_0 = (0.3 + (( simpleNoise219 * voroi285 ) - -1.0) * (0.95 - 0.3) / (1.0 - -1.0));
 				
-				float3 Albedo = ( temp_output_230_0 * _CloudColor ).rgb;
+				float3 Albedo = ( temp_output_307_0 * ( temp_output_230_0 * _CloudColor ) ).rgb;
 				float3 Normal = float3(0, 0, 1);
 				float3 Emission = 0;
 				float3 Specular = 0.5;
 				float Metallic = 0;
 				float Smoothness = 0.5;
 				float Occlusion = 1;
-				float Alpha = ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha );
+				float Alpha = ( temp_output_307_0 * ( ( ( step( temp_output_230_0 , _ShadowSize1 ) * _ShadowDark1 ) + ( step( temp_output_230_0 , _ShadowSize2 ) * _ShadowDark2 ) + ( step( temp_output_230_0 , _ShadowSize3 ) * _ShadowDark3 ) ) * _Alpha ) );
 				float AlphaClipThreshold = 0.5;
 				float AlphaClipThresholdShadow = 0.5;
 				float3 BakedGI = 0;
@@ -3060,7 +3123,7 @@ Shader "2DCloudShadows"
 }
 /*ASEBEGIN
 Version=18900
-0;689;1513;302;-438.0764;-583.1532;1.066916;True;False
+0;638;1513;353;698.7192;-37.498;2.361039;True;False
 Node;AmplifyShaderEditor.RangedFloatNode;213;-1904,736;Inherit;False;Constant;_PixelSize;PixelSize;0;0;Create;True;0;0;0;False;0;False;16;16;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;208;-1920,656;Inherit;False;Constant;_PixelDivision;PixelDivision;4;0;Create;True;0;0;0;False;0;False;1;0.4;0;0;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleDivideOpNode;209;-1764.384,654.944;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
@@ -3076,38 +3139,44 @@ Node;AmplifyShaderEditor.Vector2Node;298;-1184,384;Inherit;False;Property;_Cloud
 Node;AmplifyShaderEditor.RangedFloatNode;240;-1184,976;Inherit;False;Property;_EdgeNoise;EdgeNoise;7;0;Create;True;0;0;0;False;0;False;2.624792;0.08;0;10;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;299;-1184,1056;Inherit;False;Property;_EdgeSmooth;EdgeSmooth;10;0;Create;True;0;0;0;False;0;False;0.5;1.87;0;2;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;261;-880,736;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;FLOAT;0;False;1;FLOAT3;0
-Node;AmplifyShaderEditor.PannerNode;296;-912,496;Inherit;True;3;0;FLOAT2;0,0;False;2;FLOAT2;0.1,0.1;False;1;FLOAT;1;False;1;FLOAT2;0
 Node;AmplifyShaderEditor.RangedFloatNode;241;-928,416;Inherit;False;Property;_MainNoise;MainNoise;9;0;Create;True;0;0;0;False;0;False;0.2;1.64;0;10;0;1;FLOAT;0
+Node;AmplifyShaderEditor.PannerNode;296;-912,496;Inherit;True;3;0;FLOAT2;0,0;False;2;FLOAT2;0.1,0.1;False;1;FLOAT;1;False;1;FLOAT2;0
 Node;AmplifyShaderEditor.NoiseGeneratorNode;219;-656,496;Inherit;True;Simple;True;False;2;0;FLOAT2;0,0;False;1;FLOAT;0.1;False;1;FLOAT;0
 Node;AmplifyShaderEditor.VoronoiNode;285;-704,752;Inherit;True;0;4;5;0;8;False;1;False;True;4;0;FLOAT2;0,0;False;1;FLOAT;2;False;2;FLOAT;1;False;3;FLOAT;0;False;3;FLOAT;0;FLOAT2;1;FLOAT2;2
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;272;-416,496;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;237;-272,800;Inherit;False;Property;_ShadowSize1;ShadowSize1;4;0;Create;True;0;0;0;False;0;False;1;0.513;0.5;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;280;-272,928;Inherit;False;Property;_ShadowSize3;ShadowSize3;6;0;Create;True;0;0;0;False;0;False;1;0.5;0.5;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;238;-272,864;Inherit;False;Property;_ShadowSize2;ShadowSize2;5;0;Create;True;0;0;0;False;0;False;1;0.5;0.5;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.TFHCRemapNode;230;-272,496;Inherit;True;5;0;FLOAT;0;False;1;FLOAT;-1;False;2;FLOAT;1;False;3;FLOAT;0.3;False;4;FLOAT;0.95;False;1;FLOAT;0
 Node;AmplifyShaderEditor.CommentaryNode;300;240,880;Inherit;False;285.0251;260.0289;ShadowDark;3;282;235;236;ShadowDark;0,0,0,1;0;0
-Node;AmplifyShaderEditor.RangedFloatNode;238;-272,864;Inherit;False;Property;_ShadowSize2;ShadowSize2;5;0;Create;True;0;0;0;False;0;False;1;0.5;0.5;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.StepOpNode;281;32,912;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.63;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;282;256,1056;Inherit;False;Property;_ShadowDark3;ShadowDark3;2;0;Create;True;0;0;0;False;0;False;0.7068362;0.158;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;235;256,992;Inherit;False;Property;_ShadowDark2;ShadowDark2;0;0;Create;True;0;0;0;False;0;False;1;0.158;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;237;-272,800;Inherit;False;Property;_ShadowSize1;ShadowSize1;4;0;Create;True;0;0;0;False;0;False;1;0.513;0.5;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;280;-272,928;Inherit;False;Property;_ShadowSize3;ShadowSize3;6;0;Create;True;0;0;0;False;0;False;1;0.5;0.5;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;236;256,928;Inherit;False;Property;_ShadowDark1;ShadowDark1;3;0;Create;True;0;0;0;False;0;False;1;0.117;0;1;0;1;FLOAT;0
-Node;AmplifyShaderEditor.StepOpNode;231;32,704;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.63;False;1;FLOAT;0
 Node;AmplifyShaderEditor.StepOpNode;225;32,496;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.6;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;232;640,720;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.SimpleMultiplyOpNode;226;640,512;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.StepOpNode;231;32,704;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.63;False;1;FLOAT;0
+Node;AmplifyShaderEditor.StepOpNode;281;32,912;Inherit;True;2;0;FLOAT;0;False;1;FLOAT;0.63;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;235;256,992;Inherit;False;Property;_ShadowDark2;ShadowDark2;0;0;Create;True;0;0;0;False;0;False;1;0.158;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;282;256,1056;Inherit;False;Property;_ShadowDark3;ShadowDark3;2;0;Create;True;0;0;0;False;0;False;0.7068362;0.158;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;283;640,928;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.RangedFloatNode;302;1289.475,773.0642;Inherit;False;Property;_Alpha;Alpha;12;0;Create;True;0;0;0;False;0;False;1;1;0;1;0;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;226;640,512;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.TexturePropertyNode;305;384,-64;Inherit;True;Property;_Texture0;Texture 0;13;0;Create;True;0;0;0;False;0;False;d8844b45c8e11f54cb8ca68d1e7db6e9;None;False;white;Auto;Texture2D;-1;0;2;SAMPLER2D;0;SAMPLERSTATE;1
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;232;640,720;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.ColorNode;224;1232,320;Inherit;False;Property;_CloudColor;CloudColor;1;0;Create;True;0;0;0;False;0;False;0.6462264,0.9748523,1,1;1,1,1,1;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.ColorNode;308;688,144;Inherit;False;Constant;_Color0;Color 0;14;0;Create;True;0;0;0;False;0;False;1,0,1,0;0,0,0,0;True;0;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.SamplerNode;303;592,-64;Inherit;True;Property;_TextureSample0;Texture Sample 0;13;0;Create;True;0;0;0;False;0;False;-1;None;None;True;0;False;white;Auto;False;Object;-1;Auto;Texture2D;8;0;SAMPLER2D;;False;1;FLOAT2;0,0;False;2;FLOAT;0;False;3;FLOAT2;0,0;False;4;FLOAT2;0,0;False;5;FLOAT;1;False;6;FLOAT;0;False;7;SAMPLERSTATE;;False;5;COLOR;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+Node;AmplifyShaderEditor.RangedFloatNode;302;1289.475,773.0642;Inherit;False;Property;_Alpha;Alpha;12;0;Create;True;0;0;0;False;0;False;1;1;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleAddOpNode;234;976,704;Inherit;True;3;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;277;1472,448;Inherit;False;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;301;1391.899,611.96;Inherit;False;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;192;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;197;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.FunctionNode;307;992,-64;Inherit;True;Color Mask;-1;;1;eec747d987850564c95bde0e5a6d1867;0;4;1;FLOAT3;0,0,0;False;3;FLOAT3;0,0,0;False;4;FLOAT;0;False;5;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;309;1620.643,275.4991;Inherit;True;2;2;0;FLOAT;0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
+Node;AmplifyShaderEditor.SimpleMultiplyOpNode;310;1589.128,530.9551;Inherit;True;2;2;0;FLOAT;0;False;1;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;193;1827.621,457.836;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;2DCloudShadows;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;1;Surface;1;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;0;  Transmission Shadow;0.5,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;199;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;GBuffer;0;7;GBuffer;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalGBuffer;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;192;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ExtraPrePass;0;0;ExtraPrePass;5;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;0;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;198;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthNormals;0;6;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=DepthNormals;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;197;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Universal2D;0;5;Universal2D;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;False;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=Universal2D;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;196;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;Meta;0;4;Meta;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;2;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=Meta;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;193;1604.66,438.278;Float;False;True;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;2DCloudShadows;94348b07e5e8bab40bd6c8a1e3df54cd;True;Forward;0;1;Forward;18;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Transparent=RenderType;Queue=Transparent=Queue=0;True;0;0;False;True;1;5;False;-1;10;False;-1;1;1;False;-1;10;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;-1;False;False;False;False;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;False;True;2;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;LightMode=UniversalForward;False;0;Hidden/InternalErrorShader;0;0;Standard;38;Workflow;1;Surface;1;  Refraction Model;0;  Blend;0;Two Sided;1;Fragment Normal Space,InvertActionOnDeselection;0;Transmission;0;  Transmission Shadow;0.5,False,-1;Translucency;0;  Translucency Strength;1,False,-1;  Normal Distortion;0.5,False,-1;  Scattering;2,False,-1;  Direct;0.9,False,-1;  Ambient;0.1,False,-1;  Shadow;0.5,False,-1;Cast Shadows;1;  Use Shadow Threshold;0;Receive Shadows;1;GPU Instancing;1;LOD CrossFade;1;Built-in Fog;1;_FinalColorxAlpha;0;Meta Pass;1;Override Baked GI;0;Extra Pre Pass;0;DOTS Instancing;0;Tessellation;0;  Phong;0;  Strength;0.5,False,-1;  Type;0;  Tess;16,False,-1;  Min;10,False,-1;  Max;25,False,-1;  Edge Length;16,False,-1;  Max Displacement;25,False,-1;Write Depth;0;  Early Z;0;Vertex Position,InvertActionOnDeselection;1;0;8;False;True;True;True;True;True;True;True;False;;False;0
-Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;195;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;194;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;ShadowCaster;0;2;ShadowCaster;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;-1;True;3;False;-1;False;True;1;LightMode=ShadowCaster;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
+Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;195;1239.653,427.85;Float;False;False;-1;2;UnityEditor.ShaderGraph.PBRMasterGUI;0;2;New Amplify Shader;94348b07e5e8bab40bd6c8a1e3df54cd;True;DepthOnly;0;3;DepthOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;True;0;False;-1;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;3;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;True;0;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;-1;False;False;False;True;False;False;False;False;0;False;-1;False;False;False;False;False;False;False;False;False;True;1;False;-1;False;False;True;1;LightMode=DepthOnly;False;0;Hidden/InternalErrorShader;0;0;Standard;0;False;0
 WireConnection;209;0;208;0
 WireConnection;209;1;213;0
 WireConnection;211;0;218;0
@@ -3130,18 +3199,19 @@ WireConnection;285;3;299;0
 WireConnection;272;0;219;0
 WireConnection;272;1;285;0
 WireConnection;230;0;272;0
-WireConnection;281;0;230;0
-WireConnection;281;1;280;0
-WireConnection;231;0;230;0
-WireConnection;231;1;238;0
 WireConnection;225;0;230;0
 WireConnection;225;1;237;0
-WireConnection;232;0;231;0
-WireConnection;232;1;235;0
-WireConnection;226;0;225;0
-WireConnection;226;1;236;0
+WireConnection;231;0;230;0
+WireConnection;231;1;238;0
+WireConnection;281;0;230;0
+WireConnection;281;1;280;0
 WireConnection;283;0;281;0
 WireConnection;283;1;282;0
+WireConnection;226;0;225;0
+WireConnection;226;1;236;0
+WireConnection;232;0;231;0
+WireConnection;232;1;235;0
+WireConnection;303;0;305;0
 WireConnection;234;0;226;0
 WireConnection;234;1;232;0
 WireConnection;234;2;283;0
@@ -3149,7 +3219,13 @@ WireConnection;277;0;230;0
 WireConnection;277;1;224;0
 WireConnection;301;0;234;0
 WireConnection;301;1;302;0
-WireConnection;193;0;277;0
-WireConnection;193;6;301;0
+WireConnection;307;1;303;0
+WireConnection;307;3;308;0
+WireConnection;309;0;307;0
+WireConnection;309;1;277;0
+WireConnection;310;0;307;0
+WireConnection;310;1;301;0
+WireConnection;193;0;309;0
+WireConnection;193;6;310;0
 ASEEND*/
-//CHKSM=65CB0857D4AF5898DC8198440613E65E01A3B2A1
+//CHKSM=AD4BF1244E73F58A0F731B4F5B19A0EE27CA8FBC
