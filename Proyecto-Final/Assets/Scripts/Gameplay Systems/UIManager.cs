@@ -1,8 +1,14 @@
-using System.Collections;
-using TMPro;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
+/// <summary>
+/// UIManager actualizado para:
+/// - Presionar “1–5” una vez: selecciona la semilla en ese slot (modo plantación, como antes).
+/// - Presionar “1–5” dos veces rápidamente (dos pulsaciones consecutivas del mismo número): entra en “modo intercambio” de ese slot.
+///   Luego, la siguiente tecla “1–5” (diferente) intercambia los dos slots.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("HEALTH BAR")]
@@ -34,7 +40,7 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject HUD;
     public GameObject pausePanel;
-    public GameObject seedSlots;
+    public GameObject seedSlots;                       // Contenedor general de los slots de semillas
     [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
@@ -46,7 +52,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
     [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[5];
 
-    [Header("SELECTION")]
+    [Header("SELECTION COLORS")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
     [SerializeField] private Color selectedColor = Color.white;
     [SerializeField] private float selectedScale = 1.2f;
@@ -83,6 +89,14 @@ public class UIManager : MonoBehaviour
     private PauseMenu pauseMenu;
     private Coroutine fadeCoroutine;
 
+    // --- Variables para detectar “doble pulsación” en teclas 1..5 ---
+    private int lastPressSlot = -1;            // Índice del slot (0..4) presionado en la última tecla
+    private float lastPressTime = 0f;          // Momento de la última pulsación
+    [SerializeField] private float doublePressThreshold = 0.3f; // Intervalo máximo (segundos) para reconocer doble pulsación
+
+    // --- Variables para el “intercambio” de slots ---
+    private int pendingSwapSlot = -1;          // Índice del primer slot seleccionado para intercambio, o -1 si ninguno
+
     void Start()
     {
         InitializeReferences();
@@ -107,32 +121,25 @@ public class UIManager : MonoBehaviour
         CheckGameStateChanges();
         HandleGameOverState();
         HandleInventoryInput();
+        HandleSeedSlotInput(); // Ahora maneja selección única y doble pulsación para intercambio
     }
 
     private void OnDestroy()
     {
         if (SeedInventory.Instance != null)
-        {
             SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
-        }
 
         if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
-        {
             abilitySystem.OnAbilityChanged -= OnAbilityChanged;
-        }
     }
 
     private void InitializeReferences()
     {
         if (player == null)
-        {
             player = GameObject.FindGameObjectWithTag("Player");
-        }
 
         if (pauseMenu == null)
-        {
             pauseMenu = FindObjectOfType<PauseMenu>();
-        }
 
         if (player != null)
         {
@@ -162,38 +169,27 @@ public class UIManager : MonoBehaviour
         }
 
         if (SeedInventory.Instance != null)
-        {
             SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
-        }
 
         if (startNightButton != null)
-        {
             startNightButton.onClick.AddListener(OnStartNightButtonClicked);
-        }
 
         if (instructionsButton != null)
-        {
             instructionsButton.onClick.AddListener(OpenInstructions);
-        }
 
         if (closeInstructionsButton != null)
-        {
             closeInstructionsButton.onClick.AddListener(CloseInstructions);
-        }
 
         if (continueButton != null && pauseMenu != null)
-        {
             continueButton.onClick.AddListener(pauseMenu.Resume);
-        }
 
         if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
-        {
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
-        }
     }
 
     private void InitializeUI()
     {
+        // Desactivar parcialmente los slots si no está en modo “Planting”
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
             seedSlotsCanvasGroup.alpha = 0.5f;
@@ -202,9 +198,7 @@ public class UIManager : MonoBehaviour
         }
 
         if (gameOverPanel != null)
-        {
             gameOverPanel.SetActive(false);
-        }
 
         if (instructionsPanel != null)
         {
@@ -225,14 +219,10 @@ public class UIManager : MonoBehaviour
     private void InitializeInventory()
     {
         if (inventoryPanel == null)
-        {
             inventoryPanel = GameObject.FindGameObjectWithTag("InventoryPanel");
-        }
 
         if (inventoryUI == null && inventoryPanel != null)
-        {
             inventoryUI = inventoryPanel.GetComponent<InventoryUI>();
-        }
 
         if (inventoryPanel != null)
         {
@@ -241,39 +231,37 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Llena los 5 slots según lo que tenga SeedInventory. 
+    /// </summary>
     public void InitializeSeedSlotsUI()
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
-            if (slotObjects[i] != null)
+            if (slotObjects[i] == null) continue;
+
+            PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
+
+            if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
             {
-                PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
-
-                if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
+                if (slotIcons[i] != null)
                 {
-                    if (slotIcons[i] != null)
-                    {
-                        slotIcons[i].sprite = plantSlot.plantIcon;
-                        slotIcons[i].preserveAspect = true;
-                        slotIcons[i].gameObject.SetActive(true);
-                    }
-
-                    if (slotNumbers[i] != null)
-                    {
-                        slotNumbers[i].text = (i + 1).ToString();
-                    }
-
-                    if (seedCount[i] != null)
-                    {
-                        seedCount[i].text = plantSlot.seedCount.ToString();
-                    }
+                    slotIcons[i].sprite = plantSlot.plantIcon;
+                    slotIcons[i].preserveAspect = true;
+                    slotIcons[i].gameObject.SetActive(true);
                 }
-                else
-                {
-                    if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
-                    if (slotNumbers[i] != null) slotNumbers[i].text = "";
-                    if (seedCount[i] != null) seedCount[i].text = "";
-                }
+
+                if (slotNumbers[i] != null)
+                    slotNumbers[i].text = (i + 1).ToString();
+
+                if (seedCount[i] != null)
+                    seedCount[i].text = plantSlot.seedCount.ToString();
+            }
+            else
+            {
+                if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
+                if (slotNumbers[i] != null) slotNumbers[i].text = "";
+                if (seedCount[i] != null) seedCount[i].text = "";
             }
         }
     }
@@ -302,8 +290,6 @@ public class UIManager : MonoBehaviour
 
     public void UpdateHomeHealthBar(float currentHealth, float maxHealth)
     {
-        Debug.Log($"Home Health Updated: {currentHealth}/{maxHealth}");
-
         if (homeHealthBar != null)
         {
             homeHealthBar.value = currentHealth;
@@ -311,17 +297,13 @@ public class UIManager : MonoBehaviour
         }
 
         if (homeHealthText != null)
-        {
             homeHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
-        }
     }
 
     private void UpdateHomeFillColor(float healthPercentage)
     {
         if (homeFillImage != null && homeHealthGradient != null)
-        {
             homeFillImage.color = homeHealthGradient.Evaluate(healthPercentage);
-        }
     }
 
     private void CheckGameStateChanges()
@@ -344,45 +326,42 @@ public class UIManager : MonoBehaviour
     private void HandleGameOverState()
     {
         if (gameOverPanel != null && gameOverPanel.activeInHierarchy && HUD != null)
-        {
             HUD.SetActive(false);
-        }
     }
 
     private void UpdateUIElementsVisibility()
     {
-        if (GameManager.Instance != null)
-        {
-            bool isDayOrAbilityState = GameManager.Instance.currentGameState == GameState.Day ||
-                                       GameManager.Instance.currentGameState == GameState.Digging ||
-                                       GameManager.Instance.currentGameState == GameState.Planting ||
-                                       GameManager.Instance.currentGameState == GameState.Harvesting ||
-                                       GameManager.Instance.currentGameState == GameState.Removing;
+        if (GameManager.Instance == null) return;
 
-            if (isDayOrAbilityState)
-            {
-                if (seedSlots != null) seedSlots.gameObject.SetActive(true && !isInstructionsOpen);
-                if (dayControlPanel != null) dayControlPanel.SetActive(true && !isInstructionsOpen);
-                if (startNightButton != null) startNightButton.gameObject.SetActive(true && !isInstructionsOpen);
-            }
-            else
-            {
-                if (seedSlots != null) seedSlots.gameObject.SetActive(false);
-                if (dayControlPanel != null) dayControlPanel.SetActive(false);
-                if (startNightButton != null) startNightButton.gameObject.SetActive(false);
-            }
+        bool isDayOrAbilityState =
+            GameManager.Instance.currentGameState == GameState.Day ||
+            GameManager.Instance.currentGameState == GameState.Digging ||
+            GameManager.Instance.currentGameState == GameState.Planting ||
+            GameManager.Instance.currentGameState == GameState.Harvesting ||
+            GameManager.Instance.currentGameState == GameState.Removing;
+
+        if (isDayOrAbilityState)
+        {
+            if (seedSlots != null) seedSlots.SetActive(!isInstructionsOpen);
+            if (dayControlPanel != null) dayControlPanel.SetActive(!isInstructionsOpen);
+            if (startNightButton != null) startNightButton.gameObject.SetActive(!isInstructionsOpen);
+        }
+        else
+        {
+            if (seedSlots != null) seedSlots.SetActive(false);
+            if (dayControlPanel != null) dayControlPanel.SetActive(false);
+            if (startNightButton != null) startNightButton.gameObject.SetActive(false);
         }
     }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
-        
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
             UpdateFillColor(currentHealth / maxHealth);
         }
-       
+
         float damageTaken = lastPlayerHealth - currentHealth;
         if (damageTaken > 0f && floatingDamagePrefab != null)
         {
@@ -392,80 +371,67 @@ public class UIManager : MonoBehaviour
         }
 
         if (currentHealth < lastPlayerHealth)
-        {
             TributeSystem.Instance?.NotifyPlayerDamaged();
-        }
 
         lastPlayerHealth = currentHealth;
 
         if (playerHealthText != null)
-        {
             playerHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
-        }
     }
-
 
     private void UpdateFillColor(float healthPercentage)
     {
         if (fillImage != null && healthGradient != null)
-        {
             fillImage.color = healthGradient.Evaluate(healthPercentage);
-        }
     }
 
     private void UpdateSelectedSlotUI(int selectedIndex)
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
-            if (slotBackgrounds[i] != null)
-            {
-                slotBackgrounds[i].color = (i == selectedIndex) ? selectedColor : normalColor;
-                slotObjects[i].transform.localScale = (i == selectedIndex) ?
-                    new Vector3(selectedScale, selectedScale, 1f) :
-                    new Vector3(normalScale, normalScale, 1f);
-            }
+            if (slotBackgrounds[i] == null) continue;
+
+            bool isSelected = (i == selectedIndex);
+            slotBackgrounds[i].color = isSelected ? selectedColor : normalColor;
+            slotObjects[i].transform.localScale = isSelected
+                ? new Vector3(selectedScale, selectedScale, 1f)
+                : new Vector3(normalScale, normalScale, 1f);
         }
     }
 
     private void UpdateAbilityUIVisibility()
     {
-        if (abilityPanel == null || GameManager.Instance == null)
-            return;
+        if (abilityPanel == null || GameManager.Instance == null) return;
 
-        if (GameManager.Instance.currentGameState != GameState.Night)
-            abilityPanel.SetActive(true);
-        else if (GameManager.Instance.currentGameState == GameState.Night)
-            abilityPanel.SetActive(false);
+        abilityPanel.SetActive(GameManager.Instance.currentGameState != GameState.Night);
     }
 
     private void HandleInventoryInput()
     {
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
-        {
             ToggleInventory();
-        }
+
         if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
-        {
             CloseInventory();
-        }
     }
 
     public void ToggleInventory()
     {
         if (isInventoryOpen)
-        {
             CloseInventory();
-        }
         else
-        {
             OpenInventory();
-        }
     }
 
     public void OpenInventory()
     {
         if (inventoryPanel == null || isInstructionsOpen) return;
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night || GameManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.currentGameState == GameState.OnCrafting || GameManager.Instance.currentGameState == GameState.GameOver || GameManager.Instance.currentGameState == GameState.OnAltarRestoration)
+        if (GameManager.Instance != null &&
+            (GameManager.Instance.currentGameState == GameState.Night ||
+             GameManager.Instance.currentGameState == GameState.Paused ||
+             GameManager.Instance.currentGameState == GameState.OnCrafting ||
+             GameManager.Instance.currentGameState == GameState.GameOver ||
+             GameManager.Instance.currentGameState == GameState.OnAltarRestoration))
         {
             return;
         }
@@ -480,12 +446,9 @@ public class UIManager : MonoBehaviour
         }
 
         if (disablePlayerMovementWhenOpen && playerController != null)
-        {
             playerController.SetMovementEnabled(false);
-        }
 
         GameManager.Instance?.SetGameState(GameState.OnInventory);
-
         Debug.Log("Inventario abierto");
     }
 
@@ -496,14 +459,10 @@ public class UIManager : MonoBehaviour
         isInventoryOpen = false;
 
         if (disablePlayerMovementWhenOpen && playerController != null)
-        {
             playerController.SetMovementEnabled(true);
-        }
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
-        {
             GameManager.Instance.SetGameState(GameState.Digging);
-        }
 
         Debug.Log("Inventario cerrado");
     }
@@ -528,9 +487,7 @@ public class UIManager : MonoBehaviour
         openedFromPauseMenu = pausePanel != null && pausePanel.activeSelf;
 
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Paused)
-        {
             lastState = GameManager.Instance.currentGameState;
-        }
 
         if (HUD != null) HUD.SetActive(false);
         if (seedSlots != null) seedSlots.SetActive(false);
@@ -538,23 +495,16 @@ public class UIManager : MonoBehaviour
         if (inventoryPanel != null && isInventoryOpen) inventoryPanel.SetActive(false);
         if (startNightButton != null) startNightButton.gameObject.SetActive(false);
 
-        if (pausePanel != null)
-        {
-            pausePanel.SetActive(false);
-        }
+        if (pausePanel != null) pausePanel.SetActive(false);
 
         instructionsPanel.SetActive(true);
         isInstructionsOpen = true;
 
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.SetGameState(GameState.Paused);
-        }
 
         if (playerController != null)
-        {
             playerController.SetMovementEnabled(false);
-        }
     }
 
     public void CloseInstructions()
@@ -571,9 +521,7 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 0f;
 
             if (HUD != null)
-            {
                 HUD.SetActive(false);
-            }
         }
         else
         {
@@ -581,14 +529,10 @@ public class UIManager : MonoBehaviour
             UpdateUIElementsVisibility();
 
             if (playerController != null)
-            {
                 playerController.SetMovementEnabled(true);
-            }
 
             if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Paused)
-            {
                 GameManager.Instance.SetGameState(lastState);
-            }
         }
 
         Debug.Log("Panel de instrucciones cerrado");
@@ -599,32 +543,25 @@ public class UIManager : MonoBehaviour
     private void OnStartNightButtonClicked()
     {
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Night)
-        {
             GameManager.Instance.ManualTransitionToNight();
-        }
     }
 
     public void UpdateManaUI()
     {
-        if (manaBar != null && manaSystem != null)
-        {
-            float current = manaSystem.GetCurrentMana();
-            float max = manaSystem.GetMaxMana();
-            float percent = current / max;
+        if (manaBar == null || manaSystem == null) return;
 
-            manaBar.maxValue = max;
-            manaBar.value = current;
+        float current = manaSystem.GetCurrentMana();
+        float max = manaSystem.GetMaxMana();
+        float percent = current / max;
 
-            if (manaFillImage != null && manaGradient != null)
-            {
-                manaFillImage.color = manaGradient.Evaluate(percent);
-            }
+        manaBar.maxValue = max;
+        manaBar.value = current;
 
-            if (manaText != null)
-            {
-                manaText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
-            }
-        }
+        if (manaFillImage != null && manaGradient != null)
+            manaFillImage.color = manaGradient.Evaluate(percent);
+
+        if (manaText != null)
+            manaText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
     }
 
     public void UpdateSeedCountsUI()
@@ -633,9 +570,7 @@ public class UIManager : MonoBehaviour
         {
             var slot = SeedInventory.Instance.GetPlantSlot(i);
             if (slot != null)
-            {
                 seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "-";
-            }
         }
     }
 
@@ -680,5 +615,153 @@ public class UIManager : MonoBehaviour
         seedSlotsCanvasGroup.alpha = targetAlpha;
         seedSlotsCanvasGroup.interactable = fadeIn;
         seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
+    }
+
+    // ----------------------------------------
+    // MÉTODOS PARA SELECCIÓN / INTERCAMBIO
+    // ----------------------------------------
+
+    /// <summary>
+    /// Detecta pulsaciones de teclas 1..5. 
+    /// - Una pulsación “simple” (out of double-press threshold) selecciona el slot (modo plantación). 
+    /// - Dos pulsaciones consecutivas del mismo número (dentro del threshold) activan “modo intercambio” para ese slot.
+    /// - Si ya está en “modo intercambio”, la siguiente tecla 1–5 (distinta o igual) define el segundo slot a intercambiar.
+    /// </summary>
+    private void HandleSeedSlotInput()
+    {
+        if (GameManager.Instance == null) return;
+        GameState state = GameManager.Instance.currentGameState;
+
+        // Solo se puede seleccionar/intercambiar en estados diurnos/plantación
+        bool validState = state == GameState.Day
+                        || state == GameState.Digging
+                        || state == GameState.Planting
+                        || state == GameState.Harvesting
+                        || state == GameState.Removing;
+        if (!validState) return;
+
+        for (int i = 0; i < 5; i++)
+        {
+            KeyCode key = KeyCode.Alpha1 + i;
+            if (Input.GetKeyDown(key))
+            {
+                OnSlotKeyPressed(i);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Lógica interna al pulsar el número de slot i:
+    /// - Si hay un pendingSwapSlot >= 0: se está en modo intercambio; intercambia con i.
+    /// - Si no hay pendingSwapSlot:
+    ///     • Si i == lastPressSlot y (Time.time – lastPressTime) < threshold: entra en modo intercambio, pendingSwapSlot = i.
+    ///     • Si no, hace “selección normal” de semilla i.
+    /// </summary>
+    private void OnSlotKeyPressed(int i)
+    {
+        float now = Time.time;
+
+        // Si está en modo “intercambio” (pendingSwapSlot != -1), hacemos swap con este i
+        if (pendingSwapSlot >= 0)
+        {
+            int first = pendingSwapSlot;
+            int second = i;
+
+            // Si presiona de nuevo el mismo índice, cancelamos modo intercambio
+            if (first == second)
+            {
+                HighlightSlot(first, false);
+                pendingSwapSlot = -1;
+                Debug.Log("Intercambio cancelado.");
+                return;
+            }
+
+            // Realizamos intercambio y salimos del modo
+            SwapSeedSlots(first, second);
+            HighlightSlot(first, false);
+            pendingSwapSlot = -1;
+
+            // Refrescar UI
+            InitializeSeedSlotsUI();
+            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
+
+            Debug.Log($"Slots intercambiados: {first + 1} ↔ {second + 1}");
+            return;
+        }
+
+        // Si no estamos en modo intercambio, comprobamos doble pulsación:
+        if (i == lastPressSlot && (now - lastPressTime) < doublePressThreshold)
+        {
+            // DOS PULSACIONES RÁPIDAS => entramos en modo intercambio
+            pendingSwapSlot = i;
+            HighlightSlot(i, true);
+            Debug.Log($"Modo intercambio ACTIVADO para slot {i + 1}. Elige otro (1–5).");
+        }
+        else
+        {
+            // Una sola pulsación => selección normal de semilla
+            SeedInventory.Instance.SelectSlot(i);
+            UpdateSelectedSlotUI(i);
+            Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
+        }
+
+        // Actualizamos datos de “última pulsación” para detectar un posible doble clic
+        lastPressSlot = i;
+        lastPressTime = now;
+    }
+
+    /// <summary>
+    /// Resalta o quita resaltado del slot idx (cambia color y escala).
+    /// </summary>
+    private void HighlightSlot(int idx, bool highlight)
+    {
+        if (idx < 0 || idx >= slotObjects.Length) return;
+
+        if (highlight)
+        {
+            slotBackgrounds[idx].color = selectedColor;
+            slotObjects[idx].transform.localScale = new Vector3(selectedScale, selectedScale, 1f);
+        }
+        else
+        {
+            slotBackgrounds[idx].color = normalColor;
+            slotObjects[idx].transform.localScale = new Vector3(normalScale, normalScale, 1f);
+        }
+    }
+
+    /// <summary>
+    /// Intercambia dos PlantSlot (índices a y b) dentro de SeedInventory.
+    /// </summary>
+    private void SwapSeedSlots(int a, int b)
+    {
+        PlantSlot slotA = SeedInventory.Instance.GetPlantSlot(a);
+        PlantSlot slotB = SeedInventory.Instance.GetPlantSlot(b);
+
+        if (slotA == null || slotB == null) return;
+
+        // Guardar datos de slotA en temporales
+        SeedsEnum tmpSeedType = slotA.seedType;
+        GameObject tmpPrefab = slotA.plantPrefab;
+        Sprite tmpIcon = slotA.plantIcon;
+        int tmpCount = slotA.seedCount;
+        int tmpDaysToGrow = slotA.daysToGrow;
+        string tmpDescription = slotA.description;
+
+        // Asignar datos de slotB a slotA
+        slotA.seedType = slotB.seedType;
+        slotA.plantPrefab = slotB.plantPrefab;
+        slotA.plantIcon = slotB.plantIcon;
+        slotA.seedCount = slotB.seedCount;
+        slotA.daysToGrow = slotB.daysToGrow;
+        slotA.description = slotB.description;
+
+        // Asignar datos de slotA temporales a slotB
+        slotB.seedType = tmpSeedType;
+        slotB.plantPrefab = tmpPrefab;
+        slotB.plantIcon = tmpIcon;
+        slotB.seedCount = tmpCount;
+        slotB.daysToGrow = tmpDaysToGrow;
+        slotB.description = tmpDescription;
     }
 }
