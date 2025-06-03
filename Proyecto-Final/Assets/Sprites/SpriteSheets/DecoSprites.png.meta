@@ -659,10 +659,10 @@ TextureImporter:
       name: AltarBase
       rect:
         serializedVersion: 2
-        x: 31
-        y: 97
-        width: 34
-        height: 24
+        x: 36
+        y: 65
+        width: 25
+        height: 27
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -697,6 +697,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Bush
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 130
+        width: 71
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a972eb317cd37e04fb2ab22828865d7e
+      internalID: 1786330580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BigShroom
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 144
+        width: 12
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f6db1dbe5e232349a34869de6aeb2ae
+      internalID: 1703350427
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -713,6 +755,8 @@ TextureImporter:
       AltarBase: 1439159968
       AltarEye: 1912961577
       Arbol: 81972283
+      BigShroom: 1703350427
+      Bush: 1786330580
       DecoSpriteSheet_0: 891556870
       DecoSpriteSheet_1: -999091792
       DecoSpriteSheet_10: -369731200

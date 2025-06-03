@@ -22,7 +22,15 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - _Texture0:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _Alpha: 1
@@ -31,17 +39,17 @@ Material:
     - _DarkPart: 0.331
     - _DarkSize: 0.738
     - _EdgeNoise: 0.1
-    - _EdgeSmooth: 0.5
-    - _MainNoise: 0.7
+    - _EdgeSmooth: 0
+    - _MainNoise: 0.3
     - _NoiseScale: 4
     - _PixelSize: 16
     - _PixelSize1: 476
-    - _ShadowDark1: 0.125
-    - _ShadowDark2: 0.05
-    - _ShadowDark3: 0.075
-    - _ShadowSize1: 0.654
-    - _ShadowSize2: 0.652
-    - _ShadowSize3: 0.65
+    - _ShadowDark1: 0
+    - _ShadowDark2: 0.1
+    - _ShadowDark3: 0.179
+    - _ShadowSize1: 0.5
+    - _ShadowSize2: 0.65
+    - _ShadowSize3: 0.655
     - _SoftPart: 0.515
     - _SoftSize: 0.703
     - _Speed: 0.1
@@ -50,7 +58,7 @@ Material:
     - _Worm: 0.5
     m_Colors:
     - _CloudColor: {r: 0, g: 0, b: 0, a: 0.9843137}
-    - _CloudSpeed: {r: 0.2, g: 0.2, b: 0, a: 0}
+    - _CloudSpeed: {r: 0.4, g: 0.2, b: 0, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _MainWater: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
     - _Water1: {r: 0.32549015, g: 0.7529413, b: 0.9254903, a: 1}

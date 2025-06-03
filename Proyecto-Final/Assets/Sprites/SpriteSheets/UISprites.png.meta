@@ -281,9 +281,9 @@ TextureImporter:
       name: HiddenBars
       rect:
         serializedVersion: 2
-        x: 16
+        x: 14
         y: 8
-        width: 63
+        width: 65
         height: 14
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -365,10 +365,10 @@ TextureImporter:
       name: FillHouse
       rect:
         serializedVersion: 2
-        x: 97
-        y: 20
-        width: 59
-        height: 5
+        x: 96
+        y: 21
+        width: 60
+        height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: FillHP
       rect:
         serializedVersion: 2
-        x: 97
+        x: 96
         y: 14
-        width: 59
-        height: 5
+        width: 60
+        height: 6
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -407,10 +407,10 @@ TextureImporter:
       name: FillMana
       rect:
         serializedVersion: 2
-        x: 97
-        y: 11
-        width: 59
-        height: 2
+        x: 96
+        y: 10
+        width: 60
+        height: 3
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,10 +428,10 @@ TextureImporter:
       name: HouseBar
       rect:
         serializedVersion: 2
-        x: 16
+        x: 14
         y: 21
-        width: 63
-        height: 7
+        width: 65
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
