@@ -34,7 +34,12 @@ public class UICursor : MonoBehaviour
             return;
         }
 
-        SetCursorForGameState(GameState.Digging);
+        GameState state = GameManager.Instance != null ? GameManager.Instance.currentGameState : GameState.MainMenu;
+        bool isGameplay = IsGameplayState(state);
+
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+        SetCursorForGameState(state);
         playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         cursorImage.transform.SetAsLastSibling();
     }
@@ -44,25 +49,30 @@ public class UICursor : MonoBehaviour
         if (GameManager.Instance == null)
             return;
 
-        if (grid == null || GameManager.Instance == null)
-        {
-            cursorImage.enabled = false;
-            return;
-        }
-
         GameState state = GameManager.Instance.currentGameState;
+        bool isGameplay = IsGameplayState(state);
 
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
-        if (!IsGameplayState(state))
+        if (isGameplay)
         {
-            Cursor.visible = true;
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            if (cursorImage != null) cursorImage.enabled = false;
-            return;
+            if (Cursor.visible)
+                Cursor.visible = false;
+
+            if (cursorImage != null && !cursorImage.enabled)
+                cursorImage.enabled = true;
+        }
+        else
+        {
+            if (!Cursor.visible)
+                Cursor.visible = true;
+
+            if (cursorImage != null && cursorImage.enabled)
+                cursorImage.enabled = false;
         }
 
-        Cursor.visible = false;
-        if (cursorImage != null) cursorImage.enabled = true;
+        if (!isGameplay || grid == null)
+            return;
 
         bool useTileSnap = IsUsingTileSnap(state);
         bool inRange = IsTargetInRange(state);
@@ -92,14 +102,7 @@ public class UICursor : MonoBehaviour
 
                 case GameState.Planting:
                     var tile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cellPos);
-                    if (plant != null)
-                    {
-                        cursorToUse = dayCursor;
-                    }
-                    else
-                    {
-                        cursorToUse = tile == playerAbilitySystem.tilledSoilTile ? activeCursor : dayCursor;
-                    }
+                    cursorToUse = (plant == null && tile == playerAbilitySystem.tilledSoilTile) ? activeCursor : dayCursor;
                     break;
 
                 case GameState.Harvesting:

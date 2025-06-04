@@ -20,7 +20,7 @@ public class SeedInventory : MonoBehaviour
     public static SeedInventory Instance;
 
     [Header("SEED INVENTORY")]
-    [SerializeField] private PlantSlot[] plantSlots = new PlantSlot[5];
+    [SerializeField] private PlantSlot[] plantSlots = new PlantSlot[9];
     [SerializeField] private int selectedSlotIndex = 0;
 
     [Header("UI EVENTS")]
@@ -58,7 +58,7 @@ public class SeedInventory : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 9; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {

@@ -46,11 +46,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject dayControlPanel;
 
     [Header("PLANT SLOTS")]
-    [SerializeField] private GameObject[] slotObjects = new GameObject[5];
-    [SerializeField] private Image[] slotIcons = new Image[5];
-    [SerializeField] private Image[] slotBackgrounds = new Image[5];
-    [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[5];
-    [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[5];
+    [SerializeField] private GameObject[] slotObjects = new GameObject[9];
+    [SerializeField] private Image[] slotIcons = new Image[9];
+    [SerializeField] private Image[] slotBackgrounds = new Image[9];
+    [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[9];
+    [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[9];
 
     [Header("SELECTION COLORS")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
@@ -568,7 +568,7 @@ public class UIManager : MonoBehaviour
         {
             var slot = SeedInventory.Instance.GetPlantSlot(i);
             if (slot != null)
-                seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "-";
+                seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "";
         }
     }
 
