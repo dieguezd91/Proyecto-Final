@@ -88,8 +88,8 @@ public class UIManager : MonoBehaviour
     private PlayerController playerController;
     private PauseMenu pauseMenu;
     private Coroutine fadeCoroutine;
+    private Coroutine warningCoroutine;
 
-   
     private int lastPressSlot = -1;            
     private float lastPressTime = 0f;          
     [SerializeField] private float doublePressThreshold = 0.3f; 

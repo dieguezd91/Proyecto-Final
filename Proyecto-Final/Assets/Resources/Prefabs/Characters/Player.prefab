@@ -5489,6 +5489,9 @@ MonoBehaviour:
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1

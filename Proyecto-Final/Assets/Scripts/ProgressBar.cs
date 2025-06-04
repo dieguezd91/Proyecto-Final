@@ -79,4 +79,9 @@ public class ProgressBar : MonoBehaviour
         targetProgress = currentProgress;
         fillImage.fillAmount = currentProgress;
     }
+
+    public bool IsShowing()
+    {
+        return canvasGroup != null && canvasGroup.alpha > 0.1f;
+    }
 }

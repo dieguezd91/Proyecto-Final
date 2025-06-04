@@ -35,6 +35,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     private bool isDigging = false;
     private Vector3 digPosition;
 
+    private FloatingTextController floatingText;
+
     private bool isHarvesting = false;
     private ResourcePlant currentHarvestPlant = null;
 
@@ -54,6 +56,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             plantInventory.onSlotSelected += OnSeedSlotSelected;
         }
+
+        floatingText = GetComponentInChildren<FloatingTextController>();
     }
 
     private void OnDestroy()
@@ -185,24 +189,29 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (!plantInventory.HasSeedsInSelectedSlot())
             {
-                Debug.Log("No quedan semillas para esta planta.");
+                floatingText?.ShowWarning("No seeds left.");
                 return;
             }
 
             Vector3 center = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
-            if (Vector2.Distance(transform.position, center) <= interactionDistance)
+
+            if (Vector2.Distance(transform.position, center) > interactionDistance)
             {
-                bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant);
-                if (planted)
-                {
-                    plantInventory.ConsumeSeedInSelectedSlot();
-                    GameManager.Instance.uiManager.UpdateSeedCountsUI();
-                    GameManager.Instance.uiManager.InitializeSeedSlotsUI();
-                }
-                else
-                {
-                    Debug.Log("Ya hay una planta en esa casilla.");
-                }
+                floatingText?.ShowWarning("Too far to plant.");
+                return;
+            }
+
+            bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant, out string reason);
+
+            if (planted)
+            {
+                plantInventory.ConsumeSeedInSelectedSlot();
+                GameManager.Instance.uiManager.UpdateSeedCountsUI();
+                GameManager.Instance.uiManager.InitializeSeedSlotsUI();
+            }
+            else if (!string.IsNullOrEmpty(reason))
+            {
+                floatingText?.ShowWarning(reason);
             }
         }
     }
@@ -220,13 +229,27 @@ public class PlayerAbilitySystem : MonoBehaviour
             Plant possiblePlant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
             if (possiblePlant is ResourcePlant harvestablePlant)
             {
-                if (harvestablePlant.IsReadyToHarvest() && !harvestablePlant.IsBeingHarvested())
+                if (!harvestablePlant.IsReadyToHarvest())
                 {
-                    if (Vector2.Distance(transform.position, harvestablePlant.transform.position) <= interactionDistance)
-                    {
-                        StartHarvesting(harvestablePlant);
-                    }
+                    floatingText?.ShowWarning("Plant not ready to harvest.");
+                    return;
                 }
+                if (harvestablePlant.IsBeingHarvested())
+                {
+                    floatingText?.ShowWarning("This plant is already being harvested.");
+                    return;
+                }
+                if (Vector2.Distance(transform.position, harvestablePlant.transform.position) > interactionDistance)
+                {
+                    floatingText?.ShowWarning("Too far to harvest.");
+                    return;
+                }
+
+                StartHarvesting(harvestablePlant);
+            }
+            else
+            {
+                floatingText?.ShowWarning("No harvestable plant here.");
             }
         }
     }
@@ -239,15 +262,21 @@ public class PlayerAbilitySystem : MonoBehaviour
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
             Plant plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
-            if (plant != null)
+            if (plant == null)
             {
-                if (Vector2.Distance(transform.position, plant.transform.position) <= interactionDistance)
-                {
-                    TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
-                    Destroy(plant.gameObject);
-                    Debug.Log("Planta removida.");
-                }
+                floatingText?.ShowWarning("No plant to remove.");
+                return;
             }
+
+            if (Vector2.Distance(transform.position, plant.transform.position) > interactionDistance)
+            {
+                floatingText?.ShowWarning("Too far to remove plant.");
+                return;
+            }
+
+            TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
+            Destroy(plant.gameObject);
+            floatingText?.ShowWarning("Plant removed.");
         }
     }
 
@@ -326,7 +355,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (isDigging)
             return;
 
-        // Si estoy sobre la “Casa” (capa “House”), no cavar
         Collider2D roofHit = Physics2D.OverlapPoint(transform.position, LayerMask.GetMask("House"));
         if (roofHit != null)
             return;
@@ -354,14 +382,16 @@ public class PlayerAbilitySystem : MonoBehaviour
         TileBase existingTile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cell);
         if (existingTile == tilledSoilTile)
         {
-            Debug.Log("Ya hay tierra cavada en esta posición.");
+            Vector3 warnPos = transform.position + Vector3.up * 1.5f;
+            floatingText?.ShowWarning("Ya hay tierra cavada en esta posición.");
             return false;
         }
 
         float distance = Vector2.Distance(transform.position, position);
         if (distance > digDistance)
         {
-            Debug.Log("El lugar está demasiado lejos");
+            Vector3 warnPos = transform.position + Vector3.up * 1.5f;
+            floatingText?.ShowWarning("El lugar está demasiado lejos");
             return false;
         }
 

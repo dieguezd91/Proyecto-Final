@@ -29,10 +29,23 @@ public class TilePlantingSystem : MonoBehaviour
         return currentTile == allowedPlantTile && !plantedTiles.ContainsKey(cellPos);
     }
 
-    public bool TryPlant(Vector3Int cellPos, GameObject plantPrefab)
+    public bool TryPlant(Vector3Int cellPos, GameObject plantPrefab, out string failureReason)
     {
-        if (!CanPlantAt(cellPos))
+        failureReason = "";
+
+        TileBase currentTile = plantingTilemap.GetTile(cellPos);
+
+        if (currentTile != allowedPlantTile)
+        {
+            failureReason = "The soil is not tilled.";
             return false;
+        }
+
+        if (plantedTiles.ContainsKey(cellPos))
+        {
+            failureReason = "There's already a plant here.";
+            return false;
+        }
 
         Vector3 worldPos = plantingTilemap.GetCellCenterWorld(cellPos);
         GameObject plantGO = Instantiate(plantPrefab, worldPos, Quaternion.identity);
@@ -50,10 +63,6 @@ public class TilePlantingSystem : MonoBehaviour
         {
             PlantManager.Instance.UnregisterPlant(plant);
             plantedTiles.Remove(cellPos);
-        }
-        else
-        {
-            Debug.LogWarning($"No se encontró planta para eliminar en {cellPos}");
         }
     }
 

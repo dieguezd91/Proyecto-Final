@@ -33,7 +33,7 @@ public class ManaPickup : MonoBehaviour
                     manaSystem.AddMana(manaAmount);
                 }
 
-                FloatingPickupText pickupHandler = player.GetComponentInChildren<FloatingPickupText>();
+                FloatingTextController pickupHandler = player.GetComponentInChildren<FloatingTextController>();
                 if (pickupHandler != null)
                 {
                     pickupHandler.ShowPickup("Mana", Mathf.RoundToInt(manaAmount));
