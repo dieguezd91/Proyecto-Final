@@ -383,7 +383,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (existingTile == tilledSoilTile)
         {
             Vector3 warnPos = transform.position + Vector3.up * 1.5f;
-            floatingText?.ShowWarning("Ya hay tierra cavada en esta posición.");
+            floatingText?.ShowWarning("There is already tilled soil at this position.");
             return false;
         }
 
@@ -391,7 +391,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (distance > digDistance)
         {
             Vector3 warnPos = transform.position + Vector3.up * 1.5f;
-            floatingText?.ShowWarning("El lugar está demasiado lejos");
+            floatingText?.ShowWarning("The spot is too far away.");
             return false;
         }
 
