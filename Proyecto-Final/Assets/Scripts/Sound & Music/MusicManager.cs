@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System;
+
 
 public class MusicManager : MonoBehaviour
 {
@@ -17,11 +17,11 @@ public class MusicManager : MonoBehaviour
     public AudioClip nightMusic;
 
     private AudioSource audioSource;
-    private GameState lastState;
+
+    private GameState lastKnownGameState;
 
     private void Awake()
     {
-        // Singleton básico
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -30,107 +30,148 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Creamos el AudioSource en tiempo de ejecución
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.playOnAwake = false;
         audioSource.volume = 0.5f;
         audioSource.mute = false;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        // Si hay un GameManager en escena, nos suscribimos a su evento
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
-            lastState = GameManager.Instance.GetCurrentGameState();
-        }
+        
+        TrySubscribeToGameManager();
 
-        // Reproducir el clip inicial según el estado actual:
-        // Si estamos en MenuScene, sonar menuMusic; si no, Day/Night.
         PlayMusicAccordingToSceneOrState();
     }
 
     private void OnDestroy()
     {
-        // Nos desuscribimos al destruir este objeto
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    /// <summary>
-    /// Se ejecuta cada vez que GameManager cambia de GameState.
-    /// Aquí elegimos entre dayMusic o nightMusic.
-    /// </summary>
+    
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayMusicAccordingToSceneOrState();
+        TrySubscribeToGameManager();
+    }
+
+    
+    private void Update()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameState current = GameManager.Instance.GetCurrentGameState();
+            if (current != lastKnownGameState)
+            {
+                HandleGameStateChanged(current);
+                lastKnownGameState = current;
+            }
+        }
+    }
+
+    
+    private void TrySubscribeToGameManager()
+    {
+        if (GameManager.Instance != null)
+        {
+            lastKnownGameState = GameManager.Instance.GetCurrentGameState();
+        }
+    }
+
     private void HandleGameStateChanged(GameState newState)
     {
-        // Si volvemos al menú (MainMenu), reproducimos menuMusic
         string sceneName = SceneManager.GetActiveScene().name;
+
         if (sceneName == "MenuScene")
         {
             PlayMusic(menuMusic);
-            lastState = newState;
             return;
         }
 
-        // Solo reaccionamos cuando entramos a Day o a Night
-        if (newState == GameState.Day || newState == GameState.Digging || newState == GameState.Harvesting || newState == GameState.Planting || newState == GameState.Removing)
+        if (sceneName == "SampleScene")
         {
-            PlayMusic(dayMusic);
+            if (newState == GameState.Day
+                || newState == GameState.Digging
+                || newState == GameState.Planting
+                || newState == GameState.Harvesting
+                || newState == GameState.Removing)
+            {
+                PlayMusic(dayMusic);
+            }
+            else if (newState == GameState.Night)
+            {
+                PlayMusic(nightMusic);
+            }
+            else
+            {
+                
+                PlayMusic(dayMusic);
+            }
         }
-        else if (newState == GameState.Night)
-        {
-            PlayMusic(nightMusic);
-        }
-
-        lastState = newState;
     }
 
-    /// <summary>
-    /// Al arrancar, chequea si estamos en la escena de menú o en el juego
-    /// y reproduce el clip correspondiente (menu, day o night) según el estado actual.
-    /// </summary>
+    
     private void PlayMusicAccordingToSceneOrState()
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "MenuScene")
         {
-            // Si la escena actual es MenuScene, reproducimos menuMusic
             PlayMusic(menuMusic);
             return;
         }
 
-        // Sino, estamos en la escena de juego, así que vemos el estado actual:
-        if (GameManager.Instance != null)
+        if (sceneName == "SampleScene")
         {
-            GameState current = GameManager.Instance.GetCurrentGameState();
-            if (current == GameState.Day)
-                PlayMusic(dayMusic);
-            else if (current == GameState.Night)
-                PlayMusic(nightMusic);
+            if (GameManager.Instance != null)
+            {
+                GameState current = GameManager.Instance.GetCurrentGameState();
+                lastKnownGameState = current; 
+
+                if (current == GameState.Day
+                    || current == GameState.Digging
+                    || current == GameState.Planting
+                    || current == GameState.Harvesting
+                    || current == GameState.Removing)
+                {
+                    PlayMusic(dayMusic);
+                }
+                else if (current == GameState.Night)
+                {
+                    PlayMusic(nightMusic);
+                }
+                else
+                {
+                    PlayMusic(dayMusic);
+                }
+                return;
+            }
             else
+            {
                 PlayMusic(dayMusic);
-            // si por alguna razón el estado arranca en algo distinto, forzamos dayMusic por defecto
+                return;
+            }
         }
+
+      
     }
 
-    /// <summary>
-    /// Método que asigna el clip al AudioSource y lo reproduce.
-    /// Si ya estaba con el mismo clip, no hace nada.
-    /// </summary>
+    
     private void PlayMusic(AudioClip clip)
     {
         if (clip == null)
         {
-            Debug.LogWarning("[MusicManager] El AudioClip es null. Revisa en el Inspector que hayas asignado un clip válido.");
+            Debug.LogWarning("[MusicManager] AudioClip es null. Revisar asignación en el Inspector.");
             return;
         }
 
         if (audioSource.clip == clip && audioSource.isPlaying)
         {
-            // Si ya estaba reproduciendo ese clip, no cambia nada.
+           
             return;
         }
 
