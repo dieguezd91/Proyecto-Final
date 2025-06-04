@@ -345,6 +345,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: PlantSprites_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 244
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f0dcdab3ac444448b6b71411e9aeb56
+      internalID: -1218528404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlantSprites_1
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 242
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2299626288465f14886406cef5a400b0
+      internalID: -335066811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlantSprites_2
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 243
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f83e9ff052d4e1342b644d39f0fb1f8e
+      internalID: 697983331
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PlantSprites_3
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 243
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5568390060d29a49887e170611083d3
+      internalID: 1726723143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -368,6 +452,10 @@ TextureImporter:
       PlantRoot1: 1181964190
       PlantRoot2: -470206348
       PlantSeed: 496183913
+      PlantSprites_0: -1218528404
+      PlantSprites_1: -335066811
+      PlantSprites_2: 697983331
+      PlantSprites_3: 1726723143
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
