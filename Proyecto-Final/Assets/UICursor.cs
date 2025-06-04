@@ -28,7 +28,12 @@ public class UICursor : MonoBehaviour
 
     private void Start()
     {
-        Cursor.visible = false;
+        if (grid == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         SetCursorForGameState(GameState.Digging);
         playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         cursorImage.transform.SetAsLastSibling();
@@ -36,7 +41,29 @@ public class UICursor : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance == null)
+            return;
+
+        if (grid == null || GameManager.Instance == null)
+        {
+            cursorImage.enabled = false;
+            return;
+        }
+
         GameState state = GameManager.Instance.currentGameState;
+
+
+        if (!IsGameplayState(state))
+        {
+            Cursor.visible = true;
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            if (cursorImage != null) cursorImage.enabled = false;
+            return;
+        }
+
+        Cursor.visible = false;
+        if (cursorImage != null) cursorImage.enabled = true;
+
         bool useTileSnap = IsUsingTileSnap(state);
         bool inRange = IsTargetInRange(state);
 
@@ -192,5 +219,12 @@ public class UICursor : MonoBehaviour
         }
 
         return Vector2.Distance(playerAbilitySystem.transform.position, cellWorld) <= range;
+    }
+
+    private bool IsGameplayState(GameState state)
+    {
+        return state == GameState.Digging || state == GameState.Planting ||
+               state == GameState.Harvesting || state == GameState.Removing ||
+               state == GameState.Day || state == GameState.Night;
     }
 }
