@@ -48,7 +48,7 @@ public class Spell : MonoBehaviour
                 CameraShaker.Instance?.Shake(0.2f, 0.2f);
 
                 KnockbackReceiver knockback = collision.GetComponent<KnockbackReceiver>();
-                if (knockback != null)
+                if (knockback != null && knockback.gameObject.activeInHierarchy)
                 {
                     Vector2 knockDir = collision.transform.position - transform.position;
                     knockback.ApplyKnockback(knockDir, 3f);
