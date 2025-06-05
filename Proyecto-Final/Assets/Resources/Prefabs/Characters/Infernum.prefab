@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 935879750160187858}
   - component: {fileID: 259869561657676236}
   - component: {fileID: 8994487321417303199}
+  - component: {fileID: 4035741083083429255}
   m_Layer: 8
   m_Name: Infernum
   m_TagString: Enemy
@@ -337,6 +338,9 @@ MonoBehaviour:
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []
+  onDamaged:
+    m_PersistentCalls:
+      m_Calls: []
   objetDrop: {fileID: 1768544347340343859, guid: b63ac3ac3aacbd048a4daf47582e04b1, type: 3}
   manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 1
@@ -392,7 +396,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.9375, y: 1.9375}
+    oldSize: {x: 2, y: 1.9375}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -401,6 +405,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4522915, y: 1.5375309}
   m_EdgeRadius: 0
+--- !u!95 &4035741083083429255
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4654744101768285803}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 031addb157684a346bfc4f23074dab8d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &997916278258746882
 PrefabInstance:
   m_ObjectHideFlags: 0

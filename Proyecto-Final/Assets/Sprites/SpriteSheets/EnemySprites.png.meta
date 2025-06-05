@@ -519,7 +519,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 129
-        width: 31
+        width: 32
         height: 31
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -576,6 +576,216 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: InfernumWalk
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 129
+        width: 32
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2da42059fbde294e840e579362b092e
+      internalID: -626084886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumWalk2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 128
+        width: 31
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef4e253161999a44f9c362b0290eb6d2
+      internalID: -306187279
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumWalk3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 128
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8126e93f93e82e44f9339b56589b3247
+      internalID: 815996271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumWalk4
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 129
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be72a73e6022e8c4d94cc44997a4d805
+      internalID: 2089869521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumWalk5
+      rect:
+        serializedVersion: 2
+        x: 161
+        y: 129
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b12e22965a054547884c44182351fc9
+      internalID: 1467319204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumWalk6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 129
+        width: 31
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 692101788853e1a40959c8d5e7464b52
+      internalID: -67674040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkellyHead
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 19
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31e34d76d6056d247b203ba2db8b9efc
+      internalID: -481205092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkellyTorso
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 21
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a13687aeec901c4088ce612bcc1f00d
+      internalID: 1449983005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkellySword
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 21
+        width: 8
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 338a64f678f322646aa500f67bd4ff41
+      internalID: 167680969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SkellyLeg
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 35
+        width: 3
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c03c73e51885fa8428a716af77efc23f
+      internalID: -53740600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -609,7 +819,17 @@ TextureImporter:
       GroundFire: 159559732
       Infernum: -2141980523
       InfernumShot: -541236709
+      InfernumWalk: -626084886
+      InfernumWalk2: -306187279
+      InfernumWalk3: 815996271
+      InfernumWalk4: 2089869521
+      InfernumWalk5: 1467319204
+      InfernumWalk6: -67674040
       Skeleton: -1222204734
+      SkellyHead: -481205092
+      SkellyLeg: -53740600
+      SkellySword: 167680969
+      SkellyTorso: 1449983005
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
