@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private Animator animator;
     private int lastHorizontalDirection = 0;
     private SpriteRenderer spriteRenderer;
+    private bool isWalkingSoundPlaying = false;
 
     private void Start()
     {
@@ -66,7 +67,9 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+
         movementEnabled = true;
+
 
         bool isPaused = state == GameState.Paused || PauseMenu.isGamePaused;
         if (isPaused)
@@ -81,6 +84,8 @@ public class PlayerController : MonoBehaviour
         {
             HandleAttack();
         }
+
+
     }
 
     void FixedUpdate()
@@ -100,6 +105,7 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = Vector2.zero;
             animator.SetBool("IsMoving", false);
+
             return;
         }
 
@@ -114,7 +120,22 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
+
         rb.velocity = moveInput * moveSpeed;
+
+
+        bool isMoving = moveInput.sqrMagnitude > 0.01f;
+
+        // ** CONTROL DE SONIDO DE PASOS **
+        if (isMoving && !isWalkingSoundPlaying)
+        {
+            SoundManager.Instance.PlayLoop("Walk");
+            isWalkingSoundPlaying = true;
+        }
+        else if (!isMoving && isWalkingSoundPlaying)
+        {
+            StopWalkingSound();
+        }
 
         if (animator != null && spriteRenderer != null)
         {
@@ -155,6 +176,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void StopWalkingSound()
+    {
+        SoundManager.Instance.Stop("Walk");
+        isWalkingSoundPlaying = false;
+    }
+
     void Shoot()
     {
         if (!manaSystem.UseMana(spellManaCost))
@@ -167,6 +194,7 @@ public class PlayerController : MonoBehaviour
         Vector2 direction = (mousePos - transform.position).normalized;
         GameObject spell = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Spell spellComponent = spell.GetComponent<Spell>();
+        SoundManager.Instance.PlayOneShot("ShootSpell");
         if (spellComponent != null)
         {
             spellComponent.SetDirection(direction);

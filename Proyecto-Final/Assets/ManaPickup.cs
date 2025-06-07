@@ -31,6 +31,8 @@ public class ManaPickup : MonoBehaviour
                 if (manaSystem != null)
                 {
                     manaSystem.AddMana(manaAmount);
+                    SoundManager.Instance.PlayOneShot("PickUp");
+
                 }
 
                 FloatingTextController pickupHandler = player.GetComponentInChildren<FloatingTextController>();

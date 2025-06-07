@@ -183,7 +183,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
-
             GameObject selectedPlant = plantInventory.GetSelectedPlantPrefab();
             if (selectedPlant == null) return;
 
@@ -205,6 +204,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (planted)
             {
+                SoundManager.Instance.PlayOneShot("Plant");
                 plantInventory.ConsumeSeedInSelectedSlot();
                 GameManager.Instance.uiManager.UpdateSeedCountsUI();
                 GameManager.Instance.uiManager.InitializeSeedSlotsUI();
@@ -273,6 +273,7 @@ public class PlayerAbilitySystem : MonoBehaviour
                 floatingText?.ShowWarning("Too far to remove plant.");
                 return;
             }
+            SoundManager.Instance.PlayOneShot("Remove");
 
             TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
             Destroy(plant.gameObject);
@@ -289,7 +290,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         isHarvesting = true;
         playerController.SetMovementEnabled(false);
         currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
-
+        SoundManager.Instance.PlayOneShot("Harvest");
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(true);
         progressBar?.gameObject.SetActive(true);
@@ -403,7 +404,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
             return;
-
+        SoundManager.Instance.PlayOneShot("Dig");
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
         playerController.SetMovementEnabled(false);

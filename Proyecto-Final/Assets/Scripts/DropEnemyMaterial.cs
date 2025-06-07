@@ -8,6 +8,7 @@ public class DropEnemyMaterial : MonoBehaviour
     {
         if (collision.gameObject.layer == 7)
         {
+            SoundManager.Instance.PlayOneShot("PickUp");
             if (materialData == null)
             {
                 return;
@@ -27,7 +28,6 @@ public class DropEnemyMaterial : MonoBehaviour
                     pickupHandler.ShowPickup(materialData.materialName, 1);
                 }
             }
-
             Destroy(gameObject);
         }
     }
