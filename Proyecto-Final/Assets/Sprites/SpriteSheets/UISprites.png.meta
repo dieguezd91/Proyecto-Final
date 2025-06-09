@@ -113,8 +113,8 @@ TextureImporter:
       name: MoonStage0
       rect:
         serializedVersion: 2
-        x: 16
-        y: 224
+        x: 0
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -134,8 +134,8 @@ TextureImporter:
       name: MoonStage1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 224
+        x: 16
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -155,8 +155,8 @@ TextureImporter:
       name: MoonStage2
       rect:
         serializedVersion: 2
-        x: 48
-        y: 224
+        x: 32
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -176,8 +176,8 @@ TextureImporter:
       name: MoonStage3
       rect:
         serializedVersion: 2
-        x: 64
-        y: 224
+        x: 48
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -197,8 +197,8 @@ TextureImporter:
       name: MoonStage4
       rect:
         serializedVersion: 2
-        x: 80
-        y: 224
+        x: 64
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -218,8 +218,8 @@ TextureImporter:
       name: UIInventorySlot
       rect:
         serializedVersion: 2
-        x: 11
-        y: 187
+        x: 1
+        y: 213
         width: 26
         height: 26
       alignment: 0
@@ -239,8 +239,8 @@ TextureImporter:
       name: InventoryPlaceholder
       rect:
         serializedVersion: 2
-        x: 113
-        y: 146
+        x: 129
+        y: 162
         width: 125
         height: 88
       alignment: 0
@@ -257,13 +257,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PotCraftingUI
+      name: CraftingUI
       rect:
         serializedVersion: 2
         x: 1
-        y: 34
-        width: 155
-        height: 70
+        y: 37
+        width: 70
+        height: 95
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -281,8 +281,8 @@ TextureImporter:
       name: HiddenBars
       rect:
         serializedVersion: 2
-        x: 14
-        y: 8
+        x: 1
+        y: 1
         width: 65
         height: 14
       alignment: 0
@@ -303,7 +303,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 240
-        y: 129
+        y: 145
         width: 16
         height: 6
       alignment: 0
@@ -323,8 +323,8 @@ TextureImporter:
       name: ShadowBig
       rect:
         serializedVersion: 2
-        x: 224
-        y: 96
+        x: 208
+        y: 144
         width: 32
         height: 7
       alignment: 0
@@ -344,8 +344,8 @@ TextureImporter:
       name: TimerSprite
       rect:
         serializedVersion: 2
-        x: 65
-        y: 129
+        x: 81
+        y: 193
         width: 15
         height: 15
       alignment: 0
@@ -365,8 +365,8 @@ TextureImporter:
       name: FillHouse
       rect:
         serializedVersion: 2
-        x: 96
-        y: 21
+        x: 67
+        y: 15
         width: 60
         height: 6
       alignment: 0
@@ -386,8 +386,8 @@ TextureImporter:
       name: FillHP
       rect:
         serializedVersion: 2
-        x: 96
-        y: 14
+        x: 67
+        y: 8
         width: 60
         height: 6
       alignment: 0
@@ -407,8 +407,8 @@ TextureImporter:
       name: FillMana
       rect:
         serializedVersion: 2
-        x: 96
-        y: 10
+        x: 67
+        y: 4
         width: 60
         height: 3
       alignment: 0
@@ -428,8 +428,8 @@ TextureImporter:
       name: HouseBar
       rect:
         serializedVersion: 2
-        x: 14
-        y: 21
+        x: 1
+        y: 14
         width: 65
         height: 9
       alignment: 0
@@ -449,10 +449,10 @@ TextureImporter:
       name: Warning
       rect:
         serializedVersion: 2
-        x: 20
-        y: 114
-        width: 8
-        height: 37
+        x: 17
+        y: 162
+        width: 14
+        height: 46
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -470,8 +470,8 @@ TextureImporter:
       name: TimerFill
       rect:
         serializedVersion: 2
-        x: 81
-        y: 130
+        x: 97
+        y: 194
         width: 13
         height: 13
       alignment: 0
@@ -491,8 +491,8 @@ TextureImporter:
       name: ShadowSmall2
       rect:
         serializedVersion: 2
-        x: 240
-        y: 121
+        x: 192
+        y: 153
         width: 16
         height: 6
       alignment: 0
@@ -512,8 +512,8 @@ TextureImporter:
       name: ShadowXS
       rect:
         serializedVersion: 2
-        x: 242
-        y: 113
+        x: 194
+        y: 145
         width: 12
         height: 6
       alignment: 0
@@ -529,6 +529,250 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: CraftingElement
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 134
+        width: 50
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cc0e49acefc0694b8e68b0500a370b2
+      internalID: -1729699907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CraftRightButton
+      rect:
+        serializedVersion: 2
+        x: 60
+        y: 134
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5731ca60fa3025d4994547a12d60dead
+      internalID: 165050881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CraftLeftButton
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 134
+        width: 11
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd047f0748aa65744bb9e50256020e72
+      internalID: -854867658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CraftButton
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 147
+        width: 47
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ace89a342fb369d41b2a64d0eee5f1df
+      internalID: 2122693667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ScrollBar
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 180
+        width: 9
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17e82d51a1ed24644a29b688d123769b
+      internalID: -1066148658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SeedCraftingSelected
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 178
+        width: 63
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32e341ea3ec052a44bd6d31181ad097d
+      internalID: -105564040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SeedCrafting
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 162
+        width: 63
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -30.5, y: -5}
+        - {x: -30.5, y: 5}
+        - {x: 22.5, y: 5}
+        - {x: 22.5, y: -5}
+      physicsShape:
+      - - {x: -31.5, y: 6}
+        - {x: -31.5, y: -6}
+        - {x: 24.5, y: -6}
+        - {x: 24.5, y: 6}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39eaff2155376dd4eb7b84862fb4a5cc
+      internalID: 8750406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IngredientRequirement
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 147
+        width: 50
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 941023cc1070e534ca9b59c4a0dc3ce1
+      internalID: -1006000798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IngredientList
+      rect:
+        serializedVersion: 2
+        x: 74
+        y: 67
+        width: 59
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dfbeffb0b8237eb4db31027b08abb0e0
+      internalID: -132592085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Close
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 132
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d9c31142e0a14b44b89bcc127dcf47c
+      internalID: -382949612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SeedCraftingHighlight
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 146
+        width: 63
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -31.5, y: 6}
+        - {x: -31.5, y: -6}
+        - {x: 25.5, y: -6}
+        - {x: 25.5, y: 5}
+        - {x: 24.5, y: 6}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3b7b438f69f36d4085894601f03159e
+      internalID: -2108002995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -540,6 +784,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Close: -382949612
+      CraftButton: 2122693667
+      CraftLeftButton: -854867658
+      CraftRightButton: 165050881
+      CraftingElement: -1729699907
+      CraftingUI: 14847357
       CrosshairCollectIcon: 2120552150
       CrosshairDigIcon: 125339148
       CrosshairGatherIcon: 861525276
@@ -550,13 +800,18 @@ TextureImporter:
       FillMana: -359895768
       HiddenBars: 1508131376
       HouseBar: -1551444634
+      IngredientList: -132592085
+      IngredientRequirement: -1902967201
       InventoryPlaceholder: 450073570
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572
       MoonStage3: -1032481509
       MoonStage4: -1529809225
-      PotCraftingUI: 14847357
+      ScrollBar: -1066148658
+      SeedCrafting: 1026741367
+      SeedCraftingHighlight: -2108002995
+      SeedCraftingSelected: -1313676576
       Shadow: 340849173
       ShadowBig: 1234631462
       ShadowSmall2: 1868388143
@@ -568,9 +823,6 @@ TextureImporter:
       UISprites_11: -1738444724
       UISprites_12: 1118135965
       UISprites_13: -1371413568
-      UISprites_5: -1313676576
-      UISprites_6: 1026741367
-      UISprites_7: -1902967201
       UISprites_8: -996710981
       UISprites_9: -2055132647
       Warning: -1111590628
