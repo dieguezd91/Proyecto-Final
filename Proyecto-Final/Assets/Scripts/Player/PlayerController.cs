@@ -126,16 +126,16 @@ public class PlayerController : MonoBehaviour
 
         bool isMoving = moveInput.sqrMagnitude > 0.01f;
 
-        // ** CONTROL DE SONIDO DE PASOS **
-        if (isMoving && !isWalkingSoundPlaying)
-        {
-            SoundManager.Instance.PlayLoop("Walk");
-            isWalkingSoundPlaying = true;
-        }
-        else if (!isMoving && isWalkingSoundPlaying)
-        {
-            StopWalkingSound();
-        }
+        //// ** CONTROL DE SONIDO DE PASOS **
+        //if (isMoving && !isWalkingSoundPlaying)
+        //{
+        //    SoundManager.Instance.PlayLoop("Walk");
+        //    isWalkingSoundPlaying = true;
+        //}
+        //else if (!isMoving && isWalkingSoundPlaying)
+        //{
+        //    StopWalkingSound();
+        //}
 
         if (animator != null && spriteRenderer != null)
         {
@@ -233,6 +233,11 @@ public class PlayerController : MonoBehaviour
     public bool CanAct()
     {
         return canAct;
+    }
+
+    public void PlayFootstep()
+    {
+        SoundManager.Instance.PlayOneShot("Walk");
     }
 
 }
