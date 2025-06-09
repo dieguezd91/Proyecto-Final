@@ -25,7 +25,7 @@ public class DropEnemyMaterial : MonoBehaviour
                 var pickupHandler = player.GetComponentInChildren<FloatingTextController>();
                 if (pickupHandler != null)
                 {
-                    pickupHandler.ShowPickup(materialData.materialName, 1);
+                    pickupHandler.ShowPickup(materialData.materialName, 1, materialData.materialIcon);
                 }
             }
             Destroy(gameObject);

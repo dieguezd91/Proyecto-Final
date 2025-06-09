@@ -18,10 +18,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private EnemiesSpawner gameStateController;
     [SerializeField] private PlayerAbilitySystem abilitySystem;
 
-
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
     [SerializeField] private float spellManaCost = 15f;
+
+    private float lastFootstepTime = 0f;
+    private float footstepCooldown = 0.2f;
+    [SerializeField] private SurfaceDetector surfaceDetector;
 
     private Vector2 moveInput;
     private bool movementEnabled = true;
@@ -90,8 +93,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        
         GameState state = GameManager.Instance.currentGameState;
         if (state == GameState.OnInventory || state == GameState.OnCrafting
             || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
@@ -237,7 +238,30 @@ public class PlayerController : MonoBehaviour
 
     public void PlayFootstep()
     {
-        SoundManager.Instance.PlayOneShot("Walk");
-    }
+        if (Time.time - lastFootstepTime >= footstepCooldown)
+        {
+            string surface = surfaceDetector != null ? surfaceDetector.DetectSurfaceTag() : "Default";
 
+            string soundName;
+
+            switch (surface)
+            {
+                case "Grass":
+                    soundName = "Step_Grass";
+                    break;
+                case "Land":
+                    soundName = "Step_Land";
+                    break;
+                case "Wood":
+                    soundName = "Step_Wood";
+                    break;
+                default:
+                    soundName = "Default";
+                    break;
+            }
+
+            SoundManager.Instance.PlayOneShot(soundName);
+            lastFootstepTime = Time.time;
+        }
+    }
 }

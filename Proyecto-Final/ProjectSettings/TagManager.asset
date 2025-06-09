@@ -8,6 +8,9 @@ TagManager:
   - Home
   - Plant
   - Door
+  - Land
+  - Grass
+  - Wood
   layers:
   - Default
   - TransparentFX
