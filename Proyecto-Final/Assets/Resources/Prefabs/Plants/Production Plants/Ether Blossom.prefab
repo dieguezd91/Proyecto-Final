@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2831898977521749703}
   - component: {fileID: -3466763483102383814}
   m_Layer: 9
-  m_Name: Ether Bloom
+  m_Name: Ether Blossom
   m_TagString: Plant
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,12 +109,14 @@ MonoBehaviour:
   daysToProduceResources: 2
   minimumResourceAmount: 1
   maximumResourceAmount: 5
-  materialType: 0
+  materialType: 10
   materialSprite: {fileID: -548959778, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
   harvestDuration: 3
   harvestProgressIndicator: {fileID: 15842525385593699, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   clickColor: {r: 1, g: 0, b: 0, a: 1}
+  rewardType: 10
+  rewardAmount: 1
 --- !u!114 &5857128013590860986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +254,7 @@ MonoBehaviour:
   referenceY: 0
   sortingOffset: 3
   immaturePlantSortingOrder: -500
+  maturePlantSortingOrder: 5
 --- !u!1001 &4515369648740107915
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ public class FloatingTextController : MonoBehaviour
     {
         if (progressBar != null && progressBar.IsShowing())
         {
-            ClearText();
+            //ClearText();
             return;
         }
 
@@ -72,16 +72,24 @@ public class FloatingTextController : MonoBehaviour
 
     public void ShowWarning(string message)
     {
+        if (floatingPanel == null || pickupEntryPrefab == null) return;
+
         ClearText();
 
         GameObject entry = Instantiate(pickupEntryPrefab, floatingPanel);
         var text = entry.GetComponentInChildren<TextMeshProUGUI>();
         var image = entry.GetComponentInChildren<Image>();
 
-        if (text != null) text.text = message;
-        if (image != null) image.enabled = false;
+        if (text != null)
+        {
+            text.text = message;
+            text.color = warningColor;
+        }
 
-        text.color = warningColor;
+        if (image != null)
+        {
+            image.enabled = false;
+        }
 
         timer = displayTime;
     }

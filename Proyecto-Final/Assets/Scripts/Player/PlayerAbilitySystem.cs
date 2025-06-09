@@ -348,6 +348,11 @@ public class PlayerAbilitySystem : MonoBehaviour
         isHarvesting = false;
         playerController.SetMovementEnabled(true);
         progressBar?.Hide();
+        var reward = currentHarvestPlant.GetHarvestReward();
+        if (reward != null)
+        {
+            floatingText?.ShowPickup(reward.materialName, reward.amount, reward.icon);
+        }
         currentHarvestPlant = null;
     }
 

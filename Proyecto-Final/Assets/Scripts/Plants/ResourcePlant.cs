@@ -1,6 +1,14 @@
 using UnityEngine;
 using System.Collections;
 
+[System.Serializable]
+public class HarvestReward
+{
+    public string materialName;
+    public int amount;
+    public Sprite icon;
+}
+
 public class ResourcePlant : Plant
 {
     [Header("RESOURCES SETTINGS")]
@@ -23,6 +31,9 @@ public class ResourcePlant : Plant
     private bool isReadyToHarvest = false;
     private bool isBeingHarvested = false;
     private int cycleStartDay = -1;
+
+    [SerializeField] private MaterialType rewardType;
+    [SerializeField] private int rewardAmount = 1;
 
     protected override void Start()
     {
@@ -249,25 +260,19 @@ public class ResourcePlant : Plant
         return Mathf.Clamp01((float)elapsed / required);
     }
 
-    //void OnMouseDown()
-    //{
-    //    if (!isReadyToHarvest || isBeingHarvested || abilitySystem == null) return;
-
-    //    GameObject player = GameObject.FindGameObjectWithTag("Player");
-    //    if (player != null)
-    //    {
-    //        float distance = Vector2.Distance(transform.position, player.transform.position);
-    //        if (distance <= abilitySystem.interactionDistance)
-    //        {
-    //            plantRenderer.color = clickColor;
-
-    //            StartHarvest();
-    //        }
-    //        else
-    //        {
-    //            plantRenderer.color = originalColor;
-    //        }
-    //    }
-    //}
-
+    public HarvestReward GetHarvestReward()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            string name = InventoryManager.Instance.GetMaterialName(rewardType);
+            Sprite icon = InventoryManager.Instance.GetMaterialIcon(rewardType);
+            return new HarvestReward
+            {
+                materialName = name,
+                amount = rewardAmount,
+                icon = icon
+            };
+        }
+        return null;
+    }
 }
