@@ -346,15 +346,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSprites_0
+      name: MiniSeed
       rect:
         serializedVersion: 2
-        x: 4
-        y: 244
-        width: 8
-        height: 8
+        x: 3
+        y: 243
+        width: 9
+        height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -367,15 +367,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSprites_1
+      name: MiniSeed2
       rect:
         serializedVersion: 2
-        x: 18
-        y: 242
-        width: 13
-        height: 10
+        x: 20
+        y: 243
+        width: 8
+        height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -388,7 +388,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSprites_2
+      name: MiniSeed3
       rect:
         serializedVersion: 2
         x: 35
@@ -396,7 +396,7 @@ TextureImporter:
         width: 11
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -409,15 +409,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PlantSprites_3
+      name: MiniSeed4
       rect:
         serializedVersion: 2
         x: 50
-        y: 243
-        width: 11
-        height: 11
+        y: 242
+        width: 12
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -447,15 +447,15 @@ TextureImporter:
       BasicSawleaf: -2001277165
       BasicSpikeRoot: -1251527286
       GrowingGlowdust: 1459562942
+      MiniSeed: -1218528404
+      MiniSeed2: -335066811
+      MiniSeed3: 697983331
+      MiniSeed4: 1726723143
       PetalShotShoot: 61620554
       PlantFlower: 1189134553
       PlantRoot1: 1181964190
       PlantRoot2: -470206348
       PlantSeed: 496183913
-      PlantSprites_0: -1218528404
-      PlantSprites_1: -335066811
-      PlantSprites_2: 697983331
-      PlantSprites_3: 1726723143
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
