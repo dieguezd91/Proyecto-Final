@@ -215,69 +215,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigStone
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 240
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ab753671727a0e54485134aa0438b0c0
-      internalID: -121559407
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FlowerBlue
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 240
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9b9512ca237a8f64a9e5e569224813bf
-      internalID: -459977569
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FlowerRose
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 240
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 343364c8ed805e6409d68d36566fbfdb
-      internalID: -524546924
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: GrassHEU
       rect:
         serializedVersion: 2
@@ -467,69 +404,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BigSticks
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 224
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f97155924f62e65449e784c0d3573a77
-      internalID: -548959778
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FlowerPink
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 224
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 40eb99d993fa9ed48901d4d542970cdf
-      internalID: 2072066137
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FlowerRed
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 224
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 13e6bd60b435ffb4bb4a765e464d4d5c
-      internalID: -1480615387
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: GrassHM
       rect:
         serializedVersion: 2
@@ -693,27 +567,6 @@ TextureImporter:
       bones: []
       spriteID: 620cdcd5a81e8c741acc0629d86c3279
       internalID: 769953852
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SmallSticks
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 208
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b809d28e385a51942b7b7eea27ca5082
-      internalID: -651064796
       vertices: []
       indices: 
       edges: []
@@ -1097,7 +950,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WaterAnim1
+      name: WaterAnim
       rect:
         serializedVersion: 2
         x: 0
@@ -1139,364 +992,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Bush
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 208
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1fdf48963c744d14eb57fc4e09b8911a
-      internalID: -1031783320
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LandscapeSpriteSheet_3
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 208
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5ce8dc588bc952b4db1cc6e2e1193941
-      internalID: 511000038
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim2
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1c377db2c86df7e43be2cbbb40c6875c
-      internalID: -784712990
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim3
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e1762ec5a080bf746967e0b709580819
-      internalID: 1459090
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim4
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 30a4898d6a448444db639701d23b83d2
-      internalID: -2075778979
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim5
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4c597a110b15baf44888e5ac10b298da
-      internalID: 133120305
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim6
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3dedfad0be56b74393a66d406390501
-      internalID: -1670297643
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim7
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c7e2f8ff673d7d848aa0906f0dfbd716
-      internalID: 1845142594
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim8
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0e582c916787e6b44aaa7566dc4922df
-      internalID: -1468458817
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim9
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fe1c94e16fd003340a037c0edff60446
-      internalID: 1432594368
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim10
-      rect:
-        serializedVersion: 2
-        x: 144
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 422ae187ce8804348a92a7b139c72310
-      internalID: -654136541
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim11
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7ed691c971b566f4e89f07f796e7b659
-      internalID: 1176964963
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim12
-      rect:
-        serializedVersion: 2
-        x: 176
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 15c839c7a49430645b5edcb10985cfea
-      internalID: -69244714
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim13
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a227c42331ec3d046af96682001beef2
-      internalID: -1129253601
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim14
-      rect:
-        serializedVersion: 2
-        x: 208
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ba9cd085ca50554db73bd13f301770a
-      internalID: -171425245
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim15
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7c5cd522736953a44a78ef90f90184c1
-      internalID: -1397025881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WaterAnim16
-      rect:
-        serializedVersion: 2
-        x: 240
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4d0b71c0e3223e946b4241f2c0733d41
-      internalID: 258470968
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LandscapeSpriteSheet_0
+      name: Wall10
       rect:
         serializedVersion: 2
         x: 16
@@ -1521,7 +1017,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_2
+      name: Wall11
       rect:
         serializedVersion: 2
         x: 32
@@ -1546,7 +1042,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_4
+      name: Wall15
       rect:
         serializedVersion: 2
         x: 48
@@ -1567,7 +1063,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_5
+      name: Wall13
       rect:
         serializedVersion: 2
         x: 48
@@ -1588,7 +1084,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_6
+      name: Wall1
       rect:
         serializedVersion: 2
         x: 0
@@ -1613,7 +1109,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_7
+      name: Wall8
       rect:
         serializedVersion: 2
         x: 16
@@ -1639,7 +1135,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_8
+      name: Wall9
       rect:
         serializedVersion: 2
         x: 32
@@ -1665,7 +1161,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_9
+      name: Wall14
       rect:
         serializedVersion: 2
         x: 48
@@ -1686,7 +1182,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_10
+      name: Wall12
       rect:
         serializedVersion: 2
         x: 48
@@ -1707,7 +1203,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_11
+      name: Wall5
       rect:
         serializedVersion: 2
         x: 16
@@ -1735,7 +1231,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_12
+      name: Wall7
       rect:
         serializedVersion: 2
         x: 32
@@ -3212,7 +2708,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSpriteSheet_57
+      name: Mold2
       rect:
         serializedVersion: 2
         x: 16
@@ -3233,7 +2729,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_0
+      name: Mold1
       rect:
         serializedVersion: 2
         x: 0
@@ -3254,7 +2750,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_1
+      name: Mold3
       rect:
         serializedVersion: 2
         x: 32
@@ -3275,7 +2771,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_2
+      name: Mold4
       rect:
         serializedVersion: 2
         x: 48
@@ -3296,7 +2792,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_3
+      name: Wall3
       rect:
         serializedVersion: 2
         x: 0
@@ -3317,7 +2813,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_4
+      name: Wall4
       rect:
         serializedVersion: 2
         x: 16
@@ -3338,7 +2834,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: LandscapeSprites_5
+      name: Wall6
       rect:
         serializedVersion: 2
         x: 32
@@ -3733,6 +3229,216 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Fence
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d1236589ab468f4ca8e4b1d74be48da
+      internalID: -1720951748
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceBottomEnd
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2bf1c0a60270fd44aacb3d448af890b
+      internalID: -233551879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceLBottom
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac6cbeb3aca8e4147a2ad247c01d00ec
+      internalID: -1710625137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceBottom
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a63d1c6e759ed04cb92ad252aa03556
+      internalID: 186307885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceThreewayTS
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a29536640404b0a479dab9ce407954e8
+      internalID: 779470349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceLTop
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f456831c6cabffc49a164d776655f987
+      internalID: -346293010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceSide
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 176
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a06c28067ef023b4eb661097426db921
+      internalID: 2013939255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceThrewatTBS
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 144
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f185536c046288d4d8370f5226dc7a34
+      internalID: -211740784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FenceThreewayBT
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 144
+        width: 16
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e55277447e444b4d930f92c9e63c360
+      internalID: 1485890228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Wall2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 112
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2cdb5da805ef9b849bc3dfe8b7c83471
+      internalID: 1984494212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -3764,6 +3470,16 @@ TextureImporter:
       DirtSpot2: -902264514
       DirtStone: -116502728
       DirtStones: -1752784508
+      Fence: -1720951748
+      FenceBottom: 186307885
+      FenceBottomEnd: -233551879
+      FenceLBottom: -1710625137
+      FenceLTop: -346293010
+      FenceSide: 2013939255
+      FenceThreewayBT: 1485890228
+      FenceThreewayTS: 779470349
+      FenceThrewatTBS: -211740784
+      FenceTopEnd: 792009289
       FlowerBlue: -459977569
       FlowerPink: 2072066137
       FlowerRed: -1480615387
@@ -3795,11 +3511,7 @@ TextureImporter:
       GrassVER: 1660992949
       GrassVM: 63933012
       GrassyGrass: -1345450931
-      LandscapeSpriteSheet_0: 883711076
       LandscapeSpriteSheet_1: 1861419106
-      LandscapeSpriteSheet_10: -1814192697
-      LandscapeSpriteSheet_11: -2116182207
-      LandscapeSpriteSheet_12: -1732196316
       LandscapeSpriteSheet_13: -414023977
       LandscapeSpriteSheet_14: 1790006086
       LandscapeSpriteSheet_15: 2007474394
@@ -3807,7 +3519,6 @@ TextureImporter:
       LandscapeSpriteSheet_17: -1806089410
       LandscapeSpriteSheet_18: 978484826
       LandscapeSpriteSheet_19: 1372175654
-      LandscapeSpriteSheet_2: 1880970848
       LandscapeSpriteSheet_20: 42437959
       LandscapeSpriteSheet_21: 731173774
       LandscapeSpriteSheet_22: 705766961
@@ -3829,7 +3540,6 @@ TextureImporter:
       LandscapeSpriteSheet_37: -525682382
       LandscapeSpriteSheet_38: -1043338121
       LandscapeSpriteSheet_39: 1234644168
-      LandscapeSpriteSheet_4: 908584400
       LandscapeSpriteSheet_40: 1358462228
       LandscapeSpriteSheet_41: 1956351453
       LandscapeSpriteSheet_42: 1499103733
@@ -3840,7 +3550,6 @@ TextureImporter:
       LandscapeSpriteSheet_47: -1705825844
       LandscapeSpriteSheet_48: -70663667
       LandscapeSpriteSheet_49: -62823759
-      LandscapeSpriteSheet_5: -1560170883
       LandscapeSpriteSheet_50: -1512323604
       LandscapeSpriteSheet_51: 918723030
       LandscapeSpriteSheet_52: 1790917459
@@ -3848,10 +3557,8 @@ TextureImporter:
       LandscapeSpriteSheet_54: 1849857251
       LandscapeSpriteSheet_55: 261592263
       LandscapeSpriteSheet_56: -860128424
-      LandscapeSpriteSheet_57: 279943686
       LandscapeSpriteSheet_58: -1309074898
       LandscapeSpriteSheet_59: 1586879748
-      LandscapeSpriteSheet_6: 96297739
       LandscapeSpriteSheet_60: -1637577651
       LandscapeSpriteSheet_61: 541657327
       LandscapeSpriteSheet_62: -1311260699
@@ -3862,7 +3569,6 @@ TextureImporter:
       LandscapeSpriteSheet_67: 935021098
       LandscapeSpriteSheet_68: 182112964
       LandscapeSpriteSheet_69: 1717346011
-      LandscapeSpriteSheet_7: 125332427
       LandscapeSpriteSheet_70: 1592240301
       LandscapeSpriteSheet_71: -315219160
       LandscapeSpriteSheet_72: 1476004661
@@ -3873,12 +3579,8 @@ TextureImporter:
       LandscapeSpriteSheet_77: 1046913765
       LandscapeSpriteSheet_78: -643963836
       LandscapeSpriteSheet_79: -426470791
-      LandscapeSpriteSheet_8: -464738970
       LandscapeSpriteSheet_80: -1158126609
       LandscapeSpriteSheet_81: -274285787
-      LandscapeSpriteSheet_9: 1261916815
-      LandscapeSprites_0: -1675097575
-      LandscapeSprites_1: 850680724
       LandscapeSprites_10: -1090359015
       LandscapeSprites_11: 2135363020
       LandscapeSprites_12: -656851074
@@ -3889,19 +3591,34 @@ TextureImporter:
       LandscapeSprites_17: -1416738475
       LandscapeSprites_18: -903356479
       LandscapeSprites_19: 1617554811
-      LandscapeSprites_2: -1668986257
       LandscapeSprites_20: -1180856226
-      LandscapeSprites_3: 576069379
-      LandscapeSprites_4: -1475903378
-      LandscapeSprites_5: -525804706
       LandscapeSprites_6: 2041476490
       LandscapeSprites_7: 210543228
       LandscapeSprites_8: -1391774639
       LandscapeSprites_9: 1949812971
+      Mold1: -1675097575
+      Mold2: 279943686
+      Mold3: 850680724
+      Mold4: -1668986257
       PinkTexture: 471163312
       SmallSticks: 609867016
       StoneBricks: 1435358498
-      WaterAnim1: -1431267560
+      Wall1: 96297739
+      Wall10: 883711076
+      Wall11: 1880970848
+      Wall12: -1814192697
+      Wall13: -1560170883
+      Wall14: 1261916815
+      Wall15: 908584400
+      Wall2: 1984494212
+      Wall3: 576069379
+      Wall4: -1475903378
+      Wall5: -2116182207
+      Wall6: -525804706
+      Wall7: -1732196316
+      Wall8: 125332427
+      Wall9: -464738970
+      WaterAnim: -1431267560
       WaterAnim10: -654136541
       WaterAnim11: 1176964963
       WaterAnim12: -69244714
