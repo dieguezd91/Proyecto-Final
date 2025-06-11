@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantName: Astral Water Lily
   plantPrefab: {fileID: 6736001113723686055, guid: 6b4075f2f782afd4b871e0bc312ed13f, type: 3}
-  plantIcon: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  plantIcon: {fileID: -1218528404, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   startingDaySprite: {fileID: 496183913, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}

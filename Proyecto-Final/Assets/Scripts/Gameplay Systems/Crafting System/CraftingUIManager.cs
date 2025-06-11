@@ -116,13 +116,13 @@ public class CraftingUIManager : MonoBehaviour
                 if (nameText != null)
                     nameText.text = plantData.plantName;
 
-                var iconTransform = btn.transform.Find("PlantImage");
+                var iconTransform = btn.transform.Find("SeedIcon");
                 if (iconTransform != null)
                 {
                     var iconImage = iconTransform.GetComponent<Image>();
                     if (iconImage != null)
                     {
-                        iconImage.sprite = plantData.plantIcon;
+                        iconImage.sprite = recipe.SeedIcon;
                         iconImage.preserveAspect = true;
                     }
                 }
