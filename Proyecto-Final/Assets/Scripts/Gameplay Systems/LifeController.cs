@@ -207,13 +207,14 @@ public class LifeController : MonoBehaviour
         isDead = false;
         currentHealth = maxHealth;
 
-        foreach (var col in GetComponents<Collider2D>())
-        {
-            col.enabled = true;
-        }
-
         onHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        foreach (var col in GetComponents<Collider2D>())
+            col.enabled = true;
+
         animator.SetBool("IsDead", false);
+        animator.ResetTrigger("Death");
+        animator.SetTrigger("Revive");
     }
 
     public IEnumerator StartInvulnerability(float duration)
@@ -223,8 +224,6 @@ public class LifeController : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         isRespawning = false;
-
-        GetComponent<PlayerController>()?.ResetAnimator();
     }
 
     public bool IsTargetable()
@@ -240,5 +239,10 @@ public class LifeController : MonoBehaviour
             Drop();
             Destroy(gameObject);
         }
+    }
+
+    public void OnReviveAnimationEnd()
+    {
+        GetComponent<PlayerController>()?.SetCanAct(true);
     }
 }
