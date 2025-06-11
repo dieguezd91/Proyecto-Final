@@ -1,6 +1,7 @@
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
-using System.Collections;
 
 public class LifeController : MonoBehaviour
 {
@@ -89,6 +90,12 @@ public class LifeController : MonoBehaviour
             if (animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.SetTrigger("Death");
+
+                if (!AnimatorHasEvent("OnDeathAnimationEnd"))
+                {
+                    Drop();
+                    Destroy(gameObject);
+                }
             }
             else
             {
@@ -111,6 +118,22 @@ public class LifeController : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
+    }
+
+    private bool AnimatorHasEvent(string eventName)
+    {
+        RuntimeAnimatorController controller = animator.runtimeAnimatorController;
+        if (controller == null) return false;
+
+        foreach (AnimationClip clip in controller.animationClips)
+        {
+            foreach (var evt in AnimationUtility.GetAnimationEvents(clip))
+            {
+                if (evt.functionName == eventName)
+                    return true;
+            }
+        }
+        return false;
     }
 
     IEnumerator FlashRoutine()
@@ -144,8 +167,15 @@ public class LifeController : MonoBehaviour
 
     public void OnDeathAnimationEnd()
     {
-        Drop();
-        StartCoroutine(MoveToRespawnPoint());
+        if (isEnemy)
+        {
+            Drop();
+            Destroy(gameObject);
+        }
+        else
+        {
+            StartCoroutine(MoveToRespawnPoint());
+        }
     }
 
     private IEnumerator MoveToRespawnPoint()
