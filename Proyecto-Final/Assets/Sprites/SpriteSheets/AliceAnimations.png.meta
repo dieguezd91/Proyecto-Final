@@ -114,7 +114,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -135,7 +135,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 24
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -156,7 +156,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -177,7 +177,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 72
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -198,7 +198,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -219,7 +219,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 120
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -240,7 +240,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 144
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -261,7 +261,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 168
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -282,7 +282,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -303,7 +303,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 216
-        y: 0
+        y: 216
         width: 24
         height: 24
       alignment: 0
@@ -323,8 +323,8 @@ TextureImporter:
       name: AliceAnimations_10
       rect:
         serializedVersion: 2
-        x: 240
-        y: 0
+        x: 0
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -344,8 +344,8 @@ TextureImporter:
       name: AliceAnimations_11
       rect:
         serializedVersion: 2
-        x: 264
-        y: 0
+        x: 24
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -365,8 +365,8 @@ TextureImporter:
       name: AliceAnimations_12
       rect:
         serializedVersion: 2
-        x: 288
-        y: 0
+        x: 48
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -386,8 +386,8 @@ TextureImporter:
       name: AliceAnimations_13
       rect:
         serializedVersion: 2
-        x: 312
-        y: 0
+        x: 72
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -407,8 +407,8 @@ TextureImporter:
       name: AliceAnimations_14
       rect:
         serializedVersion: 2
-        x: 336
-        y: 0
+        x: 96
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -428,8 +428,8 @@ TextureImporter:
       name: AliceAnimations_15
       rect:
         serializedVersion: 2
-        x: 360
-        y: 0
+        x: 120
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -449,8 +449,8 @@ TextureImporter:
       name: AliceAnimations_16
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
+        x: 144
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -470,8 +470,8 @@ TextureImporter:
       name: AliceAnimations_17
       rect:
         serializedVersion: 2
-        x: 408
-        y: 0
+        x: 168
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -491,8 +491,8 @@ TextureImporter:
       name: AliceAnimations_18
       rect:
         serializedVersion: 2
-        x: 432
-        y: 0
+        x: 192
+        y: 192
         width: 24
         height: 24
       alignment: 0
@@ -512,8 +512,8 @@ TextureImporter:
       name: AliceAnimations_19
       rect:
         serializedVersion: 2
-        x: 456
-        y: 0
+        x: 0
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -533,8 +533,8 @@ TextureImporter:
       name: AliceAnimations_20
       rect:
         serializedVersion: 2
-        x: 480
-        y: 0
+        x: 24
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -554,8 +554,8 @@ TextureImporter:
       name: AliceAnimations_21
       rect:
         serializedVersion: 2
-        x: 504
-        y: 0
+        x: 48
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -575,8 +575,8 @@ TextureImporter:
       name: AliceAnimations_22
       rect:
         serializedVersion: 2
-        x: 528
-        y: 0
+        x: 72
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -596,8 +596,8 @@ TextureImporter:
       name: AliceAnimations_23
       rect:
         serializedVersion: 2
-        x: 552
-        y: 0
+        x: 96
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -617,8 +617,8 @@ TextureImporter:
       name: AliceAnimations_24
       rect:
         serializedVersion: 2
-        x: 576
-        y: 0
+        x: 120
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -638,8 +638,8 @@ TextureImporter:
       name: AliceAnimations_25
       rect:
         serializedVersion: 2
-        x: 600
-        y: 0
+        x: 144
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -659,8 +659,8 @@ TextureImporter:
       name: AliceAnimations_26
       rect:
         serializedVersion: 2
-        x: 624
-        y: 0
+        x: 168
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -680,8 +680,8 @@ TextureImporter:
       name: AliceAnimations_27
       rect:
         serializedVersion: 2
-        x: 648
-        y: 0
+        x: 192
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -701,8 +701,8 @@ TextureImporter:
       name: AliceAnimations_28
       rect:
         serializedVersion: 2
-        x: 672
-        y: 0
+        x: 216
+        y: 168
         width: 24
         height: 24
       alignment: 0
@@ -722,8 +722,8 @@ TextureImporter:
       name: AliceAnimations_29
       rect:
         serializedVersion: 2
-        x: 696
-        y: 0
+        x: 0
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -743,8 +743,8 @@ TextureImporter:
       name: AliceAnimations_30
       rect:
         serializedVersion: 2
-        x: 720
-        y: 0
+        x: 24
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -764,8 +764,8 @@ TextureImporter:
       name: AliceAnimations_31
       rect:
         serializedVersion: 2
-        x: 744
-        y: 0
+        x: 48
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -785,8 +785,8 @@ TextureImporter:
       name: AliceAnimations_32
       rect:
         serializedVersion: 2
-        x: 768
-        y: 0
+        x: 72
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -806,8 +806,8 @@ TextureImporter:
       name: AliceAnimations_33
       rect:
         serializedVersion: 2
-        x: 792
-        y: 0
+        x: 96
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -827,8 +827,8 @@ TextureImporter:
       name: AliceAnimations_34
       rect:
         serializedVersion: 2
-        x: 816
-        y: 0
+        x: 120
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -848,8 +848,8 @@ TextureImporter:
       name: AliceAnimations_35
       rect:
         serializedVersion: 2
-        x: 840
-        y: 0
+        x: 144
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -869,8 +869,8 @@ TextureImporter:
       name: AliceAnimations_36
       rect:
         serializedVersion: 2
-        x: 864
-        y: 0
+        x: 168
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -890,8 +890,8 @@ TextureImporter:
       name: AliceAnimations_37
       rect:
         serializedVersion: 2
-        x: 888
-        y: 0
+        x: 192
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -911,8 +911,8 @@ TextureImporter:
       name: AliceAnimations_38
       rect:
         serializedVersion: 2
-        x: 912
-        y: 0
+        x: 216
+        y: 144
         width: 24
         height: 24
       alignment: 0
@@ -932,8 +932,8 @@ TextureImporter:
       name: AliceAnimations_39
       rect:
         serializedVersion: 2
-        x: 936
-        y: 0
+        x: 0
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -953,8 +953,8 @@ TextureImporter:
       name: AliceAnimations_40
       rect:
         serializedVersion: 2
-        x: 960
-        y: 0
+        x: 24
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -974,8 +974,8 @@ TextureImporter:
       name: AliceAnimations_41
       rect:
         serializedVersion: 2
-        x: 984
-        y: 0
+        x: 48
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -995,8 +995,8 @@ TextureImporter:
       name: AliceDeath1
       rect:
         serializedVersion: 2
-        x: 1008
-        y: 0
+        x: 72
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1016,8 +1016,8 @@ TextureImporter:
       name: AliceDeath2
       rect:
         serializedVersion: 2
-        x: 1032
-        y: 0
+        x: 96
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1037,8 +1037,8 @@ TextureImporter:
       name: AliceDeath3
       rect:
         serializedVersion: 2
-        x: 1056
-        y: 0
+        x: 120
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1058,8 +1058,8 @@ TextureImporter:
       name: AliceDeath4
       rect:
         serializedVersion: 2
-        x: 1080
-        y: 0
+        x: 144
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1079,8 +1079,8 @@ TextureImporter:
       name: AliceDeath5
       rect:
         serializedVersion: 2
-        x: 1104
-        y: 0
+        x: 168
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1100,8 +1100,8 @@ TextureImporter:
       name: AliceDeath6
       rect:
         serializedVersion: 2
-        x: 1128
-        y: 0
+        x: 192
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1121,8 +1121,8 @@ TextureImporter:
       name: AliceDeath7
       rect:
         serializedVersion: 2
-        x: 1152
-        y: 0
+        x: 216
+        y: 120
         width: 24
         height: 24
       alignment: 0
@@ -1142,8 +1142,8 @@ TextureImporter:
       name: AliceDeath8
       rect:
         serializedVersion: 2
-        x: 1176
-        y: 0
+        x: 0
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1163,8 +1163,8 @@ TextureImporter:
       name: AliceDeath9
       rect:
         serializedVersion: 2
-        x: 1200
-        y: 0
+        x: 24
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1184,8 +1184,8 @@ TextureImporter:
       name: AliceDeath10
       rect:
         serializedVersion: 2
-        x: 1224
-        y: 0
+        x: 48
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1205,8 +1205,8 @@ TextureImporter:
       name: AliceDeath11
       rect:
         serializedVersion: 2
-        x: 1248
-        y: 0
+        x: 72
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1226,8 +1226,8 @@ TextureImporter:
       name: AliceDeath12
       rect:
         serializedVersion: 2
-        x: 1272
-        y: 0
+        x: 96
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1247,8 +1247,8 @@ TextureImporter:
       name: AliceDeath13
       rect:
         serializedVersion: 2
-        x: 1296
-        y: 0
+        x: 120
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1268,8 +1268,8 @@ TextureImporter:
       name: AliceDeath14
       rect:
         serializedVersion: 2
-        x: 1320
-        y: 0
+        x: 144
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1289,8 +1289,8 @@ TextureImporter:
       name: AliceDeath15
       rect:
         serializedVersion: 2
-        x: 1344
-        y: 0
+        x: 168
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1310,8 +1310,8 @@ TextureImporter:
       name: AliceDeath16
       rect:
         serializedVersion: 2
-        x: 1368
-        y: 0
+        x: 192
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1331,8 +1331,8 @@ TextureImporter:
       name: AliceDeath17
       rect:
         serializedVersion: 2
-        x: 1392
-        y: 0
+        x: 216
+        y: 96
         width: 24
         height: 24
       alignment: 0
@@ -1352,8 +1352,8 @@ TextureImporter:
       name: AliceDeath18
       rect:
         serializedVersion: 2
-        x: 1416
-        y: 0
+        x: 0
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1373,8 +1373,8 @@ TextureImporter:
       name: AliceDeath19
       rect:
         serializedVersion: 2
-        x: 1440
-        y: 0
+        x: 24
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1394,8 +1394,8 @@ TextureImporter:
       name: AliceDeath20
       rect:
         serializedVersion: 2
-        x: 1464
-        y: 0
+        x: 48
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1415,8 +1415,8 @@ TextureImporter:
       name: AliceDeath21
       rect:
         serializedVersion: 2
-        x: 1488
-        y: 0
+        x: 72
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1436,8 +1436,8 @@ TextureImporter:
       name: AliceDeath22
       rect:
         serializedVersion: 2
-        x: 1512
-        y: 0
+        x: 96
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1457,8 +1457,8 @@ TextureImporter:
       name: AliceDeath23
       rect:
         serializedVersion: 2
-        x: 1536
-        y: 0
+        x: 120
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1478,8 +1478,8 @@ TextureImporter:
       name: AliceDeath24
       rect:
         serializedVersion: 2
-        x: 1560
-        y: 0
+        x: 144
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1499,8 +1499,8 @@ TextureImporter:
       name: AliceDeath25
       rect:
         serializedVersion: 2
-        x: 1584
-        y: 0
+        x: 168
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1520,8 +1520,8 @@ TextureImporter:
       name: AliceDeath26
       rect:
         serializedVersion: 2
-        x: 1608
-        y: 0
+        x: 192
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1541,8 +1541,29 @@ TextureImporter:
       name: AliceAnimations_42
       rect:
         serializedVersion: 2
-        x: 1630
-        y: 0
+        x: 216
+        y: 192
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 834dc0904343a684684acb9ebbfc672b
+      internalID: -1793214583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 72
         width: 24
         height: 24
       alignment: 0
@@ -1552,8 +1573,176 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 834dc0904343a684684acb9ebbfc672b
-      internalID: -1793214583
+      spriteID: 19216debfd42a954880e3a0e9d4f8c40
+      internalID: 235271091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 784e49ead1a7ecc48ad18ef5dd0ce8b4
+      internalID: 195490867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive3
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a647e2883f7b6e045a454c90a581ea55
+      internalID: -827765438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive4
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 047f0f6463f8d0e4b946ebef6b202c1f
+      internalID: 1846031639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive5
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56a4b074c3565c546ab21c13ab65ab65
+      internalID: -1301084055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive6
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93dd3cf21a4186941a69cbe6bbf9ef57
+      internalID: -1244778902
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive7
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c3f2f6854f9f03479c1b3d0cfbf9a37
+      internalID: 831657928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive8
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e652b23ea936484a9ec16846957494c
+      internalID: -298786966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive9
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afd33175fdf65b1418127adbe099c3b4
+      internalID: -192321818
       vertices: []
       indices: 
       edges: []
@@ -1638,6 +1827,15 @@ TextureImporter:
       AliceDeath7: -551755861
       AliceDeath8: 1608503608
       AliceDeath9: 1833142447
+      Revive: 235271091
+      Revive2: 195490867
+      Revive3: -827765438
+      Revive4: 1846031639
+      Revive5: -1301084055
+      Revive6: -1244778902
+      Revive7: 831657928
+      Revive8: -298786966
+      Revive9: -192321818
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
