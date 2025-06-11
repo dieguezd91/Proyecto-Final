@@ -103,7 +103,7 @@ public class Enemy : MonoBehaviour
         if (playerObj != null)
         {
             LifeController playerLife = playerObj.GetComponent<LifeController>();
-            if (playerLife != null && !playerLife.isRespawning)
+            if (playerLife != null && playerLife.IsTargetable())
             {
                 float distanceToPlayer = Vector2.Distance(transform.position, playerObj.transform.position);
                 float adjustedDistance = distanceToPlayer / playerPriority;

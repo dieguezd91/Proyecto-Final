@@ -257,12 +257,11 @@ public class GameManager : MonoBehaviour
         controller.SetCanAct(false);
 
         var life = player.GetComponent<LifeController>();
-        life.ResetLife();
 
         yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
 
+        life.ResetLife();
         controller.SetCanAct(true);
-        controller.ResetAnimator();
     }
 
     public void OnPlayerDeathAnimationComplete()

@@ -91,11 +91,7 @@ public class LifeController : MonoBehaviour
             {
                 animator.SetTrigger("Death");
 
-                if (!AnimatorHasEvent("OnDeathAnimationEnd"))
-                {
-                    Drop();
-                    Destroy(gameObject);
-                }
+                StartCoroutine(DestroyAfterDelay(1f));
             }
             else
             {
@@ -118,22 +114,6 @@ public class LifeController : MonoBehaviour
                 gameObject.SetActive(false);
             }
         }
-    }
-
-    private bool AnimatorHasEvent(string eventName)
-    {
-        RuntimeAnimatorController controller = animator.runtimeAnimatorController;
-        if (controller == null) return false;
-
-        foreach (AnimationClip clip in controller.animationClips)
-        {
-            foreach (var evt in AnimationUtility.GetAnimationEvents(clip))
-            {
-                if (evt.functionName == eventName)
-                    return true;
-            }
-        }
-        return false;
     }
 
     IEnumerator FlashRoutine()
@@ -245,5 +225,20 @@ public class LifeController : MonoBehaviour
         isRespawning = false;
 
         GetComponent<PlayerController>()?.ResetAnimator();
+    }
+
+    public bool IsTargetable()
+    {
+        return !isRespawning && !isDead;
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (this != null && gameObject != null)
+        {
+            Drop();
+            Destroy(gameObject);
+        }
     }
 }
