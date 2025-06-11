@@ -144,17 +144,12 @@ public class LifeController : MonoBehaviour
     public void OnDeathAnimationEnd()
     {
         Drop();
-        gameObject.SetActive(false);
-        StartCoroutine(DelayedRespawn());
-    }
-
-    private IEnumerator DelayedRespawn()
-    {
-        yield return new WaitForSeconds(0.1f);
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.StartCoroutine(GameManager.Instance.RespawnPlayer());
+            GameManager.Instance.OnPlayerDeathAnimationComplete();
         }
+
+        gameObject.SetActive(false);
     }
 
     public void Drop()

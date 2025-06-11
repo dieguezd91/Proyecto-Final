@@ -265,6 +265,13 @@ public class GameManager : MonoBehaviour
         life.ResetLife();
         yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
         controller.SetCanAct(true);
+
+        controller.ResetAnimator();
+    }
+
+    public void OnPlayerDeathAnimationComplete()
+    {
+        StartCoroutine(RespawnPlayer());
     }
 
     public void Restart()

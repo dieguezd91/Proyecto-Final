@@ -264,4 +264,14 @@ public class PlayerController : MonoBehaviour
             lastFootstepTime = Time.time;
         }
     }
+
+    public void ResetAnimator()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", false);
+            animator.SetFloat("aimX", 0f);
+            animator.SetFloat("aimY", -1f);
+        }
+    }
 }
