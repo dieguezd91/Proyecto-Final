@@ -88,11 +88,6 @@ public class GameManager : MonoBehaviour
         if (player != null)
         {
             playerLife = player.GetComponent<LifeController>();
-
-            if (playerLife != null)
-            {
-                playerLife.onDeath.AddListener(HandlePlayerDeath);
-            }
         }
 
         if (home == null)
@@ -224,11 +219,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void HandlePlayerDeath()
-    {
-        StartCoroutine(RespawnPlayer());
-    }
-
     private void HandleHomeDeath()
     {
         StartCoroutine(ShowGameOverAfterDelay());
@@ -258,7 +248,7 @@ public class GameManager : MonoBehaviour
         dayCount = 1;
     }
 
-    private IEnumerator RespawnPlayer()
+    public IEnumerator RespawnPlayer()
     {
         player.SetActive(false);
 

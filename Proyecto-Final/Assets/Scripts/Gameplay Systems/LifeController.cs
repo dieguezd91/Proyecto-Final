@@ -73,7 +73,6 @@ public class LifeController : MonoBehaviour
         }
     }
 
-
     public virtual void Die()
     {
         isDead = true;
@@ -99,8 +98,17 @@ public class LifeController : MonoBehaviour
         }
         else
         {
-            Drop();
-            gameObject.SetActive(false);
+            if (animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Death");
+                GetComponent<PlayerController>()?.SetMovementEnabled(false);
+                GetComponent<PlayerController>()?.SetCanAct(false);
+            }
+            else
+            {
+                Drop();
+                gameObject.SetActive(false);
+            }
         }
     }
 
@@ -136,7 +144,17 @@ public class LifeController : MonoBehaviour
     public void OnDeathAnimationEnd()
     {
         Drop();
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        StartCoroutine(DelayedRespawn());
+    }
+
+    private IEnumerator DelayedRespawn()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.StartCoroutine(GameManager.Instance.RespawnPlayer());
+        }
     }
 
     public void Drop()
