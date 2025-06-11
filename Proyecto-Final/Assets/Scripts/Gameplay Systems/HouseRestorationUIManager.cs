@@ -126,7 +126,7 @@ public class HouseRestorationUIManager : MonoBehaviour
             if (i < restorationSystem.OptionCount)
             {
                 var opt = restorationSystem.GetOption(i);
-                optionLabels[i].text = $"{opt.label}: {opt.restorePercentage}% vida\n{opt.goldCost} oro + 1 {opt.materialRequired}";
+                optionLabels[i].text = $"{opt.restorePercentage}% vida\n{opt.goldCost} oro + 1 {opt.materialRequired}";
             }
             optionButtons[i].interactable = !restorationSystem.HasRestoredToday();
         }

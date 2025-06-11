@@ -338,18 +338,12 @@ public class UIManager : MonoBehaviour
             GameManager.Instance.currentGameState == GameState.Harvesting ||
             GameManager.Instance.currentGameState == GameState.Removing;
 
-        if (isDayOrAbilityState)
-        {
-            if (seedSlots != null) seedSlots.SetActive(!isInstructionsOpen);
-            if (dayControlPanel != null) dayControlPanel.SetActive(!isInstructionsOpen);
-            if (startNightButton != null) startNightButton.gameObject.SetActive(!isInstructionsOpen);
-        }
-        else
-        {
-            if (seedSlots != null) seedSlots.SetActive(false);
-            if (dayControlPanel != null) dayControlPanel.SetActive(false);
-            if (startNightButton != null) startNightButton.gameObject.SetActive(false);
-        }
+        bool showHUD = isDayOrAbilityState;
+
+        if (HUD != null) HUD.SetActive(showHUD);
+        if (seedSlots != null) seedSlots.SetActive(showHUD && !isInstructionsOpen);
+        if (dayControlPanel != null) dayControlPanel.SetActive(showHUD && !isInstructionsOpen);
+        if (startNightButton != null) startNightButton.gameObject.SetActive(showHUD && !isInstructionsOpen);
     }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
