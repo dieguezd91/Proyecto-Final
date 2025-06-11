@@ -79,7 +79,7 @@ public class Enemy2 : MonoBehaviour
         if (pObj != null)
         {
             LifeController playerLife = pObj.GetComponent<LifeController>();
-            if (playerLife == null || !playerLife.isRespawning)
+            if (playerLife != null && playerLife.IsTargetable())
             {
                 float d = Vector2.Distance(transform.position, pObj.transform.position);
                 float score = d / playerPriority;

@@ -246,4 +246,10 @@ public class LifeController : MonoBehaviour
 
         GetComponent<PlayerController>()?.ResetAnimator();
     }
+
+    public bool IsTargetable()
+    {
+        return !isRespawning && !isDead;
+    }
+
 }
