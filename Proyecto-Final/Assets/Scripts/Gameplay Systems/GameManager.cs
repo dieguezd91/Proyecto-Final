@@ -250,12 +250,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator RespawnPlayer()
     {
-        player.SetActive(false);
-
         yield return new WaitForSeconds(playerRespawnTime);
-
-        player.transform.position = playerRespawnPoint.position;
-        player.SetActive(true);
 
         var controller = player.GetComponent<PlayerController>();
         controller.SetMovementEnabled(true);
@@ -263,15 +258,21 @@ public class GameManager : MonoBehaviour
 
         var life = player.GetComponent<LifeController>();
         life.ResetLife();
-        yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
-        controller.SetCanAct(true);
 
+        yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
+
+        controller.SetCanAct(true);
         controller.ResetAnimator();
     }
 
     public void OnPlayerDeathAnimationComplete()
     {
         StartCoroutine(RespawnPlayer());
+    }
+
+    public Transform GetPlayerRespawnPoint()
+    {
+        return playerRespawnPoint;
     }
 
     public void Restart()

@@ -101,6 +101,7 @@ public class LifeController : MonoBehaviour
             if (animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.SetTrigger("Death");
+                animator.SetBool("IsDead", true);
                 GetComponent<PlayerController>()?.SetMovementEnabled(false);
                 GetComponent<PlayerController>()?.SetCanAct(false);
             }
@@ -144,12 +145,37 @@ public class LifeController : MonoBehaviour
     public void OnDeathAnimationEnd()
     {
         Drop();
-        if (GameManager.Instance != null)
+        StartCoroutine(MoveToRespawnPoint());
+    }
+
+    private IEnumerator MoveToRespawnPoint()
+    {
+        Transform respawnPoint = GameManager.Instance?.GetPlayerRespawnPoint();
+        if (respawnPoint == null)
         {
-            GameManager.Instance.OnPlayerDeathAnimationComplete();
+            yield break;
         }
 
-        gameObject.SetActive(false);
+        float duration = 1.5f;
+        float elapsed = 0f;
+
+        Vector3 start = transform.position;
+        Vector3 end = respawnPoint.position;
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (var col in colliders)
+            col.enabled = false;
+
+        while (elapsed < duration)
+        {
+            transform.position = Vector3.Lerp(start, end, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = end;
+
+        GameManager.Instance.OnPlayerDeathAnimationComplete();
     }
 
     public void Drop()
@@ -177,35 +203,17 @@ public class LifeController : MonoBehaviour
         }
 
         onHealthChanged?.Invoke(currentHealth, maxHealth);
+        animator.SetBool("IsDead", false);
     }
 
     public IEnumerator StartInvulnerability(float duration)
     {
         isRespawning = true;
-        float elapsed = 0f;
-        bool toggle = false;
 
-        while (elapsed < duration)
-        {
-            if (spriteRenderer != null)
-            {
-                Color color = spriteRenderer.color;
-                color.a = toggle ? 0.3f : 1f;
-                spriteRenderer.color = color;
-                toggle = !toggle;
-            }
-
-            elapsed += 0.2f;
-            yield return new WaitForSeconds(0.2f);
-        }
-
-        if (spriteRenderer != null)
-        {
-            Color finalColor = spriteRenderer.color;
-            finalColor.a = 1f;
-            spriteRenderer.color = finalColor;
-        }
+        yield return new WaitForSeconds(duration);
 
         isRespawning = false;
+
+        GetComponent<PlayerController>()?.ResetAnimator();
     }
 }

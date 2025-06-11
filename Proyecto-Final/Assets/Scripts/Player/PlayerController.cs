@@ -272,6 +272,7 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("IsMoving", false);
             animator.SetFloat("aimX", 0f);
             animator.SetFloat("aimY", -1f);
+            animator.Play("Idle");  
         }
     }
 }
