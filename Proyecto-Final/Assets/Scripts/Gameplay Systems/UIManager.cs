@@ -331,19 +331,26 @@ public class UIManager : MonoBehaviour
     {
         if (GameManager.Instance == null) return;
 
-        bool isDayOrAbilityState =
-            GameManager.Instance.currentGameState == GameState.Day ||
-            GameManager.Instance.currentGameState == GameState.Digging ||
-            GameManager.Instance.currentGameState == GameState.Planting ||
-            GameManager.Instance.currentGameState == GameState.Harvesting ||
-            GameManager.Instance.currentGameState == GameState.Removing;
+        GameState state = GameManager.Instance.currentGameState;
 
-        bool showHUD = isDayOrAbilityState;
+        bool showHUD = state == GameState.Day ||
+                       state == GameState.Digging ||
+                       state == GameState.Planting ||
+                       state == GameState.Harvesting ||
+                       state == GameState.Removing ||
+                       state == GameState.Night;
 
         if (HUD != null) HUD.SetActive(showHUD);
-        if (seedSlots != null) seedSlots.SetActive(showHUD && !isInstructionsOpen);
-        if (dayControlPanel != null) dayControlPanel.SetActive(showHUD && !isInstructionsOpen);
-        if (startNightButton != null) startNightButton.gameObject.SetActive(showHUD && !isInstructionsOpen);
+
+        bool showGameplayUI = state == GameState.Day ||
+                              state == GameState.Digging ||
+                              state == GameState.Planting ||
+                              state == GameState.Harvesting ||
+                              state == GameState.Removing;
+
+        if (seedSlots != null) seedSlots.SetActive(showGameplayUI && !isInstructionsOpen);
+        if (dayControlPanel != null) dayControlPanel.SetActive(showGameplayUI && !isInstructionsOpen);
+        if (startNightButton != null) startNightButton.gameObject.SetActive(showGameplayUI && !isInstructionsOpen);
     }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -395,7 +402,15 @@ public class UIManager : MonoBehaviour
     {
         if (abilityPanel == null || GameManager.Instance == null) return;
 
-        abilityPanel.SetActive(GameManager.Instance.currentGameState != GameState.Night);
+        GameState state = GameManager.Instance.currentGameState;
+        bool showAbilities = state != GameState.Night &&
+                             state != GameState.OnInventory &&
+                             state != GameState.OnCrafting &&
+                             state != GameState.OnAltarRestoration &&
+                             state != GameState.Paused &&
+                             state != GameState.GameOver;
+
+        abilityPanel.SetActive(showAbilities);
     }
 
     private void HandleInventoryInput()
