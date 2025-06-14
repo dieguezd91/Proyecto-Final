@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
+using System.Collections.Generic;
 
 /// <summary>
 /// UIManager actualizado para:
@@ -92,9 +94,16 @@ public class UIManager : MonoBehaviour
 
     private int lastPressSlot = -1;            
     private float lastPressTime = 0f;          
-    [SerializeField] private float doublePressThreshold = 0.3f; 
+    [SerializeField] private float doublePressThreshold = 0.3f;
 
-    
+
+    // Drag & Drop fields
+    private Transform _slotsParent;
+    private Transform _draggingSlot;
+    private GameObject _placeholder;
+    private int _originalSiblingIndex;
+
+
     private int pendingSwapSlot = -1;         
 
     void Start()
@@ -102,6 +111,21 @@ public class UIManager : MonoBehaviour
         InitializeReferences();
         SetupListeners();
         InitializeUI();
+
+
+        // 1) Aseguramos que cada slot tenga un CanvasGroup
+        foreach (var go in slotObjects)
+        {
+            if (go != null && go.GetComponent<CanvasGroup>() == null)
+                go.AddComponent<CanvasGroup>();
+        }
+
+        // 2) Capturamos el parent común de todos los slots
+        if (slotObjects.Length > 0 && slotObjects[0] != null)
+            _slotsParent = slotObjects[0].transform.parent;
+
+        RegisterSlotDragEvents();
+
 
         if (playerLife != null)
             UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
@@ -231,38 +255,43 @@ public class UIManager : MonoBehaviour
         }
     }
 
-   
+
     public void InitializeSeedSlotsUI()
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
-            if (slotObjects[i] == null) continue;
+            // --- Primero: el número de slot **siempre** va a i+1 ---
+            if (slotNumbers[i] != null)
+                slotNumbers[i].text = (i + 1).ToString();
 
             PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
 
+            // Si hay planta/semilla en ese slot…
             if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
             {
+                // Icono
                 if (slotIcons[i] != null)
                 {
                     slotIcons[i].sprite = plantSlot.plantIcon;
                     slotIcons[i].preserveAspect = true;
                     slotIcons[i].gameObject.SetActive(true);
                 }
-
-                if (slotNumbers[i] != null)
-                    slotNumbers[i].text = (i + 1).ToString();
-
+                // Cantidad
                 if (seedCount[i] != null)
+                {
                     seedCount[i].text = plantSlot.seedCount.ToString();
+                    seedCount[i].enabled = true;
+                }
             }
             else
             {
+                // No hay nada: oculto icono y cantidad
                 if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
-                if (slotNumbers[i] != null) slotNumbers[i].text = "";
-                if (seedCount[i] != null) seedCount[i].text = "";
+                if (seedCount[i] != null) seedCount[i].enabled = false;
             }
         }
     }
+
 
     void InitializeHealthBar()
     {
@@ -648,7 +677,109 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    
+    private void RegisterSlotDragEvents()
+    {
+        for (int i = 0; i < slotObjects.Length; i++)
+        {
+            var go = slotObjects[i];
+            if (go == null) continue;
+            var trigger = go.GetComponent<EventTrigger>() ?? go.AddComponent<EventTrigger>();
+            trigger.triggers.Clear();
+
+            // BeginDrag
+            var bd = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
+            int copy = i;
+            bd.callback.AddListener(_ => BeginDragIcon(copy));
+            trigger.triggers.Add(bd);
+
+            // Drag
+            var dd = new EventTrigger.Entry { eventID = EventTriggerType.Drag };
+            dd.callback.AddListener(evt => OnDragIcon((PointerEventData)evt));
+            trigger.triggers.Add(dd);
+
+            // EndDrag
+            var ed = new EventTrigger.Entry { eventID = EventTriggerType.EndDrag };
+            ed.callback.AddListener(evt => EndDragIcon((PointerEventData)evt));
+            trigger.triggers.Add(ed);
+        }
+    }
+
+    // Variables auxiliares:
+    private GameObject _dragIcon;
+    private int _dragSourceIndex;
+
+    // 2) Cuando comienzas el drag, creas sólo el icono flotante y ocultas el original:
+    public void BeginDragIcon(int slotIndex)
+    {
+        _dragSourceIndex = slotIndex;
+
+        // crea el icono flotante
+        _dragIcon = new GameObject("DragIcon");
+        var rt = _dragIcon.AddComponent<RectTransform>();
+        rt.SetParent(transform.root, false);
+        rt.sizeDelta = slotObjects[slotIndex].GetComponent<RectTransform>().sizeDelta;
+
+        var img = _dragIcon.AddComponent<UnityEngine.UI.Image>();
+        img.raycastTarget = false;
+        img.sprite = slotIcons[slotIndex].sprite;
+
+        // oculta el icono original mientras arrastras
+        slotIcons[slotIndex].gameObject.SetActive(false);
+    }
+
+    // 3) Sigue al puntero:
+    public void OnDragIcon(PointerEventData data)
+    {
+        if (_dragIcon == null) return;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            transform.root as RectTransform,
+            data.position,
+            data.pressEventCamera,
+            out Vector2 localPos);
+        (_dragIcon.transform as RectTransform).anchoredPosition = localPos;
+    }
+
+    // 4) Al soltar, determinamos en qué slot caímos por raycast UI, swap y reconstruimos:
+    public void EndDragIcon(PointerEventData data)
+    {
+        if (_dragIcon != null)
+            Destroy(_dragIcon);
+
+        // volvemos a mostrar el icono origen
+        slotIcons[_dragSourceIndex].gameObject.SetActive(true);
+
+        // raycast UI para saber sobre qué slot soltaste
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(data, results);
+
+        int hitIndex = -1;
+        foreach (var r in results)
+        {
+            for (int i = 0; i < slotObjects.Length; i++)
+            {
+                if (r.gameObject == slotObjects[i] || r.gameObject.transform.IsChildOf(slotObjects[i].transform))
+                {
+                    hitIndex = i;
+                    break;
+                }
+            }
+            if (hitIndex != -1) break;
+        }
+
+        // si cayó sobre un slot distinto, intercambia en el inventario
+        if (hitIndex >= 0 && hitIndex != _dragSourceIndex)
+        {
+            SwapSeedSlots(_dragSourceIndex, hitIndex);
+            // repinta UI y selecciona automáticamente el destino:
+            InitializeSeedSlotsUI();
+            SeedInventory.Instance.SelectSlot(hitIndex);
+            UpdateSelectedSlotUI(hitIndex);
+        }
+
+        _dragSourceIndex = -1;
+    }
+
+
     private void OnSlotKeyPressed(int i)
     {
         float now = Time.time;
