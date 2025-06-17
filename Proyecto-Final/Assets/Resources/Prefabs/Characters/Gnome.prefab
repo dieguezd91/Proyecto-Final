@@ -229,5 +229,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  knockbackResistance: 0.5
+  knockbackResistance: 1
   knockbackDuration: 0.2
