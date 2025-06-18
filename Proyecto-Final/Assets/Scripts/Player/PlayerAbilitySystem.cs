@@ -43,6 +43,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     public delegate void AbilityChangedHandler(PlayerAbility newAbility);
     public event AbilityChangedHandler OnAbilityChanged;
 
+    [SerializeField] private GameObject digAnimationPrefab;
+
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()
@@ -409,12 +411,19 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
             return;
-        SoundManager.Instance.PlayOneShot("Dig");
+
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
         playerController.SetMovementEnabled(false);
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(false);
+
+        if (digAnimationPrefab != null)
+        {
+            Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(digPosition);
+            Vector3 spawnPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
+            Instantiate(digAnimationPrefab, spawnPos, Quaternion.identity);
+        }
 
         StartCoroutine(DiggingProcess());
     }
@@ -450,6 +459,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(digPosition);
         TilePlantingSystem.Instance.PlantingTilemap.SetTile(cell, tilledSoilTile);
+
         isDigging = false;
         playerController.SetMovementEnabled(true);
         progressBar?.Hide();
