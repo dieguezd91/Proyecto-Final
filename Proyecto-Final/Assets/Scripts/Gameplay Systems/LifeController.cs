@@ -157,38 +157,19 @@ public class LifeController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(MoveToRespawnPoint());
+            StartCoroutine(DelayedRevive());
         }
     }
 
-    private IEnumerator MoveToRespawnPoint()
+    private IEnumerator DelayedRevive()
     {
-        Transform respawnPoint = GameManager.Instance?.GetPlayerRespawnPoint();
-        if (respawnPoint == null)
-        {
-            yield break;
-        }
+        float delay = GameManager.Instance != null ? GameManager.Instance.playerRespawnTime : 2f;
 
-        float duration = 1.5f;
-        float elapsed = 0f;
+        yield return new WaitForSeconds(delay);
 
-        Vector3 start = transform.position;
-        Vector3 end = respawnPoint.position;
-
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (var col in colliders)
-            col.enabled = false;
-
-        while (elapsed < duration)
-        {
-            transform.position = Vector3.Lerp(start, end, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = end;
-
-        GameManager.Instance.OnPlayerDeathAnimationComplete();
+        ResetLife();
+        GetComponent<PlayerController>()?.SetMovementEnabled(true);
+        GetComponent<PlayerController>()?.SetCanAct(true);
     }
 
     public void Drop()

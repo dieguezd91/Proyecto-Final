@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
     public UnityEvent<int> onNewDay;
 
     [Header("Respawn")]
-    [SerializeField] private float playerRespawnTime;
+    [SerializeField] public float playerRespawnTime;
     [SerializeField] private Transform playerRespawnPoint;
 
     private LifeController playerLife;
