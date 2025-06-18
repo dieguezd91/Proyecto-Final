@@ -50,6 +50,14 @@ public class UICursor : MonoBehaviour
             return;
 
         GameState state = GameManager.Instance.currentGameState;
+
+        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
+        {
+            if (cursorImage != null && cursorImage.enabled)
+                cursorImage.enabled = false;
+            return;
+        }
+
         bool isGameplay = IsGameplayState(state);
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
@@ -80,56 +88,48 @@ public class UICursor : MonoBehaviour
         CursorData cursorToUse = defaultCursor;
         CursorData activeCursor = GetCurrentCursorData();
 
-        if (useTileSnap && inRange)
+        // Lógica del cursor visual según el estado y contexto
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3Int cellPos = grid.WorldToCell(mouseWorld);
+        var plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+
+        switch (state)
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cellPos = grid.WorldToCell(mouseWorld);
-            var plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+            case GameState.Digging:
+                if (plant != null)
+                {
+                    cursorToUse = dayCursor;
+                }
+                else
+                {
+                    RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero, Mathf.Infinity, playerAbilitySystem.diggableLayer);
+                    cursorToUse = hit.collider != null ? activeCursor : dayCursor;
+                }
+                break;
 
-            switch (state)
-            {
-                case GameState.Digging:
-                    if (plant != null)
-                    {
-                        cursorToUse = dayCursor;
-                    }
-                    else
-                    {
-                        RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero, Mathf.Infinity, playerAbilitySystem.diggableLayer);
-                        cursorToUse = hit.collider != null ? activeCursor : dayCursor;
-                    }
-                    break;
+            case GameState.Planting:
+                var tile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cellPos);
+                cursorToUse = (plant == null && tile == playerAbilitySystem.tilledSoilTile) ? activeCursor : dayCursor;
+                break;
 
-                case GameState.Planting:
-                    var tile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cellPos);
-                    cursorToUse = (plant == null && tile == playerAbilitySystem.tilledSoilTile) ? activeCursor : dayCursor;
-                    break;
+            case GameState.Harvesting:
+                var harvestPlant = plant as ResourcePlant;
+                cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? activeCursor : dayCursor;
+                break;
 
-                case GameState.Harvesting:
-                    var harvestPlant = plant as ResourcePlant;
-                    cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? activeCursor : dayCursor;
-                    break;
+            case GameState.Removing:
+                cursorToUse = plant != null ? activeCursor : dayCursor;
+                break;
 
-                case GameState.Removing:
-                    cursorToUse = plant != null ? activeCursor : dayCursor;
-                    break;
-
-                default:
-                    cursorToUse = activeCursor;
-                    break;
-            }
-        }
-        else
-        {
-            cursorToUse = defaultCursor;
+            default:
+                cursorToUse = activeCursor;
+                break;
         }
 
         bool shouldSnap = useTileSnap && inRange && cursorToUse.cursorSprite != dayCursor.cursorSprite;
 
         if (shouldSnap)
         {
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cellPos = grid.WorldToCell(worldPos);
             Vector3 snappedWorldPos = grid.GetCellCenterWorld(cellPos);
             Vector3 screenPos = Camera.main.WorldToScreenPoint(snappedWorldPos);
             cursorImage.rectTransform.position = screenPos + (Vector3)cursorToUse.hotSpot;

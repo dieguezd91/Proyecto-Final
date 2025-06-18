@@ -483,6 +483,11 @@ public class PlayerAbilitySystem : MonoBehaviour
                state == GameState.Removing;
     }
 
+    public bool IsBusy()
+    {
+        return isDigging || isHarvesting;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
