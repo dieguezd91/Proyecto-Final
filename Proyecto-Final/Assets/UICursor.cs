@@ -34,10 +34,11 @@ public class UICursor : MonoBehaviour
             return;
         }
 
-        GameState state = GameManager.Instance != null ? GameManager.Instance.currentGameState : GameState.MainMenu;
-        bool isGameplay = IsGameplayState(state);
+        Cursor.visible = false;
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+
+        GameState state = GameManager.Instance != null ? GameManager.Instance.currentGameState : GameState.MainMenu;
 
         SetCursorForGameState(state);
         playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
@@ -59,8 +60,6 @@ public class UICursor : MonoBehaviour
         }
 
         bool isGameplay = IsGameplayState(state);
-
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
         if (isGameplay)
         {
@@ -88,7 +87,6 @@ public class UICursor : MonoBehaviour
         CursorData cursorToUse = defaultCursor;
         CursorData activeCursor = GetCurrentCursorData();
 
-        // Lógica del cursor visual según el estado y contexto
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3Int cellPos = grid.WorldToCell(mouseWorld);
         var plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
@@ -103,28 +101,34 @@ public class UICursor : MonoBehaviour
                 else
                 {
                     RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero, Mathf.Infinity, playerAbilitySystem.diggableLayer);
-                    cursorToUse = hit.collider != null ? activeCursor : dayCursor;
+                    cursorToUse = hit.collider != null ? diggingCursor : dayCursor;
                 }
                 break;
 
             case GameState.Planting:
                 var tile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cellPos);
-                cursorToUse = (plant == null && tile == playerAbilitySystem.tilledSoilTile) ? activeCursor : dayCursor;
+                cursorToUse = (plant == null && tile == playerAbilitySystem.tilledSoilTile) ? plantingCursor : dayCursor;
                 break;
 
             case GameState.Harvesting:
                 var harvestPlant = plant as ResourcePlant;
-                cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? activeCursor : dayCursor;
+                cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? harvestingCursor : dayCursor;
                 break;
 
             case GameState.Removing:
-                cursorToUse = plant != null ? activeCursor : dayCursor;
+                cursorToUse = plant != null ? removingCursor : dayCursor;
                 break;
 
             default:
-                cursorToUse = activeCursor;
+                cursorToUse = defaultCursor;
                 break;
         }
+
+        if (!inRange && IsUsingTileSnap(state))
+        {
+            cursorToUse = dayCursor;
+        }
+
 
         bool shouldSnap = useTileSnap && inRange && cursorToUse.cursorSprite != dayCursor.cursorSprite;
 
