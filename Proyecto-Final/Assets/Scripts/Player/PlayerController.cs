@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform firePoint;
     [SerializeField] private float bulletSpeed = 10f;
 
-
     [Header("SPELL SETTINGS")]
     [SerializeField] private float spellCooldown = 0.5f;
     private float nextFireTime = 0f;
@@ -35,10 +34,17 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isWalkingSoundPlaying = false;
 
+    [SerializeField] private Animator handAnimator;
+    [SerializeField] private SpriteRenderer handRenderer;
+    [SerializeField] private int baseHandSortingOrder = 0;
+
+
     private void Start()
     {
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
 
         if (gameStateController == null)
         {
@@ -87,8 +93,6 @@ public class PlayerController : MonoBehaviour
         {
             HandleAttack();
         }
-
-
     }
 
     void FixedUpdate()
@@ -121,22 +125,9 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
-
         rb.velocity = moveInput * moveSpeed;
 
-
         bool isMoving = moveInput.sqrMagnitude > 0.01f;
-
-        //// ** CONTROL DE SONIDO DE PASOS **
-        //if (isMoving && !isWalkingSoundPlaying)
-        //{
-        //    SoundManager.Instance.PlayLoop("Walk");
-        //    isWalkingSoundPlaying = true;
-        //}
-        //else if (!isMoving && isWalkingSoundPlaying)
-        //{
-        //    StopWalkingSound();
-        //}
 
         if (animator != null && spriteRenderer != null)
         {
@@ -164,6 +155,24 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("IsMoving", false);
             }
         }
+
+        if (animator != null && handRenderer != null)
+        {
+            float aimY = animator.GetFloat("aimY");
+
+            if (aimY > 0.1f)
+            {
+                handRenderer.sortingOrder = baseHandSortingOrder - 1;
+            }
+            else if (aimY < -0.1f)
+            {
+                handRenderer.sortingOrder = baseHandSortingOrder + 1;
+            }
+            else
+            {
+                handRenderer.sortingOrder = baseHandSortingOrder;
+            }
+        }
     }
 
     void HandleAttack()
@@ -172,15 +181,13 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
-            Shoot();
-            nextFireTime = Time.time + spellCooldown;
+            handAnimator.SetBool("IsAttacking", true);
         }
     }
 
-    private void StopWalkingSound()
+    public void OnAttackAnimationEnd()
     {
-        SoundManager.Instance.Stop("Walk");
-        isWalkingSoundPlaying = false;
+        handAnimator.SetBool("IsAttacking", false);
     }
 
     void Shoot()
@@ -208,6 +215,15 @@ public class PlayerController : MonoBehaviour
                 rb.velocity = direction * bulletSpeed;
             }
         }
+    }
+
+    public void ShootFromHand()
+    {
+        if (!canAct || Time.time < nextFireTime)
+            return;
+
+        Shoot();
+        nextFireTime = Time.time + spellCooldown;
     }
 
     public void SetMovementEnabled(bool enabled)
@@ -273,6 +289,17 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("aimX", 0f);
             animator.SetFloat("aimY", -1f);
             animator.Play("Idle");  
+        }
+    }
+
+    private void HandleGameStateChanged(GameState newState)
+    {
+        bool isNight = newState == GameState.Night;
+        handAnimator.SetBool("IsNight", isNight);
+
+        if (!isNight)
+        {
+            handAnimator.SetBool("IsAttacking", false);
         }
     }
 }

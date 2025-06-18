@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class GardenGnomeController : MonoBehaviour
 {
-    [Header("Movimiento")]
+    [Header("MOVEMENT")]
     public float maxSpeed = 3f;
     public float acceleration = 2f;
     public float stopDistance = 0.1f;
@@ -12,14 +12,13 @@ public class GardenGnomeController : MonoBehaviour
     [Tooltip("Cuánto hacia abajo persigue el gnomo respecto al centro del jugador")]
     [SerializeField] private float chaseYOffset = 0.5f;
 
-    [Header("Explosión")]
+    [Header("EXPLOSION")]
     public float clingDuration = 2f;
     public float explosionRadius = 2f;
     public float explosionDamage = 30f;
     public LayerMask playerLayerMask;
-    public GameObject explosionEffectPrefab;
 
-    [Header("Look")]
+    [Header("LOOK")]
     public SpriteRenderer spriteRenderer;
 
     private Rigidbody2D _rb;
@@ -27,13 +26,20 @@ public class GardenGnomeController : MonoBehaviour
     private Vector2 _velocity;
     private bool _isClinging = false;
 
+    private Animator animator;
+    private LifeController targetLife;
+
     void Awake()
     {
+        animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0f;
         _rb.drag = 0.5f;
         if (spriteRenderer == null)
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+        if (animator != null)
+            animator.Play("GnomeWalk");
     }
 
     void Start()
@@ -75,15 +81,20 @@ public class GardenGnomeController : MonoBehaviour
         _rb.isKinematic = true;
         transform.SetParent(playerCollider.transform, true);
 
-        yield return new WaitForSeconds(clingDuration);
+        if (animator != null)
+            animator.Play("GnomeExplode");
 
-        if (explosionEffectPrefab != null)
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+        targetLife = playerCollider.GetComponent<LifeController>();
 
-        var hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius, playerLayerMask);
-        foreach (var hit in hits)
-            if (hit.TryGetComponent(out LifeController life))
-                life.TakeDamage(explosionDamage);
+        yield return null;
+    }
+
+    public void Explode()
+    {
+        if (targetLife != null)
+        {
+            targetLife.TakeDamage(explosionDamage);
+        }
 
         Destroy(gameObject);
     }

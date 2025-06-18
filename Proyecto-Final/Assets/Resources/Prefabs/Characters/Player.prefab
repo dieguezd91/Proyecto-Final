@@ -14650,6 +14650,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2049143052256852865}
   - component: {fileID: 7503550939136486912}
+  - component: {fileID: 1463363302880399508}
+  - component: {fileID: 2599041003889555745}
   m_Layer: 0
   m_Name: PlayerHand
   m_TagString: Untagged
@@ -14712,7 +14714,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: -1557011483, guid: 4475a5d971e73d04cb06cd9ee9b45a86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -14724,6 +14726,39 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &1463363302880399508
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3607987250942176149}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3152b1cef15b5ac49b2d8b5f18c00d04, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2599041003889555745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3607987250942176149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b187f44f18b74d146bb09a9db1b88e9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4103950989391339607
 GameObject:
   m_ObjectHideFlags: 0
@@ -19917,7 +19952,9 @@ MonoBehaviour:
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
   spellManaCost: 10
-  surfaceDetector: {fileID: 0}
+  surfaceDetector: {fileID: 4856583932368232146}
+  handRenderer: {fileID: 7503550939136486912}
+  handAnimator: {fileID: 1463363302880399508}
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
