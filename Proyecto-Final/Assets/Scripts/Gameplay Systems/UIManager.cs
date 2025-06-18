@@ -851,4 +851,43 @@ public class UIManager : MonoBehaviour
         slotB.daysToGrow = tmpDaysToGrow;
         slotB.description = tmpDescription;
     }
+
+    public void AnimateRespawnRecovery(float duration)
+    {
+        if (playerLife == null || manaSystem == null) return;
+        StartCoroutine(AnimateBarsCoroutine(duration));
+    }
+
+    private IEnumerator AnimateBarsCoroutine(float duration)
+    {
+        float time = 0f;
+
+        float startHealth = 0f;
+        float endHealth = playerLife.maxHealth;
+
+        float startMana = 0f;
+        float endMana = manaSystem.GetMaxMana();
+
+        playerLife.currentHealth = 0f;
+        manaSystem.SetMana(0f);
+        while (time < duration)
+        {
+            float t = time / duration;
+
+            playerLife.currentHealth = Mathf.Lerp(startHealth, endHealth, t);
+            manaSystem.SetMana(Mathf.Lerp(startMana, endMana, t));
+
+            UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+            UpdateManaUI();
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        playerLife.currentHealth = endHealth;
+        manaSystem.SetMana(endMana);
+
+        UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+        UpdateManaUI();
+    }
 }

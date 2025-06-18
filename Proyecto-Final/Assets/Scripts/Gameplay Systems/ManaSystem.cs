@@ -101,6 +101,17 @@ public class ManaSystem : MonoBehaviour
         }
     }
 
+    public void SetMana(float amount)
+    {
+        currentMana = Mathf.Clamp(amount, 0f, modifiedMaxMana);
+        OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
+
+        if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+        {
+            GameManager.Instance.uiManager.UpdateManaUI();
+        }
+    }
+
     private IEnumerator RegenerateMana()
     {
         while (true)

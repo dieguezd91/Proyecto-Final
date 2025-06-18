@@ -101,6 +101,9 @@ public class LifeController : MonoBehaviour
         }
         else
         {
+            GetComponent<ManaSystem>()?.SetMana(0f);
+            GameManager.Instance?.uiManager?.UpdateManaUI();
+
             if (animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.SetTrigger("Death");

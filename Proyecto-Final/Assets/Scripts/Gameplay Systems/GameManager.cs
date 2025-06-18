@@ -58,11 +58,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance { get; private set; }
 
-    // ----------------------------
-    // 1) AÑADIDO: Evento para notificar cambios de estado
-    // ----------------------------
     public event Action<GameState> OnGameStateChanged;
-    // ----------------------------
 
     private void Awake()
     {
@@ -176,11 +172,7 @@ public class GameManager : MonoBehaviour
 
         currentGameState = newState;
 
-        // ----------------------------
-        // 2) Disparar el evento cuando cambie de estado
-        // ----------------------------
         OnGameStateChanged?.Invoke(currentGameState);
-        // ----------------------------
 
         if (newState == GameState.Digging)
         {
@@ -251,6 +243,8 @@ public class GameManager : MonoBehaviour
     public IEnumerator RespawnPlayer()
     {
         yield return new WaitForSeconds(playerRespawnTime);
+
+        uiManager?.AnimateRespawnRecovery(playerRespawnTime);
 
         var controller = player.GetComponent<PlayerController>();
         controller.SetMovementEnabled(true);
