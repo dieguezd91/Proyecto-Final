@@ -155,40 +155,6 @@ public class LifeController : MonoBehaviour
             Drop();
             Destroy(gameObject);
         }
-        else
-        {
-            StartCoroutine(MoveToRespawnPoint());
-        }
-    }
-
-    private IEnumerator MoveToRespawnPoint()
-    {
-        Transform respawnPoint = GameManager.Instance?.GetPlayerRespawnPoint();
-        if (respawnPoint == null)
-        {
-            yield break;
-        }
-
-        float duration = 1.5f;
-        float elapsed = 0f;
-
-        Vector3 start = transform.position;
-        Vector3 end = respawnPoint.position;
-
-        Collider2D[] colliders = GetComponents<Collider2D>();
-        foreach (var col in colliders)
-            col.enabled = false;
-
-        while (elapsed < duration)
-        {
-            transform.position = Vector3.Lerp(start, end, elapsed / duration);
-            elapsed += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = end;
-
-        GameManager.Instance.OnPlayerDeathAnimationComplete();
     }
 
     public void Drop()
