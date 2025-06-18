@@ -167,6 +167,8 @@ public class LifeController : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
+        GameManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
+
         ResetLife();
         GetComponent<PlayerController>()?.SetMovementEnabled(true);
         GetComponent<PlayerController>()?.SetCanAct(true);
