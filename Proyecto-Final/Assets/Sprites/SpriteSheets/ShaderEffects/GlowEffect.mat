@@ -37,7 +37,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Glow:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 388eff4e5978a3d4a841e287b9d46e22, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _GlowPower: 0.5
+    - _GlowPower: 0.2
     m_Colors:
     - _GlowMainColor: {r: 1, g: 1, b: 1, a: 0}
     - _GlowStrength: {r: 1, g: 1, b: 1, a: 0}

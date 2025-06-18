@@ -19897,7 +19897,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6d5204eb7bf37224686f402032879c57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -19953,8 +19953,9 @@ MonoBehaviour:
   manaSystem: {fileID: 0}
   spellManaCost: 10
   surfaceDetector: {fileID: 4856583932368232146}
-  handRenderer: {fileID: 7503550939136486912}
   handAnimator: {fileID: 1463363302880399508}
+  handRenderer: {fileID: 7503550939136486912}
+  baseHandSortingOrder: 0
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
