@@ -5,12 +5,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using System.Collections.Generic;
 
-/// <summary>
-/// UIManager actualizado para:
-/// - Presionar “1–5” una vez: selecciona la semilla en ese slot (modo plantación, como antes).
-/// - Presionar “1–5” dos veces rápidamente (dos pulsaciones consecutivas del mismo número): entra en “modo intercambio” de ese slot.
-///   Luego, la siguiente tecla “1–5” (diferente) intercambia los dos slots.
-/// </summary>
+
 public class UIManager : MonoBehaviour
 {
     [Header("HEALTH BAR")]
@@ -113,14 +108,12 @@ public class UIManager : MonoBehaviour
         InitializeUI();
 
 
-        // 1) Aseguramos que cada slot tenga un CanvasGroup
         foreach (var go in slotObjects)
         {
             if (go != null && go.GetComponent<CanvasGroup>() == null)
                 go.AddComponent<CanvasGroup>();
         }
 
-        // 2) Capturamos el parent común de todos los slots
         if (slotObjects.Length > 0 && slotObjects[0] != null)
             _slotsParent = slotObjects[0].transform.parent;
 
@@ -260,13 +253,11 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
-            // --- Primero: el número de slot **siempre** va a i+1 ---
             if (slotNumbers[i] != null)
                 slotNumbers[i].text = (i + 1).ToString();
 
             PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
 
-            // Si hay planta/semilla en ese slot…
             if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
             {
                 // Icono
@@ -285,7 +276,6 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                // No hay nada: oculto icono y cantidad
                 if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
                 if (seedCount[i] != null) seedCount[i].enabled = false;
             }
@@ -704,16 +694,13 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    // Variables auxiliares:
     private GameObject _dragIcon;
     private int _dragSourceIndex;
 
-    // 2) Cuando comienzas el drag, creas sólo el icono flotante y ocultas el original:
     public void BeginDragIcon(int slotIndex)
     {
         _dragSourceIndex = slotIndex;
 
-        // crea el icono flotante
         _dragIcon = new GameObject("DragIcon");
         var rt = _dragIcon.AddComponent<RectTransform>();
         rt.SetParent(transform.root, false);
@@ -723,11 +710,9 @@ public class UIManager : MonoBehaviour
         img.raycastTarget = false;
         img.sprite = slotIcons[slotIndex].sprite;
 
-        // oculta el icono original mientras arrastras
         slotIcons[slotIndex].gameObject.SetActive(false);
     }
 
-    // 3) Sigue al puntero:
     public void OnDragIcon(PointerEventData data)
     {
         if (_dragIcon == null) return;
@@ -739,16 +724,13 @@ public class UIManager : MonoBehaviour
         (_dragIcon.transform as RectTransform).anchoredPosition = localPos;
     }
 
-    // 4) Al soltar, determinamos en qué slot caímos por raycast UI, swap y reconstruimos:
     public void EndDragIcon(PointerEventData data)
     {
         if (_dragIcon != null)
             Destroy(_dragIcon);
 
-        // volvemos a mostrar el icono origen
         slotIcons[_dragSourceIndex].gameObject.SetActive(true);
 
-        // raycast UI para saber sobre qué slot soltaste
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(data, results);
 
@@ -766,11 +748,9 @@ public class UIManager : MonoBehaviour
             if (hitIndex != -1) break;
         }
 
-        // si cayó sobre un slot distinto, intercambia en el inventario
         if (hitIndex >= 0 && hitIndex != _dragSourceIndex)
         {
             SwapSeedSlots(_dragSourceIndex, hitIndex);
-            // repinta UI y selecciona automáticamente el destino:
             InitializeSeedSlotsUI();
             SeedInventory.Instance.SelectSlot(hitIndex);
             UpdateSelectedSlotUI(hitIndex);
