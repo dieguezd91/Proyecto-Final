@@ -19979,6 +19979,7 @@ MonoBehaviour:
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
+  digAnimationPrefab: {fileID: 0}
 --- !u!114 &477447474750530567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20029,6 +20030,7 @@ MonoBehaviour:
   manaDropChance: 1
   isRespawning: 0
   isEnemy: 0
+  hasDeathAnimation: 1
 --- !u!95 &4502512717715921832
 Animator:
   serializedVersion: 5

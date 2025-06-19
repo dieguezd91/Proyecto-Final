@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
-public class GardenGnomeController : MonoBehaviour
+public class GardenGnomeController : MonoBehaviour, IEnemy
 {
     [Header("MOVEMENT")]
     public float maxSpeed = 3f;
@@ -28,6 +28,7 @@ public class GardenGnomeController : MonoBehaviour
 
     private Animator animator;
     private LifeController targetLife;
+    private bool isDead = false;
 
     void Awake()
     {
@@ -117,6 +118,13 @@ public class GardenGnomeController : MonoBehaviour
             spriteRenderer.flipX = false;
             
         }
+    }
+
+    public void MarkAsDead()
+    {
+        isDead = true;
+        _rb.velocity = Vector2.zero;
+        _rb.isKinematic = true;
     }
 
     void OnDrawGizmosSelected()

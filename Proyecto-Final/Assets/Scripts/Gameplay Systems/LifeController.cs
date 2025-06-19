@@ -33,6 +33,7 @@ public class LifeController : MonoBehaviour
     public bool isRespawning = false;
     [SerializeField] private bool isEnemy;
     private Animator animator;
+    [SerializeField] private bool hasDeathAnimation;
 
     void Start()
     {
@@ -76,27 +77,26 @@ public class LifeController : MonoBehaviour
 
     public virtual void Die()
     {
+        if (isDead) return;
+
         isDead = true;
 
         foreach (var col in GetComponents<Collider2D>())
-        {
             col.enabled = false;
-        }
 
         onDeath?.Invoke();
 
         if (isEnemy)
         {
-            if (animator != null && animator.runtimeAnimatorController != null)
+            GetComponent<IEnemy>()?.MarkAsDead();
+
+            if (hasDeathAnimation && animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.SetTrigger("Death");
-
-                StartCoroutine(DestroyAfterDelay(1f));
             }
             else
             {
-                Drop();
-                Destroy(gameObject);
+                EnemyDeath();
             }
         }
         else
@@ -113,7 +113,6 @@ public class LifeController : MonoBehaviour
             }
             else
             {
-                Drop();
                 gameObject.SetActive(false);
             }
         }
@@ -152,13 +151,18 @@ public class LifeController : MonoBehaviour
     {
         if (isEnemy)
         {
-            Drop();
-            Destroy(gameObject);
+            EnemyDeath();
         }
         else
         {
             StartCoroutine(DelayedRevive());
         }
+    }
+
+    private void EnemyDeath()
+    {
+        Drop();
+        Destroy(gameObject);
     }
 
     private IEnumerator DelayedRevive()

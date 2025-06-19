@@ -249,6 +249,7 @@ MonoBehaviour:
   manaDropChance: 1
   isRespawning: 0
   isEnemy: 1
+  hasDeathAnimation: 1
 --- !u!114 &3447298691744884854
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Enemy2 : MonoBehaviour
+public class Enemy2 : MonoBehaviour, IEnemy
 {
     [Header("References")]
     [SerializeField] private Rigidbody2D rb;
