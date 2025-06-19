@@ -344,10 +344,10 @@ TextureImporter:
       name: TimerSprite
       rect:
         serializedVersion: 2
-        x: 81
-        y: 193
-        width: 15
-        height: 15
+        x: 80
+        y: 192
+        width: 17
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -470,7 +470,7 @@ TextureImporter:
       name: TimerFill
       rect:
         serializedVersion: 2
-        x: 97
+        x: 113
         y: 194
         width: 13
         height: 13
@@ -773,6 +773,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: BackgroundTransparent
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 0
+        width: 47
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c285a30f4b223448a382652a3a394d7
+      internalID: -1199162342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BackgroundSolid
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 48
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0402c8ec93e2e4d46b0b8a272cb1421b
+      internalID: 138599093
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BackTimerSprite
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 194
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbd4061d0df582b48a08e62d02f9bf63
+      internalID: 1146136175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EmptyBar
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 18
+        width: 61
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5296d32b48d5444448558839b950712a
+      internalID: 1316128634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -784,6 +868,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      BackTimerSprite: 1146136175
+      BackgroundSolid: 138599093
+      BackgroundTransparent: -1199162342
       Close: -382949612
       CraftButton: 2122693667
       CraftLeftButton: -854867658
@@ -795,6 +882,7 @@ TextureImporter:
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
+      EmptyBar: 1316128634
       FillHP: 1365419780
       FillHouse: -1423815668
       FillMana: -359895768
