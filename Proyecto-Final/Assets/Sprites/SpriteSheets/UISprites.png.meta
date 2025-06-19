@@ -845,7 +845,7 @@ TextureImporter:
         width: 61
         height: 6
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -853,6 +853,27 @@ TextureImporter:
       bones: []
       spriteID: 5296d32b48d5444448558839b950712a
       internalID: 1316128634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ListUI
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 37
+        width: 61
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35b7d7401fbfb704dbaab5b0d83c4a83
+      internalID: 336679578
       vertices: []
       indices: 
       edges: []
@@ -891,6 +912,7 @@ TextureImporter:
       IngredientList: -132592085
       IngredientRequirement: -1902967201
       InventoryPlaceholder: 450073570
+      ListUI: 336679578
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572

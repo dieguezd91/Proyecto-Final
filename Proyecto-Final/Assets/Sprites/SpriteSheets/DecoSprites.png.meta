@@ -663,12 +663,12 @@ TextureImporter:
       name: HellCrack
       rect:
         serializedVersion: 2
-        x: 82
-        y: 96
-        width: 45
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        x: 84
+        y: 97
+        width: 43
+        height: 24
+      alignment: 9
+      pivot: {x: 0.47674417, y: 0.5625}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1582,6 +1582,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: HellcrackA
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 72
+        width: 20
+        height: 14
+      alignment: 9
+      pivot: {x: 0.575, y: 0.4642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 738e38ee7f31e8a40bb9206fc4c929bc
+      internalID: 645999424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HellcrackB
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 40
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71744a4152b15ab4c9aee86dd73118d1
+      internalID: -1266074641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1634,7 +1676,6 @@ TextureImporter:
       DecoSprites_19: -351303676
       DecoSprites_2: -2054292215
       DecoSprites_20: 724876471
-      DecoSprites_22: -1266074641
       DecoSprites_23: -1343609156
       DecoSprites_24: -1167651902
       DecoSprites_25: 854374387
@@ -1664,6 +1705,8 @@ TextureImporter:
       DecoSprites_8: 521314461
       DecoSprites_9: 1275317391
       HellCrack: -1222049489
+      HellcrackA: 645999424
+      HellcrackB: -1266074641
       HongosNaranjas: -807579385
       HongosVerdes: 1448450495
       PotDeco: 1046542882
