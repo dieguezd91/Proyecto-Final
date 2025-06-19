@@ -10,7 +10,6 @@ public class SurfaceDetector : MonoBehaviour
         Collider2D hit = Physics2D.OverlapCircle(checkPoint.position, checkRadius);
         if (hit != null)
         {
-            Debug.Log("Pisando: " + hit.name + " / Tag: " + hit.tag);
             return hit.tag;
         }
         return "Default";

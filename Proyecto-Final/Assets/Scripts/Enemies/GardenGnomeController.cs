@@ -32,7 +32,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     void Awake()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0f;
         _rb.drag = 0.5f;
@@ -68,26 +68,28 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         LookDir(targetPos, transform.position);
     }
 
-    void OnCollisionEnter2D(Collision2D col)
+    private void OnTriggerEnter2D(Collider2D col)
     {
         if (_isClinging) return;
         if ((playerLayerMask.value & (1 << col.gameObject.layer)) != 0)
-            StartCoroutine(ClingAndExplode(col.collider));
+            StartCoroutine(ClingAndExplode(col.attachedRigidbody));
     }
 
-    private IEnumerator ClingAndExplode(Collider2D playerCollider)
+    private IEnumerator ClingAndExplode(Rigidbody2D player)
     {
         _isClinging = true;
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
-        transform.SetParent(playerCollider.transform, true);
+        transform.SetParent(player.transform, true);
 
         if (animator != null)
             animator.Play("GnomeExplode");
 
-        targetLife = playerCollider.GetComponent<LifeController>();
+        targetLife = player.GetComponent<LifeController>();
 
-        yield return null;
+        yield return new WaitForSeconds(1.2f);
+
+        Explode();
     }
 
     public void Explode()

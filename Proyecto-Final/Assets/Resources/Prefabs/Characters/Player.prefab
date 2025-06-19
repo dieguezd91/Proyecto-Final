@@ -19979,7 +19979,7 @@ MonoBehaviour:
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   plantInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
-  digAnimationPrefab: {fileID: 0}
+  digAnimationPrefab: {fileID: 1522577013364806030, guid: 330e16aa371d76f47b21ff7817d79261, type: 3}
 --- !u!114 &477447474750530567
 MonoBehaviour:
   m_ObjectHideFlags: 0

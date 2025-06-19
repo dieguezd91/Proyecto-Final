@@ -41,8 +41,6 @@ public class SeedInventory : MonoBehaviour
             if (plantSlots[i] == null)
                 plantSlots[i] = new PlantSlot();
         }
-
-        Debug.Log("SeedInventory initialized");
     }
 
     private void Start()
