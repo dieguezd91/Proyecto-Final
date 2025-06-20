@@ -39,6 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] public GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
     [SerializeField] private List<HouseController> houseControllers = new List<HouseController>();
+    [SerializeField] private List<SpawnPointAnimator> spawnpoints = new List<SpawnPointAnimator>();
 
     [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
@@ -203,6 +204,11 @@ public class GameManager : MonoBehaviour
         }
 
         bool isNight = newState == GameState.Night;
+
+        foreach (var spawnpoint in spawnpoints)
+        {
+            spawnpoint.SetNightMode(isNight);
+        }
 
         foreach (var house in houseControllers)
         {
