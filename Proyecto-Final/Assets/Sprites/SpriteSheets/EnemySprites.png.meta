@@ -517,10 +517,10 @@ TextureImporter:
       name: Infernum
       rect:
         serializedVersion: 2
-        x: 0
+        x: 1
         y: 129
-        width: 32
-        height: 31
+        width: 31
+        height: 28
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -556,34 +556,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GroundFire
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 1
-        width: 12
-        height: 13
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dd66504ab89122248962c78dedbcad77
-      internalID: 159559732
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: InfernumWalk
       rect:
         serializedVersion: 2
         x: 32
-        y: 129
+        y: 128
         width: 32
-        height: 31
+        height: 29
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -622,8 +601,8 @@ TextureImporter:
       name: InfernumWalk3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 128
+        x: 97
+        y: 129
         width: 29
         height: 28
       alignment: 0
@@ -645,7 +624,7 @@ TextureImporter:
         serializedVersion: 2
         x: 129
         y: 129
-        width: 29
+        width: 30
         height: 28
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -664,9 +643,9 @@ TextureImporter:
       name: InfernumWalk5
       rect:
         serializedVersion: 2
-        x: 161
+        x: 160
         y: 129
-        width: 30
+        width: 31
         height: 27
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1005,7 +984,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1026,7 +1005,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1047,7 +1026,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1055,6 +1034,27 @@ TextureImporter:
       bones: []
       spriteID: de0736b1c7312274aae76a75c7ab141c
       internalID: -804726685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SmallParticle
+      rect:
+        serializedVersion: 2
+        x: 23
+        y: 7
+        width: 2
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7b498be172d5514ebac2ba215cc45d7
+      internalID: 1397852500
       vertices: []
       indices: 
       edges: []
@@ -1116,6 +1116,7 @@ TextureImporter:
       SkellyLeg: -53740600
       SkellySword: 167680969
       SkellyTorso: 1449983005
+      SmallParticle: 1397852500
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
