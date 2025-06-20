@@ -99,6 +99,10 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
             targetLife.TakeDamage(explosionDamage);
         }
 
+        var life = GetComponent<LifeController>();
+        if (life != null)
+            life.Die();
+
         Destroy(gameObject);
     }
 
