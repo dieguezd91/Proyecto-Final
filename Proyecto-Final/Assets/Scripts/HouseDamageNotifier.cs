@@ -4,36 +4,52 @@ using UnityEngine;
 
 public class HouseDamageNotifier : MonoBehaviour
 {
-    public LifeController houseLife;         // Referencia al LifeController de la casa
-    public DangerIndicator dangerIndicator;  
-    private float lastHealth;
+    [Header("Referencias")]
+    public LifeController houseLife;
+    public DangerIndicator dangerIndicator;
+    public Transform player;
+
+    [Header("Ajustes")]
+    [Tooltip("Distancia mínima a la casa para ignorar la notificación")]
+    public float ignoreRadius = 5f;
 
     void Start()
     {
         if (houseLife != null)
-        {
             houseLife.onDamaged.AddListener(OnHouseDamaged);
-        }
     }
 
     void OnDestroy()
     {
         if (houseLife != null)
-        {
             houseLife.onDamaged.RemoveListener(OnHouseDamaged);
-        }
     }
 
-    void OnHouseDamaged(float damage)
+    private void OnHouseDamaged(float damage)
     {
-        dangerIndicator?.Activate();
+        if (player == null || dangerIndicator == null)
+            return;
+
+        float dist = Vector3.Distance(player.position, houseLife.transform.position);
+        if (dist <= ignoreRadius)
+            return;
+
+        dangerIndicator.Activate();
 
         CancelInvoke(nameof(DeactivateIndicator));
-        Invoke(nameof(DeactivateIndicator), 3f);
+        Invoke(nameof(DeactivateIndicator), 2f);
     }
 
-    void DeactivateIndicator()
+    private void DeactivateIndicator()
     {
-        dangerIndicator?.Deactivate();
+        dangerIndicator.Deactivate();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (houseLife == null) return;
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(houseLife.transform.position, ignoreRadius);
     }
 }
