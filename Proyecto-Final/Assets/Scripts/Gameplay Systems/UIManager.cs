@@ -210,8 +210,9 @@ public class UIManager : MonoBehaviour
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
             seedSlotsCanvasGroup.alpha = 0.5f;
-            seedSlotsCanvasGroup.interactable = false;
-            seedSlotsCanvasGroup.blocksRaycasts = false;
+            //seedSlotsCanvasGroup.interactable = false;
+            //seedSlotsCanvasGroup.blocksRaycasts = false;
+
         }
 
         if (gameOverPanel != null)
@@ -260,14 +261,12 @@ public class UIManager : MonoBehaviour
 
             if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
             {
-                // Icono
                 if (slotIcons[i] != null)
                 {
                     slotIcons[i].sprite = plantSlot.plantIcon;
                     slotIcons[i].preserveAspect = true;
                     slotIcons[i].gameObject.SetActive(true);
                 }
-                // Cantidad
                 if (seedCount[i] != null)
                 {
                     seedCount[i].text = plantSlot.seedCount.ToString();
@@ -639,8 +638,8 @@ public class UIManager : MonoBehaviour
         }
 
         seedSlotsCanvasGroup.alpha = targetAlpha;
-        seedSlotsCanvasGroup.interactable = fadeIn;
-        seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
+        //seedSlotsCanvasGroup.interactable = fadeIn;
+        //seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
     }
 
     
@@ -676,23 +675,29 @@ public class UIManager : MonoBehaviour
             var trigger = go.GetComponent<EventTrigger>() ?? go.AddComponent<EventTrigger>();
             trigger.triggers.Clear();
 
-            // BeginDrag
-            var bd = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
             int copy = i;
+
+            var clickEntry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerClick
+            };
+            clickEntry.callback.AddListener(evt => OnSlotClicked(copy));
+            trigger.triggers.Add(clickEntry);
+
+            var bd = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
             bd.callback.AddListener(_ => BeginDragIcon(copy));
             trigger.triggers.Add(bd);
 
-            // Drag
             var dd = new EventTrigger.Entry { eventID = EventTriggerType.Drag };
             dd.callback.AddListener(evt => OnDragIcon((PointerEventData)evt));
             trigger.triggers.Add(dd);
 
-            // EndDrag
             var ed = new EventTrigger.Entry { eventID = EventTriggerType.EndDrag };
             ed.callback.AddListener(evt => EndDragIcon((PointerEventData)evt));
             trigger.triggers.Add(ed);
         }
     }
+
 
     private GameObject _dragIcon;
     private int _dragSourceIndex;
@@ -889,5 +894,18 @@ public class UIManager : MonoBehaviour
 
         UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
         UpdateManaUI();
+    }
+
+    private void OnSlotClicked(int slotIndex)
+    {
+        SeedInventory.Instance.SelectSlot(slotIndex);
+        UpdateSelectedSlotUI(slotIndex);
+
+        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem ability)
+        {
+            ability.SetAbility(PlayerAbility.Planting);
+        }
+
+        Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
     }
 }
