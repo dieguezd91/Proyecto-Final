@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.Universal;
 
 public class LifeController : MonoBehaviour
 {
@@ -94,6 +95,7 @@ public class LifeController : MonoBehaviour
             {
                 Debug.Log("AAA");
                 animator.SetTrigger("Death");
+
             }
             else
             {
@@ -165,6 +167,7 @@ public class LifeController : MonoBehaviour
         Drop();
         Destroy(gameObject);
     }
+
 
     private IEnumerator DelayedRevive()
     {

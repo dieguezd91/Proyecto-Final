@@ -32,15 +32,12 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0f;
         _rb.drag = 0.5f;
         if (spriteRenderer == null)
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-        if (animator != null)
-            animator.Play("GnomeWalk");
+            spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Start()
@@ -80,10 +77,23 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         _isClinging = true;
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
-        transform.SetParent(player.transform, true);
+
+        Transform gripPoint = player.transform.Find("GnomeGripPoint");
+        if (gripPoint != null)
+        {
+            transform.SetParent(gripPoint, true);
+            transform.position = gripPoint.position;
+        }
+        else
+        {
+            transform.SetParent(player.transform, true);
+        }
+
+        float dirX = player.transform.position.x - transform.position.x;
+        spriteRenderer.flipX = dirX > 0f;
 
         if (animator != null)
-            animator.Play("GnomeExplode");
+            animator.SetBool("IsClinging", true);
 
         targetLife = player.GetComponent<LifeController>();
 
@@ -95,9 +105,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     public void Explode()
     {
         if (targetLife != null)
-        {
             targetLife.TakeDamage(explosionDamage);
-        }
 
         var life = GetComponent<LifeController>();
         if (life != null)
@@ -105,6 +113,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
         Destroy(gameObject);
     }
+
 
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {

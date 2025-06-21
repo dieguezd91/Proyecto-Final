@@ -214,7 +214,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -382,14 +382,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: canvasGroup
-      value: 
-      objectReference: {fileID: 9211625545713813009}
-    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: fadeOutTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -478,10 +470,5 @@ PrefabInstance:
 --- !u!224 &1590559635041208447 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-  m_PrefabInstance: {fileID: 8841208329316143617}
-  m_PrefabAsset: {fileID: 0}
---- !u!225 &9211625545713813009 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 388449216423433232, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
   m_PrefabInstance: {fileID: 8841208329316143617}
   m_PrefabAsset: {fileID: 0}
