@@ -23,6 +23,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     private Rigidbody2D _rb;
     private Transform _player;
+    private LifeController _playerLife;
     private Vector2 _velocity;
     private bool _isClinging = false;
 
@@ -46,20 +47,42 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         if (p != null) _player = p.transform;
     }
 
+    void Update()
+    {
+        var pObj = GameObject.FindGameObjectWithTag("Player");
+        if (pObj != null)
+        {
+            var life = pObj.GetComponent<LifeController>();
+            if (life != null && life.IsTargetable())
+            {
+                _player = pObj.transform;
+                _playerLife = life;
+            }
+            else
+            {
+                _player = null;
+                _playerLife = null;
+            }
+        }
+        else
+        {
+            _player = null;
+            _playerLife = null;
+        }
+    }
+
     void FixedUpdate()
     {
         if (_isClinging || _player == null) return;
 
-        
         Vector2 targetPos = (Vector2)_player.position + Vector2.down * chaseYOffset;
-        Vector2 displacement = targetPos - (Vector2)transform.position;
-        float dist = displacement.magnitude;
-
-        Vector2 desiredVel = dist > stopDistance
-            ? displacement.normalized * maxSpeed
+        Vector2 disp = targetPos - (Vector2)transform.position;
+        float dist = disp.magnitude;
+        Vector2 desired = dist > stopDistance
+            ? disp.normalized * maxSpeed
             : Vector2.zero;
 
-        _velocity = Vector2.Lerp(_velocity, desiredVel, acceleration * Time.fixedDeltaTime);
+        _velocity = Vector2.Lerp(_velocity, desired, acceleration * Time.fixedDeltaTime);
         _rb.velocity = _velocity;
 
         LookDir(targetPos, transform.position);
@@ -67,9 +90,14 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (_isClinging) return;
+        if (_isClinging || _player == null) return;
+
         if ((playerLayerMask.value & (1 << col.gameObject.layer)) != 0)
-            StartCoroutine(ClingAndExplode(col.attachedRigidbody));
+        {
+            var life = col.GetComponent<LifeController>();
+            if (life != null && life.IsTargetable())
+                StartCoroutine(ClingAndExplode(col.attachedRigidbody));
+        }
     }
 
     private IEnumerator ClingAndExplode(Rigidbody2D player)
