@@ -25,8 +25,7 @@ public class FireTrail : MonoBehaviour
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }
-        }
-        
+        }        
         
         if (collision.CompareTag("Plant") || collision.CompareTag("Home"))
         {

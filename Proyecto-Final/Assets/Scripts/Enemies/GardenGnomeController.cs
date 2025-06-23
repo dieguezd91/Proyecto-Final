@@ -14,8 +14,8 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     [Header("EXPLOSION")]
     public float clingDuration = 2f;
-    public float explosionRadius = 2f;
-    public float explosionDamage = 30f;
+    public float minExplosionDamage = 25f;
+    public float maxExplosionDamage = 35f;
     public LayerMask playerLayerMask;
 
     [Header("LOOK")]
@@ -130,14 +130,17 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         Explode();
     }
 
+
     public void Explode()
     {
         if (targetLife != null)
-            targetLife.TakeDamage(explosionDamage);
+        {
+            float dmg = Random.Range(minExplosionDamage, maxExplosionDamage);
+            targetLife.TakeDamage(dmg);
+        }
 
-        var life = GetComponent<LifeController>();
-        if (life != null)
-            life.Die();
+        var selfLife = GetComponent<LifeController>();
+        if (selfLife != null) selfLife.Die();
 
         Destroy(gameObject);
     }
@@ -168,11 +171,5 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         isDead = true;
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }

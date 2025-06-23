@@ -1,9 +1,10 @@
 ﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using TMPro;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 
 public class UIManager : MonoBehaviour
@@ -411,9 +412,19 @@ public class UIManager : MonoBehaviour
         if (damageTaken > 0f && floatingDamagePrefab != null)
         {
             lastDamageTime = Time.time;
-            Vector3 spawnPos = player.transform.position + Vector3.up * 0.5f;
-            GameObject txt = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
-            txt.GetComponent<FloatingDamageText>()?.SetText(damageTaken);
+            var existing = player.GetComponentInChildren<FloatingDamageText>();
+            if (existing != null)
+            {
+                existing.AddDamage(damageTaken);
+            }
+            else
+            {
+                Vector3 spawnPos = player.transform.position + Vector3.up * 1f;
+                var go = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
+                var fdt = go.GetComponent<FloatingDamageText>();
+                fdt.Initialize(player.transform);
+                fdt.AddDamage(damageTaken);
+            }
         }
 
         float healthPerc = currentHealth / maxHealth;

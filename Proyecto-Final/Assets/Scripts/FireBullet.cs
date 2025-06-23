@@ -4,7 +4,8 @@ using System.Collections;
 public class FireBullet : MonoBehaviour
 {
     [Header("FireBall Settings")]
-    public float damage = 20f;
+    public float minDamage = 20f;
+    public float maxDamage = 30f;
     public float lifeTime = 3f;
     public float speed = 10f;
 
@@ -17,8 +18,6 @@ public class FireBullet : MonoBehaviour
     public float trailSpawnRate = 0.1f;
 
     private float trailTimer;
-
-    [SerializeField] private GameObject DamagedScreen;
 
     void Awake()
     {
@@ -64,13 +63,14 @@ public class FireBullet : MonoBehaviour
             var health = collision.GetComponent<LifeController>();
             if (health != null)
             {
-                health.TakeDamage(damage);
+                float dmg = Random.Range(minDamage, maxDamage);
+                health.TakeDamage(dmg);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
                 {
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
-
             }
+
             BulletPool.Instance.ReturnBullet(this);
         }
 

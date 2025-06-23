@@ -17,11 +17,12 @@ public class Enemy : MonoBehaviour, IEnemy
     [Header("Movement Settings")]
     public float moveSpeed = 3f;
     public float detectionDistance = 10f;
-    public float attackDistance = 1.5f;
+    public float attackDistance = 1f;
 
     [Header("Combat Settings")]
-    public float damage = 10f;
-    public float attackCooldown = 1f;
+    public float minDamage = 8f;
+    public float maxDamage = 12f;
+    public float attackCooldown = 0.75f;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.7f;
     [SerializeField] private LayerMask attackableLayers;
@@ -189,7 +190,8 @@ public class Enemy : MonoBehaviour, IEnemy
             LifeController life = target.GetComponent<LifeController>();
             if (life != null)
             {
-                life.TakeDamage(damage);
+                float dmg = Random.Range(minDamage, maxDamage);
+                life.TakeDamage(dmg);
 
                 if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
                 {

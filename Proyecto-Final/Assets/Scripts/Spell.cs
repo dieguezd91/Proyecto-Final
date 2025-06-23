@@ -1,4 +1,6 @@
+using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class Spell : MonoBehaviour
 {
@@ -29,34 +31,31 @@ public class Spell : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        float r = Random.Range(damage, damage + 5);
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (!collision.CompareTag("Enemy"))
+            return;
+
+        float dmg = Random.Range(damage, damage + 5f);
+
+        var life = collision.GetComponent<LifeController>();
+        life?.TakeDamage(dmg);
+
+        Transform target = collision.transform;
+        var existing = target.GetComponentInChildren<FloatingDamageText>();
+
+        if (existing != null)
         {
-            LifeController enemyHealth = collision.GetComponent<LifeController>();
-            if (enemyHealth != null)
-            {
-                enemyHealth.TakeDamage(r);
-
-                if (impactParticlesPrefab != null)
-                {
-                    Instantiate(impactParticlesPrefab, collision.transform.position, Quaternion.identity);
-                }
-
-                GameObject floatingText = Instantiate(floatingDamagePrefab, collision.transform.position + Vector3.up * 0.5f, Quaternion.identity);
-                floatingText.GetComponent<FloatingDamageText>().SetText(r);
-
-                CameraShaker.Instance?.Shake(0.2f, 0.2f);
-
-                KnockbackReceiver knockback = collision.GetComponent<KnockbackReceiver>();
-                if (knockback != null && knockback.gameObject.activeInHierarchy)
-                {
-                    Vector2 knockDir = collision.transform.position - transform.position;
-                    knockback.ApplyKnockback(knockDir, 3f);
-                }
-            }
-
-            Destroy(gameObject);
+            existing.AddDamage(dmg);
         }
+        else
+        {
+            Vector3 spawnPos = target.position + Vector3.up * 1f;
+            var go = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
+            var fdt = go.GetComponent<FloatingDamageText>();
+            fdt.Initialize(target);
+            fdt.AddDamage(dmg);
+        }
+
+        Destroy(gameObject);
     }
 
     public void SetDirection(Vector2 newDirection)

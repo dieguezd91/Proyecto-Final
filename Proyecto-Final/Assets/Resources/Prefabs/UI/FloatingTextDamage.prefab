@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 000
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
+  m_sharedMaterial: {fileID: 7763458193861376953, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.5
-  m_fontSizeBase: 0.5
+  m_fontSize: 1
+  m_fontSizeBase: 1
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -249,6 +249,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2abc4f5ef2c7f544b145f59e376a5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMesh: {fileID: 8777140967253477585}
+  offset: {x: 0, y: 1, z: 0}
   floatSpeed: 1
+  fadeInDuration: 0.2
   duration: 1
+  fadeOutDuration: 0.5
+  startColor: {r: 1, g: 0.2301679, b: 0, a: 1}
+  endColor: {r: 0.7264151, g: 0, b: 0, a: 1}
+  maxDamageForColor: 50
+  minScale: 0.5
+  maxScale: 1

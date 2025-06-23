@@ -14694,7 +14694,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6d5204eb7bf37224686f402032879c57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14876,10 +14876,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floatingPanel: {fileID: 8258948721920141710}
   pickupEntryPrefab: {fileID: 4269542569326092464, guid: 93771d607cf171b40b89acb7c59c0c19, type: 3}
-  displayTime: 1.5
-  warningColor: {r: 0.6792453, g: 0.0032039948, b: 0.0032039948, a: 0}
+  pickupDisplayTime: 1.5
+  warningColor: {r: 0.6792453, g: 0.0032039948, b: 0.0032039948, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
-  progressBar: {fileID: 0}
+  floatingDamagePrefab: {fileID: 8011744024934345175, guid: b18d5e020de9918429f62b516be2ef30, type: 3}
 --- !u!1 &4561617814540924185
 GameObject:
   m_ObjectHideFlags: 0
@@ -19987,7 +19987,7 @@ MonoBehaviour:
   surfaceDetector: {fileID: 4856583932368232146}
   handAnimator: {fileID: 1463363302880399508}
   handRenderer: {fileID: 7503550939136486912}
-  baseHandSortingOrder: 0
+  baseHandSortingOrder: 5
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25372,7 +25372,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 1
+  m_ChildAlignment: 3
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
