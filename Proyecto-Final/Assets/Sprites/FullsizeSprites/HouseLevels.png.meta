@@ -197,12 +197,12 @@ TextureImporter:
       name: Doors
       rect:
         serializedVersion: 2
-        x: 464
+        x: 400
         y: 208
         width: 32
         height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -210,6 +210,48 @@ TextureImporter:
       bones: []
       spriteID: a13ae43728a815b49a5542d44fc2e88f
       internalID: 970242705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseLevels_0
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 208
+        width: 32
+        height: 41
+      alignment: 9
+      pivot: {x: 0.5, y: 0.42682928}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d01fa1316f3f85c489408af67ff3388a
+      internalID: -1491984200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseLevels_1
+      rect:
+        serializedVersion: 2
+        x: 496
+        y: 208
+        width: 32
+        height: 42
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4047619}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 72fb300bd9db7c5409ef59d2a3c5f15c
+      internalID: 779734044
       vertices: []
       indices: 
       edges: []
@@ -228,6 +270,8 @@ TextureImporter:
       Doors: 970242705
       HouseFront1: -527732196
       HouseFront5: -1501353990
+      HouseLevels_0: -1491984200
+      HouseLevels_1: 779734044
       HouseRoof1: -604989864
       HouseRoof5: -978076702
   mipmapLimitGroupName: 
