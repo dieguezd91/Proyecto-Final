@@ -193,7 +193,6 @@ public class Enemy : MonoBehaviour, IEnemy
 
                 if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
                 {
-                    GameManager.Instance.uiManager.ShowDamagedScreen();
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }

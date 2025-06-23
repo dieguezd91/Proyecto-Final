@@ -71,6 +71,11 @@ public class UIManager : MonoBehaviour
 
     [Header("FEEDBACK")]
     [SerializeField] private GameObject damagedScreen;
+    private CanvasGroup damagedScreenCanvasGroup;
+    private float targetDamageAlpha = 0f;
+    private float damageFadeSpeed = 2f;
+    private float damageFadeOutDelay = 1f;
+    private float lastDamageTime = 0f;
 
     [Header("PLAYER ABILITY UI")]
     [SerializeField] private GameObject abilityPanel;
@@ -130,6 +135,17 @@ public class UIManager : MonoBehaviour
                 UpdateHomeHealthBar(homeLife.currentHealth, homeLife.maxHealth);
         }
 
+
+        if (damagedScreen != null)
+        {
+            damagedScreenCanvasGroup = damagedScreen.GetComponent<CanvasGroup>()
+                                   ?? damagedScreen.AddComponent<CanvasGroup>();
+            damagedScreenCanvasGroup.alpha = 0f;
+            damagedScreen.SetActive(true);
+        }
+
+        lastDamageTime = Time.time;
+
         UpdateManaUI();
     }
 
@@ -138,7 +154,19 @@ public class UIManager : MonoBehaviour
         CheckGameStateChanges();
         HandleGameOverState();
         HandleInventoryInput();
-        HandleSeedSlotInput(); 
+        HandleSeedSlotInput();
+
+        if (damagedScreenCanvasGroup != null)
+        {
+            if (Time.time - lastDamageTime > damageFadeOutDelay)
+                targetDamageAlpha = 0f;
+
+            damagedScreenCanvasGroup.alpha = Mathf.Lerp(
+                damagedScreenCanvasGroup.alpha,
+                targetDamageAlpha,
+                damageFadeSpeed * Time.deltaTime
+            );
+        }
     }
 
     private void OnDestroy()
@@ -382,10 +410,16 @@ public class UIManager : MonoBehaviour
         float damageTaken = lastPlayerHealth - currentHealth;
         if (damageTaken > 0f && floatingDamagePrefab != null)
         {
+            lastDamageTime = Time.time;
             Vector3 spawnPos = player.transform.position + Vector3.up * 0.5f;
             GameObject txt = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
             txt.GetComponent<FloatingDamageText>()?.SetText(damageTaken);
         }
+
+        float healthPerc = currentHealth / maxHealth;
+        targetDamageAlpha = 1f - healthPerc;
+
+        lastPlayerHealth = currentHealth;
 
         if (currentHealth < lastPlayerHealth)
             TributeSystem.Instance?.NotifyPlayerDamaged();
@@ -599,20 +633,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowDamagedScreen()
-    {
-        if (damagedScreen == null) return;
-        damagedScreen.SetActive(true);
-        StopCoroutine(nameof(HideDamagedScreen));
-        StartCoroutine(HideDamagedScreen());
-    }
-
-    private IEnumerator HideDamagedScreen()
-    {
-        yield return new WaitForSeconds(0.5f);
-        damagedScreen.SetActive(false);
-    }
-
     private void OnAbilityChanged(PlayerAbility newAbility)
     {
         if (seedSlotsCanvasGroup == null) return;
@@ -698,7 +718,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     private GameObject _dragIcon;
     private int _dragSourceIndex;
 
@@ -764,7 +783,6 @@ public class UIManager : MonoBehaviour
         _dragSourceIndex = -1;
     }
 
-
     private void OnSlotKeyPressed(int i)
     {
         float now = Time.time;
@@ -809,7 +827,6 @@ public class UIManager : MonoBehaviour
         lastPressSlot = i;
         lastPressTime = now;
     }
-
     
     private void HighlightSlot(int idx, bool highlight)
     {
@@ -826,7 +843,6 @@ public class UIManager : MonoBehaviour
             slotObjects[idx].transform.localScale = new Vector3(normalScale, normalScale, 1f);
         }
     }
-
     
     private void SwapSeedSlots(int a, int b)
     {
