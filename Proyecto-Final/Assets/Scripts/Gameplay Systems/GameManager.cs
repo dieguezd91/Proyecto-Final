@@ -248,9 +248,9 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator RespawnPlayer()
     {
-        yield return new WaitForSeconds(playerRespawnTime);
-
         uiManager?.AnimateRespawnRecovery(playerRespawnTime);
+        
+        yield return new WaitForSeconds(playerRespawnTime);
 
         var controller = player.GetComponent<PlayerController>();
         controller.SetMovementEnabled(true);

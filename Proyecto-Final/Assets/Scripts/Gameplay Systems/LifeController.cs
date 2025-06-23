@@ -168,14 +168,13 @@ public class LifeController : MonoBehaviour
         Destroy(gameObject);
     }
 
-
     private IEnumerator DelayedRevive()
     {
         float delay = GameManager.Instance != null ? GameManager.Instance.playerRespawnTime : 2f;
 
-        yield return new WaitForSeconds(delay);
-
         GameManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
+
+        yield return new WaitForSeconds(delay);
 
         ResetLife();
         GetComponent<PlayerController>()?.SetMovementEnabled(true);
