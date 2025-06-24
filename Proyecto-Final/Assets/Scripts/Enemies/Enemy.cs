@@ -182,11 +182,9 @@ public class Enemy : MonoBehaviour, IEnemy
     public void PerformSwordHit()
     {
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
-        Debug.Log(hitTargets.Length);  
 
         foreach (Collider2D target in hitTargets)
         {
-            Debug.Log(target.name);
             LifeController life = target.GetComponent<LifeController>();
             if (life != null)
             {

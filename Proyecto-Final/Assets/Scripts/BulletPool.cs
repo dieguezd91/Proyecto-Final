@@ -38,7 +38,6 @@ public class BulletPool : MonoBehaviour
         }
 
         b.gameObject.SetActive(true);
-        Debug.Log("Activada");
         return b;
     }
 
