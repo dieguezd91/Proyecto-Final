@@ -43,7 +43,7 @@ public class Plant : MonoBehaviour
         }
 
         plantingDay = GameManager.Instance.GetCurrentDay();
-        GameManager.Instance.onNewDay.AddListener(OnNewDay);
+        GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
 
         abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
 
@@ -77,18 +77,13 @@ public class Plant : MonoBehaviour
     {
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.onNewDay.RemoveListener(OnNewDay);
+            GameManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
         }
 
         if (lifeController != null)
         {
             lifeController.onDeath.RemoveListener(HandlePlantDeath);
         }
-    }
-
-    protected virtual void OnNewDay(int currentDay)
-    {
-        UpdateGrowthStatus(currentDay);
     }
 
     private void UpdateGrowthStatus(int currentDay)
@@ -174,6 +169,14 @@ public class Plant : MonoBehaviour
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         TributeSystem.Instance?.NotifyPlantDestroyed();
         Debug.Log("Plant has been destroyed!");
+    }
+
+    protected virtual void HandleGameStateChanged(GameState newState)
+    {
+        if (newState == GameState.Night)
+        {
+            UpdateGrowthStatus(GameManager.Instance.GetCurrentDay());
+        }
     }
 
     private void ChangeSprite(Sprite newSprite)

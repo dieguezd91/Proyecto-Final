@@ -148,15 +148,14 @@ public class GameManager : MonoBehaviour
 
     public void ManualTransitionToNight()
     {
+
+        dayCount++;
         SetGameState(GameState.Night);
         TributeSystem.Instance?.StartNightEvaluation();
     }
 
     private void HandleHordeCompleted()
     {
-        dayCount++;
-
-        SetGameState(GameState.Digging);
         TributeSystem.Instance?.EvaluateAndGrantReward();
         StartDayCycle();
     }

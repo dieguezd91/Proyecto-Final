@@ -10,7 +10,7 @@ public class PlantManager : MonoBehaviour
     private Dictionary<Vector3Int, Plant> tilePlants;
 
     [Header("SETTINGS")]
-    [SerializeField] private bool notifyPlantsOnNewDay = true;
+    [SerializeField] private bool notifyPlantsOnNewDay = false;
 
     private List<Plant> registeredPlants = new List<Plant>();
 
@@ -31,10 +31,8 @@ public class PlantManager : MonoBehaviour
     {
         lastGameState = GameManager.Instance.currentGameState;
 
-        if (GameManager.Instance != null)
-        {
+        if (GameManager.Instance != null && notifyPlantsOnNewDay)
             GameManager.Instance.onNewDay.AddListener(OnGameManagerNewDay);
-        }
     }
 
     private void OnDestroy()

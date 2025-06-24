@@ -56,12 +56,6 @@ public class ResourcePlant : Plant
         cycleStartDay = GameManager.Instance.GetCurrentDay();
     }
 
-    protected override void OnNewDay(int currentDay)
-    {
-        base.OnNewDay(currentDay);
-        CheckProduction(currentDay);
-    }
-
     private void CheckProduction(int currentDay)
     {
         if (!IsFullyGrown() || isProducing || isReadyToHarvest || isBeingHarvested)
@@ -88,26 +82,6 @@ public class ResourcePlant : Plant
         isReadyToHarvest = true;
 
         Debug.Log($"Resources ready to harvest");
-    }
-
-    public bool IsReadyToHarvest()
-    {
-        return isReadyToHarvest;
-    }
-
-    public bool IsBeingHarvested()
-    {
-        return isBeingHarvested;
-    }
-
-    public float GetHarvestDuration()
-    {
-        return harvestDuration;
-    }
-
-    public void CompletedHarvest()
-    {
-        CompleteHarvest();
     }
 
     public void StartHarvest()
@@ -191,19 +165,21 @@ public class ResourcePlant : Plant
         cycleStartDay = GameManager.Instance.GetCurrentDay();
     }
 
+    protected override void HandleGameStateChanged(GameState newState)
+    {
+         if (newState == GameState.Night)
+         {
+             base.HandleGameStateChanged(newState);
+             CheckProduction(GameManager.Instance.GetCurrentDay());
+         }
+    }
+
     protected override void OnDestroy()
     {
         base.OnDestroy();
 
-        if (GameManager.Instance != null && IsFullyGrown())
-        {
-            GameManager.Instance.onNewDay.RemoveListener(CheckProduction);
-        }
-    }
-
-    private Sprite GetResourceSprite()
-    {
-        return materialSprite;
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
     }
 
     void OnMouseOver()
@@ -232,16 +208,6 @@ public class ResourcePlant : Plant
         {
             plantRenderer.color = originalColor;
         }
-    }
-
-    public int GetLastProductionDay()
-    {
-        return cycleStartDay;
-    }
-
-    public int GetDaysToProduce()
-    {
-        return daysToProduceResources;
     }
 
     public float GetTotalProgress()
@@ -275,4 +241,19 @@ public class ResourcePlant : Plant
         }
         return null;
     }
+
+
+    public int GetLastProductionDay() => cycleStartDay;
+
+    public int GetDaysToProduce() => daysToProduceResources;
+
+    private Sprite GetResourceSprite() => materialSprite;
+
+    public bool IsReadyToHarvest() => isReadyToHarvest;
+
+    public bool IsBeingHarvested() => isBeingHarvested;
+
+    public float GetHarvestDuration() => harvestDuration;
+
+    public void CompletedHarvest() => CompleteHarvest();
 }

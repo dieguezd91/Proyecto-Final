@@ -296,7 +296,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void HandleGameStateChanged(GameState newState)
+    public void HandleGameStateChanged(GameState newState)
     {
         bool isNight = newState == GameState.Night;
 

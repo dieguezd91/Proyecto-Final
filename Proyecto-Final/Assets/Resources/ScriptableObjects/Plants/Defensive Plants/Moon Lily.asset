@@ -19,7 +19,7 @@ MonoBehaviour:
   middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 1
+  daysToGrow: 0
   description: 
-  seedType: 12
+  seedType: 0
   slotIndex: 0
