@@ -41,12 +41,9 @@ public class CraftingUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerNear)
+        if (isPlayerNear && Input.GetKeyDown(KeyCode.E) && GameManager.Instance.currentGameState != GameState.Night)
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                ToggleCraftingUI();
-            }
+            ToggleCraftingUI();
         }
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
@@ -144,11 +141,9 @@ public class CraftingUIManager : MonoBehaviour
         selectedPlantIcon.sprite = plantData.plantIcon;
         selectedPlantIcon.preserveAspect = true;
 
-        // Limpiar lista de materiales visuales (texto)
         foreach (Transform child in materialListContainer)
             Destroy(child.gameObject);
 
-        // Mostrar solo textos de requerimientos en la lista
         for (int i = 0; i < recipe.MaterialsRequired.Count; i++)
         {
             var mat = recipe.MaterialsRequired[i];
