@@ -12,6 +12,8 @@ public class HouseShakeOnDamage : MonoBehaviour
     private List<Transform> visuals = new List<Transform>();
     private List<Vector3> originalPositions = new List<Vector3>();
 
+    private Coroutine shakeCoroutine;
+
     private void Awake()
     {
         life = GetComponent<LifeController>();
@@ -22,13 +24,24 @@ public class HouseShakeOnDamage : MonoBehaviour
         }
     }
 
-    private void OnEnable() => life.onDamaged.AddListener(OnDamaged);
-    private void OnDisable() => life.onDamaged.RemoveListener(OnDamaged);
+    private void OnEnable()
+    {
+        life.onDamaged.AddListener(OnDamaged);
+    }
+
+    private void OnDisable()
+    {
+        life.onDamaged.RemoveListener(OnDamaged);
+    }
 
     private void OnDamaged(float damage)
     {
-        StopAllCoroutines();
-        StartCoroutine(ShakeTremor());
+        if (shakeCoroutine != null)
+        {
+            StopCoroutine(shakeCoroutine);
+            ResetPositions();
+        }
+        shakeCoroutine = StartCoroutine(ShakeTremor());
     }
 
     private IEnumerator ShakeTremor()
@@ -37,6 +50,12 @@ public class HouseShakeOnDamage : MonoBehaviour
 
         while (elapsed < duration)
         {
+            if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            {
+                yield return null;
+                continue;
+            }
+
             float damper = 1f - (elapsed / duration);
             float currentMag = magnitude * damper;
 
@@ -50,6 +69,12 @@ public class HouseShakeOnDamage : MonoBehaviour
             yield return null;
         }
 
+        ResetPositions();
+        shakeCoroutine = null;
+    }
+
+    private void ResetPositions()
+    {
         for (int i = 0; i < visuals.Count; i++)
             visuals[i].localPosition = originalPositions[i];
     }
