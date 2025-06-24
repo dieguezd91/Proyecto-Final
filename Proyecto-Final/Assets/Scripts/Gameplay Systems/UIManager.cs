@@ -673,22 +673,23 @@ public class UIManager : MonoBehaviour
         //seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
     }
 
-    
+
     private void HandleSeedSlotInput()
     {
         if (GameManager.Instance == null) return;
-        GameState state = GameManager.Instance.currentGameState;
+        var state = GameManager.Instance.currentGameState;
 
-        bool validState = state == GameState.Day
-                        || state == GameState.Digging
-                        || state == GameState.Planting
-                        || state == GameState.Harvesting
-                        || state == GameState.Removing;
+        bool validState =
+            state == GameState.Day ||
+            state == GameState.Digging ||
+            state == GameState.Planting ||
+            state == GameState.Harvesting ||
+            state == GameState.Removing;
         if (!validState) return;
 
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < slotObjects.Length; i++)
         {
-            KeyCode key = KeyCode.Alpha1 + i;
+            KeyCode key = KeyCode.Alpha1 + i;  
             if (Input.GetKeyDown(key))
             {
                 OnSlotKeyPressed(i);
@@ -696,6 +697,8 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
+
 
     private void RegisterSlotDragEvents()
     {
@@ -764,8 +767,6 @@ public class UIManager : MonoBehaviour
         if (_dragIcon != null)
             Destroy(_dragIcon);
 
-        slotIcons[_dragSourceIndex].gameObject.SetActive(true);
-
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(data, results);
 
@@ -774,7 +775,8 @@ public class UIManager : MonoBehaviour
         {
             for (int i = 0; i < slotObjects.Length; i++)
             {
-                if (r.gameObject == slotObjects[i] || r.gameObject.transform.IsChildOf(slotObjects[i].transform))
+                if (r.gameObject == slotObjects[i] ||
+                    r.gameObject.transform.IsChildOf(slotObjects[i].transform))
                 {
                     hitIndex = i;
                     break;
@@ -786,13 +788,22 @@ public class UIManager : MonoBehaviour
         if (hitIndex >= 0 && hitIndex != _dragSourceIndex)
         {
             SwapSeedSlots(_dragSourceIndex, hitIndex);
+
+            var rt = seedSlots.GetComponent<RectTransform>();
+            if (rt != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+
             InitializeSeedSlotsUI();
+
             SeedInventory.Instance.SelectSlot(hitIndex);
             UpdateSelectedSlotUI(hitIndex);
         }
 
         _dragSourceIndex = -1;
     }
+
+
+
 
     private void OnSlotKeyPressed(int i)
     {
