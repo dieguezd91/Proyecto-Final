@@ -208,6 +208,8 @@ public class LifeController : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.ResetTrigger("Death");
         animator.SetTrigger("Revive");
+
+        GameManager.Instance.SetGameState(GameManager.Instance.currentGameState);
     }
 
     public IEnumerator StartInvulnerability(float duration)
@@ -236,6 +238,11 @@ public class LifeController : MonoBehaviour
 
     public void OnReviveAnimationEnd()
     {
-        GetComponent<PlayerController>()?.SetCanAct(true);
+        var pc = GetComponent<PlayerController>();
+        if (pc != null)
+        {
+            pc.SetCanAct(true);
+            pc.RefreshHandNightness();
+        }
     }
 }

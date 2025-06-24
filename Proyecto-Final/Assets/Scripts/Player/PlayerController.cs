@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Animator handAnimator;
     [SerializeField] private SpriteRenderer handRenderer;
     [SerializeField] private int baseHandSortingOrder = 0;
+    [SerializeField] private GameObject handObject;
+
 
 
     private void Start()
@@ -45,6 +47,8 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+
+        HandleGameStateChanged(GameManager.Instance.currentGameState);
 
         if (gameStateController == null)
         {
@@ -295,11 +299,24 @@ public class PlayerController : MonoBehaviour
     private void HandleGameStateChanged(GameState newState)
     {
         bool isNight = newState == GameState.Night;
-        handAnimator.SetBool("IsNight", isNight);
 
+        handAnimator.SetBool("IsNight", isNight);
         if (!isNight)
-        {
             handAnimator.SetBool("IsAttacking", false);
-        }
+
+        if (handObject != null)
+            handObject.SetActive(isNight);
     }
+
+    public void RefreshHandNightness()
+    {
+        bool isNight = GameManager.Instance.currentGameState == GameState.Night;
+        handAnimator.SetBool("IsNight", isNight);
+        if (!isNight)
+            handAnimator.SetBool("IsAttacking", false);
+
+        if (handObject != null)
+            handObject.SetActive(isNight);
+    }
+
 }

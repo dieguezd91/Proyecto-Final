@@ -45,6 +45,9 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     [SerializeField] private GameObject digAnimationPrefab;
 
+    private bool initialized = false;
+
+
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()
@@ -149,6 +152,12 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void OnSeedSlotSelected(int slotIndex)
     {
+        if (!initialized)
+        {
+            initialized = true;
+            return;
+        }
+
         SetAbility(PlayerAbility.Planting);
     }
 
