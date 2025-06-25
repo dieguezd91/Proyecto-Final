@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -7,33 +6,27 @@ using UnityEngine.UI;
 public class FloatingTextController : MonoBehaviour
 {
     [Header("Pickups UI")]
-    [SerializeField] private Transform pickupPanel;
-    [SerializeField] private Transform warningPanel;
+    [SerializeField] private Transform floatingPanel;
     [SerializeField] private GameObject pickupEntryPrefab;
-    [SerializeField] private GameObject warningEntryPrefab;
     [SerializeField] private float pickupDisplayTime = 1.5f;
-    [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private Color warningColor;
     [SerializeField] private Color defaultColor = Color.white;
 
-    private float pickupTimer;
-    private float warningTimer;
 
+    [Header("Damage Text")]
+    [SerializeField] private GameObject floatingDamagePrefab;
+
+    [SerializeField] private Image panelBackground;
+    [SerializeField] private Vector2 backgroundPadding = new Vector2(16f, 8f);
+
+    private float pickupTimer;
     private Dictionary<string, (int amount, GameObject entry)> pickups = new();
     private Dictionary<Transform, FloatingDamageText> damageTexts = new();
 
-    private CanvasGroup pickupPanelCanvasGroup;
-    private CanvasGroup warningPanelCanvasGroup;
-
-    void Awake()
+    void Start()
     {
-        if (pickupPanel != null)
-            pickupPanelCanvasGroup = pickupPanel.GetComponent<CanvasGroup>();
-        if (warningPanel != null)
-            warningPanelCanvasGroup = warningPanel.GetComponent<CanvasGroup>();
-
-        SetPanelAlpha(pickupPanelCanvasGroup, 0f);
-        SetPanelAlpha(warningPanelCanvasGroup, 0f);
+        if (panelBackground != null)
+            panelBackground.gameObject.SetActive(false);
     }
 
     void Update()
@@ -42,20 +35,14 @@ public class FloatingTextController : MonoBehaviour
         {
             pickupTimer -= Time.deltaTime;
             if (pickupTimer <= 0f)
-                StartCoroutine(FadeOutPanel(pickupPanelCanvasGroup, ClearPickups));
-        }
-        if (warningTimer > 0f)
-        {
-            warningTimer -= Time.deltaTime;
-            if (warningTimer <= 0f)
-                StartCoroutine(FadeOutPanel(warningPanelCanvasGroup, ClearWarnings));
+                ClearPickups();
         }
     }
 
     public void ShowPickup(string materialName, int amount, Sprite icon)
     {
-        if (pickupPanel == null || pickupEntryPrefab == null) return;
-        StartCoroutine(FadeInPanel(pickupPanelCanvasGroup));
+        if (floatingPanel == null || pickupEntryPrefab == null) return;
+
         pickupTimer = pickupDisplayTime;
 
         if (pickups.TryGetValue(materialName, out var data))
@@ -67,7 +54,7 @@ public class FloatingTextController : MonoBehaviour
         }
         else
         {
-            var entry = Instantiate(pickupEntryPrefab, pickupPanel);
+            var entry = Instantiate(pickupEntryPrefab, floatingPanel);
             var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
             var img = entry.GetComponentInChildren<Image>();
             if (txt != null) { txt.text = $"+{amount} {materialName}"; txt.color = defaultColor; }
@@ -76,63 +63,96 @@ public class FloatingTextController : MonoBehaviour
         }
     }
 
+
     public void ShowWarning(string message)
     {
-        if (warningPanel == null || warningEntryPrefab == null) return;
-        ClearWarnings();
-        StartCoroutine(FadeInPanel(warningPanelCanvasGroup));
-        var entry = Instantiate(warningEntryPrefab, warningPanel);
+
+        if (floatingPanel == null || pickupEntryPrefab == null) return;
+
+        
+
+
+        ClearPickups();
+
+        if (panelBackground != null)
+        {
+            panelBackground.gameObject.SetActive(true);
+            panelBackground.transform.SetAsFirstSibling();
+        }
+
+
+        var entry = Instantiate(pickupEntryPrefab, floatingPanel);
         var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
         var img = entry.GetComponentInChildren<Image>();
         if (txt != null) { txt.text = message; txt.color = warningColor; }
         if (img != null) img.enabled = false;
-        warningTimer = pickupDisplayTime;
+        
+        AdjustBackgroundToContent();
+        pickupTimer = pickupDisplayTime;
+
     }
 
     private void ClearPickups()
     {
-        foreach (Transform t in pickupPanel) Destroy(t.gameObject);
+        foreach (Transform t in floatingPanel) Destroy(t.gameObject);
         pickups.Clear();
-        SetPanelAlpha(pickupPanelCanvasGroup, 0f);
+
+        if (panelBackground != null)
+            panelBackground.gameObject.SetActive(false);
     }
 
-    private void ClearWarnings()
+    private void AdjustBackgroundToContent()
     {
-        foreach (Transform t in warningPanel) Destroy(t.gameObject);
-        SetPanelAlpha(warningPanelCanvasGroup, 0f);
+        if (panelBackground == null || floatingPanel == null) return;
+
+        var panelRT = floatingPanel as RectTransform;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(panelRT);
+
+        float w = LayoutUtility.GetPreferredWidth(panelRT);
+        float h = LayoutUtility.GetPreferredHeight(panelRT);
+
+        var padded = new Vector2(
+            w + backgroundPadding.x,
+            h + backgroundPadding.y
+        );
+
+        var bgRT = panelBackground.rectTransform;
+        bgRT.sizeDelta = padded;
+
+        bgRT.pivot = panelRT.pivot;
+        bgRT.anchorMin = panelRT.anchorMin;
+        bgRT.anchorMax = panelRT.anchorMax;
+        bgRT.anchoredPosition = panelRT.anchoredPosition;
+
+        panelBackground.transform.SetAsFirstSibling();
+        panelBackground.gameObject.SetActive(true);
     }
 
-    private void SetPanelAlpha(CanvasGroup cg, float alpha)
-    {
-        if (cg != null)
-            cg.alpha = alpha;
-    }
 
-    private IEnumerator FadeInPanel(CanvasGroup cg)
+    public void ShowDamage(float dmg, Transform target)
     {
-        if (cg == null) yield break;
-        float t = 0f;
-        while (t < fadeDuration)
+        if (floatingDamagePrefab == null || target == null) return;
+
+        if (damageTexts.TryGetValue(target, out var existing))
         {
-            t += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(cg.alpha, 1f, t / fadeDuration);
-            yield return null;
+            if (existing != null)
+            {
+                existing.AddDamage(dmg);
+                return;
+            }
+            else
+            {
+                damageTexts.Remove(target);
+            }
         }
-        cg.alpha = 1f;
+
+        var go = Instantiate(floatingDamagePrefab, target.position, Quaternion.identity);
+        var fdt = go.GetComponent<FloatingDamageText>();
+        fdt.Initialize(target);
+        fdt.AddDamage(dmg);
+        damageTexts[target] = fdt;
     }
 
-    private IEnumerator FadeOutPanel(CanvasGroup cg, System.Action onComplete)
-    {
-        if (cg == null) yield break;
-        float startAlpha = cg.alpha;
-        float t = 0f;
-        while (t < fadeDuration)
-        {
-            t += Time.deltaTime;
-            cg.alpha = Mathf.Lerp(startAlpha, 0f, t / fadeDuration);
-            yield return null;
-        }
-        cg.alpha = 0f;
-        onComplete?.Invoke();
-    }
+
+
 }
