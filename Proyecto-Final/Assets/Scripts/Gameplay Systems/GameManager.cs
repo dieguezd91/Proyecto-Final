@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
         }
 
-        dayCount = 1;
+        dayCount = 0;
         SetGameState(GameState.Digging);
         StartDayCycle();
     }

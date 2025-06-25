@@ -19988,6 +19988,7 @@ MonoBehaviour:
   handAnimator: {fileID: 1463363302880399508}
   handRenderer: {fileID: 7503550939136486912}
   baseHandSortingOrder: 5
+  handObject: {fileID: 3607987250942176149}
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
