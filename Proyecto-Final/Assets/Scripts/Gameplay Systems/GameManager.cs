@@ -117,7 +117,7 @@ public class GameManager : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
         }
 
-        dayCount = 0;
+        dayCount = 1;
         SetGameState(GameState.Digging);
         StartDayCycle();
     }
@@ -265,6 +265,11 @@ public class GameManager : MonoBehaviour
     public void OnPlayerDeathAnimationComplete()
     {
         StartCoroutine(RespawnPlayer());
+    }
+
+    public Transform GetPlayerRespawnPoint()
+    {
+        return playerRespawnPoint;
     }
 
     public void Restart()

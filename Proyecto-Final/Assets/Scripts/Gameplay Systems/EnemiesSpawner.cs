@@ -58,6 +58,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
         {
+            Debug.Log("Iniciando horda");
             StartContinuousHorde();
         }
 
@@ -87,6 +88,8 @@ public class EnemiesSpawner : MonoBehaviour
 
         currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay
         );
+
+        Debug.Log($"Iniciando horda para la noche {currentDay}. Objetivo: eliminar {totalEnemiesToKill} enemigos");
 
         onHordeStart?.Invoke();
 
