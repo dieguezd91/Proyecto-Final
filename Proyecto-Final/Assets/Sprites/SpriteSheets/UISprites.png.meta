@@ -866,7 +866,7 @@ TextureImporter:
         width: 61
         height: 95
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -874,6 +874,27 @@ TextureImporter:
       bones: []
       spriteID: 35b7d7401fbfb704dbaab5b0d83c4a83
       internalID: 336679578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EndingTImer
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 193
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b18c5cf24d87324894d709121bb35b2
+      internalID: -437305898
       vertices: []
       indices: 
       edges: []
@@ -904,6 +925,7 @@ TextureImporter:
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
       EmptyBar: 1316128634
+      EndingTImer: -437305898
       FillHP: 1365419780
       FillHouse: -1423815668
       FillMana: -359895768
