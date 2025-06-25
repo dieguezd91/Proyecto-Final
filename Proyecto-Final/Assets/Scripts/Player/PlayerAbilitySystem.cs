@@ -152,11 +152,15 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void OnSeedSlotSelected(int slotIndex)
     {
+        
         if (!initialized)
         {
             initialized = true;
             return;
         }
+
+        if (GameManager.Instance.currentGameState == GameState.Night)
+            return;
 
         SetAbility(PlayerAbility.Planting);
     }
