@@ -4,6 +4,7 @@ public class MoveCamera : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Transform mainChar;
+    [SerializeField] private PlayerAbilitySystem abilitySystem;
 
     [Header("Offset Settings")]
     [SerializeField] private float maxOffsetDistance = 5f;
@@ -32,6 +33,11 @@ public class MoveCamera : MonoBehaviour
 
     private void LateUpdate()
     {
+        if(abilitySystem != null && (abilitySystem.IsDigging() || abilitySystem.IsHarvesting()))
+            return;
+        
+        
+        
         // 1) Si estamos en inventory o crafting, no mover la cámara
         var state = GameManager.Instance.currentGameState;
         if (state == GameState.OnInventory || state == GameState.OnCrafting)
