@@ -1059,6 +1059,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: InfernumAttackStart
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 80
+        width: 31
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 072e117b4f14b1743a6d5e7e1d98eb4e
+      internalID: 1326224314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumCharging
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 81
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2958f3d3897d204bb98fcb5d7707a98
+      internalID: -2126740381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InfernumAttack
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 80
+        width: 29
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 011de6db20d46d44f92b50a3d168fa8b
+      internalID: 758346540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1104,6 +1167,9 @@ TextureImporter:
       GnomeHold5: -449728585
       GroundFire: 159559732
       Infernum: -2141980523
+      InfernumAttack: 758346540
+      InfernumAttackStart: 1326224314
+      InfernumCharging: -2126740381
       InfernumShot: -541236709
       InfernumWalk: -626084886
       InfernumWalk2: -306187279
