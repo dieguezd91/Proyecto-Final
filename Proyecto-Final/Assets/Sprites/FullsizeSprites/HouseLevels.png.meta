@@ -256,6 +256,132 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: HouseFrontD2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 336
+        width: 320
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 4.9714284}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e88ef9e58c239cc489fa4dc4d6d73812
+      internalID: 846255627
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseRoof5D
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 371
+        width: 320
+        height: 300
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e3e36a453d979d438e11bc9406f0202
+      internalID: 1598785333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseRoof5MD
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 371
+        width: 320
+        height: 301
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46179402}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e099a2b169cbc4418c9d6f0dc4a0229
+      internalID: -587759188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseFront5MD
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 336
+        width: 320
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 4.9714284}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb776ba649617414ea4a3555aa8c458b
+      internalID: -180669593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseRoof5HD
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 372
+        width: 320
+        height: 300
+      alignment: 9
+      pivot: {x: 0.5, y: 0.46333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80f532226ff2efb4ab5c105548984af5
+      internalID: -1709602296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseFront5HD
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 336
+        width: 320
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 4.9714284}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 578b3b246bb8c36489988abec7347185
+      internalID: -772091685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -270,10 +396,16 @@ TextureImporter:
       Doors: 970242705
       HouseFront1: -527732196
       HouseFront5: -1501353990
+      HouseFront5HD: -772091685
+      HouseFront5MD: -180669593
+      HouseFrontD2: 846255627
       HouseLevels_0: -1491984200
       HouseLevels_1: 779734044
       HouseRoof1: -604989864
       HouseRoof5: -978076702
+      HouseRoof5D: 1598785333
+      HouseRoof5HD: -1709602296
+      HouseRoof5MD: -587759188
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
