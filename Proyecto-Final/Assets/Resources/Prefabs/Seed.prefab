@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_Sprite: {fileID: 1701969414, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -174,5 +174,5 @@ MonoBehaviour:
   damage: 5
   lifeTime: 3
   speed: 15
-  floatingDamagePrefab: {fileID: 0}
+  floatingDamagePrefab: {fileID: 8011744024934345175, guid: b18d5e020de9918429f62b516be2ef30, type: 3}
   impactParticlesPrefab: {fileID: 0}

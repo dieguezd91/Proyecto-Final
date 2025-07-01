@@ -15,6 +15,11 @@ public class Plant : MonoBehaviour
     [SerializeField] public int plantingDay;
     [SerializeField] private bool growthCompleted = false;
 
+    [Header("FX")]
+    [SerializeField] private GameObject preMatureParticlesPrefab;
+    private GameObject activeParticlesInstance;
+    private bool particlesActivated = false;
+
     protected int daysToGrow;
     protected Sprite plantSprite;
 
@@ -99,7 +104,10 @@ public class Plant : MonoBehaviour
             return;
         }
 
-        Debug.Log($"Planta: {gameObject.name}, Días desde plantación: {daysSincePlanting}, Días para crecer: {daysToGrow}");
+        if (!particlesActivated && daysSincePlanting == daysToGrow - 1)
+        {
+            ActivatePreMatureParticles();
+        }
 
         if (daysSincePlanting >= daysToGrow)
         {
@@ -108,7 +116,6 @@ public class Plant : MonoBehaviour
         }
 
         float progress = Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
-        Debug.Log($"Progreso de crecimiento: {progress:F2}");
 
         if (progress <= 0.33f)
             ChangeSprite(startingDaySprite);
@@ -118,13 +125,41 @@ public class Plant : MonoBehaviour
             ChangeSprite(lastDaySprite);
     }
 
+    private void ActivatePreMatureParticles()
+    {
+        if (!particlesActivated && preMatureParticlesPrefab != null)
+        {
+            activeParticlesInstance = Instantiate(preMatureParticlesPrefab, transform);
+            activeParticlesInstance.transform.localPosition = Vector3.zero;
+            particlesActivated = true;
+        }
+    }
+
+    private void DeactivatePreMatureParticles()
+    {
+        if (particlesActivated)
+        {
+            if (activeParticlesInstance != null)
+            {
+                Destroy(activeParticlesInstance);
+                activeParticlesInstance = null;
+            }
+            particlesActivated = false;
+        }
+    }
+
+    public void OnNewDay(int currentDay)
+    {
+        UpdateGrowthStatus(currentDay);
+    }
+
     private void CompleteGrowth()
     {
         if (growthCompleted)
             return;
 
         growthCompleted = true;
-        Debug.Log("Plant: Growth completed");
+        DeactivatePreMatureParticles();
         ChangeSprite(fullyGrownSprite);
         OnMature();
         if (plantCollider != null)
@@ -141,7 +176,6 @@ public class Plant : MonoBehaviour
             lifeController.maxHealth = newMaxHealth;
             lifeController.currentHealth = newMaxHealth;
             lifeController.onHealthChanged?.Invoke(lifeController.currentHealth, lifeController.maxHealth);
-            Debug.Log($"Plant matured: Health increased to {lifeController.maxHealth}");
         }
     }
 
@@ -166,6 +200,7 @@ public class Plant : MonoBehaviour
 
     private void HandlePlantDeath()
     {
+        DeactivatePreMatureParticles();
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         TributeSystem.Instance?.NotifyPlantDestroyed();
         Debug.Log("Plant has been destroyed!");

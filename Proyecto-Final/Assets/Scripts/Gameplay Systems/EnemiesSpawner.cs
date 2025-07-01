@@ -250,8 +250,6 @@ public class EnemiesSpawner : MonoBehaviour
 
         if (completed)
         {
-            Debug.Log($"Horda completada. Se eliminaron {totalEnemiesKilled} de {totalEnemiesToKill} enemigos");
-
             onHordeEnd?.Invoke();
 
             GameManager.Instance.currentGameState = GameState.Digging;

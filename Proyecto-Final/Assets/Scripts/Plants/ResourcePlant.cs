@@ -22,6 +22,9 @@ public class ResourcePlant : Plant
     [SerializeField] private float harvestDuration = 2f;
     [SerializeField] private GameObject harvestProgressIndicator;
 
+    [Header("HARVEST FX")]
+    [SerializeField] private ParticleSystem harvestReadyParticles;
+
     private SpriteRenderer plantRenderer;
     private Color originalColor;
     public Color highlightColor;
@@ -81,7 +84,15 @@ public class ResourcePlant : Plant
         isProducing = false;
         isReadyToHarvest = true;
 
+        ActivateHarvestReadyParticles();
+
         Debug.Log($"Resources ready to harvest");
+    }
+
+    private void ActivateHarvestReadyParticles()
+    {
+        if (harvestReadyParticles != null && !harvestReadyParticles.isPlaying)
+            harvestReadyParticles.Play();
     }
 
     public void StartHarvest()
@@ -163,6 +174,14 @@ public class ResourcePlant : Plant
         isReadyToHarvest = false;
         isBeingHarvested = false;
         cycleStartDay = GameManager.Instance.GetCurrentDay();
+
+        DeactivateHarvestReadyParticles();
+    }
+
+    private void DeactivateHarvestReadyParticles()
+    {
+        if (harvestReadyParticles != null && harvestReadyParticles.isPlaying)
+            harvestReadyParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
     protected override void HandleGameStateChanged(GameState newState)

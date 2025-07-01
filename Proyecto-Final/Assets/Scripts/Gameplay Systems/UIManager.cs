@@ -843,7 +843,7 @@ public class UIManager : MonoBehaviour
         {
             SeedInventory.Instance.SelectSlot(i);
             UpdateSelectedSlotUI(i);
-            Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
+            //Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
         }
 
         lastPressSlot = i;
@@ -944,6 +944,6 @@ public class UIManager : MonoBehaviour
             ability.SetAbility(PlayerAbility.Planting);
         }
 
-        Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
+        //Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
     }
 }

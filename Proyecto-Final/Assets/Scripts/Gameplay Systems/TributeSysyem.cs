@@ -54,37 +54,30 @@ public class TributeSystem : MonoBehaviour
         if (!anyPlantDestroyed)
         {
             totalGold += rewardNoPlantsDestroyed;
-            feedback += "🌿 Las defensas se mantuvieron firmes. +30 oro\n";
+            feedback += "Las defensas se mantuvieron firmes. +30 oro\n";
         }
 
         float currentHomeHealth = GameManager.Instance.home.GetComponent<LifeController>()?.currentHealth ?? 0f;
         if (Mathf.Approximately(currentHomeHealth, homeHealthAtNightStart))
         {
             totalGold += rewardHomeUntouched;
-            feedback += "🏠 La casa no recibió daño. +50 oro\n";
+            feedback += "La casa no recibió daño. +50 oro\n";
         }
 
         if (!playerTookDamage)
         {
             totalGold += rewardPlayerUnharmed;
-            feedback += "🧙‍♀️ La hechicera no fue herida. +20 oro\n";
+            feedback += "La hechicera no fue herida. +20 oro\n";
         }
 
         if (totalGold > 0)
         {
             InventoryManager.Instance.AddGold(totalGold);
-            feedback += $"\n💰 Recompensa total: {totalGold} oro";
+            feedback += $"\n Recompensa total: {totalGold} oro";
         }
         else
         {
-            feedback = "😈 Las sombras observan en silencio... No obtuviste recompensa.";
+            feedback = "Las sombras observan en silencio... No obtuviste recompensa.";
         }
-
-        ShowTributeFeedback(feedback);
-    }
-
-    private void ShowTributeFeedback(string message)
-    {
-        Debug.Log("[Tributo Demoníaco] " + message);
     }
 }

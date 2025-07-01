@@ -137,7 +137,7 @@ public class SeedInventory : MonoBehaviour
         if (slot != null && slot.seedCount > 0)
         {
             slot.seedCount--;
-            Debug.Log($"Semillas restantes de {slot.plantName}: {slot.seedCount}");
+            //Debug.Log($"Semillas restantes de {slot.plantName}: {slot.seedCount}");
 
             if (slot.seedCount <= 0)
             {
