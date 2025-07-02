@@ -1201,6 +1201,111 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ThoughtCloud
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 51
+        width: 5
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 791b39b9ad520d447a9efe360c1f41ba
+      internalID: 1322117010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThoughtCloud2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 49
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dca3bc0aba6163d4188a17816c1cf935
+      internalID: -439084199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThoughtCloud3
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 50
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89a812e6c65ecf642903d23cf9e8cd46
+      internalID: 1171033025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThoughtCloud4
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 48
+        width: 46
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1926d45e50b2e7c40bb7f128f88c5aa8
+      internalID: 1304090407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ThoughtCloud5
+      rect:
+        serializedVersion: 2
+        x: 115
+        y: 48
+        width: 74
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f65be97900e99c4999bc0787440fb10
+      internalID: 326547604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1259,6 +1364,11 @@ TextureImporter:
       Snow3: 921805244
       SpellParticle: 298098152
       Step: -1301085213
+      ThoughtCloud: 1322117010
+      ThoughtCloud2: -439084199
+      ThoughtCloud3: 1171033025
+      ThoughtCloud4: 1304090407
+      ThoughtCloud5: 326547604
       Wind: 876738399
       Wind10: 2032421392
       Wind2: 58123025
