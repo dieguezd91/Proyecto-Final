@@ -60,23 +60,29 @@ public class FireBullet : MonoBehaviour
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Plant") || collision.CompareTag("Home"))
         {
-            var health = collision.GetComponent<LifeController>();
-            if (health != null)
+
+            var life = collision.GetComponent<LifeController>();
+            if (life != null)
             {
                 float dmg = Random.Range(minDamage, maxDamage);
-                health.TakeDamage(dmg);
+                life.TakeDamage(dmg);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
                 {
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }
+            else
+            {
+                var houseLife = collision.GetComponent<HouseLifeController>();
+                if (houseLife != null)
+                {
+                    float dmg = Random.Range(minDamage, maxDamage);
+                    houseLife.TakeDamage(dmg);
+                }
+            }
 
             BulletPool.Instance.ReturnBullet(this);
         }
-
-        
-
-
     }
 
     public void SetDirection(Vector2 newDirection)

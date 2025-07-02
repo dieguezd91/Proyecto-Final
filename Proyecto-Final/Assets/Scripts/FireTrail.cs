@@ -25,14 +25,25 @@ public class FireTrail : MonoBehaviour
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }
-        }        
-        
-        if (collision.CompareTag("Plant") || collision.CompareTag("Home"))
+            else
+            {
+                var houseLife = collision.GetComponent<HouseLifeController>();
+                if (houseLife != null)
+                    houseLife.TakeDamage(damagePerSecond * Time.deltaTime);
+            }
+        }
+        else if (collision.CompareTag("Plant") || collision.CompareTag("Home"))
         {
-            LifeController life = collision.GetComponent<LifeController>();
+            var life = collision.GetComponent<LifeController>();
             if (life != null && life.IsAlive())
             {
                 life.TakeDamage(damagePerSecond * Time.deltaTime);
+            }
+            else
+            {
+                var houseLife = collision.GetComponent<HouseLifeController>();
+                if (houseLife != null)
+                    houseLife.TakeDamage(damagePerSecond * Time.deltaTime);
             }
         }
     }

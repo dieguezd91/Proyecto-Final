@@ -196,6 +196,15 @@ public class Enemy : MonoBehaviour, IEnemy
                     CameraShaker.Instance?.Shake(0.2f, 0.2f);
                 }
             }
+            else
+            {
+                var houseLife = target.GetComponent<HouseLifeController>();
+                if (houseLife != null)
+                {
+                    float dmg = Random.Range(minDamage, maxDamage);
+                    houseLife.TakeDamage(dmg);
+                }
+            }
         }
     }
 

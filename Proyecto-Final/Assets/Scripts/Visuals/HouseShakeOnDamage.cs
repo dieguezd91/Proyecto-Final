@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(LifeController))]
+[RequireComponent(typeof(HouseLifeController))]
 public class HouseShakeOnDamage : MonoBehaviour
 {
     [SerializeField] private float duration = 0.3f;
     [SerializeField] private float magnitude = 0.2f;
 
-    private LifeController life;
+    private HouseLifeController life;
     private List<Transform> visuals = new List<Transform>();
     private List<Vector3> originalPositions = new List<Vector3>();
 
@@ -16,7 +16,7 @@ public class HouseShakeOnDamage : MonoBehaviour
 
     private void Awake()
     {
-        life = GetComponent<LifeController>();
+        life = GetComponent<HouseLifeController>();
         foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
         {
             visuals.Add(sr.transform);
@@ -36,6 +36,8 @@ public class HouseShakeOnDamage : MonoBehaviour
 
     private void OnDamaged(float damage)
     {
+        if (damage <= 0) return;
+
         if (shakeCoroutine != null)
         {
             StopCoroutine(shakeCoroutine);
@@ -50,7 +52,7 @@ public class HouseShakeOnDamage : MonoBehaviour
 
         while (elapsed < duration)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            if (GameManager.Instance.currentGameState == GameState.Paused)
             {
                 yield return null;
                 continue;

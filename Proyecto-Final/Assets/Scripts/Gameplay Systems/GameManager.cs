@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform playerRespawnPoint;
 
     private LifeController playerLife;
-    private LifeController HomeLife;
+    private HouseLifeController HomeLife;
     public UIManager uiManager;
     public GameState currentGameState;
 
@@ -94,11 +94,11 @@ public class GameManager : MonoBehaviour
 
         if (home != null)
         {
-            HomeLife = home.GetComponent<LifeController>();
+            HomeLife = home.GetComponent<HouseLifeController>();
 
             if (HomeLife != null)
             {
-                HomeLife.onDeath.AddListener(HandleHomeDeath);
+                HomeLife.onHouseDestroyed.AddListener(HandleHomeDeath);
             }
         }
 
@@ -304,12 +304,11 @@ public class GameManager : MonoBehaviour
 
         if (HomeLife != null)
         {
-            HomeLife.currentHealth = HomeLife.maxHealth;
-            HomeLife.onHealthChanged?.Invoke(HomeLife.currentHealth, HomeLife.maxHealth);
+            HomeLife.ResetLife();
         }
 
         uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-        uiManager?.UpdateHomeHealthBar(HomeLife.currentHealth, HomeLife.maxHealth);
+        uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
         uiManager?.UpdateManaUI();
         uiManager?.InitializeSeedSlotsUI();
     }

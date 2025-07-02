@@ -225,16 +225,6 @@ public class LifeController : MonoBehaviour
         return !isRespawning && !isDead;
     }
 
-    private IEnumerator DestroyAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (this != null && gameObject != null)
-        {
-            Drop();
-            Destroy(gameObject);
-        }
-    }
-
     public void OnReviveAnimationEnd()
     {
         var pc = GetComponent<PlayerController>();
