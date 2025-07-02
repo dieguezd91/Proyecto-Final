@@ -1747,6 +1747,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: GhostForm
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 697eaeb0b60837049b63b79314791d92
+      internalID: 294831337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1829,6 +1850,7 @@ TextureImporter:
       AliceDeath7: -551755861
       AliceDeath8: 1608503608
       AliceDeath9: 1833142447
+      GhostForm: 294831337
       Revive: 235271091
       Revive2: 195490867
       Revive3: -827765438

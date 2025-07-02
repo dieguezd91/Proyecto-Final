@@ -955,13 +955,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EnemySprites_26
+      name: GnomePiece1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 32
-        width: 16
-        height: 16
+        x: 5
+        y: 34
+        width: 4
+        height: 5
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1122,6 +1122,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: GnomePiece2
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 40
+        width: 4
+        height: 5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3b30f761c70276409e5d1b47779e3f6
+      internalID: 260680677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GnomePiece3
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 41
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c94e891257479e41a0f8035d46b4eeb
+      internalID: -249800840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1145,7 +1187,6 @@ TextureImporter:
       EnemySprites_15: 998704662
       EnemySprites_16: -417923569
       EnemySprites_2: 880174432
-      EnemySprites_26: 236712412
       EnemySprites_3: -1552539966
       EnemySprites_4: 389637016
       EnemySprites_5: -343568727
@@ -1165,6 +1206,9 @@ TextureImporter:
       GnomeHold3: 742892983
       GnomeHold4: 1131042795
       GnomeHold5: -449728585
+      GnomePiece1: 236712412
+      GnomePiece2: 260680677
+      GnomePiece3: -249800840
       GroundFire: 159559732
       Infernum: -2141980523
       InfernumAttack: 758346540
