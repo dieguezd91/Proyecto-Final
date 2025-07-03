@@ -35,7 +35,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     private bool isDigging = false;
     private Vector3 digPosition;
 
-    private FloatingTextController floatingText;
+    private WarningBubble warningBubble;
+    private FloatingTextController floatingTextController;
 
     private bool isHarvesting = false;
     private ResourcePlant currentHarvestPlant = null;
@@ -62,7 +63,8 @@ public class PlayerAbilitySystem : MonoBehaviour
             plantInventory.onSlotSelected += OnSeedSlotSelected;
         }
 
-        floatingText = GetComponentInChildren<FloatingTextController>();
+        warningBubble = GetComponentInChildren<WarningBubble>();
+        floatingTextController = GetComponentInChildren<FloatingTextController>();
     }
 
     private void OnDestroy()
@@ -203,7 +205,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (!plantInventory.HasSeedsInSelectedSlot())
             {
-                floatingText?.ShowWarning("No seeds left.");
+                warningBubble?.ShowMessage("No seeds left.");
                 return;
             }
 
@@ -211,7 +213,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (Vector2.Distance(transform.position, center) > interactionDistance)
             {
-                floatingText?.ShowWarning("Too far to plant.");
+                warningBubble?.ShowMessage("Too far to plant.");
                 return;
             }
 
@@ -226,7 +228,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             }
             else if (!string.IsNullOrEmpty(reason))
             {
-                floatingText?.ShowWarning(reason);
+                warningBubble?.ShowMessage(reason);
             }
         }
     }
@@ -246,17 +248,17 @@ public class PlayerAbilitySystem : MonoBehaviour
             {
                 if (!harvestablePlant.IsReadyToHarvest())
                 {
-                    floatingText?.ShowWarning("Plant not ready to harvest.");
+                    warningBubble?.ShowMessage("Plant not ready to harvest.");
                     return;
                 }
                 if (harvestablePlant.IsBeingHarvested())
                 {
-                    floatingText?.ShowWarning("This plant is already being harvested.");
+                    warningBubble?.ShowMessage("This plant is already being harvested.");
                     return;
                 }
                 if (Vector2.Distance(transform.position, harvestablePlant.transform.position) > interactionDistance)
                 {
-                    floatingText?.ShowWarning("Too far to harvest.");
+                    warningBubble?.ShowMessage("Too far to harvest.");
                     return;
                 }
 
@@ -264,7 +266,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             }
             else
             {
-                floatingText?.ShowWarning("No harvestable plant here.");
+                warningBubble?.ShowMessage("No harvestable plant here.");
             }
         }
     }
@@ -279,20 +281,20 @@ public class PlayerAbilitySystem : MonoBehaviour
             Plant plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
             if (plant == null)
             {
-                floatingText?.ShowWarning("No plant to remove.");
+                warningBubble?.ShowMessage("No plant to remove.");
                 return;
             }
 
             if (Vector2.Distance(transform.position, plant.transform.position) > interactionDistance)
             {
-                floatingText?.ShowWarning("Too far to remove plant.");
+                warningBubble?.ShowMessage("Too far to remove plant.");
                 return;
             }
             SoundManager.Instance.PlayOneShot("Remove");
 
             TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
             Destroy(plant.gameObject);
-            floatingText?.ShowWarning("Plant removed.");
+            warningBubble?.ShowMessage("Plant removed.");
         }
     }
 
@@ -366,7 +368,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         var reward = currentHarvestPlant.GetHarvestReward();
         if (reward != null)
         {
-            floatingText?.ShowPickup(reward.materialName, reward.amount, reward.icon);
+            floatingTextController?.ShowPickup(reward.materialName, reward.amount, reward.icon);
         }
         currentHarvestPlant = null;
     }
@@ -404,7 +406,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (existingTile == tilledSoilTile)
         {
             Vector3 warnPos = transform.position + Vector3.up * 1.5f;
-            floatingText?.ShowWarning("There is already tilled soil at this position.");
+            warningBubble?.ShowMessage("There is already tilled soil at this position.");
             return false;
         }
 
@@ -412,7 +414,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (distance > digDistance)
         {
             Vector3 warnPos = transform.position + Vector3.up * 1.5f;
-            floatingText?.ShowWarning("The spot is too far away.");
+            warningBubble?.ShowMessage("The spot is too far away.");
             return false;
         }
 

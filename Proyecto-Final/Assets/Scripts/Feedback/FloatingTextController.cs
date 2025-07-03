@@ -8,32 +8,25 @@ public class FloatingTextController : MonoBehaviour
 {
     [Header("Pickups UI")]
     [SerializeField] private Transform pickupPanel;
-    [SerializeField] private Transform warningPanel;
     [SerializeField] private GameObject pickupEntryPrefab;
-    [SerializeField] private GameObject warningEntryPrefab;
     [SerializeField] private float pickupDisplayTime = 1.5f;
-    [SerializeField] private float fadeDuration = 0.25f; // <- Duración del fade
+    [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private Color warningColor;
     [SerializeField] private Color defaultColor = Color.white;
 
     private float pickupTimer;
-    private float warningTimer;
 
     private Dictionary<string, (int amount, GameObject entry)> pickups = new();
     private Dictionary<Transform, FloatingDamageText> damageTexts = new();
 
     private CanvasGroup pickupPanelCanvasGroup;
-    private CanvasGroup warningPanelCanvasGroup;
 
     void Awake()
     {
         if (pickupPanel != null)
             pickupPanelCanvasGroup = pickupPanel.GetComponent<CanvasGroup>();
-        if (warningPanel != null)
-            warningPanelCanvasGroup = warningPanel.GetComponent<CanvasGroup>();
 
         SetPanelAlpha(pickupPanelCanvasGroup, 0f);
-        SetPanelAlpha(warningPanelCanvasGroup, 0f);
     }
 
     void Update()
@@ -43,12 +36,6 @@ public class FloatingTextController : MonoBehaviour
             pickupTimer -= Time.deltaTime;
             if (pickupTimer <= 0f)
                 StartCoroutine(FadeOutPanel(pickupPanelCanvasGroup, ClearPickups));
-        }
-        if (warningTimer > 0f)
-        {
-            warningTimer -= Time.deltaTime;
-            if (warningTimer <= 0f)
-                StartCoroutine(FadeOutPanel(warningPanelCanvasGroup, ClearWarnings));
         }
     }
 
@@ -76,30 +63,11 @@ public class FloatingTextController : MonoBehaviour
         }
     }
 
-    public void ShowWarning(string message)
-    {
-        if (warningPanel == null || warningEntryPrefab == null) return;
-        ClearWarnings();
-        StartCoroutine(FadeInPanel(warningPanelCanvasGroup));
-        var entry = Instantiate(warningEntryPrefab, warningPanel);
-        var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
-        var img = entry.GetComponentInChildren<Image>();
-        if (txt != null) { txt.text = message; txt.color = warningColor; }
-        if (img != null) img.enabled = false;
-        warningTimer = pickupDisplayTime;
-    }
-
     private void ClearPickups()
     {
         foreach (Transform t in pickupPanel) Destroy(t.gameObject);
         pickups.Clear();
         SetPanelAlpha(pickupPanelCanvasGroup, 0f);
-    }
-
-    private void ClearWarnings()
-    {
-        foreach (Transform t in warningPanel) Destroy(t.gameObject);
-        SetPanelAlpha(warningPanelCanvasGroup, 0f);
     }
 
     private void SetPanelAlpha(CanvasGroup cg, float alpha)

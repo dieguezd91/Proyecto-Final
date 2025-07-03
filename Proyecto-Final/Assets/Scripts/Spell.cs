@@ -1,6 +1,5 @@
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class Spell : MonoBehaviour
 {

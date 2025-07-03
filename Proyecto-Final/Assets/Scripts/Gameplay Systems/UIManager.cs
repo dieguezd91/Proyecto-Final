@@ -131,9 +131,9 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance?.home != null)
         {
-            LifeController homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+            HouseLifeController homeLife = GameManager.Instance.home.GetComponent<HouseLifeController>();
             if (homeLife != null)
-                UpdateHomeHealthBar(homeLife.currentHealth, homeLife.maxHealth);
+                UpdateHomeHealthBar(homeLife.CurrentHealth, homeLife.MaxHealth);
         }
 
 
