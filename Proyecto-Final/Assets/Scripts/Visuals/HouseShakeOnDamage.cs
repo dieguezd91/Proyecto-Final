@@ -5,8 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(HouseLifeController))]
 public class HouseShakeOnDamage : MonoBehaviour
 {
+    [Header("Shake Settings")]
     [SerializeField] private float duration = 0.3f;
     [SerializeField] private float magnitude = 0.2f;
+
+    [Header("Excluded Visuals")]
+    [SerializeField] private List<Transform> excludedObjects;
 
     private HouseLifeController life;
     private List<Transform> visuals = new List<Transform>();
@@ -17,8 +21,12 @@ public class HouseShakeOnDamage : MonoBehaviour
     private void Awake()
     {
         life = GetComponent<HouseLifeController>();
+
         foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
         {
+            if (excludedObjects != null && excludedObjects.Contains(sr.transform))
+                continue;
+
             visuals.Add(sr.transform);
             originalPositions.Add(sr.transform.localPosition);
         }
@@ -43,6 +51,7 @@ public class HouseShakeOnDamage : MonoBehaviour
             StopCoroutine(shakeCoroutine);
             ResetPositions();
         }
+
         shakeCoroutine = StartCoroutine(ShakeTremor());
     }
 
