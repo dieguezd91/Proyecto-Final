@@ -4,8 +4,9 @@ using UnityEngine.Events;
 public class HouseLifeController : MonoBehaviour
 {
     [Header("HEALTH SETTINGS")]
-    private float maxHealth = 1000f;
-    private float currentHealth;
+    public float maxHealth = 1000f;
+    public float currentHealth;
+
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
 

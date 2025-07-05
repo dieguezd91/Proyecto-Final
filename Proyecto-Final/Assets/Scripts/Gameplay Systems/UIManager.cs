@@ -197,7 +197,7 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance != null && GameManager.Instance.home != null)
         {
-            LifeController homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+            HouseLifeController homeLife = GameManager.Instance.home.GetComponent<HouseLifeController>();
             if (homeLife != null)
             {
                 homeLife.onHealthChanged.AddListener(UpdateHomeHealthBar);
@@ -322,14 +322,14 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void InitializeHomeHealthBar(LifeController homeLife)
+    private void InitializeHomeHealthBar(HouseLifeController homeLife)
     {
         if (homeHealthBar != null)
         {
             homeHealthBar.minValue = 0;
             homeHealthBar.maxValue = homeLife.maxHealth;
             homeHealthBar.value = homeLife.currentHealth;
-            UpdateHomeFillColor(homeLife.GetHealthPercentage());
+            UpdateHomeFillColor(homeLife.GetHealthPercent());
         }
     }
 
