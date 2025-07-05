@@ -12,6 +12,8 @@ public class SceneController : MonoBehaviour
         startGame.interactable = true;
         //Option.interactable = true;
         //back.interactable = true;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
     }
 

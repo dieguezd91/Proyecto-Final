@@ -526,6 +526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
+  OptionsMenu: {fileID: 0}
   instructionsPanel: {fileID: 0}
   uiManager: {fileID: 0}
 --- !u!1 &236408744
