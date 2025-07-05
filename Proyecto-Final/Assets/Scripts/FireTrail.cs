@@ -22,7 +22,7 @@ public class FireTrail : MonoBehaviour
                 life.TakeDamage(damagePerSecond * Time.deltaTime);
                 if (GameManager.Instance.uiManager != null)
                 {
-                    CameraShaker.Instance?.Shake(0.2f, 0.2f);
+                    CameraShaker.Instance?.Shake(0.3f, 0.3f);
                 }
             }
             else

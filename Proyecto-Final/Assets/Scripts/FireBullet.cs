@@ -68,7 +68,7 @@ public class FireBullet : MonoBehaviour
                 life.TakeDamage(dmg);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
                 {
-                    CameraShaker.Instance?.Shake(0.2f, 0.2f);
+                    CameraShaker.Instance?.Shake(0.3f, 0.3f);
                 }
             }
             else

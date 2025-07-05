@@ -137,6 +137,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         {
             float dmg = Random.Range(minExplosionDamage, maxExplosionDamage);
             targetLife.TakeDamage(dmg);
+            CameraShaker.Instance?.Shake(0.3f, 0.3f);
         }
 
         var selfLife = GetComponent<LifeController>();

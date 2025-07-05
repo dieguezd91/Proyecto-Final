@@ -63,15 +63,23 @@ public class EnemiesSpawner : MonoBehaviour
 
         lastGameState = GameManager.Instance.currentGameState;
 
+        int trulyAliveEnemies = 0;
+        foreach (var enemy in activeEnemies)
+        {
+            if (enemy != null)
+                trulyAliveEnemies++;
+        }
+
         if (GameManager.Instance.currentGameState == GameState.Night &&
             totalEnemiesKilled >= totalEnemiesToKill &&
-            currentEnemiesAlive <= 0 &&
+            trulyAliveEnemies <= 0 &&
             !hordeCompleted)
         {
             hordeCompleted = true;
             StopContinuousHorde(true);
         }
     }
+
 
     public void StartContinuousHorde()
     {
@@ -223,6 +231,8 @@ public class EnemiesSpawner : MonoBehaviour
         totalEnemiesKilled++;
         currentEnemiesAlive--;
 
+        activeEnemies.RemoveAll(e => e == null);
+
         if (activeEnemies.Contains(enemy))
         {
             activeEnemies.Remove(enemy);
@@ -230,13 +240,22 @@ public class EnemiesSpawner : MonoBehaviour
 
         onHordeProgress?.Invoke(totalEnemiesKilled, totalEnemiesToKill);
 
-        if (totalEnemiesKilled >= totalEnemiesToKill && currentEnemiesAlive <= 0 &&
+        int trulyAliveEnemies = 0;
+        foreach (var e in activeEnemies)
+        {
+            if (e != null)
+                trulyAliveEnemies++;
+        }
+
+        if (totalEnemiesKilled >= totalEnemiesToKill && trulyAliveEnemies <= 0 &&
             GameManager.Instance.currentGameState == GameState.Night && !hordeCompleted)
         {
             hordeCompleted = true;
             StopContinuousHorde(true);
         }
     }
+
+
 
     public void StopContinuousHorde(bool completed)
     {
