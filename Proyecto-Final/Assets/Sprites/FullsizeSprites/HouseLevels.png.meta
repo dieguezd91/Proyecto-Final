@@ -284,9 +284,9 @@ TextureImporter:
         x: 0
         y: 371
         width: 320
-        height: 300
+        height: 301
       alignment: 9
-      pivot: {x: 0.5, y: 0.46333334}
+      pivot: {x: 0.5, y: 0.461794}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -345,11 +345,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 672
-        y: 372
+        y: 371
         width: 320
-        height: 300
+        height: 301
       alignment: 9
-      pivot: {x: 0.5, y: 0.46333334}
+      pivot: {x: 0.5, y: 0.461794}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -370,7 +370,7 @@ TextureImporter:
         width: 320
         height: 35
       alignment: 9
-      pivot: {x: 0.5, y: 4.9714284}
+      pivot: {x: 0.5, y: 4.971428}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -378,6 +378,174 @@ TextureImporter:
       bones: []
       spriteID: 578b3b246bb8c36489988abec7347185
       internalID: -772091685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseDestroyedFront
+      rect:
+        serializedVersion: 2
+        x: 1009
+        y: 336
+        width: 320
+        height: 35
+      alignment: 9
+      pivot: {x: 0.5, y: 4.9714284}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 969d3cf6efd645c40912d2880bc1ccd5
+      internalID: -278929917
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseDestroyedRoof
+      rect:
+        serializedVersion: 2
+        x: 1009
+        y: 371
+        width: 320
+        height: 301
+      alignment: 9
+      pivot: {x: 0.5, y: 0.461794}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 16556d4f207d0cd4a8da552b80188292
+      internalID: 1090224669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 178
+        width: 4
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dafdfeaf3fc02e04d9d6a8d72f7f3fed
+      internalID: 2039190353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial2
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 177
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4e9c8af0b3246f243a6ae89e426da218
+      internalID: 194497764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial3
+      rect:
+        serializedVersion: 2
+        x: 515
+        y: 176
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3797acc4cc8b63e48b58668a4438ec05
+      internalID: 1051854719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial4
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 178
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e6541e40d674564ab95161f4d3a298e
+      internalID: -1493852525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial5
+      rect:
+        serializedVersion: 2
+        x: 546
+        y: 179
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 958ede07712161943b03d8cbb0f5eb73
+      internalID: 1319314958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseMaterial6
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 179
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68f63876294cdde41b1a3117beb7a3c4
+      internalID: -418460142
       vertices: []
       indices: 
       edges: []
@@ -394,6 +562,8 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       Doors: 970242705
+      HouseDestroyedFront: -278929917
+      HouseDestroyedRoof: 1090224669
       HouseFront1: -527732196
       HouseFront5: -1501353990
       HouseFront5HD: -772091685
@@ -401,6 +571,12 @@ TextureImporter:
       HouseFrontD2: 846255627
       HouseLevels_0: -1491984200
       HouseLevels_1: 779734044
+      HouseMaterial: 2039190353
+      HouseMaterial2: 194497764
+      HouseMaterial3: 1051854719
+      HouseMaterial4: -1493852525
+      HouseMaterial5: 1319314958
+      HouseMaterial6: -418460142
       HouseRoof1: -604989864
       HouseRoof5: -978076702
       HouseRoof5D: 1598785333
