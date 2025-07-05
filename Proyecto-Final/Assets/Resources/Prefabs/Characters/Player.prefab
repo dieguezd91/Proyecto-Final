@@ -30398,7 +30398,6 @@ MonoBehaviour:
   bubbleRect: {fileID: 0}
   bubbleImage: {fileID: 0}
   bubbleText: {fileID: 2714279699808301400}
-  padding: {x: 60, y: 40}
   fadeInTime: 0.2
   showDuration: 2
   wobbleSpeed: 1.5
@@ -35411,7 +35410,7 @@ MonoBehaviour:
   pickupEntryPrefab: {fileID: 4269542569326092464, guid: 93771d607cf171b40b89acb7c59c0c19, type: 3}
   pickupDisplayTime: 1.5
   fadeDuration: 0.25
-  warningColor: {r: 0.6792453, g: 0.0032039948, b: 0.0032039948, a: 1}
+  warningColor: {r: 1, g: 1, b: 1, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!225 &2585424018082720245
 CanvasGroup:
