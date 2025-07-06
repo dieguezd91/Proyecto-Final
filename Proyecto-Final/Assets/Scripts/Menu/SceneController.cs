@@ -19,7 +19,7 @@ public class SceneController : MonoBehaviour
 
     public void OnPlay()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameScene");
     }
 
     public void Options()
@@ -35,7 +35,7 @@ public class SceneController : MonoBehaviour
     public void Restart()
     {
         GameManager.Instance.ResetGameData();
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameScene");
     }
 
     public void Reset()
