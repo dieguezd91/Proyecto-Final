@@ -13,6 +13,9 @@ public class PlantSlot
     public string description;
 
     public int seedCount = 0;
+
+    public PlantDataSO data;
+
 }
 
 public class SeedInventory : MonoBehaviour
@@ -163,7 +166,8 @@ public class SeedInventory : MonoBehaviour
         Sprite plantIcon,
         int slotIndex,
         int daysToGrow,
-        string description = "")
+        string description = "",
+        PlantDataSO data = null)
     {
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
         {
@@ -173,6 +177,7 @@ public class SeedInventory : MonoBehaviour
             plantSlots[slotIndex].plantIcon = plantIcon;
             plantSlots[slotIndex].daysToGrow = daysToGrow;
             plantSlots[slotIndex].description = description;
+            plantSlots[slotIndex].data = data;
 
             Debug.Log($"Unlocked new plant: {plantName} (Seed: {seedType}) in slot {slotIndex + 1}");
         }

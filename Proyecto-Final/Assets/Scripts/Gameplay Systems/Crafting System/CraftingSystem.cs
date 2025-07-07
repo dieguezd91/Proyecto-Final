@@ -87,7 +87,8 @@ public class CraftingSystem : MonoBehaviour
                             plantData.plantIcon,
                             slotIndex,
                             plantData.daysToGrow,
-                            plantData.description
+                            plantData.description,
+                            plantData
                         );
                         SeedInventory.Instance.GetPlantSlot(slotIndex).seedCount = 1;
                     }

@@ -81,6 +81,11 @@ public class UIManager : MonoBehaviour
     [Header("PLAYER ABILITY UI")]
     [SerializeField] private GameObject abilityPanel;
 
+    [Header("TOOLTIP")]
+    [SerializeField] private GameObject tooltipPanel;
+    [SerializeField] private TextMeshProUGUI tooltipText;
+    [SerializeField] private Vector2 tooltipOffset = new Vector2(20f, -20f);
+
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
     private ManaSystem manaSystem;
@@ -105,7 +110,17 @@ public class UIManager : MonoBehaviour
     private int _originalSiblingIndex;
 
 
-    private int pendingSwapSlot = -1;         
+    private int pendingSwapSlot = -1;
+
+    public static UIManager Instance { get; private set; }
+
+    void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -156,6 +171,7 @@ public class UIManager : MonoBehaviour
         HandleGameOverState();
         HandleInventoryInput();
         HandleSeedSlotInput();
+        UpdateTooltipPosition();
 
         if (damagedScreenCanvasGroup != null)
         {
@@ -283,6 +299,17 @@ public class UIManager : MonoBehaviour
     {
         for (int i = 0; i < slotObjects.Length; i++)
         {
+
+            if (slotObjects[i] == null) continue;
+
+            var tooltip = slotObjects[i].GetComponent<PlantSlotTooltipHandler>();
+            if (tooltip == null)
+                tooltip = slotObjects[i].AddComponent<PlantSlotTooltipHandler>();
+
+            tooltip.slotIndex = i;
+
+
+
             if (slotNumbers[i] != null)
                 slotNumbers[i].text = (i + 1).ToString();
 
@@ -729,7 +756,58 @@ public class UIManager : MonoBehaviour
             var ed = new EventTrigger.Entry { eventID = EventTriggerType.EndDrag };
             ed.callback.AddListener(evt => EndDragIcon((PointerEventData)evt));
             trigger.triggers.Add(ed);
+
+
+            var enter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
+            enter.callback.AddListener(evt => ShowTooltipForSlot(copy));
+            trigger.triggers.Add(enter);
+
+            var exit = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
+            exit.callback.AddListener(evt => HideTooltip());
+            trigger.triggers.Add(exit);
         }
+    }
+
+
+    public void ShowTooltipForSlot(int slotIndex)
+    {
+        if (tooltipPanel == null || tooltipText == null) return;
+
+        PlantSlot slot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
+        if (slot == null || slot.seedCount <= 0)
+        {
+            HideTooltip();
+            return;
+        }
+
+        PlantDataSO data = slot.data;
+        if (data == null)
+        {
+            HideTooltip();
+            return;
+        }
+
+
+        tooltipPanel.SetActive(true);
+        tooltipPanel.transform.position = Input.mousePosition + new Vector3(100f, -50f);
+
+        tooltipText.text = $"<b>{data.plantName}</b>\n<size=80%>{data.description}\nDías para crecer: {data.daysToGrow}</size>";
+    }
+
+
+
+
+
+    public void HideTooltip()
+    {
+        if (tooltipPanel != null)
+            tooltipPanel.SetActive(false);
+    }
+
+    private void UpdateTooltipPosition()
+    {
+        if (tooltipPanel != null && tooltipPanel.activeSelf)
+            tooltipPanel.transform.position = Input.mousePosition + (Vector3)tooltipOffset;
     }
 
     private GameObject _dragIcon;
