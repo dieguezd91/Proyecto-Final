@@ -75,6 +75,9 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     {
         if (_isClinging || _player == null) return;
 
+        if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
+            return;
+
         Vector2 targetPos = (Vector2)_player.position + Vector2.down * chaseYOffset;
         Vector2 disp = targetPos - (Vector2)transform.position;
         float dist = disp.magnitude;

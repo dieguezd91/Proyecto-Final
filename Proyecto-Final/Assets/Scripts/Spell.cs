@@ -55,6 +55,13 @@ public class Spell : MonoBehaviour
         if (CameraShaker.Instance != null)
             CameraShaker.Instance.Shake(0.3f, 0.25f);
 
+        var knockback = collision.GetComponent<KnockbackReceiver>();
+        if (knockback != null)
+        {
+            Vector2 direction = (collision.transform.position - transform.position).normalized;
+            knockback.ApplyKnockback(direction, 8f);
+        }
+
         if (existing != null)
         {
             existing.AddDamage(dmg);

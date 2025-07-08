@@ -157,7 +157,11 @@ public class Enemy : MonoBehaviour, IEnemy
     void FixedUpdate()
     {
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
+        {
+            if (anim != null)
+                anim.SetBool("isMoving", false);
             return;
+        }
 
         if (isDead) return;
 

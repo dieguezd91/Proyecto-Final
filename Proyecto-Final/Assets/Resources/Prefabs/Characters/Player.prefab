@@ -29829,6 +29829,7 @@ GameObject:
   - component: {fileID: 5323037432474920394}
   - component: {fileID: 1333776624667747220}
   - component: {fileID: 4856583932368232146}
+  - component: {fileID: 1928622631053985834}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -29923,13 +29924,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a34d0be1b9cb746bf4ec15035781ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4.5
   rb: {fileID: 1774628585642013327}
   cam: {fileID: 0}
   bulletPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
   firePoint: {fileID: 7145714007259786806}
   bulletSpeed: 10
   spellCooldown: 0.5
+  accelerationRate: 6
+  decelerationRate: 8
+  maxSpeed: 5
+  attackMovementPenalty: 0.5
+  attackSlowDuration: 0.3
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
@@ -30262,6 +30267,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkPoint: {fileID: 599287380551035941}
   checkRadius: 0.1
+--- !u!114 &1928622631053985834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackResistance: 0.5
+  knockbackDuration: 0.2
+  knockbackDecay: 8
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0
