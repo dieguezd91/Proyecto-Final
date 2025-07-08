@@ -41,6 +41,20 @@ public class Spell : MonoBehaviour
         Transform target = collision.transform;
         var existing = target.GetComponentInChildren<FloatingDamageText>();
 
+        if (impactParticlesPrefab != null)
+        {
+            Vector3 spawnPos = target.position;
+            var particles = Instantiate(impactParticlesPrefab, spawnPos, Quaternion.identity);
+            var ps = particles.GetComponent<ParticleSystem>();
+            if (ps != null)
+                Destroy(particles, ps.main.duration);
+            else
+                Destroy(particles, 1.5f);
+        }
+
+        if (CameraShaker.Instance != null)
+            CameraShaker.Instance.Shake(0.3f, 0.25f);
+
         if (existing != null)
         {
             existing.AddDamage(dmg);
@@ -56,6 +70,7 @@ public class Spell : MonoBehaviour
 
         Destroy(gameObject);
     }
+
 
     public void SetDirection(Vector2 newDirection)
     {
