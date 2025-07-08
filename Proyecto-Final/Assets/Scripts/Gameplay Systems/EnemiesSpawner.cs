@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[System.Serializable]
+public class EnemyWeight
+{
+    public GameObject prefab;
+    [Range(0.01f, 100f)]
+    public float weight;
+}
+
 public class EnemiesSpawner : MonoBehaviour
 {
     [SerializeField] private bool useContinuousHordeSystem = true;
@@ -22,7 +30,7 @@ public class EnemiesSpawner : MonoBehaviour
     public float playerCheckRadius = 5f;
 
     [Header("Enemy Types")]
-    [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private List<EnemyWeight> enemyWeights;
 
     [Header("Events")]
     public UnityEvent onHordeStart;
@@ -43,6 +51,8 @@ public class EnemiesSpawner : MonoBehaviour
     private bool hordeCompleted = false;
     private float currentSpawnInterval;
 
+    private WeightedRoulette<GameObject> enemyRoulette = new WeightedRoulette<GameObject>();
+
     void Start()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -58,6 +68,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (GameManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
         {
+            ConfigureEnemyRoulette();
             StartContinuousHorde();
         }
 
@@ -80,28 +91,24 @@ public class EnemiesSpawner : MonoBehaviour
         }
     }
 
-
     public void StartContinuousHorde()
     {
         if (GameManager.Instance.currentGameState != GameState.Night)
-        {
             return;
-        }
 
         ResetHordeCounters();
 
         int currentDay = GameManager.Instance.GetCurrentDay();
         totalEnemiesToKill = baseEnemiesPerNight + ((currentDay - 1) * enemiesPerNightIncrement);
 
-        currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay
-        );
+        currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay);
+
+        ConfigureEnemyRoulette();
 
         onHordeStart?.Invoke();
 
         if (continuousSpawnCoroutine != null)
-        {
             StopCoroutine(continuousSpawnCoroutine);
-        }
 
         continuousSpawnCoroutine = StartCoroutine(SpawnEnemiesIndividually());
     }
@@ -156,7 +163,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (spawnPoints.Count == 0 || enemyPrefabs.Count == 0)
+        if (spawnPoints.Count == 0 || enemyWeights.Count == 0)
         {
             Debug.Log("No hay puntos de spawn o enemigos asignados");
             return;
@@ -192,7 +199,7 @@ public class EnemiesSpawner : MonoBehaviour
             spawnPoint = spawnPoints[totalEnemiesSpawned % spawnPoints.Count];
         }
 
-        GameObject selectedEnemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+        GameObject selectedEnemyPrefab = enemyRoulette.Roll();
 
         GameObject enemy = Instantiate(selectedEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
         enemy.transform.SetParent(this.transform);
@@ -369,5 +376,20 @@ public class EnemiesSpawner : MonoBehaviour
         hordeCompleted = true;
         StopContinuousHorde(true);
     }
-    
+
+    private void ConfigureEnemyRoulette()
+    {
+        enemyRoulette.Clear();
+
+        foreach (var ew in enemyWeights)
+        {
+            if (ew.prefab != null && ew.weight > 0f)
+                enemyRoulette.Add(ew.prefab, ew.weight);
+        }
+    }
+
+    private float CalculateEnemyWeight(GameObject prefab)
+    {
+        return 1f;
+    }
 }
