@@ -876,7 +876,7 @@ public class UIManager : MonoBehaviour
             SeedInventory.Instance.SelectSlot(hitIndex);
             UpdateSelectedSlotUI(hitIndex);
         }
-
+        UpdateTooltipHandlers();
         _dragSourceIndex = -1;
     }
 
@@ -943,7 +943,7 @@ public class UIManager : MonoBehaviour
             slotObjects[idx].transform.localScale = new Vector3(normalScale, normalScale, 1f);
         }
     }
-    
+
     private void SwapSeedSlots(int a, int b)
     {
         PlantSlot slotA = SeedInventory.Instance.GetPlantSlot(a);
@@ -957,6 +957,7 @@ public class UIManager : MonoBehaviour
         int tmpCount = slotA.seedCount;
         int tmpDaysToGrow = slotA.daysToGrow;
         string tmpDescription = slotA.description;
+        PlantDataSO tmpData = slotA.data;
 
         slotA.seedType = slotB.seedType;
         slotA.plantPrefab = slotB.plantPrefab;
@@ -964,6 +965,7 @@ public class UIManager : MonoBehaviour
         slotA.seedCount = slotB.seedCount;
         slotA.daysToGrow = slotB.daysToGrow;
         slotA.description = slotB.description;
+        slotA.data = slotB.data;
 
         slotB.seedType = tmpSeedType;
         slotB.plantPrefab = tmpPrefab;
@@ -971,7 +973,9 @@ public class UIManager : MonoBehaviour
         slotB.seedCount = tmpCount;
         slotB.daysToGrow = tmpDaysToGrow;
         slotB.description = tmpDescription;
+        slotB.data = tmpData;
     }
+
 
     public void AnimateRespawnRecovery(float duration)
     {
@@ -1023,5 +1027,18 @@ public class UIManager : MonoBehaviour
         }
 
         //Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
+    }
+
+
+    private void UpdateTooltipHandlers()
+    {
+        for (int i = 0; i < slotObjects.Length; i++)
+        {
+            var tooltip = slotObjects[i]?.GetComponent<PlantSlotTooltipHandler>();
+            if (tooltip != null)
+            {
+                tooltip.slotIndex = i;
+            }
+        }
     }
 }
