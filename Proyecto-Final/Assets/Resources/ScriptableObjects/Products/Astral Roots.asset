@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Astral Roots
   m_EditorClassIdentifier: 
   materialName: Astral Roots
-  materialIcon: {fileID: -548959778, guid: d8844b45c8e11f54cb8ca68d1e7db6e9, type: 3}
+  materialIcon: {fileID: 1841481835, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   materialType: 9
   materialDescription: 
   rarity: 1

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
-    using UnityEngine;
-    using UnityEngine.UI;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class CraftingUIManager : MonoBehaviour
 {
@@ -15,6 +15,7 @@ public class CraftingUIManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI selectedPlantName;
     [SerializeField] private Image selectedPlantIcon;
+    [SerializeField] private TextMeshProUGUI selectedPlantDescription;
     [SerializeField] private Transform materialListContainer;
     [SerializeField] private GameObject materialRequirementPrefab;
 
@@ -84,6 +85,12 @@ public class CraftingUIManager : MonoBehaviour
         craftingUIPanel.SetActive(true);
         isCraftingUIOpen = true;
 
+        selectedPlantIcon.enabled = false;
+        selectedPlantIcon.sprite = null;
+        selectedPlantName.text = "";
+        if (selectedPlantDescription != null)
+            selectedPlantDescription.text = "";
+
         GameManager.Instance?.SetGameState(GameState.OnCrafting);
     }
 
@@ -106,7 +113,7 @@ public class CraftingUIManager : MonoBehaviour
         {
             var btn = Instantiate(recipeButtonPrefab, recipeListContainer);
             var plantData = craftingSystem.GetPlantData(recipe.SeedToCraft);
-
+            Debug.Log(plantData);
             if (plantData != null)
             {
                 var nameText = btn.GetComponentInChildren<TextMeshProUGUI>();
@@ -137,9 +144,23 @@ public class CraftingUIManager : MonoBehaviour
         selectedSeed = recipe.SeedToCraft;
 
         var plantData = craftingSystem.GetPlantData(selectedSeed);
+
         selectedPlantName.text = plantData.plantName;
-        selectedPlantIcon.sprite = plantData.plantIcon;
-        selectedPlantIcon.preserveAspect = true;
+
+        if (plantData.plantIcon != null)
+        {
+            selectedPlantIcon.sprite = plantData.plantIcon;
+            selectedPlantIcon.preserveAspect = true;
+            selectedPlantIcon.enabled = true;
+        }
+        else
+        {
+            selectedPlantIcon.sprite = null;
+            selectedPlantIcon.enabled = false;
+        }
+
+        if (selectedPlantDescription != null)
+            selectedPlantDescription.text = plantData.description;
 
         foreach (Transform child in materialListContainer)
             Destroy(child.gameObject);
@@ -157,10 +178,21 @@ public class CraftingUIManager : MonoBehaviour
                 {
                     textComponent.text = $"{materialData.materialName} x{mat.quantity}";
                 }
+
+                var iconTransform = reqUI.transform.Find("MaterialIcon");
+                if (iconTransform != null)
+                {
+                    var iconImage = iconTransform.GetComponent<Image>();
+                    if (iconImage != null && materialData.materialIcon != null)
+                    {
+                        iconImage.sprite = materialData.materialIcon;
+                        iconImage.preserveAspect = true;
+                        iconImage.enabled = true;
+                    }
+                }
             }
         }
 
-        // Mostrar íconos separados (fuera de los slots)
         for (int i = 0; i < materialIconSlots.Count; i++)
         {
             if (materialIconSlots[i] == null)
@@ -191,7 +223,6 @@ public class CraftingUIManager : MonoBehaviour
             }
         }
 
-        // Habilitar o deshabilitar botón de crafteo
         craftButton.interactable = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
     }
 
