@@ -11,6 +11,7 @@ TagManager:
   - Land
   - Grass
   - Wood
+  - AttackPoint
   layers:
   - Default
   - TransparentFX
