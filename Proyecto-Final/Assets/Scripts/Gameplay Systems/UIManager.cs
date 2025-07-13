@@ -839,6 +839,11 @@ public class UIManager : MonoBehaviour
         img.sprite = slotIcons[slotIndex].sprite;
 
         slotIcons[slotIndex].gameObject.SetActive(false);
+
+        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem ability)
+        {
+            ability.SetAbility(PlayerAbility.Planting);
+        }
     }
 
     public void OnDragIcon(PointerEventData data)
