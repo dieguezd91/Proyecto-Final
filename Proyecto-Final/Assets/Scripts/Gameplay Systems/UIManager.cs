@@ -857,6 +857,7 @@ public class UIManager : MonoBehaviour
         (_dragIcon.transform as RectTransform).anchoredPosition = localPos;
     }
 
+
     public void EndDragIcon(PointerEventData data)
     {
         if (_dragIcon != null)
@@ -880,6 +881,15 @@ public class UIManager : MonoBehaviour
             if (hitIndex != -1) break;
         }
 
+        if (hitIndex == _dragSourceIndex)
+        {
+            if (slotIcons[_dragSourceIndex] != null)
+                slotIcons[_dragSourceIndex].gameObject.SetActive(true);
+
+            _dragSourceIndex = -1;
+            return;
+        }
+
         if (hitIndex >= 0 && hitIndex != _dragSourceIndex)
         {
             SwapSeedSlots(_dragSourceIndex, hitIndex);
@@ -893,9 +903,17 @@ public class UIManager : MonoBehaviour
             SeedInventory.Instance.SelectSlot(hitIndex);
             UpdateSelectedSlotUI(hitIndex);
         }
+        else
+        {
+            if (slotIcons[_dragSourceIndex] != null)
+                slotIcons[_dragSourceIndex].gameObject.SetActive(true);
+        }
+
         UpdateTooltipHandlers();
         _dragSourceIndex = -1;
     }
+
+
 
 
 
