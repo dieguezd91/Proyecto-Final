@@ -14,6 +14,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image fillImage;
     [SerializeField] private Gradient healthGradient;
     [SerializeField] private TextMeshProUGUI playerHealthText;
+    [SerializeField] private Image whiteFillImage;
+    [SerializeField] private float whiteBarSpeed = 1.5f;
+
+    private float targetFill = 1f;
 
     [Header("HOME HEALTH BAR")]
     [SerializeField] private Slider homeHealthBar;
@@ -163,6 +167,9 @@ public class UIManager : MonoBehaviour
         lastDamageTime = Time.time;
 
         UpdateManaUI();
+
+        if (whiteFillImage != null)
+            whiteFillImage.fillAmount = playerLife.GetHealthPercentage();
     }
 
     void Update()
@@ -184,6 +191,8 @@ public class UIManager : MonoBehaviour
                 damageFadeSpeed * Time.deltaTime
             );
         }
+        UpdateWhiteBar();
+
     }
 
     private void OnDestroy()
@@ -431,9 +440,12 @@ public class UIManager : MonoBehaviour
     {
         if (healthBar != null)
         {
+            float percent = currentHealth / maxHealth;
             healthBar.value = currentHealth;
-            UpdateFillColor(currentHealth / maxHealth);
+            targetFill = percent;
+            UpdateFillColor(percent);
         }
+
 
         float damageTaken = lastPlayerHealth - currentHealth;
         if (damageTaken > 0f && floatingDamagePrefab != null)
@@ -1041,4 +1053,22 @@ public class UIManager : MonoBehaviour
             }
         }
     }
+
+    private void UpdateWhiteBar()
+    {
+        if (whiteFillImage == null || fillImage == null) return;
+
+        float current = whiteFillImage.fillAmount;
+        float target = fillImage.fillAmount;
+
+        if (current > target)
+        {
+            whiteFillImage.fillAmount = Mathf.MoveTowards(current, target, whiteBarSpeed * Time.deltaTime);
+        }
+        else
+        {
+            whiteFillImage.fillAmount = target;
+        }
+    }
+
 }

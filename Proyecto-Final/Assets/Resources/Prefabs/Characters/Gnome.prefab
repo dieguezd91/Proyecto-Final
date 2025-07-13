@@ -5053,6 +5053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockbackResistance: 1
   knockbackDuration: 0.2
+  knockbackDecay: 8
 --- !u!61 &5307998528139399458
 BoxCollider2D:
   m_ObjectHideFlags: 0

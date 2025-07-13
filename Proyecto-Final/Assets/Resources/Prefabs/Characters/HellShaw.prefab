@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8947831693628458650}
   - component: {fileID: 4167715457539083562}
   - component: {fileID: 2274362802430721429}
+  - component: {fileID: 8102336949729422656}
   m_Layer: 8
   m_Name: HellShaw
   m_TagString: Enemy
@@ -81,7 +82,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 1663056160, guid: 023176822c7636a4db345f9d1033e6cf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.5416667, y: 2.0833333}
@@ -153,7 +154,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.5416667, y: 2.0833333}
+    oldSize: {x: 3.8125, y: 3.125}
     newSize: {x: 2.5416667, y: 2.0833333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -207,20 +208,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b2305390559c94eb8e335f76d5952d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vel: 2
-  velReinicio: 2
-  detectRange: 15
-  minRange: 2
-  radioGolpe: 2
-  radioEspecial: 3
-  danoGolpe: 5
-  danoEspecial: 15
-  cooldown: 1
-  delayAtaque: 0.6
-  delayEspecial: 1
+  spriteRenderer: {fileID: 7905766180791579066}
+  chaseYOffset: 0.5
+  moveSpeed: 2
+  detectionRange: 15
+  minAttackDistance: 3
+  meleeRadius: 3
+  specialRadius: 4
+  meleeDamage: 5
+  specialDamage: 15
+  attackCooldown: 1
+  meleeDelay: 0.6
+  specialDelay: 1
+  animator: {fileID: 8102336949729422656}
   rb: {fileID: 5633985108502546552}
-  jugador: {fileID: 0}
-  controladorGolpe: {fileID: 324195009587380907}
+  player: {fileID: 0}
+  attackPoint: {fileID: 324195009587380907}
+--- !u!95 &8102336949729422656
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2501910690517604512}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f203914d7bb79c9488a42e5f79aaec2a, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4430775818049188217
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +256,7 @@ GameObject:
   - component: {fileID: 324195009587380907}
   m_Layer: 8
   m_Name: AttackPoint
-  m_TagString: Untagged
+  m_TagString: AttackPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -252,6 +276,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2712040192113140525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8622273863689026056
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 328830289171956572}
+  - component: {fileID: 6135279582378034448}
+  - component: {fileID: 3217820119467665842}
+  m_Layer: 5
+  m_Name: LifebarFill (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &328830289171956572
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622273863689026056}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 470.25293, y: 214.49232, z: 214.49232}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5696977564631809641}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 405}
+  m_SizeDelta: {x: 1.45, y: 0.25}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &6135279582378034448
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622273863689026056}
+  m_CullTransparentMesh: 1
+--- !u!114 &3217820119467665842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622273863689026056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 7482667652216324306, guid: 3fcb07e8507d99e42baaa231ea17de77, type: 3}
+  m_Type: 3
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 0
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1001 &2571343487091237911
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -337,9 +436,17 @@ PrefabInstance:
       value: 10000
       objectReference: {fileID: 0}
     - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: whiteBarSpeed
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: lifeController
       value: 
       objectReference: {fileID: 4167715457539083562}
+    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: whiteFillImage
+      value: 
+      objectReference: {fileID: 3217820119467665842}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -438,7 +545,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 328830289171956572}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
 --- !u!225 &2795384920042958855 stripped
