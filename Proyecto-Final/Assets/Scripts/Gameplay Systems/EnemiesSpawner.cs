@@ -37,7 +37,7 @@ public class EnemiesSpawner : MonoBehaviour
     public UnityEvent onHordeEnd;
     public UnityEvent onEnemySpawned;
     public UnityEvent<int, int> onHordeProgress;
-    
+
     private int totalEnemiesKilled;
     private int currentEnemiesAlive;
     private int totalEnemiesToKill;
@@ -340,7 +340,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void EndNight()
     {
-    
+
         if (GameManager.Instance.currentGameState != GameState.Night)
         {
             return;

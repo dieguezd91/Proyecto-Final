@@ -108,6 +108,7 @@ public class LifeController : MonoBehaviour
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
+                GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(true);
                 animator.SetTrigger("Death");
                 animator.SetBool("IsDead", true);
                 GetComponent<PlayerController>()?.SetMovementEnabled(false);
@@ -207,6 +208,7 @@ public class LifeController : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.ResetTrigger("Death");
         animator.SetTrigger("Revive");
+        GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(false);
 
         GameManager.Instance.SetGameState(GameManager.Instance.currentGameState);
     }

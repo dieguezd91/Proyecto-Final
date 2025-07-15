@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
 
 
 public class UIManager : MonoBehaviour
@@ -42,7 +44,7 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverPanel;
     public GameObject HUD;
     public GameObject pausePanel;
-    public GameObject seedSlots;                       
+    public GameObject seedSlots;
     [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
     [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
@@ -90,6 +92,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI tooltipText;
     [SerializeField] private Vector2 tooltipOffset = new Vector2(20f, -20f);
 
+    [Header("POST-PROCESS")]
+    [SerializeField] private Volume bloomVolume;
+    private Bloom bloom;
+    private ColorAdjustments colorAdjustments;
+
+
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
     private ManaSystem manaSystem;
@@ -102,8 +110,8 @@ public class UIManager : MonoBehaviour
     private Coroutine fadeCoroutine;
     private Coroutine warningCoroutine;
 
-    private int lastPressSlot = -1;            
-    private float lastPressTime = 0f;          
+    private int lastPressSlot = -1;
+    private float lastPressTime = 0f;
     [SerializeField] private float doublePressThreshold = 0.3f;
 
 
@@ -170,6 +178,12 @@ public class UIManager : MonoBehaviour
 
         if (whiteFillImage != null)
             whiteFillImage.fillAmount = playerLife.GetHealthPercentage();
+
+        if (bloomVolume != null && bloomVolume.profile != null)
+        {
+            bloomVolume.profile.TryGet(out bloom);
+            bloomVolume.profile.TryGet(out colorAdjustments);
+        }
     }
 
     void Update()
@@ -260,7 +274,7 @@ public class UIManager : MonoBehaviour
 
     private void InitializeUI()
     {
-        
+
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
             seedSlotsCanvasGroup.alpha = 0.5f;
@@ -728,7 +742,7 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < slotObjects.Length; i++)
         {
-            KeyCode key = KeyCode.Alpha1 + i;  
+            KeyCode key = KeyCode.Alpha1 + i;
             if (Input.GetKeyDown(key))
             {
                 OnSlotKeyPressed(i);
@@ -962,7 +976,7 @@ public class UIManager : MonoBehaviour
         lastPressSlot = i;
         lastPressTime = now;
     }
-    
+
     private void HighlightSlot(int idx, bool highlight)
     {
         if (idx < 0 || idx >= slotObjects.Length) return;
@@ -1092,6 +1106,15 @@ public class UIManager : MonoBehaviour
         {
             whiteFillImage.fillAmount = target;
         }
+    }
+
+    public void SetGrayscaleGhostEffect(bool enabled)
+    {
+        if (bloom != null)
+            bloom.active = !enabled;
+
+        if (colorAdjustments != null)
+            colorAdjustments.saturation.value = enabled ? -100f : 15f;
     }
 
 }
