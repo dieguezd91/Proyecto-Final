@@ -41,15 +41,15 @@ Material:
     - _AmplitudeY: 16
     - _CrossWaveFrequency: 1
     - _Float1: 16
-    - _NoiseScale: 1
+    - _NoiseScale: 0.06
     - _Opacity: 0
     - _PixelSize: 16
     - _PixelSize1: 1
     - _Pixelation: 16
-    - _Speed: 0.4
+    - _Speed: 0.2
     - _VertFrequency: 1
-    - _VoroBaseScale: 1
-    - _VoroTimeScale: 10
+    - _VoroBaseScale: 1.77
+    - _VoroTimeScale: 0.4
     - _WaveAmplitude: 1
     - _WaveAmplitude1: 1
     - _WaveFrequency: 1
@@ -61,13 +61,13 @@ Material:
     - _Color1: {r: 1, g: 1, b: 1, a: 0}
     - _DeepWater: {r: 0.32549015, g: 0.7529413, b: 0.9254903, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MainWater: {r: 0, g: 0.36244306, b: 0.5660378, a: 1}
-    - _Opacity: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
+    - _MainWater: {r: 0.06731233, g: 0.5647059, b: 0, a: 1}
+    - _Opacity: {r: 1, g: 1, b: 1, a: 1}
     - _ShallowWater: {r: 0, g: 1, b: 0.5809541, a: 0}
-    - _Water: {r: 0.0738252, g: 0.6675939, b: 0.745283, a: 1}
+    - _Water: {r: 0, g: 1, b: 0.7342434, a: 1}
     - _Water1: {r: 0.09344962, g: 0.6377298, b: 0.9433962, a: 1}
-    - _WaveHighlight: {r: 0.1321645, g: 0.30075216, b: 0.509434, a: 1}
-    - _WaveHighlight2: {r: 0.38692594, g: 0.41713098, b: 0.4433962, a: 1}
-    - _WaveShadow: {r: 0.47770557, g: 0.8169064, b: 0.8962264, a: 1}
+    - _WaveHighlight: {r: 0, g: 0.21534048, b: 0.3301887, a: 1}
+    - _WaveHighlight2: {r: 0.013082955, g: 0.3962264, b: 0.19067197, a: 1}
+    - _WaveShadow: {r: 0, g: 1, b: 0.041609526, a: 1}
     - _WaveShadow1: {r: 0.38431373, g: 0.6627451, b: 0.9137256, a: 1}
   m_BuildTextureStacks: []

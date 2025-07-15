@@ -3439,6 +3439,174 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_0
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 300
+        width: 37
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d715e3e9d766a704fafd103fc8fa9285
+      internalID: -86846029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_1
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 304
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3c4bcfe15e89814f922cbc356bcd7df
+      internalID: -1044839100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_2
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 304
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8fe3a73b420fc3448ca0ec29e7fbdb4
+      internalID: 1624291792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_3
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 288
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ae1078ae991c0c42bd42ac87088d032
+      internalID: 1696216522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_4
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 288
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71f613faf1704ec46a62ff175341a9e0
+      internalID: -1632585809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_5
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 272
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7446602638afcd41a8e5df56ac3a1cf
+      internalID: -566455625
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_21
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 272
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b224f71a4c42b4449efe26c198a49b4
+      internalID: -1057513406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LandscapeSprites_22
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 272
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35c2e9c4551600248bb5c2b039235c0a
+      internalID: -1796195767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -3581,6 +3749,8 @@ TextureImporter:
       LandscapeSpriteSheet_79: -426470791
       LandscapeSpriteSheet_80: -1158126609
       LandscapeSpriteSheet_81: -274285787
+      LandscapeSprites_0: -86846029
+      LandscapeSprites_1: -1044839100
       LandscapeSprites_10: -1090359015
       LandscapeSprites_11: 2135363020
       LandscapeSprites_12: -656851074
@@ -3591,7 +3761,13 @@ TextureImporter:
       LandscapeSprites_17: -1416738475
       LandscapeSprites_18: -903356479
       LandscapeSprites_19: 1617554811
+      LandscapeSprites_2: 1624291792
       LandscapeSprites_20: -1180856226
+      LandscapeSprites_21: -1057513406
+      LandscapeSprites_22: -1796195767
+      LandscapeSprites_3: 1696216522
+      LandscapeSprites_4: -1632585809
+      LandscapeSprites_5: -566455625
       LandscapeSprites_6: 2041476490
       LandscapeSprites_7: 210543228
       LandscapeSprites_8: -1391774639
