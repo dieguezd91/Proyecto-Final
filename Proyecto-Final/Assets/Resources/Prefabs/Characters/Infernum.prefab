@@ -362,6 +362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockbackResistance: 0.5
   knockbackDuration: 0.2
+  knockbackDecay: 8
 --- !u!61 &8994487321417303199
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10101,14 +10102,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: canvasGroup
-      value: 
-      objectReference: {fileID: 629733260897014290}
-    - target: {fileID: 7784439205906887624, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: fadeOutTime
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10194,11 +10187,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
---- !u!225 &629733260897014290 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 388449216423433232, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-  m_PrefabInstance: {fileID: 997916278258746882}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7023867465920191612 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}

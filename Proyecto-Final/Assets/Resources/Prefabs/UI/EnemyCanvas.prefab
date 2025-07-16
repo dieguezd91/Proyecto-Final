@@ -256,7 +256,7 @@ MonoBehaviour:
   lifeController: {fileID: 0}
   healthFillImage: {fileID: 8783055113398384073}
   whiteFillImage: {fileID: 2503668391806603557}
-  whiteBarSpeed: 0.09
+  whiteBarSpeed: 0.2
   healthText: {fileID: 1269140674671454803}
   canvasGroup: {fileID: 388449216423433232}
   fadeOutTime: 1
