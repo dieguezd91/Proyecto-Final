@@ -55,6 +55,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image[] slotBackgrounds = new Image[9];
     [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[9];
     [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[9];
+    [SerializeField] private Color slotHighlightColor = new Color(1f, 1f, 0.5f, 1f);
+
+    private int _hoveredSlotIndex = -1;
+
 
     [Header("SELECTION COLORS")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
@@ -206,6 +210,8 @@ public class UIManager : MonoBehaviour
             );
         }
         UpdateWhiteBar();
+
+
 
     }
 
@@ -863,13 +869,45 @@ public class UIManager : MonoBehaviour
     public void OnDragIcon(PointerEventData data)
     {
         if (_dragIcon == null) return;
+
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             transform.root as RectTransform,
             data.position,
             data.pressEventCamera,
             out Vector2 localPos);
         (_dragIcon.transform as RectTransform).anchoredPosition = localPos;
+
+        var pointerData = new PointerEventData(EventSystem.current) { position = data.position };
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        int newHover = -1;
+        foreach (var r in results)
+        {
+            for (int i = 0; i < slotObjects.Length; i++)
+            {
+                if (r.gameObject == slotObjects[i] ||
+                    r.gameObject.transform.IsChildOf(slotObjects[i].transform))
+                {
+                    newHover = i;
+                    break;
+                }
+            }
+            if (newHover != -1) break;
+        }
+
+        if (newHover != _hoveredSlotIndex)
+        {
+            ClearSlotHighlight();
+
+            if (newHover >= 0)
+            {
+                slotBackgrounds[newHover].color = slotHighlightColor;
+                _hoveredSlotIndex = newHover;
+            }
+        }
     }
+
 
 
     public void EndDragIcon(PointerEventData data)
@@ -924,6 +962,7 @@ public class UIManager : MonoBehaviour
         }
 
         UpdateTooltipHandlers();
+        ClearSlotHighlight();
         _dragSourceIndex = -1;
     }
 
@@ -1115,6 +1154,17 @@ public class UIManager : MonoBehaviour
 
         if (colorAdjustments != null)
             colorAdjustments.saturation.value = enabled ? -100f : 15f;
+    }
+
+
+    private void ClearSlotHighlight()
+    {
+        if (_hoveredSlotIndex >= 0)
+        {
+            // Volvemos al color normal
+            slotBackgrounds[_hoveredSlotIndex].color = normalColor;
+            _hoveredSlotIndex = -1;
+        }
     }
 
 }
