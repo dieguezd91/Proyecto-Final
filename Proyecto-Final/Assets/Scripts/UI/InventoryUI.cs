@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class InventoryUI : MonoBehaviour
 {
@@ -9,6 +11,12 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private Transform slotsContainer;
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private int maxDisplayedResources = 12;
+
+    [Header("DESCRIPTION PANEL")]
+    [SerializeField] private GameObject descriptionPanel;      // Panel que contiene la descripción
+    [SerializeField] private Image descriptionIcon;            // Image dentro del panel
+    [SerializeField] private TextMeshProUGUI descriptionName;  // TMP para el nombre
+    [SerializeField] private TextMeshProUGUI descriptionDetails; // TMP para la descripción
 
     [SerializeField] private TextMeshProUGUI goldText;
 
@@ -63,8 +71,20 @@ public class InventoryUI : MonoBehaviour
         foreach (InventorySlotUI slot in slots)
         {
             uiSlots.Add(slot);
+            slot.onLeftClick += HandleSlotClicked;
             slot.Clear();
         }
+    }
+
+    private void HandleSlotClicked(MaterialType type)
+    {
+        var data = InventoryManager.Instance.GetMaterialData(type);
+        if (data == null) return;
+
+        descriptionIcon.sprite = data.materialIcon;
+        descriptionName.text = data.materialName;
+        descriptionDetails.text = data.materialDescription;
+        descriptionPanel.SetActive(true);
     }
 
     private void OnMaterialChanged(MaterialType materialType, int amount)
