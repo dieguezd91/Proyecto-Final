@@ -45,7 +45,6 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
         UpdateAllSlots();
-        Debug.Log("actualizando slots");
     }
 
     private void OnDestroy()

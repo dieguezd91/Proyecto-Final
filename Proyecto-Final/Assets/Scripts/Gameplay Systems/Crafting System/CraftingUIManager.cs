@@ -113,7 +113,6 @@ public class CraftingUIManager : MonoBehaviour
         {
             var btn = Instantiate(recipeButtonPrefab, recipeListContainer);
             var plantData = craftingSystem.GetPlantData(recipe.SeedToCraft);
-            Debug.Log(plantData);
             if (plantData != null)
             {
                 var nameText = btn.GetComponentInChildren<TextMeshProUGUI>();

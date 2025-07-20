@@ -32,10 +32,57 @@ public class Jefe : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Transform attackPoint;
 
+    [Header("Boss Health")]
+    [SerializeField] private float bossMaxHealth = 300f;
+
+    private LifeController lifeController;
     private Vector3 direction;
     private bool isAttacking = false;
+    private bool isDead = false;
 
     private void Start()
+    {
+        Initialize();
+        SetupLifeController();
+        FindPlayer();
+
+        defaultSpeed = moveSpeed;
+    }
+
+    private void Update()
+    {
+        if (isDead || player == null || isAttacking) return;
+
+        direction = player.position - transform.position;
+        float distanceToPlayer = direction.magnitude;
+        Vector2 targetPosition = (Vector2)player.position + Vector2.down * chaseYOffset;
+
+        LifeController playerLife = player.GetComponent<LifeController>();
+        if (playerLife != null && playerLife.IsTargetable())
+        {
+            if (distanceToPlayer <= detectionRange)
+            {
+                if (distanceToPlayer > minAttackDistance)
+                {
+                    MoveTowardsPlayer();
+                }
+                else
+                {
+                    rb.velocity = Vector2.zero;
+                    TriggerNextAttack();
+                }
+            }
+            else
+            {
+                rb.velocity = Vector2.zero;
+            }
+        }
+
+        FaceDirection(targetPosition - (Vector2)transform.position);
+    }
+
+
+    private void Initialize()
     {
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -46,54 +93,57 @@ public class Jefe : MonoBehaviour
         if (animator == null)
             animator = GetComponent<Animator>();
 
-        if (player == null)
-            player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (attackPoint == null)
-            attackPoint = GameObject.FindGameObjectWithTag("AttackPoint")?.transform;
-
-        defaultSpeed = moveSpeed;
+        lifeController = GetComponent<LifeController>();
+        if (lifeController == null)
+        {
+            lifeController = gameObject.AddComponent<LifeController>();
+        }
     }
 
-    private void Update()
+    private void SetupLifeController()
     {
-        if (player == null) return;
-
-        direction = player.position - transform.position;
-        float distanceToPlayer = direction.magnitude;
-        Vector2 targetPosition = (Vector2)player.position + Vector2.down * chaseYOffset;
-
-        LifeController life = player.GetComponent<LifeController>();
-        if (life != null && life.IsTargetable())
+        if (lifeController != null)
         {
-            if (!isAttacking && distanceToPlayer <= detectionRange)
+            lifeController.maxHealth = bossMaxHealth;
+            lifeController.currentHealth = bossMaxHealth;
+
+            lifeController.onDeath.AddListener(OnBossDeath);
+        }
+    }
+
+    private void FindPlayer()
+    {
+        if (player == null)
+        {
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
             {
-                if (distanceToPlayer > minAttackDistance)
-                    MoveTowardsPlayer();
-                else
-                {
-                    rb.velocity = Vector2.zero;
-                    TriggerNextAttack();
-                }
-            }
-            else if (!isAttacking)
-            {
-                rb.velocity = Vector2.zero;
+                player = playerObj.transform;
             }
         }
-
-        FaceDirection(targetPosition - (Vector2)transform.position);
     }
-
     private void MoveTowardsPlayer()
     {
         Vector2 velocity = direction.normalized * moveSpeed;
         rb.velocity = velocity;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", true);
+        }
     }
 
     private void TriggerNextAttack()
     {
+        if (isAttacking) return;
+
         isAttacking = true;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", false);
+        }
+
         int randomAttack = Random.Range(1, 4);
 
         if (randomAttack == 1)
@@ -148,6 +198,48 @@ public class Jefe : MonoBehaviour
             spriteRenderer.flipX = false;
         else if (lookDir.x < -0.1f)
             spriteRenderer.flipX = true;
+    }
+
+    private void OnBossDeath()
+    {
+        if (isDead) return;
+
+        isDead = true;
+        Debug.Log("¡Jefe derrotado!");
+
+        rb.velocity = Vector2.zero;
+        isAttacking = true;
+
+        StartCoroutine(DeathSequence());
+    }
+
+    private IEnumerator DeathSequence()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Death");
+        }
+
+        if (CameraShaker.Instance != null)
+        {
+            CameraShaker.Instance.Shake(1f, 0.8f);
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        Debug.Log("Jefe siendo destruido...");
+
+        Destroy(gameObject);
+    }
+
+    public float GetCurrentHealth()
+    {
+        return lifeController != null ? lifeController.currentHealth : 0f;
+    }
+
+    public float GetMaxHealth()
+    {
+        return lifeController != null ? lifeController.maxHealth : 0f;
     }
 
     private void OnDrawGizmosSelected()
