@@ -97,7 +97,7 @@ public class HouseRestorationUIManager : MonoBehaviour
         UpdateOptionLabels();
     }
 
-    private void CloseUI()
+    public void CloseUI()
     {
         isUIOpen = false;
         altarUIPanel.SetActive(false);
