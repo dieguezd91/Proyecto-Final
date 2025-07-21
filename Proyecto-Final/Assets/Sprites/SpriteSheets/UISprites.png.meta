@@ -114,7 +114,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 240
+        y: 128
         width: 16
         height: 16
       alignment: 0
@@ -135,7 +135,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 16
-        y: 240
+        y: 128
         width: 16
         height: 16
       alignment: 0
@@ -156,7 +156,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 32
-        y: 240
+        y: 128
         width: 16
         height: 16
       alignment: 0
@@ -177,7 +177,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
-        y: 240
+        y: 128
         width: 16
         height: 16
       alignment: 0
@@ -198,7 +198,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 64
-        y: 240
+        y: 128
         width: 16
         height: 16
       alignment: 0
@@ -219,7 +219,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1
-        y: 213
+        y: 101
         width: 26
         height: 26
       alignment: 0
@@ -239,8 +239,8 @@ TextureImporter:
       name: InventoryPlaceholder
       rect:
         serializedVersion: 2
-        x: 129
-        y: 162
+        x: 387
+        y: 0
         width: 125
         height: 88
       alignment: 0
@@ -252,27 +252,6 @@ TextureImporter:
       bones: []
       spriteID: e5e93f9a91c671443a2b428025c5d1e8
       internalID: 450073570
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CraftingUI
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 37
-        width: 70
-        height: 95
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f77c5205a944a8145bb0adcad9b10541
-      internalID: 14847357
       vertices: []
       indices: 
       edges: []
@@ -303,7 +282,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 240
-        y: 145
+        y: 33
         width: 16
         height: 6
       alignment: 0
@@ -324,7 +303,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 208
-        y: 144
+        y: 32
         width: 32
         height: 7
       alignment: 0
@@ -345,7 +324,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 80
-        y: 192
+        y: 80
         width: 17
         height: 17
       alignment: 0
@@ -450,7 +429,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 17
-        y: 162
+        y: 50
         width: 14
         height: 46
       alignment: 0
@@ -471,7 +450,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 113
-        y: 194
+        y: 82
         width: 13
         height: 13
       alignment: 0
@@ -492,7 +471,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 192
-        y: 153
+        y: 41
         width: 16
         height: 6
       alignment: 0
@@ -513,7 +492,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 194
-        y: 145
+        y: 33
         width: 12
         height: 6
       alignment: 0
@@ -530,74 +509,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: CraftingElement
-      rect:
-        serializedVersion: 2
-        x: 11
-        y: 134
-        width: 50
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6cc0e49acefc0694b8e68b0500a370b2
-      internalID: -1729699907
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CraftRightButton
-      rect:
-        serializedVersion: 2
-        x: 60
-        y: 134
-        width: 11
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5731ca60fa3025d4994547a12d60dead
-      internalID: 165050881
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: CraftLeftButton
-      rect:
-        serializedVersion: 2
-        x: 1
-        y: 134
-        width: 11
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fd047f0748aa65744bb9e50256020e72
-      internalID: -854867658
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: CraftButton
       rect:
         serializedVersion: 2
         x: 1
-        y: 147
+        y: 35
         width: 47
         height: 9
       alignment: 0
@@ -618,7 +534,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 4
-        y: 180
+        y: 68
         width: 9
         height: 25
       alignment: 0
@@ -630,145 +546,6 @@ TextureImporter:
       bones: []
       spriteID: 17e82d51a1ed24644a29b688d123769b
       internalID: -1066148658
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SeedCraftingSelected
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 178
-        width: 63
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 32e341ea3ec052a44bd6d31181ad097d
-      internalID: -105564040
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SeedCrafting
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 162
-        width: 63
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: -30.5, y: -5}
-        - {x: -30.5, y: 5}
-        - {x: 22.5, y: 5}
-        - {x: 22.5, y: -5}
-      physicsShape:
-      - - {x: -31.5, y: 6}
-        - {x: -31.5, y: -6}
-        - {x: 24.5, y: -6}
-        - {x: 24.5, y: 6}
-      tessellationDetail: 0
-      bones: []
-      spriteID: 39eaff2155376dd4eb7b84862fb4a5cc
-      internalID: 8750406
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IngredientRequirement
-      rect:
-        serializedVersion: 2
-        x: 52
-        y: 147
-        width: 50
-        height: 10
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 941023cc1070e534ca9b59c4a0dc3ce1
-      internalID: -1006000798
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: IngredientList
-      rect:
-        serializedVersion: 2
-        x: 74
-        y: 67
-        width: 59
-        height: 52
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dfbeffb0b8237eb4db31027b08abb0e0
-      internalID: -132592085
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Close
-      rect:
-        serializedVersion: 2
-        x: 75
-        y: 132
-        width: 11
-        height: 11
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0d9c31142e0a14b44b89bcc127dcf47c
-      internalID: -382949612
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: SeedCraftingHighlight
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 146
-        width: 63
-        height: 12
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape:
-      - - {x: -31.5, y: 6}
-        - {x: -31.5, y: -6}
-        - {x: 25.5, y: -6}
-        - {x: 25.5, y: 5}
-        - {x: 24.5, y: 6}
-      tessellationDetail: 0
-      bones: []
-      spriteID: f3b7b438f69f36d4085894601f03159e
-      internalID: -2108002995
       vertices: []
       indices: 
       edges: []
@@ -820,7 +597,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 66
-        y: 194
+        y: 82
         width: 13
         height: 13
       alignment: 0
@@ -858,13 +635,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ListUI
+      name: EndingTImer
       rect:
         serializedVersion: 2
-        x: 144
-        y: 37
-        width: 61
-        height: 95
+        x: 52
+        y: 81
+        width: 12
+        height: 11
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -872,29 +649,218 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 35b7d7401fbfb704dbaab5b0d83c4a83
-      internalID: 336679578
+      spriteID: 6b18c5cf24d87324894d709121bb35b2
+      internalID: -437305898
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EndingTImer
+      name: UISprites_0
       rect:
         serializedVersion: 2
-        x: 52
-        y: 193
-        width: 12
-        height: 11
+        x: 0
+        y: 327
+        width: 111
+        height: 152
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6b18c5cf24d87324894d709121bb35b2
-      internalID: -437305898
+      spriteID: 58f98b3bc8efd4f4abf9f0db28b5de8f
+      internalID: -957589451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_1
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 480
+        width: 75
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35bda156c975ddc488446b248e86ab87
+      internalID: -1753449837
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_2
+      rect:
+        serializedVersion: 2
+        x: 93
+        y: 480
+        width: 17
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3db5b7b6948cac5479fc9ccdc952dd4a
+      internalID: -713296351
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_3
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 480
+        width: 17
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a5e799cb8882ac43ab24e6401d1eb7c
+      internalID: 1425165297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_4
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 476
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f8345837cf1aac49ab0f8759ba7a5d4
+      internalID: -281481597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_5
+      rect:
+        serializedVersion: 2
+        x: 113
+        y: 375
+        width: 95
+        height: 85
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7092250802e111c40a2ea6a8076a4288
+      internalID: -15138589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_6
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 412
+        width: 92
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f542704fbd9a136479746741b0b8088f
+      internalID: -407597832
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_7
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 434
+        width: 92
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fb3aa7b2599bc5499e9d0a42beebda4
+      internalID: -761621440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_8
+      rect:
+        serializedVersion: 2
+        x: 211
+        y: 459
+        width: 92
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0adb36a1689ab684aad4a3815333c5a7
+      internalID: -996710981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UISprites_9
+      rect:
+        serializedVersion: 2
+        x: 257
+        y: 320
+        width: 94
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c147e14c3286d734781b97a30a2cb0a4
+      internalID: -2055132647
       vertices: []
       indices: 
       edges: []
@@ -951,10 +917,18 @@ TextureImporter:
       TimerFill: 1418655247
       TimerSprite: 1953002121
       UIInventorySlot: -1001860351
+      UISprites_0: -957589451
+      UISprites_1: -1753449837
       UISprites_10: -1775831014
       UISprites_11: -1738444724
       UISprites_12: 1118135965
       UISprites_13: -1371413568
+      UISprites_2: -713296351
+      UISprites_3: 1425165297
+      UISprites_4: -281481597
+      UISprites_5: -15138589
+      UISprites_6: -407597832
+      UISprites_7: -761621440
       UISprites_8: -996710981
       UISprites_9: -2055132647
       Warning: -1111590628
