@@ -52,6 +52,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] public float playerRespawnTime;
     [SerializeField] private Transform playerRespawnPoint;
 
+    [Header("World Transition")]
+    [SerializeField] private WorldTransitionAnimator worldAnimator;
+
     private LifeController playerLife;
     private HouseLifeController HomeLife;
     public UIManager uiManager;
@@ -170,6 +173,8 @@ public class GameManager : MonoBehaviour
         if (currentGameState == newState)
             return;
 
+        HandleWorldTransition(newState);
+
         currentGameState = newState;
 
         OnGameStateChanged?.Invoke(currentGameState);
@@ -213,6 +218,37 @@ public class GameManager : MonoBehaviour
         {
             if (house != null)
                 house.SetNightMode(isNight);
+        }
+    }
+
+    private void HandleWorldTransition(GameState newState)
+    {
+        if (worldAnimator == null)
+        {
+            worldAnimator = FindObjectOfType<WorldTransitionAnimator>();
+            if (worldAnimator == null) return;
+        }
+
+        bool shouldBeNight = newState == GameState.Night;
+        bool currentlyNight = worldAnimator.IsNightMode;
+
+        if (newState == GameState.Paused)
+        {
+            bool wasNight = (currentGameState == GameState.Night);
+            if (wasNight != currentlyNight)
+            {
+                if (wasNight)
+                    worldAnimator.ForceNightMode();
+                else
+                    worldAnimator.ForceDayMode();
+            }
+        }
+        else if (shouldBeNight != currentlyNight)
+        {
+            if (shouldBeNight)
+                worldAnimator.TransitionToNight();
+            else
+                worldAnimator.TransitionToDay();
         }
     }
 

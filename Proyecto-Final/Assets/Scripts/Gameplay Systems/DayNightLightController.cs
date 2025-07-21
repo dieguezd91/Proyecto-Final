@@ -30,9 +30,6 @@ public class DayNightLightController : MonoBehaviour
     public float transitionDuration = 2.0f;
     public bool useSmoothTransition = true;
 
-    [Header("WORLD ANIMATION")]
-    [SerializeField] private WorldTransitionAnimator worldAnimator;
-
     private Coroutine transitionCoroutine;
     private GameState lastGameState = GameState.None;
     private bool isTransitioning = false;
@@ -105,18 +102,6 @@ public class DayNightLightController : MonoBehaviour
             return;
 
         bool isDayState = gameState != GameState.Night;
-
-        if (worldAnimator != null)
-        {
-            if (isDayState && worldAnimator.IsNightMode)
-            {
-                worldAnimator.TransitionToDay();
-            }
-            else if (!isDayState && !worldAnimator.IsNightMode)
-            {
-                worldAnimator.TransitionToNight();
-            }
-        }
 
         float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
         float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
