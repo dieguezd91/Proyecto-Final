@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -26,12 +25,13 @@ public class DayNightLightController : MonoBehaviour
     [Header("COLOR ADJUSTMENTS")]
     public float dayExposure = 0f;
     public float nightExposure = -0.5f;
-    public Color dayColorFilter = Color.white;
-    public Color nightColorFilter = new Color(0.4f, 0.5f, 0.9f);
 
     [Header("TRANSITION")]
     public float transitionDuration = 2.0f;
     public bool useSmoothTransition = true;
+
+    [Header("WORLD ANIMATION")]
+    [SerializeField] private WorldTransitionAnimator worldAnimator;
 
     private Coroutine transitionCoroutine;
     private GameState lastGameState = GameState.None;
@@ -104,13 +104,23 @@ public class DayNightLightController : MonoBehaviour
         if (gameState == GameState.Paused)
             return;
 
-        // Tratar inventario o crafting como Day
         bool isDayState = gameState != GameState.Night;
+
+        if (worldAnimator != null)
+        {
+            if (isDayState && worldAnimator.IsNightMode)
+            {
+                worldAnimator.TransitionToDay();
+            }
+            else if (!isDayState && !worldAnimator.IsNightMode)
+            {
+                worldAnimator.TransitionToNight();
+            }
+        }
 
         float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
         float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
         float targetExposure = isDayState ? dayExposure : nightExposure;
-        Color targetColorFilter = isDayState ? dayColorFilter : nightColorFilter;
         float targetVignette = isDayState ? dayVignetteIntensity : nightVignetteIntensity;
 
         if (useTransition)
@@ -119,7 +129,7 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetColorFilter, targetVignette, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetVignette, transitionDuration));
         }
         else
         {
@@ -131,7 +141,6 @@ public class DayNightLightController : MonoBehaviour
             if (colorAdjustmentsComponent != null)
             {
                 colorAdjustmentsComponent.postExposure.value = targetExposure;
-                colorAdjustmentsComponent.colorFilter.value = targetColorFilter;
             }
 
             if (vignetteComponent != null)
@@ -139,7 +148,7 @@ public class DayNightLightController : MonoBehaviour
         }
     }
 
-    IEnumerator TransitionVisuals(float targetLight, float targetBloom, float targetExposure, Color targetColorFilter, float targetVignette, float duration)
+    IEnumerator TransitionVisuals(float targetLight, float targetBloom, float targetExposure, float targetVignette, float duration)
     {
         isTransitioning = true;
 
@@ -167,12 +176,6 @@ public class DayNightLightController : MonoBehaviour
             if (bloomComponent != null)
                 bloomComponent.intensity.value = Mathf.Lerp(startBloom, targetBloom, t);
 
-            if (colorAdjustmentsComponent != null)
-            {
-                colorAdjustmentsComponent.postExposure.value = Mathf.Lerp(startExposure, targetExposure, t);
-                colorAdjustmentsComponent.colorFilter.value = Color.Lerp(startColorFilter, targetColorFilter, t);
-            }
-
             if (vignetteComponent != null)
                 vignetteComponent.intensity.value = Mathf.Lerp(startVignette, targetVignette, t);
 
@@ -190,7 +193,7 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayGlobalVolumeIntensity, dayExposure, dayColorFilter, dayVignetteIntensity, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayGlobalVolumeIntensity, dayExposure, dayVignetteIntensity, transitionDuration));
         }
     }
 }
