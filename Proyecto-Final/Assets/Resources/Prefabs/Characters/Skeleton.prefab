@@ -116,7 +116,8 @@ MonoBehaviour:
   moveSpeed: 1.25
   detectionDistance: 20
   attackDistance: 1
-  damage: 10
+  minDamage: 8
+  maxDamage: 12
   attackCooldown: 2
   attackPoint: {fileID: 7171890095304449723}
   attackRange: 0.5
@@ -255,6 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   knockbackResistance: 0.5
   knockbackDuration: 0.2
+  knockbackDecay: 8
 --- !u!1 &1692829016251714825
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,6 +463,10 @@ PrefabInstance:
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8478862263821191060, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_SortingOrder
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
