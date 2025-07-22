@@ -46,7 +46,6 @@ public class UIManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject seedSlots;
     [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
-    [SerializeField] private Button startNightButton;
     [SerializeField] private GameObject dayControlPanel;
 
     [Header("PLANT SLOTS")]
@@ -262,9 +261,6 @@ public class UIManager : MonoBehaviour
         if (SeedInventory.Instance != null)
             SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
 
-        if (startNightButton != null)
-            startNightButton.onClick.AddListener(OnStartNightButtonClicked);
-
         if (instructionsButton != null)
             instructionsButton.onClick.AddListener(OpenInstructions);
 
@@ -453,7 +449,6 @@ public class UIManager : MonoBehaviour
 
         if (seedSlots != null) seedSlots.SetActive(showGameplayUI && !isInstructionsOpen);
         if (dayControlPanel != null) dayControlPanel.SetActive(showGameplayUI && !isInstructionsOpen);
-        if (startNightButton != null) startNightButton.gameObject.SetActive(showGameplayUI && !isInstructionsOpen);
     }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
@@ -622,7 +617,6 @@ public class UIManager : MonoBehaviour
         if (seedSlots != null) seedSlots.SetActive(false);
         if (dayControlPanel != null) dayControlPanel.SetActive(false);
         if (inventoryPanel != null && isInventoryOpen) inventoryPanel.SetActive(false);
-        if (startNightButton != null) startNightButton.gameObject.SetActive(false);
 
         if (pausePanel != null) pausePanel.SetActive(false);
 
@@ -672,7 +666,7 @@ public class UIManager : MonoBehaviour
     private void OnStartNightButtonClicked()
     {
         if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Night)
-            GameManager.Instance.ManualTransitionToNight();
+            GameManager.Instance.TransitionToNight();
     }
 
     public void UpdateManaUI()

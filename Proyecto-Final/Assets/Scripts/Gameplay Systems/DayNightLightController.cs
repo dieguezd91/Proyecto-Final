@@ -98,7 +98,7 @@ public class DayNightLightController : MonoBehaviour
 
     void UpdateLightBasedOnGameState(GameState gameState, bool useTransition)
     {
-        if (gameState == GameState.Paused)
+        if (gameState == GameState.Paused || gameState == GameState.OnRitual)
             return;
 
         bool isDayState = gameState != GameState.Night;
@@ -180,5 +180,28 @@ public class DayNightLightController : MonoBehaviour
             }
             transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayGlobalVolumeIntensity, dayExposure, dayVignetteIntensity, transitionDuration));
         }
+    }
+
+    public void DimLightForRitual(float targetIntensity, float duration)
+    {
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
+
+        transitionCoroutine = StartCoroutine(TransitionVisuals(targetIntensity, bloomComponent?.intensity.value ?? 0f, colorAdjustmentsComponent?.postExposure.value ?? 0f, vignetteComponent?.intensity.value ?? 0f, duration));
+    }
+
+    public void RestoreLightAfterRitual(GameState targetState, float duration)
+    {
+        bool isDayState = targetState != GameState.Night;
+
+        float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
+        float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
+        float targetExposure = isDayState ? dayExposure : nightExposure;
+        float targetVignette = isDayState ? dayVignetteIntensity : nightVignetteIntensity;
+
+        if (transitionCoroutine != null)
+            StopCoroutine(transitionCoroutine);
+
+        transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetVignette, duration));
     }
 }

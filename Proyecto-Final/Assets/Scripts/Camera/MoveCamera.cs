@@ -33,14 +33,11 @@ public class MoveCamera : MonoBehaviour
 
     private void LateUpdate()
     {
-        if(abilitySystem != null && (abilitySystem.IsDigging() || abilitySystem.IsHarvesting()))
+        if (abilitySystem != null && (abilitySystem.IsDigging() || abilitySystem.IsHarvesting()))
             return;
-        
-        
-        
-        // 1) Si estamos en inventory o crafting, no mover la cámara
+
         var state = GameManager.Instance.currentGameState;
-        if (state == GameState.OnInventory || state == GameState.OnCrafting)
+        if (state == GameState.OnInventory || state == GameState.OnCrafting || state == GameState.OnRitual)
             return;
 
         if (mainChar == null || cam == null) return;

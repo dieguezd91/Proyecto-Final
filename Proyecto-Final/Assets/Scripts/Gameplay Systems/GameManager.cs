@@ -19,7 +19,8 @@ public enum GameState
     OnCrafting,
     MainMenu,
     Removing,
-    OnAltarRestoration
+    OnAltarRestoration,
+    OnRitual
 }
 
 public enum ElementEnum
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
     [Header("World Transition")]
     [SerializeField] private WorldTransitionAnimator worldAnimator;
 
-    private LifeController playerLife;
+    public LifeController playerLife;
     private HouseLifeController HomeLife;
     public UIManager uiManager;
     public GameState currentGameState;
@@ -76,10 +77,7 @@ public class GameManager : MonoBehaviour
 
         if (onNewDay == null)
             onNewDay = new UnityEvent<int>();
-    }
 
-    void Start()
-    {
         if (player == null)
         {
             player = GameObject.FindGameObjectWithTag("Player");
@@ -89,6 +87,10 @@ public class GameManager : MonoBehaviour
         {
             playerLife = player.GetComponent<LifeController>();
         }
+    }
+
+    void Start()
+    {
 
         if (home == null)
         {
@@ -149,9 +151,8 @@ public class GameManager : MonoBehaviour
         onNewDay.Invoke(dayCount);
     }
 
-    public void ManualTransitionToNight()
+    public void TransitionToNight()
     {
-
         dayCount++;
         SetGameState(GameState.Night);
         TributeSystem.Instance?.StartNightEvaluation();

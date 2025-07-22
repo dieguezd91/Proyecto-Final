@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         GameState state = GameManager.Instance.currentGameState;
         if (state == GameState.OnInventory || state == GameState.OnCrafting
-            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging())
+            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging() || state == GameState.OnRitual || state == GameState.OnAltarRestoration)
         {
             currentVelocity = Vector2.zero;
             rb.velocity = Vector2.zero;
