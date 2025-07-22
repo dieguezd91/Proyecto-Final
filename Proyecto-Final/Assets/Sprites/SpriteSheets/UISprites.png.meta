@@ -865,6 +865,90 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: RestorationScreen
+      rect:
+        serializedVersion: 2
+        x: 30
+        y: 174
+        width: 164
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64adb3a3c7dfff644804fdf6d5fcf040
+      internalID: 1488800299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI
+      rect:
+        serializedVersion: 2
+        x: 221
+        y: 184
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab749ad956f362f48a96ac1d97a737a9
+      internalID: -770617122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationButtonHeart
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 99
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cbb39d4b54a2f5469bba92f7a4b4e74
+      internalID: -678659094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationButtonUI
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 94
+        width: 96
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4c065aaeddec534784e6e11ea940d1f
+      internalID: 924556296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -906,6 +990,10 @@ TextureImporter:
       MoonStage2: -956797572
       MoonStage3: -1032481509
       MoonStage4: -1529809225
+      RestorationButtonHeart: -678659094
+      RestorationButtonUI: 924556296
+      RestorationHeartUI: -1738444724
+      RestorationScreen: -1775831014
       ScrollBar: -1066148658
       SeedCrafting: 1026741367
       SeedCraftingHighlight: -2108002995
@@ -919,8 +1007,6 @@ TextureImporter:
       UIInventorySlot: -1001860351
       UISprites_0: -957589451
       UISprites_1: -1753449837
-      UISprites_10: -1775831014
-      UISprites_11: -1738444724
       UISprites_12: 1118135965
       UISprites_13: -1371413568
       UISprites_2: -713296351
