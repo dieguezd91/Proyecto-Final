@@ -210,7 +210,27 @@ public class LifeController : MonoBehaviour
         animator.SetTrigger("Revive");
         GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(false);
 
-        GameManager.Instance.SetGameState(GameManager.Instance.currentGameState);
+        RefreshPlayerUI();
+    }
+
+    private void RefreshPlayerUI()
+    {
+        if (GameManager.Instance?.uiManager != null)
+        {
+            GameManager.Instance.uiManager.UpdateHealthBar(currentHealth, maxHealth);
+
+            var manaSystem = GetComponent<ManaSystem>();
+            if (manaSystem != null)
+            {
+                GameManager.Instance.uiManager.UpdateManaUI();
+            }
+        }
+
+        UICursor cursorController = FindObjectOfType<UICursor>();
+        if (cursorController != null)
+        {
+            cursorController.SetCursorForGameState(GameManager.Instance.currentGameState);
+        }
     }
 
     public IEnumerator StartInvulnerability(float duration)

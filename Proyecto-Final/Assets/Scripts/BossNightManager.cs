@@ -26,6 +26,9 @@ public class BossNightManager : MonoBehaviour
     private bool isBossNight = false;
     private bool bossDefeated = false;
 
+    private bool bossHasSpawnedThisNight = false;
+    private int lastBossNightDay = -1;
+
     public bool IsBossNight => isBossNight;
     public bool IsBossActive => currentBoss != null;
     public GameObject CurrentBoss => currentBoss;
@@ -60,14 +63,31 @@ public class BossNightManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            isBossNight = true;
-            StartBossNight();
+            int currentDay = GameManager.Instance.GetCurrentDay();
+            if (currentDay != lastBossNightDay)
+            {
+                isBossNight = true;
+                bossHasSpawnedThisNight = false;
+                lastBossNightDay = currentDay;
+                StartBossNight();
+            }
         }
     }
 
     private void OnNewDay(int dayCount)
     {
-        isBossNight = IsBossNightDay(dayCount);
+        bool shouldBeBossNight = IsBossNightDay(dayCount);
+
+        if (shouldBeBossNight && dayCount != lastBossNightDay)
+        {
+            isBossNight = true;
+            bossHasSpawnedThisNight = false;
+            lastBossNightDay = dayCount;
+        }
+        else if (!shouldBeBossNight && dayCount != lastBossNightDay)
+        {
+            ResetBossNightState();
+        }
     }
 
     public bool IsBossNightDay(int dayCount)
@@ -77,6 +97,11 @@ public class BossNightManager : MonoBehaviour
 
     public void StartBossNight()
     {
+        if (bossHasSpawnedThisNight)
+        {
+            return;
+        }
+
         int currentDay = GameManager.Instance.GetCurrentDay();
         bool isActuallyBossNight = IsBossNightDay(currentDay);
 
@@ -101,7 +126,10 @@ public class BossNightManager : MonoBehaviour
     {
         yield return new WaitForSeconds(bossAnnouncementDuration);
 
-        SpawnBoss();
+        if (!bossHasSpawnedThisNight)
+        {
+            SpawnBoss();
+        }
 
         yield return new WaitUntil(() => bossDefeated);
 
@@ -110,6 +138,11 @@ public class BossNightManager : MonoBehaviour
 
     private void SpawnBoss()
     {
+        if (bossHasSpawnedThisNight)
+        {
+            return;
+        }
+
         if (bossSpawnPoint == null)
         {
             if (enemiesSpawner != null && enemiesSpawner.spawnPoints.Count > 0)
@@ -128,10 +161,13 @@ public class BossNightManager : MonoBehaviour
         {
             return;
         }
+
         currentBoss = Instantiate(selectedBoss, bossSpawnPoint.position, bossSpawnPoint.rotation);
         currentBoss.transform.SetParent(transform);
 
         SetupBoss(currentBoss);
+
+        bossHasSpawnedThisNight = true;
 
         onBossSpawned?.Invoke();
     }
@@ -198,12 +234,24 @@ public class BossNightManager : MonoBehaviour
 
     private void CompleteBossNight()
     {
-        isBossNight = false;
+        ResetBossNightState();
         onBossNightComplete?.Invoke();
 
         if (enemiesSpawner != null)
         {
             enemiesSpawner.onHordeEnd?.Invoke();
+        }
+    }
+
+    private void ResetBossNightState()
+    {
+        isBossNight = false;
+        bossHasSpawnedThisNight = false;
+        bossDefeated = false;
+
+        if (currentBoss != null)
+        {
+            currentBoss = null;
         }
     }
 
