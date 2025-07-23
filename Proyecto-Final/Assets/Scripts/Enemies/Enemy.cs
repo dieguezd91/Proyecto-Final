@@ -186,23 +186,30 @@ public class Enemy : MonoBehaviour, IEnemy
     public void PerformSwordHit()
     {
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
+        HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
 
         foreach (Collider2D target in hitTargets)
         {
-            LifeController life = target.GetComponent<LifeController>();
-            if (life != null)
-            {
-                float dmg = Random.Range(minDamage, maxDamage);
-                life.TakeDamage(dmg);
+            GameObject obj = target.gameObject;
 
-                if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
-                {
-                    CameraShaker.Instance?.Shake(0.3f, 0.3f);
-                }
-            }
-            else
+            if (!damagedTargets.Contains(obj))
             {
-                var houseLife = target.GetComponent<HouseLifeController>();
+                damagedTargets.Add(obj);
+
+                LifeController life = obj.GetComponent<LifeController>();
+                if (life != null)
+                {
+                    float dmg = Random.Range(minDamage, maxDamage);
+                    life.TakeDamage(dmg);
+
+                    if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
+                    {
+                        CameraShaker.Instance?.Shake(0.3f, 0.3f);
+                    }
+                    continue;
+                }
+
+                var houseLife = obj.GetComponent<HouseLifeController>();
                 if (houseLife != null)
                 {
                     float dmg = Random.Range(minDamage, maxDamage);
@@ -211,6 +218,7 @@ public class Enemy : MonoBehaviour, IEnemy
             }
         }
     }
+
 
     private void LookAtDirection(Vector2 direction)
     {

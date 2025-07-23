@@ -210,13 +210,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7905766180791579066}
   chaseYOffset: 0.5
-  moveSpeed: 2
+  moveSpeed: 3
   detectionRange: 15
   minAttackDistance: 3
   meleeRadius: 3
   specialRadius: 4
-  meleeDamage: 5
-  specialDamage: 15
+  meleeDamage: 10
+  specialDamage: 30
   attackCooldown: 1
   meleeDelay: 0.6
   specialDelay: 1
@@ -224,6 +224,7 @@ MonoBehaviour:
   rb: {fileID: 5633985108502546552}
   player: {fileID: 0}
   attackPoint: {fileID: 324195009587380907}
+  bossMaxHealth: 500
 --- !u!95 &8102336949729422656
 Animator:
   serializedVersion: 5

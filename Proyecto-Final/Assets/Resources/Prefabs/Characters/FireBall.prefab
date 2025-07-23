@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7450398413827467131}
   - component: {fileID: 464619827907159024}
   - component: {fileID: 9211747902965235483}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: YellowParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4842,7 +4842,7 @@ GameObject:
   - component: {fileID: 1598654310104518990}
   - component: {fileID: 8218691163485889997}
   - component: {fileID: 8939410121986077642}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RedParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9675,7 +9675,7 @@ GameObject:
   - component: {fileID: 6711486105556047414}
   - component: {fileID: 8098347604227706814}
   - component: {fileID: 7790783132005468385}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FireBall
   m_TagString: Untagged
   m_Icon: {fileID: 0}

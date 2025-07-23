@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Jefe : MonoBehaviour
@@ -39,6 +40,10 @@ public class Jefe : MonoBehaviour
     private Vector3 direction;
     private bool isAttacking = false;
     private bool isDead = false;
+
+    private HashSet<GameObject> meleeDamagedObjects = new HashSet<GameObject>();
+    private HashSet<GameObject> specialDamagedObjects = new HashSet<GameObject>();
+
 
     private void Start()
     {
@@ -158,39 +163,45 @@ public class Jefe : MonoBehaviour
         animator.SetTrigger("attack");
         yield return new WaitForSeconds(meleeDelay);
 
+        meleeDamagedObjects.Clear();
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, meleeRadius);
+
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player"))
+            if (hit.CompareTag("Player") && !meleeDamagedObjects.Contains(hit.gameObject))
             {
+                meleeDamagedObjects.Add(hit.gameObject);
                 hit.GetComponent<LifeController>()?.TakeDamage(meleeDamage);
                 CameraShaker.Instance?.Shake(0.3f, 0.3f);
             }
-
         }
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
     }
+
 
     private IEnumerator PerformSpecialAttack()
     {
         rb.velocity = Vector2.zero;
         yield return new WaitForSeconds(specialDelay);
 
-        
-        // MainCameraController.Instance.Shake(3f, 1f);
-
+        specialDamagedObjects.Clear();
         Collider2D[] hits = Physics2D.OverlapCircleAll(attackPoint.position, specialRadius);
+
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player"))
+            if (hit.CompareTag("Player") && !specialDamagedObjects.Contains(hit.gameObject))
+            {
+                specialDamagedObjects.Add(hit.gameObject);
                 hit.GetComponent<LifeController>()?.TakeDamage(specialDamage);
+            }
         }
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
     }
+
 
     private void FaceDirection(Vector2 lookDir)
     {
