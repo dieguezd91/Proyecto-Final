@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public class SceneController : MonoBehaviour
 {
     [SerializeField] Button startGame;
@@ -10,16 +9,49 @@ public class SceneController : MonoBehaviour
     private void Start()
     {
         startGame.interactable = true;
-        //Option.interactable = true;
-        //back.interactable = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-
     }
 
     public void OnPlay()
     {
+        ResetPersistentManagers();
         SceneManager.LoadScene("GameScene");
+    }
+
+    public void Restart()
+    {
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.ResetGameData();
+        }
+
+        ResetPersistentManagers();
+
+        SceneManager.LoadScene("GameScene");
+    }
+
+    public void Reset()
+    {
+        ResetPersistentManagers();
+        SceneManager.LoadScene(0);
+    }
+
+    public void GoBack()
+    {
+        ResetPersistentManagers();
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    private void ResetPersistentManagers()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.ClearAllMaterials();
+            InventoryManager.Instance.SetGold(0);
+        }
+
+        Time.timeScale = 1f;
     }
 
     public void Options()
@@ -32,18 +64,6 @@ public class SceneController : MonoBehaviour
         LoadingManager.Instance.LoadScene(6, 1);
     }
 
-    public void Restart()
-    {
-        GameManager.Instance.ResetGameData();
-        SceneManager.LoadScene("GameScene");
-    }
-
-    public void Reset()
-    {
-        //LoadingManager.Instance.LoadScene(7, 1);
-        SceneManager.LoadScene(0);
-    }
-
     public void Next()
     {
         LoadingManager.Instance.LoadScene(5, 3);
@@ -52,10 +72,5 @@ public class SceneController : MonoBehaviour
     public void CloseGame()
     {
         Application.Quit();
-    }
-
-    public void GoBack()
-    {
-        SceneManager.LoadScene("MenuScene");
     }
 }

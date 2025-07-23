@@ -318,17 +318,22 @@ public class GameManager : MonoBehaviour
 
     public void ResetGameData()
     {
+        Debug.Log("Reseteando datos del juego...");
+        Time.timeScale = 1f;
+
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.ClearAllMaterials();
+            InventoryManager.Instance.SetGold(0);
         }
 
         if (SeedInventory.Instance != null)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 9; i++)
             {
                 SeedInventory.Instance.RemoveSeedFromSlot(i);
             }
+            SeedInventory.Instance.SelectSlot(0);
         }
 
         ResetDayCount();
@@ -360,9 +365,38 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null) Destroy(enemy);
+        }
+
+        Spell[] activeSpells = FindObjectsOfType<Spell>();
+        foreach (Spell spell in activeSpells)
+        {
+            if (spell != null) Destroy(spell.gameObject);
+        }
+
+        ManaSystem manaSystem = FindObjectOfType<ManaSystem>();
+        if (manaSystem != null)
+        {
+            manaSystem.SetMana(manaSystem.GetBaseMaxMana());
+        }
+
         uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
         uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
         uiManager?.UpdateManaUI();
         uiManager?.InitializeSeedSlotsUI();
+
+        if (uiManager != null)
+        {
+            uiManager.CloseInventory();
+            if (uiManager.gameOverPanel != null)
+            {
+                uiManager.gameOverPanel.SetActive(false);
+            }
+        }
+
+        Debug.Log("Reset completado.");
     }
 }
