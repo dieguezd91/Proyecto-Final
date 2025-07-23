@@ -344,6 +344,22 @@ public class GameManager : MonoBehaviour
             HomeLife.ResetLife();
         }
 
+        if (player != null)
+        {
+            var playerController = player.GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(true);
+                playerController.SetCanAct(true);
+            }
+
+            var lifeController = player.GetComponent<LifeController>();
+            if (lifeController != null)
+            {
+                lifeController.ResetLife();
+            }
+        }
+
         uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
         uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
         uiManager?.UpdateManaUI();
