@@ -8,6 +8,14 @@ public class Jefe : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private float chaseYOffset = 0.5f;
 
+    [Header("Target Settings")]
+    [SerializeField] private float playerPriority = 1.0f;
+    [SerializeField] private float plantPriority = 1.2f;
+    [SerializeField] private float homePriority = 1.5f;
+    [SerializeField] private LayerMask plantLayer;
+
+    private Transform currentTarget;
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 2f;
     private float defaultSpeed;
@@ -49,27 +57,44 @@ public class Jefe : MonoBehaviour
     {
         Initialize();
         SetupLifeController();
-        FindPlayer();
 
         defaultSpeed = moveSpeed;
     }
 
     private void Update()
     {
-        if (isDead || player == null || isAttacking) return;
+        if (isDead || isAttacking) return;
 
-        direction = player.position - transform.position;
-        float distanceToPlayer = direction.magnitude;
-        Vector2 targetPosition = (Vector2)player.position + Vector2.down * chaseYOffset;
+        FindClosestTarget();
 
-        LifeController playerLife = player.GetComponent<LifeController>();
-        if (playerLife != null && playerLife.IsTargetable())
+        if (currentTarget == null) return;
+
+        direction = currentTarget.position - transform.position;
+        float distanceToTarget = direction.magnitude;
+        Vector2 targetPosition = (Vector2)currentTarget.position + Vector2.down * chaseYOffset;
+
+        bool isTargetValid = false;
+
+        if (currentTarget.CompareTag("Player") || currentTarget.CompareTag("Plant"))
         {
-            if (distanceToPlayer <= detectionRange)
+            var life = currentTarget.GetComponent<LifeController>();
+            if (life != null && life.IsTargetable())
+                isTargetValid = true;
+        }
+        else if (currentTarget.CompareTag("Home"))
+        {
+            var home = currentTarget.GetComponent<HouseLifeController>();
+            if (home != null)
+                isTargetValid = true;
+        }
+
+        if (isTargetValid)
+        {
+            if (distanceToTarget <= detectionRange)
             {
-                if (distanceToPlayer > minAttackDistance)
+                if (distanceToTarget > minAttackDistance)
                 {
-                    MoveTowardsPlayer();
+                    MoveTowardsTarget();
                 }
                 else
                 {
@@ -83,7 +108,19 @@ public class Jefe : MonoBehaviour
             }
         }
 
+
         FaceDirection(targetPosition - (Vector2)transform.position);
+    }
+
+    private void MoveTowardsTarget()
+    {
+        Vector2 velocity = direction.normalized * moveSpeed;
+        rb.velocity = velocity;
+
+        if (animator != null)
+        {
+            animator.SetBool("IsMoving", true);
+        }
     }
 
 
@@ -116,27 +153,62 @@ public class Jefe : MonoBehaviour
         }
     }
 
-    private void FindPlayer()
+    
+    private void FindClosestTarget()
     {
-        if (player == null)
+        float closestScore = Mathf.Infinity;
+        Transform best = null;
+
+        // Jugador
+        GameObject pObj = GameObject.FindGameObjectWithTag("Player");
+        if (pObj != null)
         {
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
+            LifeController playerLife = pObj.GetComponent<LifeController>();
+            if (playerLife != null && playerLife.IsTargetable())
             {
-                player = playerObj.transform;
+                float d = Vector2.Distance(transform.position, pObj.transform.position);
+                float score = d / playerPriority;
+                if (d <= detectionRange && score < closestScore)
+                {
+                    closestScore = score;
+                    best = pObj.transform;
+                }
             }
         }
-    }
-    private void MoveTowardsPlayer()
-    {
-        Vector2 velocity = direction.normalized * moveSpeed;
-        rb.velocity = velocity;
 
-        if (animator != null)
+        // Plantas
+        Collider2D[] plants = Physics2D.OverlapCircleAll(transform.position, detectionRange, plantLayer);
+        foreach (var col in plants)
         {
-            animator.SetBool("IsMoving", true);
+            Plant plant = col.GetComponent<Plant>();
+            if (plant != null)
+            {
+                float d = Vector2.Distance(transform.position, col.transform.position);
+                float score = d / plantPriority;
+                if (score < closestScore)
+                {
+                    closestScore = score;
+                    best = col.transform;
+                }
+            }
         }
+
+        // Casa
+        GameObject hObj = GameObject.FindGameObjectWithTag("Home");
+        if (hObj != null)
+        {
+            float d = Vector2.Distance(transform.position, hObj.transform.position);
+            float score = d / homePriority;
+            if (d <= detectionRange && score < closestScore)
+            {
+                closestScore = score;
+                best = hObj.transform;
+            }
+        }
+
+        currentTarget = best;
     }
+
 
     private void TriggerNextAttack()
     {
@@ -168,17 +240,42 @@ public class Jefe : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player") && !meleeDamagedObjects.Contains(hit.gameObject))
+            if (!meleeDamagedObjects.Contains(hit.gameObject))
             {
+                if (hit.CompareTag("Player"))
+                {
+                    var life = hit.GetComponent<LifeController>();
+                    if (life != null)
+                    {
+                        life.TakeDamage(meleeDamage);
+                        CameraShaker.Instance?.Shake(0.3f, 0.3f);
+                    }
+                }
+                else if (hit.CompareTag("Plant"))
+                {
+                    var life = hit.GetComponent<LifeController>();
+                    if (life != null)
+                    {
+                        life.TakeDamage(meleeDamage);
+                    }
+                }
+                else if (hit.CompareTag("Home"))
+                {
+                    var home = hit.GetComponent<HouseLifeController>();
+                    if (home != null)
+                    {
+                        home.TakeDamage(meleeDamage);
+                    }
+                }
+
                 meleeDamagedObjects.Add(hit.gameObject);
-                hit.GetComponent<LifeController>()?.TakeDamage(meleeDamage);
-                CameraShaker.Instance?.Shake(0.3f, 0.3f);
             }
         }
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
     }
+
 
 
     private IEnumerator PerformSpecialAttack()
@@ -191,16 +288,42 @@ public class Jefe : MonoBehaviour
 
         foreach (var hit in hits)
         {
-            if (hit.CompareTag("Player") && !specialDamagedObjects.Contains(hit.gameObject))
+            if (!specialDamagedObjects.Contains(hit.gameObject))
             {
+                if (hit.CompareTag("Player"))
+                {
+                    var life = hit.GetComponent<LifeController>();
+                    if (life != null)
+                    {
+                        life.TakeDamage(specialDamage);
+                        CameraShaker.Instance?.Shake(0.5f, 0.5f);
+                    }
+                }
+                else if (hit.CompareTag("Plant"))
+                {
+                    var life = hit.GetComponent<LifeController>();
+                    if (life != null)
+                    {
+                        life.TakeDamage(specialDamage);
+                    }
+                }
+                else if (hit.CompareTag("Home"))
+                {
+                    var home = hit.GetComponent<HouseLifeController>();
+                    if (home != null)
+                    {
+                        home.TakeDamage(specialDamage);
+                    }
+                }
+
                 specialDamagedObjects.Add(hit.gameObject);
-                hit.GetComponent<LifeController>()?.TakeDamage(specialDamage);
             }
         }
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
     }
+
 
 
     private void FaceDirection(Vector2 lookDir)

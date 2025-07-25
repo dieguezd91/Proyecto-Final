@@ -79,7 +79,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 1663056160, guid: 023176822c7636a4db345f9d1033e6cf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
@@ -210,6 +210,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7905766180791579066}
   chaseYOffset: 0.5
+  playerPriority: 1.2
+  plantPriority: 1
+  homePriority: 1.5
+  plantLayer:
+    serializedVersion: 2
+    m_Bits: 512
   moveSpeed: 3
   detectionRange: 15
   minAttackDistance: 3
