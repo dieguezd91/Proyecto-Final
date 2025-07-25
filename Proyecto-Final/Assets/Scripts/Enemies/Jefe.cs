@@ -44,6 +44,17 @@ public class Jefe : MonoBehaviour
     [Header("Boss Health")]
     [SerializeField] private float bossMaxHealth = 300f;
 
+
+    [Header("Minion Settings")]
+    public GameObject minionPrefab;
+    public Transform[] minionSpawnPoints; // 6 posiciones alrededor del jefe
+    public float spawnDelayAfterMinionsDie = 6f;
+
+    private List<GameObject> currentMinions = new();
+    private bool isSpawningMinions = false;
+    private float spawnCooldownTimer = 0f;
+
+
     private LifeController lifeController;
     private Vector3 direction;
     private bool isAttacking = false;
@@ -63,7 +74,20 @@ public class Jefe : MonoBehaviour
 
     private void Update()
     {
-        if (isDead || isAttacking) return;
+        if (isDead) return;
+
+        currentMinions.RemoveAll(m => m == null);
+
+        if (!isAttacking && !isSpawningMinions && currentMinions.Count == 0)
+        {
+            spawnCooldownTimer += Time.deltaTime;
+            if (spawnCooldownTimer >= spawnDelayAfterMinionsDie)
+            {
+                StartCoroutine(SpawnMinionsRoutine());
+            }
+        }
+
+        if (isAttacking || isSpawningMinions) return;
 
         FindClosestTarget();
 
@@ -108,9 +132,9 @@ public class Jefe : MonoBehaviour
             }
         }
 
-
         FaceDirection(targetPosition - (Vector2)transform.position);
     }
+
 
     private void MoveTowardsTarget()
     {
@@ -375,6 +399,24 @@ public class Jefe : MonoBehaviour
     {
         return lifeController != null ? lifeController.maxHealth : 0f;
     }
+
+    private IEnumerator SpawnMinionsRoutine()
+    {
+        isSpawningMinions = true;
+        rb.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(1f);
+
+        foreach (Transform spawnPoint in minionSpawnPoints)
+        {
+            GameObject minion = Instantiate(minionPrefab, spawnPoint.position, Quaternion.identity);
+            currentMinions.Add(minion);
+        }
+
+        spawnCooldownTimer = 0f;
+        isSpawningMinions = false;
+    }
+
 
     private void OnDrawGizmosSelected()
     {
