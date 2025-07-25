@@ -33,6 +33,7 @@ public class LifeController : MonoBehaviour
     private bool isDead = false;
     public bool isRespawning = false;
     [SerializeField] private bool isEnemy;
+    [SerializeField] private bool isPlayer;
     private Animator animator;
     [SerializeField] private bool hasDeathAnimation;
 
@@ -48,6 +49,8 @@ public class LifeController : MonoBehaviour
         }
 
         onHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        isPlayer = GetComponent<PlayerController>() != null;
     }
 
     public void TakeDamage(float damage)
@@ -94,14 +97,13 @@ public class LifeController : MonoBehaviour
             if (hasDeathAnimation && animator != null && animator.runtimeAnimatorController != null)
             {
                 animator.SetTrigger("Death");
-
             }
             else
             {
                 EnemyDeath();
             }
         }
-        else
+        else if (isPlayer)
         {
             GetComponent<ManaSystem>()?.SetMana(0f);
             GameManager.Instance?.uiManager?.UpdateManaUI();
@@ -117,6 +119,17 @@ public class LifeController : MonoBehaviour
             else
             {
                 gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            if (animator != null && animator.runtimeAnimatorController != null && hasDeathAnimation)
+            {
+                animator.SetTrigger("Death");
+            }
+            else
+            {
+                Destroy(gameObject);
             }
         }
     }
@@ -156,9 +169,13 @@ public class LifeController : MonoBehaviour
         {
             EnemyDeath();
         }
-        else
+        else if (isPlayer)
         {
             StartCoroutine(DelayedRevive());
+        }
+        else
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -183,7 +200,6 @@ public class LifeController : MonoBehaviour
 
     public void Drop()
     {
-        // 50% de probabilidad de dropear el objeto(Abierto a ser modificado)
         if (objetDrop != null && Random.value < 0.5f)
         {
             Instantiate(objetDrop, transform.position, Quaternion.identity);
