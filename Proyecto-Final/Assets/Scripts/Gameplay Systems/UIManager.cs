@@ -7,8 +7,6 @@ using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-
-
 public class UIManager : MonoBehaviour
 {
     [Header("HEALTH BAR")]
@@ -92,7 +90,9 @@ public class UIManager : MonoBehaviour
 
     [Header("TOOLTIP")]
     [SerializeField] private GameObject tooltipPanel;
-    [SerializeField] private TextMeshProUGUI tooltipText;
+    [SerializeField] private TextMeshProUGUI seedNameText;
+    [SerializeField] private TextMeshProUGUI seedDescriptionText;
+    [SerializeField] private Image fullyGrownImage;
     [SerializeField] private Vector2 tooltipOffset = new Vector2(20f, -20f);
 
     [Header("POST-PROCESS")]
@@ -794,10 +794,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
     public void ShowTooltipForSlot(int slotIndex)
     {
-        if (tooltipPanel == null || tooltipText == null) return;
+        if (tooltipPanel == null || seedNameText == null || seedDescriptionText == null || fullyGrownImage == null)
+            return;
 
         PlantSlot slot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
         if (slot == null || slot.seedCount <= 0)
@@ -813,15 +813,26 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-
         tooltipPanel.SetActive(true);
         tooltipPanel.transform.position = Input.mousePosition + new Vector3(100f, -50f);
 
-        tooltipText.text = $"<b>{data.plantName}</b>\n<size=80%>{data.description}\nDías para crecer: {data.daysToGrow}</size>";
+        // Actualizar textos
+        seedNameText.text = data.plantName;
+        seedDescriptionText.text = $"{data.description}\nDías para crecer: {data.daysToGrow}";
+
+        // Actualizar imagen
+        if (data.fullyGrownSprite != null)
+        {
+            fullyGrownImage.sprite = data.fullyGrownSprite;
+            fullyGrownImage.preserveAspect = true;
+            fullyGrownImage.gameObject.SetActive(true);
+        }
+        else
+        {
+            fullyGrownImage.sprite = null;
+            fullyGrownImage.gameObject.SetActive(false);
+        }
     }
-
-
-
 
 
     public void HideTooltip()
@@ -959,10 +970,6 @@ public class UIManager : MonoBehaviour
         ClearSlotHighlight();
         _dragSourceIndex = -1;
     }
-
-
-
-
 
 
     private void OnSlotKeyPressed(int i)
