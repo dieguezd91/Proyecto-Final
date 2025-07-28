@@ -361,6 +361,111 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Calendar
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 25
+        width: 322
+        height: 163
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59fea30bcba289f45bf003656f5db078
+      internalID: -2143676358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Options
+      rect:
+        serializedVersion: 2
+        x: 367
+        y: 25
+        width: 153
+        height: 163
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7fb738d1760bf849abafe41a0e9d773
+      internalID: -1480271655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Placeholder
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 393
+        width: 321
+        height: 165
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: accb1389558eb264eb3cf261340a4376
+      internalID: -1356487726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Placeholder2
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 201
+        width: 330
+        height: 165
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45b2a41ca54251c4ca3f1dcff2567cbb
+      internalID: -530286579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: OptionsPage2
+      rect:
+        serializedVersion: 2
+        x: 536
+        y: 25
+        width: 153
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ee8456404c49064abee1c6dfc03f413
+      internalID: -1746649883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -372,6 +477,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Calendar: 190405470
       InventorySprite_0: -1465691889
       InventorySprite_1: 2038785279
       InventorySprite_10: 1404506585
@@ -379,13 +485,16 @@ TextureImporter:
       InventorySprite_12: -1003076781
       InventorySprite_13: -1110522243
       InventorySprite_2: -1493456338
-      InventorySprite_3: 190405470
       InventorySprite_4: -1760741674
       InventorySprite_5: -299421518
       InventorySprite_6: -1898163498
       InventorySprite_7: 1952978674
       InventorySprite_8: 1815889003
       InventorySprite_9: -122298093
+      Options: -1480271655
+      OptionsPage2: -1746649883
+      Placeholder: -1356487726
+      Placeholder2: -530286579
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

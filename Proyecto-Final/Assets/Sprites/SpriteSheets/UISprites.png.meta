@@ -240,7 +240,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 387
-        y: 0
+        y: 71
         width: 125
         height: 88
       alignment: 0
@@ -344,10 +344,10 @@ TextureImporter:
       name: FillHouse
       rect:
         serializedVersion: 2
-        x: 67
-        y: 15
-        width: 60
-        height: 6
+        x: 360
+        y: 51
+        width: 70
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,13 +362,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FillHP
+      name: FillLife
       rect:
         serializedVersion: 2
-        x: 67
-        y: 8
-        width: 60
-        height: 6
+        x: 360
+        y: 43
+        width: 70
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -386,10 +386,10 @@ TextureImporter:
       name: FillMana
       rect:
         serializedVersion: 2
-        x: 67
-        y: 4
-        width: 60
-        height: 3
+        x: 360
+        y: 35
+        width: 70
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -614,13 +614,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: EmptyBar
+      name: EmptyMana
       rect:
         serializedVersion: 2
-        x: 128
-        y: 18
-        width: 61
-        height: 6
+        x: 433
+        y: 34
+        width: 77
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -874,7 +874,7 @@ TextureImporter:
         width: 164
         height: 116
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -895,7 +895,7 @@ TextureImporter:
         width: 86
         height: 87
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -916,7 +916,7 @@ TextureImporter:
         width: 42
         height: 42
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -937,7 +937,7 @@ TextureImporter:
         width: 96
         height: 18
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -945,6 +945,111 @@ TextureImporter:
       bones: []
       spriteID: f4c065aaeddec534784e6e11ea940d1f
       internalID: 924556296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseTrim
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 18
+        width: 77
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbcfc6a11b976684bbd039f6687c6010
+      internalID: -1821449813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LifeTrim
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 10
+        width: 77
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96f71e8f4b00ed64a99879291c2e4e12
+      internalID: -498583606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaTrim
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 2
+        width: 77
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afc0705b37266814696ec320b36eac0d
+      internalID: 981019556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EmpyLife
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 42
+        width: 77
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af1425893ccf46d408e3d79e4637ebfd
+      internalID: 1339065725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EmptyHouse
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 50
+        width: 77
+        height: 7
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cd1fdee79e948347b679add52687368
+      internalID: -1902738031
       vertices: []
       indices: 
       edges: []
@@ -974,17 +1079,22 @@ TextureImporter:
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
-      EmptyBar: 1316128634
+      EmptyHouse: -1902738031
+      EmptyMana: 1316128634
+      EmpyLife: 1339065725
       EndingTImer: -437305898
-      FillHP: 1365419780
       FillHouse: -1423815668
+      FillLife: 1365419780
       FillMana: -359895768
       HiddenBars: 1508131376
       HouseBar: -1551444634
+      HouseTrim: -1821449813
       IngredientList: -132592085
       IngredientRequirement: -1902967201
       InventoryPlaceholder: 450073570
+      LifeTrim: -498583606
       ListUI: 336679578
+      ManaTrim: 981019556
       MoonStage0: 1841481835
       MoonStage1: -1304058712
       MoonStage2: -956797572
