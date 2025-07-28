@@ -19,6 +19,9 @@ public class Enemy2 : MonoBehaviour, IEnemy
     [SerializeField] private float detectRange;
     [SerializeField] private float shootingRange;
 
+    [Tooltip("Ajuste vertical al apuntar para disparar al jugador")]
+    [SerializeField] private float aimYOffset = 0.5f;
+
     [Header("Movement Settings")]
     [SerializeField] private float speed = 0.3f;
 
@@ -130,7 +133,9 @@ public class Enemy2 : MonoBehaviour, IEnemy
         FireBullet b = BulletPool.Instance.GetBullet();
         b.transform.position = firingPoint.position;
         b.transform.rotation = firingPoint.rotation;
-        b.SetDirection((currentTarget.position - transform.position).normalized);
+        Vector2 adjustedTargetPos = (Vector2)currentTarget.position + Vector2.down * aimYOffset;
+        Vector2 direction = (adjustedTargetPos - (Vector2)transform.position).normalized;
+        b.SetDirection(direction);
     }
 
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
