@@ -52,8 +52,12 @@ public class Spell : MonoBehaviour
                 Destroy(particles, 1.5f);
         }
 
-        if (CameraShaker.Instance != null)
+        if (Time.timeScale > 0f && CameraShaker.Instance != null)
+        {
             CameraShaker.Instance.Shake(0.3f, 0.25f);
+        }
+
+
 
         var knockback = collision.GetComponent<KnockbackReceiver>();
         if (knockback != null)
