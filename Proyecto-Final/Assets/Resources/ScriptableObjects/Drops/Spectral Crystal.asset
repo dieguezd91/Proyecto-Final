@@ -15,7 +15,8 @@ MonoBehaviour:
   materialName: Spectral Crystal
   materialIcon: {fileID: 1950191755, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 1
-  materialDescription: 
+  materialDescription: Material utilizado para craftear nuevas plantas. Se obtiene
+    matando al Skeleton
   rarity: 1
   isDropped: 1
   isProduct: 1

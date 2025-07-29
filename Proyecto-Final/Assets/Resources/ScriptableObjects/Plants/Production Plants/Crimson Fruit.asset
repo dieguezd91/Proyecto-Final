@@ -20,6 +20,6 @@ MonoBehaviour:
   lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 2
-  description: 
+  description: Planta de Produccion. Produce materiales que se usan para craftear
   seedType: 2
   slotIndex: 0

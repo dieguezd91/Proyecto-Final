@@ -15,7 +15,8 @@ MonoBehaviour:
   materialName: Eternal Ember
   materialIcon: {fileID: 1807988885, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   materialType: 4
-  materialDescription: 
+  materialDescription: Material utilizado para craftear nuevas plantas. Se obtiene
+    matando al Infernum
   rarity: 2
   isDropped: 1
   isProduct: 1
