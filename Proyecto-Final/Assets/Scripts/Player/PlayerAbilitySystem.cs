@@ -438,6 +438,8 @@ public class PlayerAbilitySystem : MonoBehaviour
             Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(digPosition);
             Vector3 spawnPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
             Instantiate(digAnimationPrefab, spawnPos, Quaternion.identity);
+            SoundManager.Instance.PlayOneShot("Dig");
+
         }
 
         StartCoroutine(DiggingProcess());
