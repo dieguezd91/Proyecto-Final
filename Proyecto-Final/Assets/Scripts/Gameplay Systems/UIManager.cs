@@ -268,7 +268,7 @@ public class UIManager : MonoBehaviour
             closeInstructionsButton.onClick.AddListener(CloseInstructions);
 
         if (continueButton != null && pauseMenu != null)
-            continueButton.onClick.AddListener(pauseMenu.Resume);
+            continueButton.onClick.AddListener(pauseMenu.Continue);
 
         if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
@@ -622,7 +622,7 @@ public class UIManager : MonoBehaviour
 
         instructionsPanel.SetActive(true);
         isInstructionsOpen = true;
-
+        SoundManager.Instance.PlayOneShot("ButtonClick");
         if (GameManager.Instance != null)
             GameManager.Instance.SetGameState(GameState.Paused);
 
@@ -636,7 +636,7 @@ public class UIManager : MonoBehaviour
 
         instructionsPanel.SetActive(false);
         isInstructionsOpen = false;
-
+        SoundManager.Instance.PlayOneShot("ButtonClick");
         if (openedFromPauseMenu && pausePanel != null)
         {
             pausePanel.SetActive(true);
