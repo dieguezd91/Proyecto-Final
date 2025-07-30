@@ -26,12 +26,7 @@ public class Plant : MonoBehaviour
     private LifeController lifeController;
     [HideInInspector] public Vector3Int tilePosition;
 
-    private SpriteRenderer spriteRenderer;
-
-    protected Sprite startingDaySprite;
-    protected Sprite middleDaySprite;
-    protected Sprite lastDaySprite;
-    protected Sprite fullyGrownSprite;
+    private Animator animator;
 
     protected PlayerAbilitySystem abilitySystem;
 
@@ -39,7 +34,7 @@ public class Plant : MonoBehaviour
 
     protected virtual void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
 
         plantCollider = GetComponent<Collider2D>();
         if (plantCollider != null)
@@ -56,13 +51,6 @@ public class Plant : MonoBehaviour
         {
             daysToGrow = plantData.daysToGrow;
             plantSprite = plantData.plantIcon;
-
-            startingDaySprite = plantData.startingDaySprite;
-            middleDaySprite = plantData.middleDaySprite;
-            lastDaySprite = plantData.lastDaySprite;
-            fullyGrownSprite = plantData.fullyGrownSprite;
-
-            ChangeSprite(startingDaySprite);
         }
         else
         {
@@ -98,31 +86,29 @@ public class Plant : MonoBehaviour
 
         int daysSincePlanting = currentDay - plantingDay;
 
-        if (daysSincePlanting <= 0)
-        {
-            ChangeSprite(startingDaySprite);
-            return;
-        }
-
         if (!particlesActivated && daysSincePlanting == daysToGrow - 1)
         {
             ActivatePreMatureParticles();
         }
 
-        if (daysSincePlanting >= daysToGrow)
+        if (daysSincePlanting > daysToGrow)
         {
             CompleteGrowth();
             return;
         }
 
-        float progress = Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
+        SetGrowthAnimationStage(daysSincePlanting);
+    }
 
-        if (progress <= 0.33f)
-            ChangeSprite(startingDaySprite);
-        else if (progress <= 0.66f)
-            ChangeSprite(middleDaySprite);
-        else if (progress < 1.0f)
-            ChangeSprite(lastDaySprite);
+    private void SetGrowthAnimationStage(int daysSincePlanting)
+    {
+        float growthProgress = Mathf.Clamp01((float)daysSincePlanting / daysToGrow);
+        float blendValue = growthProgress * 2f;
+
+        if (animator != null)
+        {
+            animator.SetFloat("GrowthStage", blendValue);
+        }
     }
 
     private void ActivatePreMatureParticles()
@@ -160,13 +146,19 @@ public class Plant : MonoBehaviour
 
         growthCompleted = true;
         DeactivatePreMatureParticles();
-        ChangeSprite(fullyGrownSprite);
-        OnMature();
-        if (plantCollider != null)
+
+        if (animator != null)
         {
-            plantCollider.enabled = true;
+            animator.SetBool("GrowthCompleted", true);
+            animator.SetFloat("GrowthStage", 2f);
         }
+
+        OnMature();
+
+        if (plantCollider != null)
+            plantCollider.enabled = true;
     }
+
 
     protected virtual void OnMature()
     {
@@ -211,22 +203,6 @@ public class Plant : MonoBehaviour
         if (newState == GameState.Night)
         {
             UpdateGrowthStatus(GameManager.Instance.GetCurrentDay());
-        }
-    }
-
-    private void ChangeSprite(Sprite newSprite)
-    {
-        if (spriteRenderer != null && newSprite != null)
-        {
-            spriteRenderer.sprite = newSprite;
-        }
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (lifeController != null)
-        {
-            lifeController.TakeDamage(damage);
         }
     }
 }

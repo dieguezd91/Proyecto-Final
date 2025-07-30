@@ -231,7 +231,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 0
   isPlayer: 0
-  hasDeathAnimation: 0
+  hasDeathAnimation: 1
 --- !u!61 &2015212756354474771
 BoxCollider2D:
   m_ObjectHideFlags: 0

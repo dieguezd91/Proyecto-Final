@@ -15,11 +15,8 @@ MonoBehaviour:
   plantName: Dark Root
   plantPrefab: {fileID: 3214456861987219935, guid: a3b61fa3938157140ad7b6fa0d84403f, type: 3}
   plantIcon: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  startingDaySprite: {fileID: 697983331, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 2
+  daysToGrow: 3
   description: 
   seedType: 3
   slotIndex: 0
