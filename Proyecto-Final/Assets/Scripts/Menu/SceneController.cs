@@ -15,6 +15,7 @@ public class SceneController : MonoBehaviour
 
     public void OnPlay()
     {
+        SoundManager.Instance.PlayOneShot("ButtonClick");
         ResetPersistentManagers();
         SceneManager.LoadScene("GameScene");
     }
@@ -71,6 +72,7 @@ public class SceneController : MonoBehaviour
 
     public void CloseGame()
     {
+        SoundManager.Instance.PlayOneShot("ButtonClick");
         Application.Quit();
     }
 }

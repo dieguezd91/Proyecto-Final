@@ -32,6 +32,12 @@ public class CameraShaker : MonoBehaviour
 
         while (elapsed < duration)
         {
+            if (Time.timeScale == 0f)
+            {
+                yield return null;
+                continue;
+            }
+
             float normalizedTime = elapsed / duration;
             float currentIntensity = intensity * shakeCurve.Evaluate(normalizedTime);
 
@@ -44,4 +50,5 @@ public class CameraShaker : MonoBehaviour
 
         cameraOffsetController?.ResetOffset();
     }
+
 }

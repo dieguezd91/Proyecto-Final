@@ -89,6 +89,25 @@ public class PauseMenu : MonoBehaviour
             GameManager.Instance.SetGameState(lastState);
         }
     }
+    
+    public void Continue()
+    {
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        OptionsMenu.SetActive(false);
+        isGamePaused = false;
+        SoundManager.Instance.PlayOneShot("ButtonClick");
+
+        if (uiManager != null && uiManager.HUD != null && !uiManager.IsInstructionsOpen())
+        {
+            uiManager.HUD.SetActive(true);
+        }
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.SetGameState(lastState);
+        }
+    }
 
     public void ShowInstructions()
     {
@@ -104,6 +123,7 @@ public class PauseMenu : MonoBehaviour
         else if (instructionsPanel != null)
         {
             instructionsPanel.SetActive(true);
+            SoundManager.Instance.PlayOneShot("ButtonClick");
         }
 
         Time.timeScale = 0f;
@@ -118,6 +138,7 @@ public class PauseMenu : MonoBehaviour
         }
         else if (instructionsPanel != null)
         {
+            SoundManager.Instance.PlayOneShot("ButtonClick");
             instructionsPanel.SetActive(false);
         }
 
@@ -142,6 +163,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         isGamePaused = false;
+        SoundManager.Instance.PlayOneShot("ButtonClick");
         SceneManager.LoadScene("MenuScene");
     }
 }

@@ -67,19 +67,20 @@ public class AttackPlant : Plant
 
         foreach (Collider2D enemy in enemiesInRange)
         {
-            if (enemy.GetComponent<Enemy>() != null)
+            if (enemy.GetComponent<GardenGnomeController>() != null)
+                continue;
+
+            float distance = Vector2.Distance(transform.position, enemy.transform.position);
+            if (distance < closestDistance)
             {
-                float distance = Vector2.Distance(transform.position, enemy.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestEnemy = enemy.transform;
-                }
+                closestDistance = distance;
+                closestEnemy = enemy.transform;
             }
         }
 
         target = closestEnemy;
     }
+
 
     void Shoot()
     {

@@ -113,7 +113,6 @@ public class RitualAltar : MonoBehaviour
     private IEnumerator RitualLightingSequence()
     {
         Coroutine vignetteCoroutine = StartCoroutine(ApplyRitualVignetteCoroutine());
-
         lightController?.DimLightForRitual(0.05f, 1.5f);
 
         yield return new WaitForSeconds(1.5f);
@@ -131,11 +130,11 @@ public class RitualAltar : MonoBehaviour
             {
                 candleLights[i].gameObject.SetActive(true);
                 candleLights[i].color = candleColor;
-
+                SoundManager.Instance.PlayOneShot("CandleOn");
                 StartCoroutine(FlickerCandle(candleLights[i], i));
             }
-
             yield return new WaitForSeconds(candleIgnitionDelay);
+
         }
     }
 
@@ -158,7 +157,6 @@ public class RitualAltar : MonoBehaviour
 
             yield return null;
         }
-
         candle.intensity = originalIntensity;
     }
 
@@ -207,11 +205,11 @@ public class RitualAltar : MonoBehaviour
     private void EndRitualEffects()
     {
         RestoreCorrectVignette();
+        SoundManager.Instance.PlayOneShot("CandleOff");
 
         StartCoroutine(ExtinguishCandlesGradually());
 
         lightController.RestoreLightAfterRitual(GameState.Night, 1.5f);
-
         UpdateAltarAppearance();
     }
 
