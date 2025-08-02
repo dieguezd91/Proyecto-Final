@@ -29,11 +29,13 @@ public class SoundManager : MonoBehaviour
             var src = gameObject.AddComponent<AudioSource>();
             sound.audioSource = src;
             src.clip = sound.clip;
-            src.volume = sound.volume;
             src.pitch = sound.pitch;
             src.playOnAwake = sound.playOnAwake;
             src.loop = sound.loop;
             src.mute = sound.mute;
+
+            src.volume = sound.volume;
+
             if (sound.playOnAwake)
                 src.Play();
         }

@@ -65,6 +65,15 @@ public class LifeController : MonoBehaviour
         {
             onDamaged?.Invoke(damage);
 
+            if (isPlayer)
+            {
+                SoundManager.Instance.PlayOneShot("PlayerHit");
+            }
+            else if (isEnemy)
+            {
+                SoundManager.Instance.PlayOneShot("EnemyHit");
+            }
+
             if (flashOnDamage && spriteRenderer != null)
             {
                 StartCoroutine(FlashRoutine());
@@ -78,6 +87,7 @@ public class LifeController : MonoBehaviour
             Die();
         }
     }
+
 
     public virtual void Die()
     {
