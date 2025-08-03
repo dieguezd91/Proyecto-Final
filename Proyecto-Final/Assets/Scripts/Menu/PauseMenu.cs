@@ -60,6 +60,7 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         isGamePaused = true;
+        SoundManager.Instance.PauseAll();
 
         if (uiManager != null && uiManager.HUD != null)
         {
@@ -78,6 +79,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(false);
         OptionsMenu.SetActive(false);
         isGamePaused = false;
+        SoundManager.Instance.ResumeAll();
 
         if (uiManager != null && uiManager.HUD != null && !uiManager.IsInstructionsOpen())
         {

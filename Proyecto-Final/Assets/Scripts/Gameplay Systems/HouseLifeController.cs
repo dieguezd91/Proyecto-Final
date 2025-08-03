@@ -50,7 +50,7 @@ public class HouseLifeController : MonoBehaviour
         if (damage > 0f)
         {
             onDamaged?.Invoke(damage);
-            SoundManager.Instance.PlayOneShot("HouseHit");
+            SoundManager.Instance.Play("HouseHit");
             PlayDamageParticles();
         }
 

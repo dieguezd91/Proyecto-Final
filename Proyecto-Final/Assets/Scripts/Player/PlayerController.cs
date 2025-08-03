@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
 
         GameObject spell = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Spell spellComponent = spell.GetComponent<Spell>();
-        SoundManager.Instance.PlayOneShot("ShootSpell");
+        SoundManager.Instance.Play("ShootSpell");
 
         if (spellComponent != null)
         {
@@ -311,7 +311,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
 
-            SoundManager.Instance.PlayOneShot(soundName);
+            SoundManager.Instance.Play(soundName);
             lastFootstepTime = Time.time;
         }
     }

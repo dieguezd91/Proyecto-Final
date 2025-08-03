@@ -130,7 +130,7 @@ public class RitualAltar : MonoBehaviour
             {
                 candleLights[i].gameObject.SetActive(true);
                 candleLights[i].color = candleColor;
-                SoundManager.Instance.PlayOneShot("CandleOn");
+                SoundManager.Instance.Play("CandleOn");
                 StartCoroutine(FlickerCandle(candleLights[i], i));
             }
             yield return new WaitForSeconds(candleIgnitionDelay);
@@ -205,7 +205,7 @@ public class RitualAltar : MonoBehaviour
     private void EndRitualEffects()
     {
         RestoreCorrectVignette();
-        SoundManager.Instance.PlayOneShot("CandleOff");
+        SoundManager.Instance.Play("CandleOff");
 
         StartCoroutine(ExtinguishCandlesGradually());
 

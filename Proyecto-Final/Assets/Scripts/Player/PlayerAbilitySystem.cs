@@ -221,7 +221,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
             if (planted)
             {
-                SoundManager.Instance.PlayOneShot("Plant");
+                SoundManager.Instance.Play("Plant");
                 plantInventory.ConsumeSeedInSelectedSlot();
                 GameManager.Instance.uiManager.UpdateSeedCountsUI();
                 GameManager.Instance.uiManager.InitializeSeedSlotsUI();
@@ -290,7 +290,7 @@ public class PlayerAbilitySystem : MonoBehaviour
                 warningBubble?.ShowMessage("Too far to remove plant.");
                 return;
             }
-            SoundManager.Instance.PlayOneShot("Remove");
+            SoundManager.Instance.Play("Remove");
 
             TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
             Destroy(plant.gameObject);
@@ -307,7 +307,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         isHarvesting = true;
         playerController.SetMovementEnabled(false);
         currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
-        SoundManager.Instance.PlayOneShot("Harvest");
+        SoundManager.Instance.Play("Harvest");
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(true);
         progressBar?.gameObject.SetActive(true);
@@ -438,7 +438,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(digPosition);
             Vector3 spawnPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
             Instantiate(digAnimationPrefab, spawnPos, Quaternion.identity);
-            SoundManager.Instance.PlayOneShot("Dig");
+            SoundManager.Instance.Play("Dig");
 
         }
 

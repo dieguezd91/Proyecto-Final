@@ -67,11 +67,11 @@ public class LifeController : MonoBehaviour
 
             if (isPlayer)
             {
-                SoundManager.Instance.PlayOneShot("PlayerHit");
+                SoundManager.Instance.Play("PlayerHit");
             }
             else if (isEnemy)
             {
-                SoundManager.Instance.PlayOneShot("EnemyHit");
+                SoundManager.Instance.Play("EnemyHit");
             }
 
             if (flashOnDamage && spriteRenderer != null)
