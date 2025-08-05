@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3956378746745884272}
   - component: {fileID: 994721063522815017}
   - component: {fileID: 5709038555340804217}
+  - component: {fileID: 6135252278756263201}
   m_Layer: 9
   m_Name: Thorned Tendrils
   m_TagString: Plant
@@ -146,6 +147,7 @@ MonoBehaviour:
   manaDropChance: 1
   isRespawning: 0
   isEnemy: 0
+  isPlayer: 0
   hasDeathAnimation: 0
 --- !u!61 &994721063522815017
 BoxCollider2D:
@@ -208,3 +210,24 @@ MonoBehaviour:
   sortingOffset: 0
   immaturePlantSortingOrder: -500
   maturePlantSortingOrder: 5
+--- !u!95 &6135252278756263201
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6736001113723686055}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 41e95367265cd544aa1e7c71604db1dd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
