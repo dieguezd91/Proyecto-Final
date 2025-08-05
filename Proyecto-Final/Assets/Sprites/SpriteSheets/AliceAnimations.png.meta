@@ -1748,10 +1748,31 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GhostForm
+      name: AliceGhostF
       rect:
         serializedVersion: 2
         x: 192
+        y: 48
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 697eaeb0b60837049b63b79314791d92
+      internalID: 294831337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AliceGhostSF
+      rect:
+        serializedVersion: 2
+        x: 216
         y: 48
         width: 24
         height: 24
@@ -1762,8 +1783,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 697eaeb0b60837049b63b79314791d92
-      internalID: 294831337
+      spriteID: 126f15749af27fb40add497e8432daa7
+      internalID: -1235992244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AliceGhostB
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a05aa99e97872f4fb9af0c9edc4b56a
+      internalID: 572338055
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AliceGhostSideSB
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f3e5116cf8e17f4e8d5a074d4576a14
+      internalID: 1008056819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AliceResting
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 24
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 721c9074e27d4094395074e3046a06f4
+      internalID: 264496154
       vertices: []
       indices: 
       edges: []
@@ -1850,7 +1934,11 @@ TextureImporter:
       AliceDeath7: -551755861
       AliceDeath8: 1608503608
       AliceDeath9: 1833142447
-      GhostForm: 294831337
+      AliceGhostB: 572338055
+      AliceGhostF: 294831337
+      AliceGhostSF: -1235992244
+      AliceGhostSideSB: 1008056819
+      AliceResting: 264496154
       Revive: 235271091
       Revive2: 195490867
       Revive3: -827765438
