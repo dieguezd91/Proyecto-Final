@@ -582,6 +582,9 @@ public class UIManager : MonoBehaviour
         inventoryPanel.SetActive(false);
         isInventoryOpen = false;
 
+        if (inventoryUI != null)
+            inventoryUI.ClearDescriptionPanel();
+
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(true);
 
