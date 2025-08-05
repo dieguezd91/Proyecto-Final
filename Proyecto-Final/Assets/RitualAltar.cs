@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -33,9 +34,14 @@ public class RitualAltar : MonoBehaviour
     private Camera mainCamera;
     private Vector2 originalVignetteCenter;
 
+    [SerializeField] private GameObject interactionPromptCanvas;
+
     private void Start()
     {
         gameManager = GameManager.Instance;
+
+        if (interactionPromptCanvas != null)
+            interactionPromptCanvas.SetActive(false);
 
         if (gameManager != null && gameManager.playerLife != null)
         {
@@ -55,10 +61,16 @@ public class RitualAltar : MonoBehaviour
 
     private void Update()
     {
-        if (playerInRange && Input.GetKeyDown(KeyCode.E) && CanPerformRitual())
+        if (playerInRange)
         {
-            StartCoroutine(PerformRitualCoroutine());
+            interactionPromptCanvas.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.E) && CanPerformRitual())
+            {
+                StartCoroutine(PerformRitualCoroutine());
+            }
         }
+        else
+            interactionPromptCanvas.SetActive(false);
     }
 
     private bool CanPerformRitual()

@@ -106,6 +106,32 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -320,7 +346,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_0
+      name: SpectralCrystal
       rect:
         serializedVersion: 2
         x: 32
@@ -341,7 +367,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_1
+      name: EternalEmberEternalEmber
       rect:
         serializedVersion: 2
         x: 49
@@ -383,7 +409,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_3
+      name: WindwalkerEssence
       rect:
         serializedVersion: 2
         x: 82
@@ -404,7 +430,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventorySpriteSheet_4
+      name: VoltaicCore
       rect:
         serializedVersion: 2
         x: 97
@@ -1315,7 +1341,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1336,7 +1362,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1357,7 +1383,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1378,7 +1404,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1399,7 +1425,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1420,7 +1446,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1441,7 +1467,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1462,7 +1488,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1483,7 +1509,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1504,7 +1530,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1525,7 +1551,7 @@ TextureImporter:
         width: 16
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1533,6 +1559,27 @@ TextureImporter:
       bones: []
       spriteID: ec040a624647c774386f03cb39c5ff24
       internalID: -1989832122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GoldIcon
+      rect:
+        serializedVersion: 2
+        x: 82
+        y: 226
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef23d1513b967584199b4e2df7ec8c7a
+      internalID: 998125887
       vertices: []
       indices: 
       edges: []
@@ -1555,6 +1602,7 @@ TextureImporter:
       Bubble: 872140717
       CloudyBall: -522247805
       EmptyFrame: -1989832122
+      EternalEmberEternalEmber: 1807988885
       Explosion: -1692774135
       Explosion1: -760197070
       Explosion2: 1600874781
@@ -1564,12 +1612,9 @@ TextureImporter:
       Explosion6: -2103584862
       Explosion7: 1425021777
       GlowdustResource: -1061087
+      GoldIcon: 998125887
       InventoryBag: -596440827
-      InventorySpriteSheet_0: 1950191755
-      InventorySpriteSheet_1: 1807988885
       InventorySpriteSheet_2: -39267108
-      InventorySpriteSheet_3: 2061505305
-      InventorySpriteSheet_4: -37685797
       InventorySpriteSheet_5: 79329245
       InventorySpriteSheet_6: 2015496169
       Leaf: -1330363278
@@ -1604,6 +1649,7 @@ TextureImporter:
       Snow1: 1594500937
       Snow2: -1559063039
       Snow3: 921805244
+      SpectralCrystal: 1950191755
       SpellParticle: 298098152
       Step: -1301085213
       ThoughtCloud: 1322117010
@@ -1611,6 +1657,7 @@ TextureImporter:
       ThoughtCloud3: 1171033025
       ThoughtCloud4: 1304090407
       ThoughtCloud5: 326547604
+      VoltaicCore: -37685797
       Wind: 876738399
       Wind10: 2032421392
       Wind2: 58123025
@@ -1621,6 +1668,7 @@ TextureImporter:
       Wind7: -1364855443
       Wind8: -393268769
       Wind9: 1327417430
+      WindwalkerEssence: 2061505305
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

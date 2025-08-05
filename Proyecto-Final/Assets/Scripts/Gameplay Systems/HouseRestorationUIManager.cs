@@ -19,7 +19,6 @@ public class HouseRestorationUIManager : MonoBehaviour
     [SerializeField] private float promptDistance = 2.5f;
     private Transform player;
 
-
     private HouseRestorationSystem restorationSystem;
 
     private void Start()
