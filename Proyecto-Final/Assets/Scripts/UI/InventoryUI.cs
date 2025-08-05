@@ -40,6 +40,8 @@ public class InventoryUI : MonoBehaviour
         InventoryManager.Instance.onGoldChanged += UpdateGoldDisplay;
 
         UpdateGoldDisplay(InventoryManager.Instance.GetGold());
+
+        ClearDescriptionPanel();
     }
 
     private void OnEnable()
@@ -81,6 +83,10 @@ public class InventoryUI : MonoBehaviour
         if (data == null) return;
 
         descriptionIcon.sprite = data.materialIcon;
+        var color = descriptionIcon.color;
+        color.a = 1f;
+        descriptionIcon.color = color;
+
         descriptionName.text = data.materialName;
         descriptionDetails.text = data.materialDescription;
         descriptionPanel.SetActive(true);
@@ -181,6 +187,7 @@ public class InventoryUI : MonoBehaviour
         {
             inventoryPanel.SetActive(true);
             UpdateAllSlots();
+            ClearDescriptionPanel();
         }
     }
 
@@ -189,6 +196,7 @@ public class InventoryUI : MonoBehaviour
         if (inventoryPanel != null)
         {
             inventoryPanel.SetActive(false);
+            ClearDescriptionPanel();
         }
     }
 
@@ -213,6 +221,7 @@ public class InventoryUI : MonoBehaviour
             if (newState)
             {
                 UpdateAllSlots();
+                ClearDescriptionPanel();
             }
         }
     }
@@ -222,4 +231,25 @@ public class InventoryUI : MonoBehaviour
         if (goldText != null)
             goldText.text = $"GOLD: " + newAmount.ToString();
     }
+
+    public void ClearDescriptionPanel()
+    {
+        if (descriptionPanel != null)
+            descriptionPanel.SetActive(false);
+
+        if (descriptionIcon != null)
+        {
+            descriptionIcon.sprite = null;
+            var color = descriptionIcon.color;
+            color.a = 0f;
+            descriptionIcon.color = color;
+        }
+
+        if (descriptionName != null)
+            descriptionName.text = "";
+
+        if (descriptionDetails != null)
+            descriptionDetails.text = "";
+    }
+
 }

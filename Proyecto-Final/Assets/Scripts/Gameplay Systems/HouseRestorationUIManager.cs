@@ -126,11 +126,16 @@ public class HouseRestorationUIManager : MonoBehaviour
             if (i < restorationSystem.OptionCount)
             {
                 var opt = restorationSystem.GetOption(i);
-                optionLabels[i].text = $"{opt.restorePercentage}% vida\n{opt.goldCost} oro + 1 {opt.materialRequired}";
+                string materialIcon = GetMaterialSpriteName(opt.materialRequired);
+
+                optionLabels[i].text =
+                    $"{opt.restorePercentage}% HP\n" +
+                    $"<sprite name=\"GoldIcon\"> {opt.goldCost}  +  <sprite name=\"{materialIcon}\"> 1";
             }
             optionButtons[i].interactable = !restorationSystem.HasRestoredToday();
         }
     }
+
 
     private void OnSliderChanged(float value)
     {
@@ -156,4 +161,27 @@ public class HouseRestorationUIManager : MonoBehaviour
             goldInputField.SetTextWithoutNotify("0");
         }
     }
+
+    private string GetMaterialSpriteName(MaterialType type)
+    {
+        return type switch
+        {
+            MaterialType.SpectralCrystal => "SpectralCrystal",
+            MaterialType.WindwalkerEssence => "WindwalkerEssence",
+            MaterialType.VoltaicCore => "VoltaicCore",
+            MaterialType.EternalEmber => "EternalEmber",
+            MaterialType.StellarFragment => "StellarFragment",
+            MaterialType.LunarEssence => "LunarEssence",
+            MaterialType.CrystallizedTears => "CrystallizedTears",
+            MaterialType.FlameberryFruit => "FlameberryFruit",
+            MaterialType.AstralRoots => "AstralRoots",
+            MaterialType.VoltaicPollen => "VoltaicPollen",
+            MaterialType.FrostSpores => "FrostSpores",
+            MaterialType.EtherealTendrils => "EtherealTendrils",
+            MaterialType.HouseHealingPotion => "HouseHealingPotion",
+            MaterialType.Gold => "GoldIcon",
+            _ => type.ToString(),
+        };
+    }
+
 }

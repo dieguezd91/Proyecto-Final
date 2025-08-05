@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class HouseRestorationSystem : MonoBehaviour
 {
-    [System.Serializable]
+    [Serializable]
     public struct RestorationOption
     {
         public string label;
