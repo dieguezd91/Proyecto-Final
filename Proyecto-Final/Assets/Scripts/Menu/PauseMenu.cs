@@ -28,7 +28,7 @@ public class PauseMenu : MonoBehaviour
             !IsInstructionsPanelActive() &&
             !CraftingUIManager.isCraftingUIOpen && !HouseRestorationUIManager.isUIOpen &&
             GameManager.Instance != null &&
-            GameManager.Instance.currentGameState != GameState.GameOver)
+            GameManager.Instance.currentGameState != GameState.GameOver && GameManager.Instance.currentGameState != GameState.OnAltarRestoration && GameManager.Instance.currentGameState != GameState.OnRitual)
         {
             if (isGamePaused)
             {
