@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -88,29 +87,31 @@ public class RitualAltar : MonoBehaviour
     private IEnumerator PerformRitualCoroutine()
     {
         isPerformingRitual = true;
-
         GameState previousState = gameManager.GetCurrentGameState();
         gameManager.SetGameState(GameState.OnRitual);
 
         StartRitualEffects();
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.ShowRitualOverlay();
 
         yield return new WaitForSeconds(ritualDuration);
 
         ApplyRitualEffects();
 
         if (canTransitionToNight && gameManager.GetCurrentGameState() != GameState.Night)
-        {
             gameManager.TransitionToNight();
-        }
         else
-        {
             gameManager.SetGameState(previousState);
-        }
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.HideRitualOverlay();
 
         EndRitualEffects();
 
         isPerformingRitual = false;
     }
+
 
     private void StartRitualEffects()
     {

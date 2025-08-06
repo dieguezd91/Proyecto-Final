@@ -100,6 +100,10 @@ public class UIManager : MonoBehaviour
     private Bloom bloom;
     private ColorAdjustments colorAdjustments;
 
+    [Header("RITUAL OVERLAY")]
+    [SerializeField] private Image ritualOverlayImage;
+    [SerializeField] private float overlayFadeDuration = 1.2f;
+    private Coroutine ritualOverlayCoroutine;
 
     private bool openedFromPauseMenu = false;
     private LifeController playerLife;
@@ -1171,4 +1175,36 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ShowRitualOverlay()
+    {
+        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
+        ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(0f, 1f));
+    }
+
+    public void HideRitualOverlay()
+    {
+        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
+        ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(ritualOverlayImage.color.a, 0f));
+    }
+
+    private IEnumerator FadeRitualOverlay(float from, float to)
+    {
+        if (ritualOverlayImage == null) yield break;
+
+        ritualOverlayImage.gameObject.SetActive(true);
+        float elapsed = 0f;
+        Color color = ritualOverlayImage.color;
+
+        while (elapsed < overlayFadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            color.a = Mathf.Lerp(from, to, elapsed / overlayFadeDuration);
+            ritualOverlayImage.color = color;
+            yield return null;
+        }
+        color.a = to;
+        ritualOverlayImage.color = color;
+
+        if (to == 0f) ritualOverlayImage.gameObject.SetActive(false);
+    }
 }
