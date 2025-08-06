@@ -87,7 +87,7 @@ public class LunarCycleManager : MonoBehaviour
 
         GameState currentState = GameManager.Instance.currentGameState;
 
-        if (lastGameState != GameState.Night && currentState == GameState.Night)
+        if (WasDayState(lastGameState) && currentState == GameState.Night)
         {
             ShowMoon(true);
 
@@ -147,5 +147,14 @@ public class LunarCycleManager : MonoBehaviour
     public MoonPhase GetCurrentMoonPhase()
     {
         return currentMoonPhase;
+    }
+
+    private bool WasDayState(GameState state)
+    {
+        return state == GameState.Day
+            || state == GameState.Digging
+            || state == GameState.Planting
+            || state == GameState.Harvesting
+            || state == GameState.Removing;
     }
 }
