@@ -113,9 +113,9 @@ TextureImporter:
       name: HouseFront5
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 0
-        width: 320
+        width: 324
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 4.9714284}
@@ -134,9 +134,9 @@ TextureImporter:
       name: HouseRoof5
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 35
-        width: 320
+        width: 324
         height: 301
       alignment: 9
       pivot: {x: 0.5, y: 0.46179402}
@@ -260,9 +260,9 @@ TextureImporter:
       name: HouseFrontD2
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 336
-        width: 320
+        width: 324
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 4.9714284}
@@ -281,9 +281,9 @@ TextureImporter:
       name: HouseRoof5D
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 371
-        width: 320
+        width: 324
         height: 301
       alignment: 9
       pivot: {x: 0.5, y: 0.461794}
@@ -302,9 +302,9 @@ TextureImporter:
       name: HouseRoof5MD
       rect:
         serializedVersion: 2
-        x: 336
+        x: 350
         y: 371
-        width: 320
+        width: 324
         height: 301
       alignment: 9
       pivot: {x: 0.5, y: 0.46179402}
@@ -323,9 +323,9 @@ TextureImporter:
       name: HouseFront5MD
       rect:
         serializedVersion: 2
-        x: 336
+        x: 350
         y: 336
-        width: 320
+        width: 324
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 4.9714284}
@@ -344,9 +344,9 @@ TextureImporter:
       name: HouseRoof5HD
       rect:
         serializedVersion: 2
-        x: 672
+        x: 686
         y: 371
-        width: 320
+        width: 324
         height: 301
       alignment: 9
       pivot: {x: 0.5, y: 0.461794}
@@ -365,9 +365,9 @@ TextureImporter:
       name: HouseFront5HD
       rect:
         serializedVersion: 2
-        x: 672
+        x: 686
         y: 336
-        width: 320
+        width: 324
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 4.971428}
@@ -386,9 +386,9 @@ TextureImporter:
       name: HouseDestroyedFront
       rect:
         serializedVersion: 2
-        x: 1009
+        x: 1022
         y: 336
-        width: 320
+        width: 324
         height: 35
       alignment: 9
       pivot: {x: 0.5, y: 4.9714284}
@@ -407,9 +407,9 @@ TextureImporter:
       name: HouseDestroyedRoof
       rect:
         serializedVersion: 2
-        x: 1009
+        x: 1022
         y: 371
-        width: 320
+        width: 324
         height: 301
       alignment: 9
       pivot: {x: 0.5, y: 0.461794}
