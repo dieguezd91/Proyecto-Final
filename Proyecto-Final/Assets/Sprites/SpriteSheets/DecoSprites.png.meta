@@ -118,7 +118,7 @@ TextureImporter:
         width: 32
         height: 16
       alignment: 9
-      pivot: {x: 0.5, y: 0.19}
+      pivot: {x: 0.5, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1544,12 +1544,12 @@ TextureImporter:
       name: RitualRug
       rect:
         serializedVersion: 2
-        x: 141
+        x: 140
         y: 96
-        width: 38
-        height: 19
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        width: 40
+        height: 20
+      alignment: 9
+      pivot: {x: 0.5, y: 0.45000002}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1823,8 +1823,8 @@ TextureImporter:
         y: 75
         width: 40
         height: 21
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.47619048}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1844,8 +1844,8 @@ TextureImporter:
         y: 111
         width: 34
         height: 17
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.29411766}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
