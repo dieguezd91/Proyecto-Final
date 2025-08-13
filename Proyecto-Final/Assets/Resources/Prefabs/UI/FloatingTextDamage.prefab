@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 1
-  m_fontSizeBase: 1
+  m_fontSize: 1.2
+  m_fontSizeBase: 1.2
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -171,7 +171,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.9299927, y: 0}
+  m_AnchoredPosition: {x: -0.47998047, y: 0}
   m_SizeDelta: {x: 1.5, y: 1.5}
   m_Pivot: {x: -0.14415425, y: 0.5}
 --- !u!223 &3933338995984670382
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5038308236965274200
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,13 +249,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2abc4f5ef2c7f544b145f59e376a5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 1, z: 0}
+  offset: {x: 0.8, y: 1, z: 0}
   floatSpeed: 1
   fadeInDuration: 0.2
   duration: 1
   fadeOutDuration: 0.5
-  startColor: {r: 1, g: 0.2301679, b: 0, a: 1}
-  endColor: {r: 0.7264151, g: 0, b: 0, a: 1}
+  startColor: {r: 1, g: 1, b: 0, a: 1}
+  endColor: {r: 1, g: 1, b: 0, a: 1}
   maxDamageForColor: 50
-  minScale: 0.5
-  maxScale: 1
+  minScale: 0.7
+  maxScale: 1.2
