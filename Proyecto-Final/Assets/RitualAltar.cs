@@ -24,6 +24,12 @@ public class RitualAltar : MonoBehaviour
     [SerializeField] private float ritualVignetteIntensity;
     [SerializeField] private bool centerVignetteOnPlayer = true;
 
+    [Header("Sprite Change")]
+    [SerializeField] private SpriteRenderer altarSpriteRenderer;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite nearSprite;
+
+
     private bool isPerformingRitual = false;
     private bool playerInRange = false;
     private GameManager gameManager;
@@ -352,6 +358,9 @@ public class RitualAltar : MonoBehaviour
         {
             playerInRange = true;
 
+            if (altarSpriteRenderer != null && nearSprite != null)
+                altarSpriteRenderer.sprite = nearSprite;
+
             if (CanPerformRitual())
             {
                 Debug.Log("Presiona E para realizar el ritual de preparación");
@@ -364,8 +373,12 @@ public class RitualAltar : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+
+            if (altarSpriteRenderer != null && defaultSprite != null)
+                altarSpriteRenderer.sprite = defaultSprite;
         }
     }
+
 
     public bool IsRitualAvailable()
     {
