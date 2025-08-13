@@ -214,8 +214,7 @@ public class SoundManager : MonoBehaviour
                 source.UnPause();
         }
     }
-
-    // Additional utility methods
+    
     public bool IsPlaying(string name)
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
@@ -232,5 +231,45 @@ public class SoundManager : MonoBehaviour
     public int GetTotalSourceCount()
     {
         return audioSourcePool.Count;
+    }
+
+    /// <summary>
+    /// Plays a SoundClipData using the pooling and limiting system.
+    /// </summary>
+    public void PlayClip(SoundClipData data)
+    {
+        if (data == null) return;
+        var clip = data.GetClip();
+        if (clip == null) return;
+
+        // Find all sources currently playing this clip
+        var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
+        if (playingSources.Count >= MaxSimultaneousSameSound)
+        {
+            // Restart the first one
+            var sourceToRestart = playingSources[0];
+            sourceToRestart.Stop();
+            sourceToRestart.clip = clip;
+            sourceToRestart.volume = data.volume;
+            sourceToRestart.pitch = data.GetPitch();
+            sourceToRestart.loop = data.loop;
+            sourceToRestart.mute = false;
+            if (data.loop)
+                sourceToRestart.Play();
+            else
+                sourceToRestart.PlayOneShot(clip, data.volume);
+            return;
+        }
+
+        var audioSource = GetAvailableAudioSource();
+        audioSource.clip = clip;
+        audioSource.volume = data.volume;
+        audioSource.pitch = data.GetPitch();
+        audioSource.loop = data.loop;
+        audioSource.mute = false;
+        if (data.loop)
+            audioSource.Play();
+        else
+            audioSource.PlayOneShot(clip, data.volume);
     }
 }

@@ -32,11 +32,20 @@ public class Enemy2 : MonoBehaviour, IEnemy
     private float nextTimeToFire = 0f;
 
     private bool isDead = false;
+    private EnemySoundBase soundBase;
+    private LifeController lifeController;
 
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
         if (Enemy2Sprite == null) Enemy2Sprite = GetComponent<SpriteRenderer>();
+        soundBase = GetComponent<EnemySoundBase>();
+        lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.AddListener(OnDamaged);
+        }
+        soundBase?.PlaySound(EnemySoundType.Spawning);
     }
 
     private void Update()
@@ -160,11 +169,25 @@ public class Enemy2 : MonoBehaviour, IEnemy
         }
     }
 
+    private void OnDamaged(float damage)
+    {
+        soundBase?.PlaySound(EnemySoundType.Hurt);
+    }
+
     public void MarkAsDead()
     {
         isDead = true;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
+        soundBase?.PlaySound(EnemySoundType.Die);
+    }
+
+    private void OnDestroy()
+    {
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.RemoveListener(OnDamaged);
+        }
     }
 
     private void OnDrawGizmosSelected()

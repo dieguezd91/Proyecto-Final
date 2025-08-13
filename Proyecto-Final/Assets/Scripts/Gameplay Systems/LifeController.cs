@@ -69,11 +69,6 @@ public class LifeController : MonoBehaviour
             {
                 SoundManager.Instance.Play("PlayerHit");
             }
-            else if (isEnemy)
-            {
-                SoundManager.Instance.Play("EnemyHit");
-            }
-
             if (flashOnDamage && spriteRenderer != null)
             {
                 StartCoroutine(FlashRoutine());

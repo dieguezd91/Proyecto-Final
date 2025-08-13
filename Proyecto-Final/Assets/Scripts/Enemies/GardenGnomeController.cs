@@ -9,7 +9,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     public float acceleration = 2f;
     public float stopDistance = 0.1f;
 
-    [Tooltip("Cuánto hacia abajo persigue el gnomo respecto al centro del jugador")]
+    [Tooltip("Cuï¿½nto hacia abajo persigue el gnomo respecto al centro del jugador")]
     [SerializeField] private float chaseYOffset = 0.5f;
 
     [Header("EXPLOSION")]
@@ -31,6 +31,9 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     private LifeController targetLife;
     private bool isDead = false;
 
+    private EnemySoundBase soundBase;
+    private LifeController lifeController;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -39,12 +42,19 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         _rb.drag = 0.5f;
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
+        soundBase = GetComponent<EnemySoundBase>();
+        lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.AddListener(OnDamaged);
+        }
     }
 
     void Start()
     {
         var p = GameObject.FindGameObjectWithTag("Player");
         if (p != null) _player = p.transform;
+        soundBase?.PlaySound(EnemySoundType.Spawning);
     }
 
     void Update()
@@ -170,10 +180,24 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         }
     }
 
+    private void OnDamaged(float damage)
+    {
+        soundBase?.PlaySound(EnemySoundType.Hurt);
+    }
+
     public void MarkAsDead()
     {
         isDead = true;
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
+        soundBase?.PlaySound(EnemySoundType.Die);
+    }
+
+    void OnDestroy()
+    {
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.RemoveListener(OnDamaged);
+        }
     }
 }

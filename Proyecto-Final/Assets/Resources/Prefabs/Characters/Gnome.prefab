@@ -4907,6 +4907,7 @@ GameObject:
   - component: {fileID: 8902441865216766093}
   - component: {fileID: 8463486699940196835}
   - component: {fileID: 4549248119585824537}
+  - component: {fileID: 6177706437784343717}
   m_Layer: 8
   m_Name: Gnome
   m_TagString: Enemy
@@ -5038,6 +5039,7 @@ MonoBehaviour:
   manaDropChance: 1
   isRespawning: 0
   isEnemy: 1
+  isPlayer: 0
   hasDeathAnimation: 1
 --- !u!114 &3447298691744884854
 MonoBehaviour:
@@ -5192,6 +5194,94 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6177706437784343717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7894955776486503493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44007fa1bee80d04c93754e403d22eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  spawning:
+    clips:
+    - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  die:
+    clips:
+    - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  hurt:
+    clips:
+    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.2
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  idle:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  attack:
+    clips:
+    - {fileID: 0}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  special:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  roar:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  cast:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1001 &2888283139860618534
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -185,6 +185,7 @@ GameObject:
   - component: {fileID: 259869561657676236}
   - component: {fileID: 8994487321417303199}
   - component: {fileID: 4035741083083429255}
+  - component: {fileID: -1892927261408948434}
   m_Layer: 8
   m_Name: Infernum
   m_TagString: Enemy
@@ -431,6 +432,94 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-1892927261408948434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4654744101768285803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44007fa1bee80d04c93754e403d22eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  spawning:
+    clips:
+    - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  die:
+    clips:
+    - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  hurt:
+    clips:
+    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.2
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  idle:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  attack:
+    clips:
+    - {fileID: 0}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  special:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  roar:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  cast:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1 &4778457076153977003
 GameObject:
   m_ObjectHideFlags: 0

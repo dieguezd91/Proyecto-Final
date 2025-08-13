@@ -38,12 +38,21 @@ public class Enemy : MonoBehaviour, IEnemy
     private Vector2 direction;
     private Transform currentTarget;
     private string currentTargetType = "none";
+    private EnemySoundBase soundBase;
+    private LifeController lifeController;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        soundBase = GetComponent<EnemySoundBase>();
+        lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.AddListener(OnDamaged);
+        }
+        soundBase?.PlaySound(EnemySoundType.Spawning);
 
         if (player == null)
         {
@@ -60,6 +69,11 @@ public class Enemy : MonoBehaviour, IEnemy
         {
             home = homeObject.transform;
         }
+    }
+
+    private void OnDamaged(float damage)
+    {
+        soundBase?.PlaySound(EnemySoundType.Hurt);
     }
 
     void Update()
@@ -185,6 +199,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public void PerformSwordHit()
     {
+        soundBase?.PlaySound(EnemySoundType.Attack);
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
         HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
 
@@ -241,12 +256,21 @@ public class Enemy : MonoBehaviour, IEnemy
         isDead = true;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
+        soundBase?.PlaySound(EnemySoundType.Die);
     }
 
     public void OnAttackAnimationEnd()
     {
         anim.SetBool("isAttacking", false);
         isCurrentlyAttacking = false;
+    }
+
+    void OnDestroy()
+    {
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.RemoveListener(OnDamaged);
+        }
     }
 
     void OnDrawGizmosSelected()

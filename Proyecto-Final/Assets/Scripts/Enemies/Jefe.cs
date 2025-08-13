@@ -63,12 +63,15 @@ public class Jefe : MonoBehaviour
     private HashSet<GameObject> meleeDamagedObjects = new HashSet<GameObject>();
     private HashSet<GameObject> specialDamagedObjects = new HashSet<GameObject>();
 
+    private EnemySoundBase soundBase;
+
 
     private void Start()
     {
         Initialize();
         SetupLifeController();
-
+        soundBase = GetComponent<EnemySoundBase>();
+        soundBase?.PlaySound(EnemySoundType.Spawning);
         defaultSpeed = moveSpeed;
     }
 
@@ -174,6 +177,7 @@ public class Jefe : MonoBehaviour
             lifeController.currentHealth = bossMaxHealth;
 
             lifeController.onDeath.AddListener(OnBossDeath);
+            lifeController.onDamaged.AddListener(OnDamaged);
         }
     }
 
@@ -257,6 +261,7 @@ public class Jefe : MonoBehaviour
     {
         rb.velocity = Vector2.zero;
         animator.SetTrigger("attack");
+        soundBase?.PlaySound(EnemySoundType.Attack);
         yield return new WaitForSeconds(meleeDelay);
 
         meleeDamagedObjects.Clear();
@@ -305,6 +310,7 @@ public class Jefe : MonoBehaviour
     private IEnumerator PerformSpecialAttack()
     {
         rb.velocity = Vector2.zero;
+        soundBase?.PlaySound(EnemySoundType.Attack);
         yield return new WaitForSeconds(specialDelay);
 
         specialDamagedObjects.Clear();
@@ -361,13 +367,10 @@ public class Jefe : MonoBehaviour
     private void OnBossDeath()
     {
         if (isDead) return;
-
         isDead = true;
-        Debug.Log("¡Jefe derrotado!");
-
         rb.velocity = Vector2.zero;
         isAttacking = true;
-
+        soundBase?.PlaySound(EnemySoundType.Die);
         StartCoroutine(DeathSequence());
     }
 
@@ -433,5 +436,18 @@ public class Jefe : MonoBehaviour
 
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(attackPoint.position, specialRadius);
+    }
+
+    private void OnDamaged(float damage)
+    {
+        soundBase?.PlaySound(EnemySoundType.Hurt);
+    }
+
+    private void OnDestroy()
+    {
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.RemoveListener(OnDamaged);
+        }
     }
 }
