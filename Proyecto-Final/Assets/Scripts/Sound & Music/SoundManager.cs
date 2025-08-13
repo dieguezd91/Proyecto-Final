@@ -1,13 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance;
     public Sound[] sounds;
 
-    private List<AudioSource> allAudioSources = new List<AudioSource>();
+    [SerializeField] private List<AudioSource> audioSourcePool = new();
+    [SerializeField] private int initialPoolSize = 5;
+
+    private const int MaxSimultaneousSameSound = 3;
+
+    // Dictionary to track sounds by name for quick lookup
+    private Dictionary<string, Sound> soundLookup = new();
 
     private void Awake()
     {
@@ -25,70 +32,174 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
+        // Create lookup dictionary for faster sound finding
         foreach (var sound in sounds)
         {
-            var src = gameObject.AddComponent<AudioSource>();
-            sound.audioSource = src;
-
-            src.clip = sound.clip;
-            src.pitch = sound.pitch;
-            src.playOnAwake = sound.playOnAwake;
-            src.loop = sound.loop;
-            src.mute = sound.mute;
-            src.volume = sound.volume;
-
-            allAudioSources.Add(src);
-
-            if (sound.playOnAwake)
-                src.Play();
+            soundLookup[sound.name] = sound;
         }
+
+        // First, find any existing AudioSources on this GameObject
+        AudioSource[] existingAudioSources = GetComponents<AudioSource>();
+        audioSourcePool.AddRange(existingAudioSources);
+
+        // If we don't have enough AudioSources, create more to reach initialPoolSize
+        int sourcesToCreate = Mathf.Max(0, initialPoolSize - audioSourcePool.Count);
+        for (int i = 0; i < sourcesToCreate; i++)
+        {
+            CreateNewAudioSource();
+        }
+
+        // Play sounds that should play on awake
+        foreach (var sound in sounds)
+        {
+            if (sound.playOnAwake)
+            {
+                Play(sound.name);
+            }
+        }
+    }
+
+    private AudioSource CreateNewAudioSource()
+    {
+        var audioSource = gameObject.AddComponent<AudioSource>();
+        audioSourcePool.Add(audioSource);
+        return audioSource;
+    }
+
+    private AudioSource GetAvailableAudioSource()
+    {
+        // Try to find an available audio source (not playing)
+        var availableSource = audioSourcePool.FirstOrDefault(source => !source.isPlaying);
+
+        // If no available source, create a new one
+        if (availableSource == null)
+        {
+            availableSource = CreateNewAudioSource();
+        }
+
+        return availableSource;
+    }
+
+    private void ConfigureAudioSource(AudioSource source, Sound sound)
+    {
+        source.clip = sound.clip;
+        source.volume = sound.volume;
+        source.pitch = sound.pitch;
+        source.mute = sound.mute;
+        source.loop = sound.loop;
     }
 
     public void PlayOneShot(string name)
     {
-        var s = Array.Find(sounds, x => x.name == name);
-        if (s != null)
-            s.audioSource.PlayOneShot(s.clip);
-        else
+        if (!soundLookup.TryGetValue(name, out Sound sound))
+        {
             Debug.LogWarning($"Sound '{name}' not found");
+            return;
+        }
+
+        // Find all sources currently playing this sound
+        var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
+        if (playingSources.Count >= MaxSimultaneousSameSound)
+        {
+            // Restart the first one
+            var sourceToRestart = playingSources[0];
+            ConfigureAudioSource(sourceToRestart, sound);
+            sourceToRestart.Stop();
+            sourceToRestart.PlayOneShot(sound.clip, sound.volume);
+            return;
+        }
+
+        var audioSource = GetAvailableAudioSource();
+        ConfigureAudioSource(audioSource, sound);
+        audioSource.PlayOneShot(sound.clip, sound.volume);
     }
 
     public void Play(string name)
     {
-        var s = Array.Find(sounds, x => x.name == name);
-        if (s != null)
-            s.audioSource.Play();
-        else if (s == null)
+        if (!soundLookup.TryGetValue(name, out Sound sound))
+        {
             Debug.LogWarning($"Sound '{name}' not found");
+            return;
+        }
+
+        var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
+        if (playingSources.Count >= MaxSimultaneousSameSound)
+        {
+            var sourceToRestart = playingSources[0];
+            ConfigureAudioSource(sourceToRestart, sound);
+            sourceToRestart.Stop();
+            sourceToRestart.Play();
+            return;
+        }
+
+        var audioSource = GetAvailableAudioSource();
+        ConfigureAudioSource(audioSource, sound);
+        audioSource.Play();
     }
 
     public void PlayLoop(string name)
     {
-        var s = Array.Find(sounds, x => x.name == name);
-        if (s != null)
-        {
-            if (!s.audioSource.isPlaying)
-            {
-                s.audioSource.loop = true;
-                s.audioSource.Play();
-            }
-        }
-        else
+        if (!soundLookup.TryGetValue(name, out Sound sound))
         {
             Debug.LogWarning($"Sound '{name}' not found");
+            return;
         }
+
+        var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip && s.loop).ToList();
+        if (playingSources.Count >= MaxSimultaneousSameSound)
+        {
+            var sourceToRestart = playingSources[0];
+            ConfigureAudioSource(sourceToRestart, sound);
+            sourceToRestart.Stop();
+            sourceToRestart.loop = true;
+            sourceToRestart.Play();
+            return;
+        }
+
+        // Check if this sound is already playing and looping
+        var existingSource = audioSourcePool.FirstOrDefault(source =>
+            source.isPlaying && source.clip == sound.clip && source.loop);
+        if (existingSource != null)
+        {
+            return; // Already playing this looped sound
+        }
+
+        var audioSource = GetAvailableAudioSource();
+        ConfigureAudioSource(audioSource, sound);
+        audioSource.loop = true;
+        audioSource.Play();
     }
 
     public void Stop(string name)
     {
-        var s = Array.Find(sounds, x => x.name == name);
-        if (s != null && s.audioSource.isPlaying)
-            s.audioSource.Stop();
+        if (!soundLookup.TryGetValue(name, out Sound sound))
+        {
+            Debug.LogWarning($"Sound '{name}' not found");
+            return;
+        }
+
+        // Stop all audio sources playing this sound
+        foreach (var source in audioSourcePool)
+        {
+            if (source.isPlaying && source.clip == sound.clip)
+            {
+                source.Stop();
+            }
+        }
+    }
+
+    public void StopAll()
+    {
+        foreach (var source in audioSourcePool)
+        {
+            if (source.isPlaying)
+                source.Stop();
+        }
     }
 
     public void PauseAll()
     {
-        foreach (var source in allAudioSources)
+        foreach (var source in audioSourcePool)
         {
             if (source.isPlaying)
                 source.Pause();
@@ -97,10 +208,29 @@ public class SoundManager : MonoBehaviour
 
     public void ResumeAll()
     {
-        foreach (var source in allAudioSources)
+        foreach (var source in audioSourcePool)
         {
             if (source.clip != null && !source.isPlaying)
                 source.UnPause();
         }
+    }
+
+    // Additional utility methods
+    public bool IsPlaying(string name)
+    {
+        if (!soundLookup.TryGetValue(name, out Sound sound))
+            return false;
+
+        return audioSourcePool.Any(source => source.isPlaying && source.clip == sound.clip);
+    }
+
+    public int GetActiveSourceCount()
+    {
+        return audioSourcePool.Count(source => source.isPlaying);
+    }
+
+    public int GetTotalSourceCount()
+    {
+        return audioSourcePool.Count;
     }
 }
