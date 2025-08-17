@@ -15,11 +15,8 @@ MonoBehaviour:
   plantName: Storm Rose
   plantPrefab: {fileID: 6736001113723686055, guid: da9555e91a9d4f042bfca2e1721c0ec9, type: 3}
   plantIcon: {fileID: 697983331, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  startingDaySprite: {fileID: 1726723143, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 3
-  description: hola soy storm
+  description: Planta defensiva. Dispara a los enemigos que esten a rango.
   seedType: 15
   slotIndex: 0

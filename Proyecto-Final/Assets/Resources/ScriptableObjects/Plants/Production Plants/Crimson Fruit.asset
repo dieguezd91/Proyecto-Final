@@ -15,11 +15,8 @@ MonoBehaviour:
   plantName: Crimson Fruit
   plantPrefab: {fileID: 3214456861987219935, guid: b05ed49719e7504448b21394ba4e8759, type: 3}
   plantIcon: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  startingDaySprite: {fileID: 496183913, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  middleDaySprite: {fileID: 1181964190, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  lastDaySprite: {fileID: 1189134553, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 2
-  description: Planta de Produccion. Produce materiales que se usan para craftear
+  description: 
   seedType: 2
   slotIndex: 0
