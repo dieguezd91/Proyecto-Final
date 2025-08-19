@@ -1,5 +1,10 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class PauseMenu : MonoBehaviour
 {
@@ -8,14 +13,30 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private GameObject instructionsPanel;
     [SerializeField] private UIManager uiManager;
 
+    [Header("Blur Settings")]
+    [SerializeField] private Volume blurVolume;
+    [SerializeField] private float transitionDuration = 0.5f;
+    [SerializeField] private float maxFocalLength = 200f;
+
     public static bool isGamePaused = false;
     private GameState lastState = GameState.Day;
+
+    private Coroutine blurTransition;
+    private DepthOfField dof;
+
 
     private void Start()
     {
         if (uiManager == null)
         {
             uiManager = FindObjectOfType<UIManager>();
+        }
+
+        // buscamos el componente DepthOfField en el VolumeProfile
+        if (blurVolume != null && blurVolume.profile.TryGet(out dof))
+        {
+            dof.focalLength.overrideState = true;
+            dof.focalLength.value = 0f; // sin blur al inicio
         }
     }
 
@@ -71,6 +92,9 @@ public class PauseMenu : MonoBehaviour
         {
             GameManager.Instance.SetGameState(GameState.Paused);
         }
+
+        if (blurTransition != null) StopCoroutine(blurTransition);
+        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength));
     }
 
     public void Resume()
@@ -90,6 +114,9 @@ public class PauseMenu : MonoBehaviour
         {
             GameManager.Instance.SetGameState(lastState);
         }
+
+        if (blurTransition != null) StopCoroutine(blurTransition);
+        blurTransition = StartCoroutine(FadeFocalLength(0f));
     }
     
     public void Continue()
@@ -168,4 +195,22 @@ public class PauseMenu : MonoBehaviour
         SoundManager.Instance.PlayOneShot("ButtonClick");
         SceneManager.LoadScene("MenuScene");
     }
+
+    private IEnumerator FadeFocalLength(float target)
+    {
+        if (dof == null) yield break;
+
+        float start = dof.focalLength.value;
+        float elapsed = 0f;
+
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / transitionDuration);
+            yield return null;
+        }
+
+        dof.focalLength.value = target;
+    }
+
 }
