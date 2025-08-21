@@ -107,6 +107,15 @@ public class PlayerAbilitySystem : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CycleAbility(-1);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            CycleAbility(1);
+        }
+
         switch (currentAbility)
         {
             case PlayerAbility.Planting:
@@ -126,6 +135,26 @@ public class PlayerAbilitySystem : MonoBehaviour
         HandleMouseScroll();
     }
 
+    private void CycleAbility(int direction)
+    {
+        if (isDigging || isHarvesting)
+            return;
+
+        PlayerAbility[] validAbilities = {
+        PlayerAbility.Digging,
+        PlayerAbility.Planting,
+        PlayerAbility.Harvesting,
+        PlayerAbility.Removing
+    };
+
+        int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
+        if (currentIndex == -1) currentIndex = 0;
+
+        int nextIndex = (currentIndex + direction + validAbilities.Length) % validAbilities.Length;
+
+        SetAbility(validAbilities[nextIndex]);
+    }
+
     private void HandleMouseScroll()
     {
         if (isDigging || isHarvesting)
@@ -134,21 +163,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.01f)
         {
-            PlayerAbility[] validAbilities = {
-                PlayerAbility.Digging,
-                PlayerAbility.Planting,
-                PlayerAbility.Harvesting,
-                PlayerAbility.Removing
-            };
-
-            int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
-            if (currentIndex == -1) currentIndex = 0;
-
-            int nextIndex = scroll > 0
-                ? (currentIndex - 1 + validAbilities.Length) % validAbilities.Length
-                : (currentIndex + 1) % validAbilities.Length;
-
-            SetAbility(validAbilities[nextIndex]);
+            int direction = scroll > 0 ? -1 : 1;
+            CycleAbility(direction);
         }
     }
 
