@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 public enum PlayerAbility
@@ -87,6 +88,9 @@ public class PlayerAbilitySystem : MonoBehaviour
             progressBar.transform.position = Camera.main.WorldToScreenPoint(
                 progressBarTarget.position + progressBarOffset);
         }
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (currentAbility == PlayerAbility.Digging && !isDigging)
         {

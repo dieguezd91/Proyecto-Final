@@ -859,6 +859,14 @@ public class UIManager : MonoBehaviour
 
     public void BeginDragIcon(int slotIndex)
     {
+        PlantSlot slot = SeedInventory.Instance.GetPlantSlot(slotIndex);
+
+        if (slot == null || slot.data == null || slot.seedCount <= 0)
+        {
+            Debug.Log($"Slot {slotIndex + 1} vacío, no se puede arrastrar.");
+            return;
+        }
+
         _dragSourceIndex = slotIndex;
 
         _dragIcon = new GameObject("DragIcon");
