@@ -236,27 +236,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: InventoryPlaceholder
-      rect:
-        serializedVersion: 2
-        x: 387
-        y: 71
-        width: 125
-        height: 88
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e5e93f9a91c671443a2b428025c5d1e8
-      internalID: 450073570
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Shadow
       rect:
         serializedVersion: 2
@@ -409,8 +388,8 @@ TextureImporter:
         serializedVersion: 2
         x: 113
         y: 82
-        width: 38
-        height: 16
+        width: 13
+        height: 13
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -869,9 +848,9 @@ TextureImporter:
       name: RestorationButtonHeart
       rect:
         serializedVersion: 2
-        x: 315
-        y: 99
-        width: 42
+        x: 140
+        y: 83
+        width: 41
         height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -890,8 +869,8 @@ TextureImporter:
       name: RestorationButtonUI
       rect:
         serializedVersion: 2
-        x: 176
-        y: 94
+        x: 96
+        y: 142
         width: 96
         height: 18
       alignment: 0
@@ -1147,7 +1126,7 @@ TextureImporter:
         width: 56
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1155,6 +1134,174 @@ TextureImporter:
       bones: []
       spriteID: 1747859fe5f75f0489e0288faf52e258
       internalID: -972838167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: InventoryDeco
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 146
+        width: 175
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db14976590ed52b49b2533fdd017a343
+      internalID: -1338539560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthFull
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 95
+        width: 106
+        height: 9
+      alignment: 9
+      pivot: {x: 0.504717, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d24587eefdd3194459bd66a6b692f87d
+      internalID: -407143964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthEmpty
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 105
+        width: 106
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91348debc6811134497f8ffec8f12bbc
+      internalID: -676219007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaEmpty
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 116
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5c2f6a55acc6d2408042a955e16be25
+      internalID: 1545796611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ManaFull
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 116
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d16047f3a257fa4f9f8f09e50ea29cb
+      internalID: -1571704729
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseHealthFull
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 116
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d5aa40981dfef54294b19060f45ba9d
+      internalID: 1028575516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseHealthEmpty
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 116
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae95082581613c34f83ea1f821b115ff
+      internalID: 1895773835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthWhite
+      rect:
+        serializedVersion: 2
+        x: 363
+        y: 90
+        width: 106
+        height: 4
+      alignment: 9
+      pivot: {x: 0.504717, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b010e24ce67e0034fbb525aa41d00b4f
+      internalID: 1496787134
       vertices: []
       indices: 
       edges: []
@@ -1191,14 +1338,22 @@ TextureImporter:
       FillHouse: -1423815668
       FillLife: 1365419780
       FillMana: -359895768
+      HealthEmpty: -676219007
+      HealthFull: -407143964
+      HealthWhite: 1496787134
       HiddenBars: 1508131376
       HouseBar: -1551444634
+      HouseHealthEmpty: 1895773835
+      HouseHealthFull: 1028575516
       HouseTrim: -1821449813
       IngredientList: -132592085
       IngredientRequirement: -1902967201
+      InventoryDeco: -1338539560
       InventoryPlaceholder: 450073570
       LifeTrim: -498583606
       ListUI: 336679578
+      ManaEmpty: 1545796611
+      ManaFull: -1571704729
       ManaTrim: 981019556
       MoonStage0: 1841481835
       MoonStage1: -1304058712
