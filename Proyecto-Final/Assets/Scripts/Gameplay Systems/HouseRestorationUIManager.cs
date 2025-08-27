@@ -43,7 +43,7 @@ public class HouseRestorationUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.E) && GameManager.Instance.currentGameState != GameState.Night)
+        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && GameManager.Instance.currentGameState != GameState.Night)
         {
             ToggleUI();
         }

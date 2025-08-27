@@ -69,7 +69,7 @@ public class RitualAltar : MonoBehaviour
         if (playerInRange)
         {
             interactionPromptCanvas.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.E) && CanPerformRitual())
+            if (Input.GetKeyDown(KeyCode.F) && CanPerformRitual())
             {
                 StartCoroutine(PerformRitualCoroutine());
             }
