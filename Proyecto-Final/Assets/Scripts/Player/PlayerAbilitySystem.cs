@@ -191,6 +191,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         CancelCurrentAction();
 
+        if (currentAbility == ability) return;
+
         currentAbility = ability;
         OnAbilityChanged?.Invoke(currentAbility);
 
