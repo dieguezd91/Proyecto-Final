@@ -282,7 +282,7 @@ MonoBehaviour:
   spawning:
     clips:
     - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -291,7 +291,7 @@ MonoBehaviour:
   die:
     clips:
     - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
   hurt:
     clips:
     - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
-    volume: 1
+    volume: 0.5
     pitch: 1
     pitchVariation: 0.2
     loop: 0

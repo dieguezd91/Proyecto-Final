@@ -9,6 +9,8 @@ using UnityEngine.Rendering.Universal;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private InterfaceSoundBase interfaceSounds;
+    
     [Header("HEALTH BAR")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
@@ -130,6 +132,8 @@ public class UIManager : MonoBehaviour
 
 
     private int pendingSwapSlot = -1;
+    
+    public InterfaceSoundBase InterfaceSounds => interfaceSounds;
 
     public static UIManager Instance { get; private set; }
 
@@ -577,6 +581,7 @@ public class UIManager : MonoBehaviour
             playerController.SetMovementEnabled(false);
 
         GameManager.Instance?.SetGameState(GameState.OnInventory);
+        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
         Debug.Log("Inventario abierto");
     }
 
@@ -594,7 +599,8 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
             GameManager.Instance.SetGameState(GameState.Digging);
-
+        
+        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
         Debug.Log("Inventario cerrado");
     }
 
@@ -990,7 +996,7 @@ public class UIManager : MonoBehaviour
     private void OnSlotKeyPressed(int i)
     {
         float now = Time.time;
-
+        
         if (pendingSwapSlot >= 0)
         {
             int first = pendingSwapSlot;
@@ -1010,7 +1016,6 @@ public class UIManager : MonoBehaviour
 
             InitializeSeedSlotsUI();
             UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
-
             Debug.Log($"Slots intercambiados: {first + 1} ↔ {second + 1}");
             return;
         }
@@ -1024,6 +1029,7 @@ public class UIManager : MonoBehaviour
         else
         {
             SeedInventory.Instance.SelectSlot(i);
+            InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
             UpdateSelectedSlotUI(i);
             //Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
         }
@@ -1129,6 +1135,8 @@ public class UIManager : MonoBehaviour
         {
             ability.SetAbility(PlayerAbility.Planting);
         }
+        
+        InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
 
         //Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
     }

@@ -82,6 +82,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenu.SetActive(true);
         isGamePaused = true;
         SoundManager.Instance.PauseAll();
+        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
 
         if (uiManager != null && uiManager.HUD != null)
         {
@@ -104,6 +105,7 @@ public class PauseMenu : MonoBehaviour
         OptionsMenu.SetActive(false);
         isGamePaused = false;
         SoundManager.Instance.ResumeAll();
+        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseClose);
 
         if (uiManager != null && uiManager.HUD != null && !uiManager.IsInstructionsOpen())
         {

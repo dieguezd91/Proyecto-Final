@@ -604,6 +604,9 @@ MonoBehaviour:
   OptionsMenu: {fileID: 0}
   instructionsPanel: {fileID: 0}
   uiManager: {fileID: 0}
+  blurVolume: {fileID: 0}
+  transitionDuration: 0.5
+  maxFocalLength: 200
 --- !u!1 &236408744
 GameObject:
   m_ObjectHideFlags: 0
@@ -3897,6 +3900,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1823928442}
   - component: {fileID: 1823928441}
+  - component: {fileID: 1823928443}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -3918,13 +3922,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: ButtonClick
-    clip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+    clip: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
     volume: 0.95
     pitch: 1
     playOnAwake: 0
     loop: 0
     mute: 0
     audioSource: {fileID: 0}
+  audioSourcePool: []
+  initialPoolSize: 5
 --- !u!4 &1823928442
 Transform:
   m_ObjectHideFlags: 0
@@ -3940,6 +3946,70 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1823928443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823928440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a692d839e4644afb8e3c05bee3408e26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuButtonHover:
+    clips:
+    - {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonClick:
+    clips:
+    - {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  gameInventoryBookOpen:
+    clips:
+    - {fileID: 8300000, guid: ad5d42d1512d9a1459fee08fce01d238, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  gameInventoryBookClose:
+    clips:
+    - {fileID: 8300000, guid: 02ba376e25976314e95dfd3ef2685f85, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  pauseOpen:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  pauseClose:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1 &1890195356
 GameObject:
   m_ObjectHideFlags: 0
