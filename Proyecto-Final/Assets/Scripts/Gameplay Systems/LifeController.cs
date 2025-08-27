@@ -90,6 +90,17 @@ public class LifeController : MonoBehaviour
 
         isDead = true;
 
+        // INMEDIATAMENTE deshabilitar movimiento y acciones
+        if (isPlayer)
+        {
+            var playerController = GetComponent<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(false);
+                playerController.SetCanAct(false);
+            }
+        }
+
         foreach (var col in GetComponents<Collider2D>())
             col.enabled = false;
 
@@ -118,23 +129,28 @@ public class LifeController : MonoBehaviour
                 GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(true);
                 animator.SetTrigger("Death");
                 animator.SetBool("IsDead", true);
-                GetComponent<PlayerController>()?.SetMovementEnabled(false);
-                GetComponent<PlayerController>()?.SetCanAct(false);
+
+                var playerController = GetComponent<PlayerController>();
+                if (playerController != null)
+                {
+                    playerController.SetMovementEnabled(false);
+                    playerController.SetCanAct(false);
+
+                    var rb = GetComponent<Rigidbody2D>();
+                    if (rb != null)
+                    {
+                        rb.velocity = Vector2.zero;
+                    }
+                }
             }
             else
             {
-                gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            if (animator != null && animator.runtimeAnimatorController != null && hasDeathAnimation)
-            {
-                animator.SetTrigger("Death");
-            }
-            else
-            {
-                Destroy(gameObject);
+                var playerController = GetComponent<PlayerController>();
+                if (playerController != null)
+                {
+                    playerController.SetMovementEnabled(false);
+                    playerController.SetCanAct(false);
+                }
             }
         }
     }
@@ -192,11 +208,22 @@ public class LifeController : MonoBehaviour
 
     private IEnumerator DelayedRevive()
     {
-        float delay = GameManager.Instance != null ? GameManager.Instance.playerRespawnTime : 2f;
+        float delay = GameManager.Instance != null ?
+            GameManager.Instance.playerRespawnTime : 2f;
 
         GameManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
 
-        yield return new WaitForSeconds(delay);
+        yield return new WaitForSeconds(0.5f);
+
+        isRespawning = true;
+        var playerController = GetComponent<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(false);
+        }
+
+        yield return new WaitForSeconds(delay - 0.5f);
 
         ResetLife();
         GetComponent<PlayerController>()?.SetMovementEnabled(true);

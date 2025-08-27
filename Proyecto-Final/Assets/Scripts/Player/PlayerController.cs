@@ -81,6 +81,15 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         GameState state = GameManager.Instance.currentGameState;
+
+        var lifeController = GetComponent<LifeController>();
+        if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
+        {
+            movementEnabled = false;
+            canAct = false;
+            return;
+        }
+
         bool inInventory = state == GameState.OnInventory;
         bool inCrafting = state == GameState.OnCrafting;
 
@@ -101,7 +110,7 @@ public class PlayerController : MonoBehaviour
 
         lastGameState = state;
 
-        if (gameStateController != null && state == GameState.Night)
+        if (gameStateController != null && state == GameState.Night && canAct)
         {
             HandleAttack();
         }
@@ -110,8 +119,19 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         GameState state = GameManager.Instance.currentGameState;
+
+        var lifeController = GetComponent<LifeController>();
+        if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
+        {
+            currentVelocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
+            animator.SetBool("IsMoving", false);
+            return;
+        }
+
         if (state == GameState.OnInventory || state == GameState.OnCrafting
-            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging() || state == GameState.OnRitual || state == GameState.OnAltarRestoration)
+            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging() ||
+            state == GameState.OnRitual || state == GameState.OnAltarRestoration)
         {
             currentVelocity = Vector2.zero;
             rb.velocity = Vector2.zero;
