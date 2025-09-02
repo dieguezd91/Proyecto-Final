@@ -48,8 +48,8 @@ public class CraftingUIManager : MonoBehaviour
         }
 
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        if (interactionPromptCanvas != null)
-            interactionPromptCanvas.SetActive(false);
+        //if (interactionPromptCanvas != null)
+        //    interactionPromptCanvas.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

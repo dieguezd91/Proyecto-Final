@@ -11,8 +11,8 @@ public class InteractionPrompt : MonoBehaviour
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
 
-        if (promptCanvas != null)
-            promptCanvas.SetActive(false);
+        //if (promptCanvas != null)
+        //    promptCanvas.SetActive(false);
     }
 
     private void Update()
@@ -22,13 +22,31 @@ public class InteractionPrompt : MonoBehaviour
 
         float dist = Vector2.Distance(player.position, transform.position);
 
-        if (dist <= showDistance)
-        {
+        //if (dist <= showDistance)
+        //{
+        //    promptCanvas.SetActive(true);
+        //}
+        //else
+        //{
+        //    promptCanvas.SetActive(false);
+        //}
+
+
+
+
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
             promptCanvas.SetActive(true);
-        }
-        else
-        {
-            promptCanvas.SetActive(false);
-        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        promptCanvas.SetActive(false);
+
     }
 }

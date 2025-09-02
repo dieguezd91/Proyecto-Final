@@ -48,11 +48,11 @@ public class HouseRestorationUIManager : MonoBehaviour
             ToggleUI();
         }
 
-        if (player != null && interactionPromptCanvas != null)
-        {
-            float dist = Vector2.Distance(transform.position, player.position);
-            interactionPromptCanvas.SetActive(dist <= promptDistance);
-        }
+        //if (player != null && interactionPromptCanvas != null)
+        //{
+        //    float dist = Vector2.Distance(transform.position, player.position);
+        //    interactionPromptCanvas.SetActive(dist <= promptDistance);
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D other)

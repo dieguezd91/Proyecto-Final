@@ -7,7 +7,7 @@ public class SpriteChangeOnProximity : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private Sprite nearSprite;
-    //[SerializeField] private Color gizmoColor = Color.yellow;
+    [SerializeField] private Color gizmoColor = Color.yellow;
 
     private void Start()
     {
@@ -21,21 +21,32 @@ public class SpriteChangeOnProximity : MonoBehaviour
             spriteRenderer.sprite = defaultSprite;
     }
 
-    private void Update()
+    //private void Update()
+    //{
+    //    if (player == null || spriteRenderer == null)
+    //        return;
+
+    //    float dist = Vector2.Distance(player.position, transform.position);
+
+    //    if (dist <= changeDistance)
+    //    {
+    //    }
+    //    else
+    //    {
+    //    }
+    //}
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (player == null || spriteRenderer == null)
-            return;
-
-        float dist = Vector2.Distance(player.position, transform.position);
-
-        if (dist <= changeDistance)
-        {
+        if (collision.CompareTag("Player"))
             spriteRenderer.sprite = nearSprite;
-        }
-        else
-        {
-            spriteRenderer.sprite = defaultSprite;
-        }
+
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        spriteRenderer.sprite = defaultSprite;
+
     }
 
 
