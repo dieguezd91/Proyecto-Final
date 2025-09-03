@@ -831,7 +831,7 @@ public class UIManager : MonoBehaviour
 
         // Actualizar textos
         seedNameText.text = data.plantName;
-        seedDescriptionText.text = $"{data.description}\nDías para crecer: {data.daysToGrow}";
+        seedDescriptionText.text = $"{data.description}\nDays to fully grow: {data.daysToGrow}";
 
         // Actualizar imagen
         if (data.fullyGrownSprite != null)
