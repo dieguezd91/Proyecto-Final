@@ -99,6 +99,10 @@ public class CraftingUIManager : MonoBehaviour
         craftingUIPanel.SetActive(false);
         isCraftingUIOpen = false;
 
+        foreach (Transform child in materialListContainer)
+            Destroy(child.gameObject);
+
+
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
         {
             GameManager.Instance.SetGameState(GameState.Digging);
@@ -175,6 +179,17 @@ public class CraftingUIManager : MonoBehaviour
                 var textComponent = reqUI.GetComponentInChildren<TextMeshProUGUI>();
                 if (textComponent != null)
                 {
+                    int playerAmount = InventoryManager.Instance.GetMaterialAmount(mat.materialType);
+
+                    if (playerAmount < mat.quantity)
+                    {
+                        textComponent.color = Color.red;
+                    }
+                    else
+                    {
+                        textComponent.color = Color.green;
+                    }
+
                     textComponent.text = $"{materialData.materialName} x{mat.quantity}";
                 }
 
@@ -224,6 +239,7 @@ public class CraftingUIManager : MonoBehaviour
 
         craftButton.interactable = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
     }
+
 
     public void ShowSelectedRecipe(PlantDataSO plantData)
     {
