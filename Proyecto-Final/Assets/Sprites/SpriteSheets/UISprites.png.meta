@@ -299,69 +299,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FillHouse
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 51
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: dbaeed16e2853614cbb18d7470a5d713
-      internalID: -1423815668
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FillLife
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 43
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 35c188aa5c501f94d85c7d5cf1983277
-      internalID: 1365419780
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: FillMana
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 35
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 798b55e55d3e588478fbe3d954660deb
-      internalID: -359895768
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Warning
       rect:
         serializedVersion: 2
@@ -546,27 +483,6 @@ TextureImporter:
       bones: []
       spriteID: bbd4061d0df582b48a08e62d02f9bf63
       internalID: 1146136175
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EmptyMana
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 35
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5296d32b48d5444448558839b950712a
-      internalID: 1316128634
       vertices: []
       indices: 
       edges: []
@@ -887,111 +803,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HouseTrim
-      rect:
-        serializedVersion: 2
-        x: 354
-        y: 18
-        width: 77
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: fbcfc6a11b976684bbd039f6687c6010
-      internalID: -1821449813
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: LifeTrim
-      rect:
-        serializedVersion: 2
-        x: 354
-        y: 10
-        width: 77
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 96f71e8f4b00ed64a99879291c2e4e12
-      internalID: -498583606
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ManaTrim
-      rect:
-        serializedVersion: 2
-        x: 354
-        y: 2
-        width: 77
-        height: 7
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: afc0705b37266814696ec320b36eac0d
-      internalID: 981019556
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EmpyLife
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 43
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: af1425893ccf46d408e3d79e4637ebfd
-      internalID: 1339065725
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: EmptyHouse
-      rect:
-        serializedVersion: 2
-        x: 439
-        y: 51
-        width: 70
-        height: 4
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8cd1fdee79e948347b679add52687368
-      internalID: -1902738031
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: UISprites_10
       rect:
         serializedVersion: 2
@@ -1142,10 +953,10 @@ TextureImporter:
       name: InventoryDeco
       rect:
         serializedVersion: 2
-        x: 329
-        y: 146
-        width: 175
-        height: 30
+        x: 463
+        y: 5
+        width: 39
+        height: 77
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1163,12 +974,12 @@ TextureImporter:
       name: HealthFull
       rect:
         serializedVersion: 2
-        x: 363
-        y: 95
-        width: 106
-        height: 9
-      alignment: 9
-      pivot: {x: 0.504717, y: 0.5}
+        x: 424
+        y: 33
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1184,10 +995,10 @@ TextureImporter:
       name: HealthEmpty
       rect:
         serializedVersion: 2
-        x: 363
-        y: 105
-        width: 106
-        height: 9
+        x: 442
+        y: 33
+        width: 17
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1205,10 +1016,10 @@ TextureImporter:
       name: ManaEmpty
       rect:
         serializedVersion: 2
-        x: 355
-        y: 116
-        width: 28
-        height: 28
+        x: 442
+        y: 14
+        width: 17
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1226,10 +1037,10 @@ TextureImporter:
       name: ManaFull
       rect:
         serializedVersion: 2
-        x: 387
-        y: 116
-        width: 28
-        height: 28
+        x: 424
+        y: 14
+        width: 17
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1247,10 +1058,10 @@ TextureImporter:
       name: HouseHealthFull
       rect:
         serializedVersion: 2
-        x: 417
-        y: 116
-        width: 28
-        height: 28
+        x: 384
+        y: 16
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1268,10 +1079,10 @@ TextureImporter:
       name: HouseHealthEmpty
       rect:
         serializedVersion: 2
-        x: 449
-        y: 116
-        width: 28
-        height: 28
+        x: 336
+        y: 16
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1289,10 +1100,10 @@ TextureImporter:
       name: HealthWhite
       rect:
         serializedVersion: 2
-        x: 363
-        y: 90
-        width: 106
-        height: 4
+        x: 443
+        y: 51
+        width: 15
+        height: 15
       alignment: 9
       pivot: {x: 0.504717, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
