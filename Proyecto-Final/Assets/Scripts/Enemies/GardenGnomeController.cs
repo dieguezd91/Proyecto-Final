@@ -180,7 +180,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         }
     }
 
-    private void OnDamaged(float damage)
+    private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
         soundBase?.PlaySound(EnemySoundType.Hurt);
     }

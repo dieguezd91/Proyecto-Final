@@ -438,7 +438,7 @@ public class Jefe : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint.position, specialRadius);
     }
 
-    private void OnDamaged(float damage)
+    private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
         soundBase?.PlaySound(EnemySoundType.Hurt);
     }

@@ -144,6 +144,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
         b.transform.rotation = firingPoint.rotation;
         Vector2 adjustedTargetPos = (Vector2)currentTarget.position + Vector2.down * aimYOffset;
         Vector2 direction = (adjustedTargetPos - (Vector2)transform.position).normalized;
+        soundBase?.PlaySound(EnemySoundType.Attack);
         b.SetDirection(direction);
     }
 
@@ -169,7 +170,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
         }
     }
 
-    private void OnDamaged(float damage)
+    private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
         soundBase?.PlaySound(EnemySoundType.Hurt);
     }

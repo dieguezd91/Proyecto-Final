@@ -6,6 +6,12 @@ using UnityEngine.Rendering.Universal;
 
 public class LifeController : MonoBehaviour
 {
+    public enum DamageType
+    {
+        SingleTick,
+        DamageOverTime
+    }
+
     [Header("HEALTH SETTINGS")]
     public float maxHealth = 100f;
     public float currentHealth;
@@ -19,7 +25,7 @@ public class LifeController : MonoBehaviour
     [Header("EVENTS")]
     public UnityEvent onDeath;
     public UnityEvent<float, float> onHealthChanged;
-    public UnityEvent<float> onDamaged;
+    public UnityEvent<float, DamageType> onDamaged;
 
     [Header("OBJECT DROP")]
     [SerializeField] private GameObject objetDrop;
@@ -27,6 +33,9 @@ public class LifeController : MonoBehaviour
     [Header("MANA DROP")]
     [SerializeField] private GameObject manaPickupPrefab;
     [SerializeField] private float manaDropChance = 1f;
+
+    [Header("AUDIO SETTINGS")]
+    [SerializeField] private float dotSoundCooldown = 0.2f;
 
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
@@ -36,6 +45,8 @@ public class LifeController : MonoBehaviour
     [SerializeField] private bool isPlayer;
     private Animator animator;
     [SerializeField] private bool hasDeathAnimation;
+
+    private float lastDotSoundTime = 0f;
 
     void Start()
     {
@@ -53,7 +64,7 @@ public class LifeController : MonoBehaviour
         isPlayer = GetComponent<PlayerController>() != null;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, DamageType damageType = DamageType.SingleTick)
     {
         if (isDead)
             return;
@@ -63,11 +74,22 @@ public class LifeController : MonoBehaviour
 
         if (damage > 0)
         {
-            onDamaged?.Invoke(damage);
+            onDamaged?.Invoke(damage, damageType);
 
             if (isPlayer)
             {
-                SoundManager.Instance.Play("PlayerHit");
+                if (damageType == DamageType.SingleTick)
+                {
+                    SoundManager.Instance.Play("PlayerHit");
+                }
+                else if (damageType == DamageType.DamageOverTime)
+                {
+                    if (Time.time - lastDotSoundTime >= dotSoundCooldown)
+                    {
+                        SoundManager.Instance.Play("PlayerBurn");
+                        lastDotSoundTime = Time.time;
+                    }
+                }
             }
             if (flashOnDamage && spriteRenderer != null)
             {

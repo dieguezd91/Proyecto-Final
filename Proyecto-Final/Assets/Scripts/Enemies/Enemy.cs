@@ -71,7 +71,7 @@ public class Enemy : MonoBehaviour, IEnemy
         }
     }
 
-    private void OnDamaged(float damage)
+    private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
         soundBase?.PlaySound(EnemySoundType.Hurt);
     }

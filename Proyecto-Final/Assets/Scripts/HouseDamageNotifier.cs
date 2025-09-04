@@ -10,7 +10,7 @@ public class HouseDamageNotifier : MonoBehaviour
     public Transform player;
 
     [Header("Ajustes")]
-    [Tooltip("Distancia mínima a la casa para ignorar la notificación")]
+    [Tooltip("Distancia mï¿½nima a la casa para ignorar la notificaciï¿½n")]
     public float ignoreRadius = 5f;
 
     void Start()
@@ -25,7 +25,7 @@ public class HouseDamageNotifier : MonoBehaviour
             houseLife.onDamaged.RemoveListener(OnHouseDamaged);
     }
 
-    private void OnHouseDamaged(float damage)
+    private void OnHouseDamaged(float damage, LifeController.DamageType damageType)
     {
         if (player == null || dangerIndicator == null)
             return;
