@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &268598257152014902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4135949981774482118}
+  - component: {fileID: 3539250624773024174}
+  m_Layer: 0
+  m_Name: SeedInventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4135949981774482118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268598257152014902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3539250624773024174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268598257152014902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223d3e544823f82459f16213aff873ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plantSlots:
+  - seedType: 14
+    plantPrefab: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
+    plantName: Attack Plant
+    plantIcon: {fileID: -1990512455, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    daysToGrow: 2
+    description: 
+    seedCount: 10
+    data: {fileID: 11400000, guid: 7706c49d722e2f348a6ef0ec0be6ffcb, type: 2}
+  - seedType: 1
+    plantPrefab: {fileID: 6736001113723686055, guid: a0286c64e2e6c4a4a9c4554ba174ecd3, type: 3}
+    plantName: Defense Plant
+    plantIcon: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    daysToGrow: 1
+    description: 
+    seedCount: 7
+    data: {fileID: 11400000, guid: f63882e6bad5d994d989aa1cbe877347, type: 2}
+  - seedType: 3
+    plantPrefab: {fileID: 3214456861987219935, guid: a3b61fa3938157140ad7b6fa0d84403f, type: 3}
+    plantName: Resource Plant
+    plantIcon: {fileID: -473241699, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    daysToGrow: 1
+    description: 
+    seedCount: 5
+    data: {fileID: 11400000, guid: 7bf0f3ef8064cf34f964f20572723a42, type: 2}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  selectedSlotIndex: 0

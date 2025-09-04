@@ -5539,6 +5539,7 @@ MonoBehaviour:
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 0
   isPlayer: 1

@@ -50,6 +50,11 @@ MonoBehaviour:
   houseControllers:
   - {fileID: 0}
   - {fileID: 0}
+  spawnpoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   gameOverDelay: 2
   dayCount: 0
   onNewDay:
@@ -57,5 +62,7 @@ MonoBehaviour:
       m_Calls: []
   playerRespawnTime: 5
   playerRespawnPoint: {fileID: 0}
+  worldAnimator: {fileID: 0}
+  playerLife: {fileID: 0}
   uiManager: {fileID: 0}
   currentGameState: 0

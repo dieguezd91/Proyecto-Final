@@ -10,7 +10,7 @@ using UnityEngine.Rendering.Universal;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private InterfaceSoundBase interfaceSounds;
-    
+
     [Header("HEALTH BAR")]
     [SerializeField] private Slider healthBar;
     [SerializeField] private Image fillImage;
@@ -57,7 +57,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Color slotHighlightColor = new Color(1f, 1f, 0.5f, 1f);
 
     private int _hoveredSlotIndex = -1;
-
 
     [Header("SELECTION COLORS")]
     [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
@@ -123,8 +122,6 @@ public class UIManager : MonoBehaviour
     private float lastPressTime = 0f;
     [SerializeField] private float doublePressThreshold = 0.3f;
 
-
-    // Drag & Drop fields
     private Transform _slotsParent;
     private Transform _draggingSlot;
     private GameObject _placeholder;
@@ -132,7 +129,7 @@ public class UIManager : MonoBehaviour
 
 
     private int pendingSwapSlot = -1;
-    
+
     public InterfaceSoundBase InterfaceSounds => interfaceSounds;
 
     public static UIManager Instance { get; private set; }
@@ -288,8 +285,6 @@ public class UIManager : MonoBehaviour
         if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
         {
             seedSlotsCanvasGroup.alpha = 0.1f;
-            //seedSlotsCanvasGroup.interactable = false;
-            //seedSlotsCanvasGroup.blocksRaycasts = false;
 
         }
 
@@ -326,7 +321,6 @@ public class UIManager : MonoBehaviour
             isInventoryOpen = false;
         }
     }
-
 
     public void InitializeSeedSlotsUI()
     {
@@ -369,7 +363,6 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
 
     void InitializeHealthBar()
     {
@@ -599,7 +592,7 @@ public class UIManager : MonoBehaviour
 
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
             GameManager.Instance.SetGameState(GameState.Digging);
-        
+
         InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
         Debug.Log("Inventario cerrado");
     }
@@ -676,12 +669,6 @@ public class UIManager : MonoBehaviour
 
     public bool IsInstructionsOpen() => isInstructionsOpen;
 
-    private void OnStartNightButtonClicked()
-    {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Night)
-            GameManager.Instance.TransitionToNight();
-    }
-
     public void UpdateManaUI()
     {
         if (manaBar == null || manaSystem == null) return;
@@ -735,8 +722,6 @@ public class UIManager : MonoBehaviour
         }
 
         seedSlotsCanvasGroup.alpha = targetAlpha;
-        //seedSlotsCanvasGroup.interactable = fadeIn;
-        //seedSlotsCanvasGroup.blocksRaycasts = fadeIn;
     }
 
 
@@ -763,8 +748,6 @@ public class UIManager : MonoBehaviour
             }
         }
     }
-
-
 
     private void RegisterSlotDragEvents()
     {
@@ -829,11 +812,9 @@ public class UIManager : MonoBehaviour
         tooltipPanel.SetActive(true);
         tooltipPanel.transform.position = Input.mousePosition + new Vector3(100f, -50f);
 
-        // Actualizar textos
         seedNameText.text = data.plantName;
         seedDescriptionText.text = $"{data.description}\nDays to fully grow: {data.daysToGrow}";
 
-        // Actualizar imagen
         if (data.fullyGrownSprite != null)
         {
             fullyGrownImage.sprite = data.fullyGrownSprite;
@@ -846,7 +827,6 @@ public class UIManager : MonoBehaviour
             fullyGrownImage.gameObject.SetActive(false);
         }
     }
-
 
     public void HideTooltip()
     {
@@ -869,7 +849,6 @@ public class UIManager : MonoBehaviour
 
         if (slot == null || slot.data == null || slot.seedCount <= 0)
         {
-            Debug.Log($"Slot {slotIndex + 1} vacío, no se puede arrastrar.");
             return;
         }
 
@@ -934,8 +913,6 @@ public class UIManager : MonoBehaviour
         }
     }
 
-
-
     public void EndDragIcon(PointerEventData data)
     {
         if (_dragIcon != null)
@@ -992,11 +969,10 @@ public class UIManager : MonoBehaviour
         _dragSourceIndex = -1;
     }
 
-
     private void OnSlotKeyPressed(int i)
     {
         float now = Time.time;
-        
+
         if (pendingSwapSlot >= 0)
         {
             int first = pendingSwapSlot;
@@ -1006,7 +982,6 @@ public class UIManager : MonoBehaviour
             {
                 HighlightSlot(first, false);
                 pendingSwapSlot = -1;
-                Debug.Log("Intercambio cancelado.");
                 return;
             }
 
@@ -1016,7 +991,6 @@ public class UIManager : MonoBehaviour
 
             InitializeSeedSlotsUI();
             UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
-            Debug.Log($"Slots intercambiados: {first + 1} ↔ {second + 1}");
             return;
         }
 
@@ -1024,14 +998,12 @@ public class UIManager : MonoBehaviour
         {
             pendingSwapSlot = i;
             HighlightSlot(i, true);
-            Debug.Log($"Modo intercambio ACTIVADO para slot {i + 1}. Elige otro (1–5).");
         }
         else
         {
             SeedInventory.Instance.SelectSlot(i);
             InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
             UpdateSelectedSlotUI(i);
-            //Debug.Log($"Slot {i + 1} seleccionado (semilla activa).");
         }
 
         lastPressSlot = i;
@@ -1086,7 +1058,6 @@ public class UIManager : MonoBehaviour
         slotB.data = tmpData;
     }
 
-
     public void AnimateRespawnRecovery(float duration)
     {
         if (playerLife == null || manaSystem == null) return;
@@ -1135,10 +1106,8 @@ public class UIManager : MonoBehaviour
         {
             ability.SetAbility(PlayerAbility.Planting);
         }
-        
-        InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
 
-        //Debug.Log($"Slot {slotIndex + 1} clicked → switched to Planting");
+        InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
     }
 
 
@@ -1185,7 +1154,6 @@ public class UIManager : MonoBehaviour
     {
         if (_hoveredSlotIndex >= 0)
         {
-            // Volvemos al color normal
             slotBackgrounds[_hoveredSlotIndex].color = normalColor;
             _hoveredSlotIndex = -1;
         }
