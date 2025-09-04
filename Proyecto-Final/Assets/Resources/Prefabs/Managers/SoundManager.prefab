@@ -165,5 +165,13 @@ MonoBehaviour:
     loop: 0
     mute: 0
     audioSource: {fileID: 0}
+  - name: PlayerBurn
+    clip: {fileID: 8300000, guid: 5457f92d674877e44bcdb3c5dfc15456, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
   audioSourcePool: []
   initialPoolSize: 15
