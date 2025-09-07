@@ -33,7 +33,7 @@ public class FireBullet : MonoBehaviour
 
     void Update()
     {
-        // Rotación
+        // Rotaciï¿½n
         if (rb.velocity.magnitude > 0.1f)
         {
             float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg - 90f;
@@ -65,7 +65,7 @@ public class FireBullet : MonoBehaviour
             if (life != null)
             {
                 float dmg = Random.Range(minDamage, maxDamage);
-                life.TakeDamage(dmg);
+                life.TakeDamage(dmg, damageElement: LifeController.DamageElement.Fire);
                 if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
                 {
                     CameraShaker.Instance?.Shake(0.3f, 0.3f);

@@ -12,6 +12,12 @@ public class LifeController : MonoBehaviour
         DamageOverTime
     }
 
+    public enum DamageElement
+    {
+        Normal,
+        Fire,
+    }
+
     [Header("HEALTH SETTINGS")]
     public float maxHealth = 100f;
     public float currentHealth;
@@ -64,7 +70,7 @@ public class LifeController : MonoBehaviour
         isPlayer = GetComponent<PlayerController>() != null;
     }
 
-    public void TakeDamage(float damage, DamageType damageType = DamageType.SingleTick)
+    public void TakeDamage(float damage, DamageType damageType = DamageType.SingleTick, DamageElement damageElement = DamageElement.Normal)
     {
         if (isDead)
             return;
@@ -80,8 +86,22 @@ public class LifeController : MonoBehaviour
             {
                 if (damageType == DamageType.SingleTick)
                 {
-                    SoundManager.Instance.Play("PlayerHit");
+                    switch (damageElement)
+                    {
+                        case DamageElement.Normal:
+                            SoundManager.Instance.Play("PlayerHit");
+                            break;
+                        
+                        case DamageElement.Fire:
+                            SoundManager.Instance.Play("PlayerHitBurn");
+                            break;
+                        
+                        default:
+                            SoundManager.Instance.Play("PlayerHit");
+                            break;
+                    }
                 }
+                
                 else if (damageType == DamageType.DamageOverTime)
                 {
                     if (Time.time - lastDotSoundTime >= dotSoundCooldown)
@@ -91,6 +111,7 @@ public class LifeController : MonoBehaviour
                     }
                 }
             }
+            
             if (flashOnDamage && spriteRenderer != null)
             {
                 StartCoroutine(FlashRoutine());
