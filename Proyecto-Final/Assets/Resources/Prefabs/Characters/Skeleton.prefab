@@ -127,7 +127,7 @@ MonoBehaviour:
     m_Bits: 2688
   chasingTarget: 0
   rb: {fileID: 0}
-  footstepCooldown: 0.35
+  footstepCooldown: 0.45
 --- !u!114 &8855017348105390996
 MonoBehaviour:
   m_ObjectHideFlags: 0
