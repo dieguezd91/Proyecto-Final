@@ -230,12 +230,26 @@ public class GameManager : MonoBehaviour
             if (worldAnimator == null) return;
         }
 
-        bool shouldBeNight = newState == GameState.Night;
+        HashSet<GameState> nonTransitionStates = new HashSet<GameState>
+    {
+        GameState.GameOver,
+        GameState.OnInventory,
+        GameState.OnCrafting,
+        GameState.OnAltarRestoration,
+        GameState.OnRitual
+    };
+
+        if (nonTransitionStates.Contains(newState))
+        {
+            return;
+        }
+
         bool currentlyNight = worldAnimator.IsNightMode;
 
         if (newState == GameState.Paused)
         {
             bool wasNight = (currentGameState == GameState.Night);
+
             if (wasNight != currentlyNight)
             {
                 if (wasNight)
@@ -243,8 +257,12 @@ public class GameManager : MonoBehaviour
                 else
                     worldAnimator.ForceDayMode();
             }
+            return;
         }
-        else if (shouldBeNight != currentlyNight)
+
+        bool shouldBeNight = newState == GameState.Night;
+
+        if (shouldBeNight != currentlyNight)
         {
             if (shouldBeNight)
                 worldAnimator.TransitionToNight();
