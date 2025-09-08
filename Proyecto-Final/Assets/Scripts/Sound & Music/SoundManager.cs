@@ -61,7 +61,11 @@ public class SoundManager : MonoBehaviour
 
     private AudioSource CreateNewAudioSource()
     {
-        var audioSource = gameObject.AddComponent<AudioSource>();
+        // Create a new GameObject for each AudioSource
+        GameObject audioObj = new GameObject($"PooledAudioSource_{audioSourcePool.Count}");
+        audioObj.transform.parent = this.transform;
+        AudioSource audioSource = audioObj.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;
         audioSourcePool.Add(audioSource);
         return audioSource;
     }
@@ -114,7 +118,7 @@ public class SoundManager : MonoBehaviour
         audioSource.PlayOneShot(sound.clip, sound.volume);
     }
 
-    public void Play(string name)
+    public void Play(string name, EnemySoundBase.SoundSourceType sourceType = EnemySoundBase.SoundSourceType.Global, Transform parent = null)
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
@@ -128,12 +132,34 @@ public class SoundManager : MonoBehaviour
             var sourceToRestart = playingSources[0];
             ConfigureAudioSource(sourceToRestart, sound);
             sourceToRestart.Stop();
+            // Set position and spatial blend based on sourceType
+            if (sourceType == EnemySoundBase.SoundSourceType.Global)
+            {
+                sourceToRestart.transform.position = Vector3.zero;
+                sourceToRestart.spatialBlend = 0f;
+            }
+            else if (parent != null)
+            {
+                sourceToRestart.transform.position = parent.position;
+                sourceToRestart.spatialBlend = 1f;
+            }
             sourceToRestart.Play();
             return;
         }
 
         var audioSource = GetAvailableAudioSource();
         ConfigureAudioSource(audioSource, sound);
+        // Set position and spatial blend based on sourceType
+        if (sourceType == EnemySoundBase.SoundSourceType.Global)
+        {
+            audioSource.transform.position = Vector3.zero;
+            audioSource.spatialBlend = 0f;
+        }
+        else if (parent != null)
+        {
+            audioSource.transform.position = parent.position;
+            audioSource.spatialBlend = 1f;
+        }
         audioSource.Play();
     }
 
@@ -236,7 +262,7 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Plays a SoundClipData using the pooling and limiting system.
     /// </summary>
-    public void PlayClip(SoundClipData data)
+    public void PlayClip(SoundClipData data, EnemySoundBase.SoundSourceType sourceType = EnemySoundBase.SoundSourceType.Global, Transform parent = null)
     {
         if (data == null) return;
         var clip = data.GetClip();
@@ -246,7 +272,6 @@ public class SoundManager : MonoBehaviour
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
-            // Restart the first one
             var sourceToRestart = playingSources[0];
             sourceToRestart.Stop();
             sourceToRestart.clip = clip;
@@ -254,6 +279,17 @@ public class SoundManager : MonoBehaviour
             sourceToRestart.pitch = data.GetPitch();
             sourceToRestart.loop = data.loop;
             sourceToRestart.mute = false;
+            // Set position and spatial blend based on sourceType
+            if (sourceType == EnemySoundBase.SoundSourceType.Global)
+            {
+                sourceToRestart.transform.position = Vector3.zero;
+                sourceToRestart.spatialBlend = 0f;
+            }
+            else if (parent != null)
+            {
+                sourceToRestart.transform.position = parent.position;
+                sourceToRestart.spatialBlend = 1f;
+            }
             if (data.loop)
                 sourceToRestart.Play();
             else
@@ -267,6 +303,17 @@ public class SoundManager : MonoBehaviour
         audioSource.pitch = data.GetPitch();
         audioSource.loop = data.loop;
         audioSource.mute = false;
+        // Set position and spatial blend based on sourceType
+        if (sourceType == EnemySoundBase.SoundSourceType.Global)
+        {
+            audioSource.transform.position = Vector3.zero;
+            audioSource.spatialBlend = 0f;
+        }
+        else if (parent != null)
+        {
+            audioSource.transform.position = parent.position;
+            audioSource.spatialBlend = 1f;
+        }
         if (data.loop)
             audioSource.Play();
         else

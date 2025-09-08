@@ -35,6 +35,9 @@ public class Enemy2 : MonoBehaviour, IEnemy
     private EnemySoundBase soundBase;
     private LifeController lifeController;
 
+    private float lastFootstepTime = 0f;
+    [SerializeField] private float footstepCooldown = 0.2f;
+
     private void Start()
     {
         if (rb == null) rb = GetComponent<Rigidbody2D>();
@@ -71,6 +74,13 @@ public class Enemy2 : MonoBehaviour, IEnemy
             Vector2 nextPos = rb.position + dir * speed * Time.fixedDeltaTime;
             rb.MovePosition(nextPos);
             LookDir(currentTarget.position, transform.position);
+
+            // Step sound logic (do not play audio yet)
+            if (Time.time - lastFootstepTime >= footstepCooldown)
+            {
+                soundBase.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+                lastFootstepTime = Time.time;
+            }
         }
         else
         {

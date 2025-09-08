@@ -65,6 +65,9 @@ public class Jefe : MonoBehaviour
 
     private EnemySoundBase soundBase;
 
+    private float lastFootstepTime = 0f;
+    [SerializeField] private float footstepCooldown = 0.2f;
+
 
     private void Start()
     {
@@ -147,6 +150,13 @@ public class Jefe : MonoBehaviour
         if (animator != null)
         {
             animator.SetBool("IsMoving", true);
+        }
+
+        // Step sound logic (do not play audio yet)
+        if (velocity.sqrMagnitude > 0.01f && Time.time - lastFootstepTime >= footstepCooldown)
+        {
+            soundBase.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+            lastFootstepTime = Time.time;
         }
     }
 

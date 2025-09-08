@@ -34,6 +34,9 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     private EnemySoundBase soundBase;
     private LifeController lifeController;
 
+    private float lastFootstepTime = 0f;
+    [SerializeField] private float footstepCooldown = 0.2f;
+
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -97,6 +100,13 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
         _velocity = Vector2.Lerp(_velocity, desired, acceleration * Time.fixedDeltaTime);
         _rb.velocity = _velocity;
+
+        // Step sound logic (do not play audio yet)
+        if (_velocity.sqrMagnitude > 0.01f && Time.time - lastFootstepTime >= footstepCooldown)
+        {
+            soundBase.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+            lastFootstepTime = Time.time;
+        }
 
         LookDir(targetPos, transform.position);
     }

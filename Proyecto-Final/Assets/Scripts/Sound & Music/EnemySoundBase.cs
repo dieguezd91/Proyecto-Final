@@ -43,15 +43,19 @@ public class EnemySoundBase : MonoBehaviour
         return soundData;
     }
     
+    public enum SoundSourceType { Global, Localized }
+    
     /// <summary>
     /// Plays the sound for the given EnemySoundType using SoundManager's pooling system.
     /// </summary>
-    public void PlaySound(EnemySoundType soundType)
+    public void PlaySound(EnemySoundType soundType, SoundSourceType sourceType = SoundSourceType.Global, Transform parent = null)
     {
         var soundData = GetSound(soundType);
         if (soundData == null) return;
         if (!soundData.CanPlay()) return;
-        SoundManager.Instance.PlayClip(soundData);
+        SoundManager.Instance.PlayClip(soundData, sourceType, parent == null ? this.transform : parent);
         soundData.SetLastPlayTime();
     }
+    
+    
 }

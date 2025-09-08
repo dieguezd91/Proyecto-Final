@@ -41,6 +41,9 @@ public class Enemy : MonoBehaviour, IEnemy
     private EnemySoundBase soundBase;
     private LifeController lifeController;
 
+    private float lastFootstepTime = 0f;
+    [SerializeField] private float footstepCooldown = 0.2f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -187,6 +190,13 @@ public class Enemy : MonoBehaviour, IEnemy
 
             if (anim != null)
                 anim.SetBool("isMoving", true);
+
+            // Step sound logic (do not play audio yet)
+            if (Time.time - lastFootstepTime >= footstepCooldown)
+            {
+                soundBase.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+                lastFootstepTime = Time.time;
+            }
 
             LookAtDirection(direction);
         }
