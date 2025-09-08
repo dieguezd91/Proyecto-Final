@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour, IEnemy
         {
             lifeController.onDamaged.AddListener(OnDamaged);
         }
-        soundBase?.PlaySound(EnemySoundType.Spawning);
+        soundBase?.PlaySound(EnemySoundType.Spawning, EnemySoundBase.SoundSourceType.Localized, transform);
 
         if (player == null)
         {
@@ -76,7 +76,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        soundBase?.PlaySound(EnemySoundType.Hurt);
+        soundBase?.PlaySound(EnemySoundType.Hurt, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     void Update()
@@ -209,7 +209,7 @@ public class Enemy : MonoBehaviour, IEnemy
 
     public void PerformSwordHit()
     {
-        soundBase?.PlaySound(EnemySoundType.Attack);
+        soundBase?.PlaySound(EnemySoundType.Attack, EnemySoundBase.SoundSourceType.Localized, transform);
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
         HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
 
@@ -266,7 +266,7 @@ public class Enemy : MonoBehaviour, IEnemy
         isDead = true;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
-        soundBase?.PlaySound(EnemySoundType.Die);
+        soundBase?.PlaySound(EnemySoundType.Die, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     public void OnAttackAnimationEnd()

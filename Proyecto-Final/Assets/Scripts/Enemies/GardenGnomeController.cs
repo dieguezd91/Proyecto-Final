@@ -57,7 +57,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     {
         var p = GameObject.FindGameObjectWithTag("Player");
         if (p != null) _player = p.transform;
-        soundBase?.PlaySound(EnemySoundType.Spawning);
+        soundBase?.PlaySound(EnemySoundType.Spawning, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     void Update()
@@ -192,7 +192,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        soundBase?.PlaySound(EnemySoundType.Hurt);
+        soundBase?.PlaySound(EnemySoundType.Hurt, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     public void MarkAsDead()
@@ -200,7 +200,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         isDead = true;
         _rb.velocity = Vector2.zero;
         _rb.isKinematic = true;
-        soundBase?.PlaySound(EnemySoundType.Die);
+        soundBase?.PlaySound(EnemySoundType.Die, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     void OnDestroy()

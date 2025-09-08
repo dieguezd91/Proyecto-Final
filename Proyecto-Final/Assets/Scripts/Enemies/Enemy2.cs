@@ -48,7 +48,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
         {
             lifeController.onDamaged.AddListener(OnDamaged);
         }
-        soundBase?.PlaySound(EnemySoundType.Spawning);
+        soundBase?.PlaySound(EnemySoundType.Spawning, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     private void Update()
@@ -154,7 +154,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
         b.transform.rotation = firingPoint.rotation;
         Vector2 adjustedTargetPos = (Vector2)currentTarget.position + Vector2.down * aimYOffset;
         Vector2 direction = (adjustedTargetPos - (Vector2)transform.position).normalized;
-        soundBase?.PlaySound(EnemySoundType.Attack);
+        soundBase?.PlaySound(EnemySoundType.Attack, EnemySoundBase.SoundSourceType.Localized, transform);
         b.SetDirection(direction);
     }
 
@@ -182,7 +182,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
 
     private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        soundBase?.PlaySound(EnemySoundType.Hurt);
+        soundBase?.PlaySound(EnemySoundType.Hurt, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     public void MarkAsDead()
@@ -190,7 +190,7 @@ public class Enemy2 : MonoBehaviour, IEnemy
         isDead = true;
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
-        soundBase?.PlaySound(EnemySoundType.Die);
+        soundBase?.PlaySound(EnemySoundType.Die, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     private void OnDestroy()

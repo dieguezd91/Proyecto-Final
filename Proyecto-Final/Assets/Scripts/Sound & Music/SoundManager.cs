@@ -135,13 +135,13 @@ public class SoundManager : MonoBehaviour
             // Set position and spatial blend based on sourceType
             if (sourceType == EnemySoundBase.SoundSourceType.Global)
             {
-                sourceToRestart.transform.position = Vector3.zero;
+                sourceToRestart.transform.position = Camera.main.transform.position;
                 sourceToRestart.spatialBlend = 0f;
             }
             else if (parent != null)
             {
                 sourceToRestart.transform.position = parent.position;
-                sourceToRestart.spatialBlend = 1f;
+                sourceToRestart.spatialBlend = 0.75f;
             }
             sourceToRestart.Play();
             return;
@@ -158,7 +158,7 @@ public class SoundManager : MonoBehaviour
         else if (parent != null)
         {
             audioSource.transform.position = parent.position;
-            audioSource.spatialBlend = 1f;
+            audioSource.spatialBlend = 0.75f;
         }
         audioSource.Play();
     }
@@ -288,7 +288,7 @@ public class SoundManager : MonoBehaviour
             else if (parent != null)
             {
                 sourceToRestart.transform.position = parent.position;
-                sourceToRestart.spatialBlend = 1f;
+                sourceToRestart.spatialBlend = 0.75f;
             }
             if (data.loop)
                 sourceToRestart.Play();
@@ -312,7 +312,7 @@ public class SoundManager : MonoBehaviour
         else if (parent != null)
         {
             audioSource.transform.position = parent.position;
-            audioSource.spatialBlend = 1f;
+            audioSource.spatialBlend = 0.75f;
         }
         if (data.loop)
             audioSource.Play();
