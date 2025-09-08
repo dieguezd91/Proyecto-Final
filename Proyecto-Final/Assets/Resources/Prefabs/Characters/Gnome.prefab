@@ -5007,6 +5007,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   spriteRenderer: {fileID: 0}
+  footstepCooldown: 0.35
 --- !u!114 &100918762742878077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5037,6 +5038,7 @@ MonoBehaviour:
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 1
+  dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
@@ -5207,17 +5209,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steps:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: c6eb9e53798819844a0f60d4fc5e0eed, type: 3}
+    - {fileID: 8300000, guid: d1c1f32a66204f3478390b5e0efa2068, type: 3}
+    - {fileID: 8300000, guid: 96f111d715a479d4b8b946324f4000c8, type: 3}
+    volume: 0.5
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   spawning:
     clips:
-    - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: 0be2e133f4d7bc348af41940153cbb49, type: 3}
+    volume: 0.25
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -5225,19 +5230,19 @@ MonoBehaviour:
     cooldownTime: 0
   die:
     clips:
-    - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: 46df699cec8795c48a74a2e6c26bea1d, type: 3}
+    volume: 0.75
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   hurt:
     clips:
-    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: dc12d8252d9d2d849a4734ee1c592ce5, type: 3}
+    volume: 0.8
     pitch: 1
-    pitchVariation: 0.2
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
@@ -5251,8 +5256,8 @@ MonoBehaviour:
     cooldownTime: 0
   attack:
     clips:
-    - {fileID: 0}
-    volume: 1
+    - {fileID: 8300000, guid: b19a78705afc458449f9769c62baea91, type: 3}
+    volume: 0.4
     pitch: 1
     pitchVariation: 0.1
     loop: 0

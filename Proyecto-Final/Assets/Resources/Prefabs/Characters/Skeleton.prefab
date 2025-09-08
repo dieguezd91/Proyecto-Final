@@ -127,6 +127,7 @@ MonoBehaviour:
     m_Bits: 2688
   chasingTarget: 0
   rb: {fileID: 0}
+  footstepCooldown: 0.35
 --- !u!114 &8855017348105390996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +158,7 @@ MonoBehaviour:
   objetDrop: {fileID: 1768544347340343859, guid: fe6532703752be5499a1180381f39d28, type: 3}
   manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 0.9
+  dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
@@ -278,7 +280,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: fbf5e3c8acdc605499a0175430a57662, type: 3}
     volume: 0.5
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0

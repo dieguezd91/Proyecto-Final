@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1081671753358194716}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 150, y: 1005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -95,7 +95,7 @@ MonoBehaviour:
     audioSource: {fileID: 0}
   - name: Step_Land
     clip: {fileID: 8300000, guid: 8bf91c27647502141bb5335b3069b330, type: 3}
-    volume: 0.7
+    volume: 1
     pitch: 1
     playOnAwake: 0
     loop: 0
@@ -103,7 +103,7 @@ MonoBehaviour:
     audioSource: {fileID: 0}
   - name: Step_Grass
     clip: {fileID: 8300000, guid: ed15a29e723b7214ea43525973cdb6bb, type: 3}
-    volume: 0.7
+    volume: 1
     pitch: 1
     playOnAwake: 0
     loop: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
     audioSource: {fileID: 0}
   - name: Step_Wood
     clip: {fileID: 8300000, guid: eea9624d96ae191439615ca598fe01fa, type: 3}
-    volume: 0.7
+    volume: 1
     pitch: 1.25
     playOnAwake: 0
     loop: 0
