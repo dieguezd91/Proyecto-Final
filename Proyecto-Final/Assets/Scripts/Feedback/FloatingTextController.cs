@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 public class FloatingTextController : MonoBehaviour
 {
-    [Header("Pickups UI")]
+    [Header("Shared UI Panel")]
     [SerializeField] private Transform pickupPanel;
     [SerializeField] private GameObject pickupEntryPrefab;
     [SerializeField] private float pickupDisplayTime = 1.5f;
@@ -14,15 +15,32 @@ public class FloatingTextController : MonoBehaviour
     [SerializeField] private Color warningColor;
     [SerializeField] private Color defaultColor = Color.white;
 
-    private float pickupTimer;
+    [Header("Gold Feedback")]
+    [SerializeField] private Transform goldRewardPanel;
+    [SerializeField] private GameObject goldEntryPrefab;
+    [SerializeField] private float goldFeedbackDisplayTime = 6f;
+    [SerializeField] private Color goldRewardColor = new Color(1f, 0.8f, 0.2f);
+    [SerializeField] private Color goldTotalColor = new Color(1f, 0.9f, 0.3f);
 
+    public static FloatingTextController Instance { get; private set; }
+
+    private float panelTimer;
     private Dictionary<string, (int amount, GameObject entry)> pickups = new();
     private Dictionary<Transform, FloatingDamageText> damageTexts = new();
-
     private CanvasGroup pickupPanelCanvasGroup;
+
+    private List<GameObject> goldFeedbackEntries = new List<GameObject>();
+    private bool isShowingGoldFeedback = false;
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+
         if (pickupPanel != null)
             pickupPanelCanvasGroup = pickupPanel.GetComponent<CanvasGroup>();
 
@@ -31,19 +49,30 @@ public class FloatingTextController : MonoBehaviour
 
     void Update()
     {
-        if (pickupTimer > 0f)
+        if (panelTimer > 0f)
         {
-            pickupTimer -= Time.deltaTime;
-            if (pickupTimer <= 0f)
-                StartCoroutine(FadeOutPanel(pickupPanelCanvasGroup, ClearPickups));
+            panelTimer -= Time.deltaTime;
+            if (panelTimer <= 0f)
+            {
+                if (isShowingGoldFeedback)
+                {
+                    StartCoroutine(FadeOutPanel(pickupPanelCanvasGroup, ClearGoldFeedback));
+                }
+                else
+                {
+                    StartCoroutine(FadeOutPanel(pickupPanelCanvasGroup, ClearPickups));
+                }
+            }
         }
     }
 
     public void ShowPickup(string materialName, int amount, Sprite icon)
     {
+        if (isShowingGoldFeedback) return;
+
         if (pickupPanel == null || pickupEntryPrefab == null) return;
         StartCoroutine(FadeInPanel(pickupPanelCanvasGroup));
-        pickupTimer = pickupDisplayTime;
+        panelTimer = pickupDisplayTime;
 
         if (pickups.TryGetValue(materialName, out var data))
         {
@@ -63,11 +92,97 @@ public class FloatingTextController : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public struct GoldReward
+    {
+        public int goldAmount;
+        public string message;
+        public Color textColor;
+    }
+
+    public void ShowGoldFeedbackSequence(List<GoldReward> rewards, int totalGold)
+    {
+        if (goldRewardPanel == null || goldEntryPrefab == null)
+        {
+            return;
+        }
+
+        ClearPickups();
+
+        isShowingGoldFeedback = true;
+        StartCoroutine(FadeInPanel(pickupPanelCanvasGroup));
+        panelTimer = goldFeedbackDisplayTime;
+
+        if (rewards.Count == 0)
+        {
+            ShowGoldFeedbackEntry("The shadows watch in silence...", 0, new Color(0.6f, 0.2f, 0.2f));
+        }
+        else
+        {
+            foreach (var reward in rewards)
+            {
+                ShowGoldFeedbackEntry(reward.message, reward.goldAmount, reward.textColor);
+            }
+        }
+    }
+
+    private void ShowGoldFeedbackEntry(string message, int goldAmount, Color textColor)
+    {
+        var entry = Instantiate(goldEntryPrefab, goldRewardPanel);
+        var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
+        var img = entry.GetComponentInChildren<Image>();
+
+        if (txt != null)
+        {
+            string displayText = goldAmount > 0 ? $"{message}\n+{goldAmount} gold" : message;
+            txt.text = displayText;
+            txt.color = textColor;
+
+            if (goldAmount > 0)
+            {
+                txt.fontSize *= 1.1f;
+            }
+        }
+
+        if (img != null)
+        {
+            if (goldAmount > 0)
+            {
+                img.color = Color.white;
+            }
+            else
+            {
+                img.color = new Color(0.5f, 0.1f, 0.1f);
+            }
+        }
+
+        goldFeedbackEntries.Add(entry);
+    }
+
+
+    private void ClearGoldFeedback()
+    {
+        foreach (var entry in goldFeedbackEntries)
+        {
+            if (entry != null) Destroy(entry);
+        }
+        goldFeedbackEntries.Clear();
+        isShowingGoldFeedback = false;
+        SetPanelAlpha(pickupPanelCanvasGroup, 0f);
+    }
+
     private void ClearPickups()
     {
-        foreach (Transform t in pickupPanel) Destroy(t.gameObject);
+        foreach (Transform t in pickupPanel)
+        {
+            if (t.gameObject != null) Destroy(t.gameObject);
+        }
         pickups.Clear();
-        SetPanelAlpha(pickupPanelCanvasGroup, 0f);
+
+        if (!isShowingGoldFeedback)
+        {
+            SetPanelAlpha(pickupPanelCanvasGroup, 0f);
+        }
     }
 
     private void SetPanelAlpha(CanvasGroup cg, float alpha)
@@ -102,5 +217,17 @@ public class FloatingTextController : MonoBehaviour
         }
         cg.alpha = 0f;
         onComplete?.Invoke();
+    }
+
+    [ContextMenu("Test Gold Feedback")]
+    public void TestGoldFeedback()
+    {
+        List<GoldReward> testRewards = new List<GoldReward>
+    {
+        new GoldReward { goldAmount = 30, message = "Defenses Intact", textColor = new Color(0.3f, 0.9f, 0.4f) },
+        new GoldReward { goldAmount = 50, message = "Home Protected", textColor = new Color(1f, 0.8f, 0.2f) }
+    };
+
+        ShowGoldFeedbackSequence(testRewards, 80);
     }
 }

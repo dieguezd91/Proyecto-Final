@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class TributeSystem : MonoBehaviour
 {
@@ -48,36 +49,51 @@ public class TributeSystem : MonoBehaviour
 
     public void EvaluateAndGrantReward()
     {
+        List<FloatingTextController.GoldReward> rewards = new List<FloatingTextController.GoldReward>();
         int totalGold = 0;
-        string feedback = "";
 
         if (!anyPlantDestroyed)
         {
+            rewards.Add(new FloatingTextController.GoldReward
+            {
+                goldAmount = rewardNoPlantsDestroyed,
+                message = "Defenses Intact",
+                textColor = new Color(0.3f, 0.9f, 0.4f)
+            });
             totalGold += rewardNoPlantsDestroyed;
-            feedback += "Las defensas se mantuvieron firmes. +30 oro\n";
         }
 
         float currentHomeHealth = GameManager.Instance.home.GetComponent<LifeController>()?.currentHealth ?? 0f;
         if (Mathf.Approximately(currentHomeHealth, homeHealthAtNightStart))
         {
+            rewards.Add(new FloatingTextController.GoldReward
+            {
+                goldAmount = rewardHomeUntouched,
+                message = "Home Protected",
+                textColor = new Color(1f, 0.8f, 0.2f)
+            });
             totalGold += rewardHomeUntouched;
-            feedback += "La casa no recibió daño. +50 oro\n";
         }
 
         if (!playerTookDamage)
         {
+            rewards.Add(new FloatingTextController.GoldReward
+            {
+                goldAmount = rewardPlayerUnharmed,
+                message = "Witch Unharmed",
+                textColor = new Color(0.7f, 0.4f, 1f)
+            });
             totalGold += rewardPlayerUnharmed;
-            feedback += "La hechicera no fue herida. +20 oro\n";
         }
 
         if (totalGold > 0)
         {
             InventoryManager.Instance.AddGold(totalGold);
-            feedback += $"\n Recompensa total: {totalGold} oro";
         }
-        else
+
+        if (FloatingTextController.Instance != null)
         {
-            feedback = "Las sombras observan en silencio... No obtuviste recompensa.";
+            FloatingTextController.Instance.ShowGoldFeedbackSequence(rewards, totalGold);
         }
     }
 }
