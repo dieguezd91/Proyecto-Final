@@ -593,7 +593,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
             GameManager.Instance.SetGameState(GameState.Digging);
 
-        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
+        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookClose);
         Debug.Log("Inventario cerrado");
     }
 
@@ -1002,7 +1002,7 @@ public class UIManager : MonoBehaviour
         else
         {
             SeedInventory.Instance.SelectSlot(i);
-            InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
+            InterfaceSounds.PlaySound(InterfaceSoundType.OnSeedSelect);
             UpdateSelectedSlotUI(i);
         }
 

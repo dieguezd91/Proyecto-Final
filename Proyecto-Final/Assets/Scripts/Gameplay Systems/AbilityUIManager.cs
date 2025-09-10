@@ -85,7 +85,7 @@ public class AbilityUIManager : MonoBehaviour
     private void OnAbilityChanged(PlayerAbility newAbility)
     {
         UpdateButtonVisuals(newAbility);
-        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
+        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.OnAbilityChanged);
     }
 
     private void UpdateButtonVisuals(PlayerAbility currentAbility)

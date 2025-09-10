@@ -33,4 +33,7 @@ public enum InterfaceSoundType
     SliderDown,
     GameInventoryBookOpen,
     GameInventoryBookClose,
+    
+    OnAbilityChanged,
+    OnSeedSelect,
 }

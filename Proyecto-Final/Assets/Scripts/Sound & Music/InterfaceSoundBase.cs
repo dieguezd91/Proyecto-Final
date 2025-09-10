@@ -21,6 +21,9 @@ public class InterfaceSoundBase : MonoBehaviour
     public SoundClipData pauseOpen;
     public SoundClipData pauseClose;
     
+    public SoundClipData onAbilityChanged;
+    public SoundClipData onSeedSelect;
+    
     // Dictionary for runtime access
     private Dictionary<InterfaceSoundType, SoundClipData> soundDictionary;
     
@@ -40,6 +43,8 @@ public class InterfaceSoundBase : MonoBehaviour
             { InterfaceSoundType.GameInventoryBookClose, gameInventoryBookClose },
             { InterfaceSoundType.GamePauseOpen, pauseOpen},
             { InterfaceSoundType.GamePauseClose, pauseClose},
+            { InterfaceSoundType.OnAbilityChanged, onAbilityChanged },
+            { InterfaceSoundType.OnSeedSelect, onSeedSelect },
         };
     }
     
