@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SceneController : MonoBehaviour
 {
@@ -15,7 +18,6 @@ public class SceneController : MonoBehaviour
 
     public void OnPlay()
     {
-        SoundManager.Instance.PlayOneShot("ButtonClick");
         ResetPersistentManagers();
         SceneManager.LoadScene("GameScene");
     }
@@ -72,7 +74,10 @@ public class SceneController : MonoBehaviour
 
     public void CloseGame()
     {
-        SoundManager.Instance.PlayOneShot("ButtonClick");
+        #if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+        #else
         Application.Quit();
+        #endif
     }
 }

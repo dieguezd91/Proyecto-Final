@@ -5,7 +5,17 @@ public class InterfaceSoundBase : MonoBehaviour
 {
     [Header("Sound Effects")]
     public SoundClipData menuButtonHover;
+    public SoundClipData menuButtonDisabledHover;
     public SoundClipData menuButtonClick;
+    public SoundClipData menuButtonDisabledClick;
+    
+    [Header("Menu Button Specific Sounds")]
+    public SoundClipData menuButtonPlay;
+    public SoundClipData menuButtonOptions;
+    public SoundClipData menuButtonControls;
+    public SoundClipData menuButtonExit;
+    
+    [Header("Game Interface Sounds")]
     public SoundClipData gameInventoryBookOpen;
     public SoundClipData gameInventoryBookClose;
     public SoundClipData pauseOpen;
@@ -19,7 +29,13 @@ public class InterfaceSoundBase : MonoBehaviour
         soundDictionary = new Dictionary<InterfaceSoundType, SoundClipData>
         {
             { InterfaceSoundType.MenuButtonHover, menuButtonHover },
+            { InterfaceSoundType.MenuButtonDisabledHover, menuButtonDisabledHover },
             { InterfaceSoundType.MenuButtonClick, menuButtonClick },
+            { InterfaceSoundType.MenuButtonDisabledClick, menuButtonDisabledClick },
+            { InterfaceSoundType.MenuButtonPlay, menuButtonPlay },
+            { InterfaceSoundType.MenuButtonOptions, menuButtonOptions },
+            { InterfaceSoundType.MenuButtonControls, menuButtonControls },
+            { InterfaceSoundType.MenuButtonExit, menuButtonExit },
             { InterfaceSoundType.GameInventoryBookOpen, gameInventoryBookOpen },
             { InterfaceSoundType.GameInventoryBookClose, gameInventoryBookClose },
             { InterfaceSoundType.GamePauseOpen, pauseOpen},

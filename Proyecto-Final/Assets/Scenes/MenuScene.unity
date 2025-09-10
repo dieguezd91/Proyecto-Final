@@ -344,6 +344,7 @@ GameObject:
   - component: {fileID: 199590708}
   - component: {fileID: 199590707}
   - component: {fileID: 199590706}
+  - component: {fileID: 199590710}
   m_Layer: 5
   m_Name: Options
   m_TagString: Untagged
@@ -478,6 +479,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 199590704}
   m_CullTransparentMesh: 1
+--- !u!114 &199590710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199590704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e034d619f56445c8cc8b2d05f31ca22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuButtonType: 1
+  interfaceSoundBase: {fileID: 0}
+  OnPlayButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &229765118
 GameObject:
   m_ObjectHideFlags: 0
@@ -890,6 +941,7 @@ GameObject:
   - component: {fileID: 291401502}
   - component: {fileID: 291401501}
   - component: {fileID: 291401500}
+  - component: {fileID: 291401503}
   m_Layer: 5
   m_Name: Quit Button
   m_TagString: Untagged
@@ -1011,6 +1063,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 291401498}
   m_CullTransparentMesh: 1
+--- !u!114 &291401503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 291401498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e034d619f56445c8cc8b2d05f31ca22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuButtonType: 3
+  interfaceSoundBase: {fileID: 0}
+  OnPlayButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &317610035
 GameObject:
   m_ObjectHideFlags: 0
@@ -2441,6 +2543,7 @@ GameObject:
   - component: {fileID: 1023612534}
   - component: {fileID: 1023612533}
   - component: {fileID: 1023612532}
+  - component: {fileID: 1023612535}
   m_Layer: 5
   m_Name: Start Button
   m_TagString: Untagged
@@ -2562,6 +2665,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1023612530}
   m_CullTransparentMesh: 1
+--- !u!114 &1023612535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023612530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e034d619f56445c8cc8b2d05f31ca22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuButtonType: 0
+  interfaceSoundBase: {fileID: 0}
+  OnPlayButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1036298868
 GameObject:
   m_ObjectHideFlags: 0
@@ -2708,6 +2861,7 @@ GameObject:
   - component: {fileID: 1057516593}
   - component: {fileID: 1057516592}
   - component: {fileID: 1057516591}
+  - component: {fileID: 1057516594}
   m_Layer: 5
   m_Name: Controls Button
   m_TagString: Untagged
@@ -2829,6 +2983,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1057516589}
   m_CullTransparentMesh: 1
+--- !u!114 &1057516594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1057516589}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e034d619f56445c8cc8b2d05f31ca22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuButtonType: 2
+  interfaceSoundBase: {fileID: 0}
+  OnPlayButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonClicked:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnOptionsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnControlsButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
+  OnExitButtonDisabledHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1092520308
 GameObject:
   m_ObjectHideFlags: 0
@@ -3961,18 +4165,71 @@ MonoBehaviour:
   menuButtonHover:
     clips:
     - {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
-    volume: 1
+    volume: 0.7
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonDisabledHover:
+    clips:
+    - {fileID: 8300000, guid: 20ddc502d6288df43a8401a4ef6060cd, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   menuButtonClick:
     clips:
     - {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonDisabledClick:
+    clips: []
     volume: 1
     pitch: 1
     pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonPlay:
+    clips:
+    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonOptions:
+    clips:
+    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonControls:
+    clips:
+    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  menuButtonExit:
+    clips:
+    - {fileID: 8300000, guid: 5f6fb209a6b10634fa7939155960acba, type: 3}
+    volume: 0.7
+    pitch: 1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
