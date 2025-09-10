@@ -127,13 +127,21 @@ public class HouseRestorationUIManager : MonoBehaviour
                 var opt = restorationSystem.GetOption(i);
                 string materialIcon = GetMaterialSpriteName(opt.materialRequired);
 
-                optionLabels[i].text =
-                    $"{opt.restorePercentage}% HP\n" +
-                    $"<sprite name=\"GoldIcon\"> {opt.goldCost}  +  <sprite name=\"{materialIcon}\"> 1";
+                bool hasGold = InventoryManager.Instance.GetGold() >= opt.goldCost;
+                bool hasMaterial = InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
+
+                string goldText = $"<color={(hasGold ? "green" : "red")}><sprite name=\"GoldIcon\"> {opt.goldCost}</color>";
+
+                string materialText = $"<color={(hasMaterial ? "green" : "red")}><sprite name=\"{materialIcon}\"> 1</color>";
+
+                optionLabels[i].text = $"{opt.restorePercentage}% HP\n{goldText}  +  {materialText}";
             }
+
             optionButtons[i].interactable = !restorationSystem.HasRestoredToday();
         }
     }
+
+
 
 
     private void OnSliderChanged(float value)
