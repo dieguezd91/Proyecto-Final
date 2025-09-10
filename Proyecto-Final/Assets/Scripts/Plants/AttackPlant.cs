@@ -15,6 +15,9 @@ public class AttackPlant : Plant
     private bool canShoot = false;
     private Transform target;
 
+    private bool isPerformingAttack = false;
+    private Transform queuedTarget;
+
     protected override void Start()
     {
         base.Start();
@@ -39,7 +42,7 @@ public class AttackPlant : Plant
     {
         canShoot = IsFullyGrown();
 
-        if (canShoot)
+        if (canShoot && !isPerformingAttack)
         {
             DetectEnemies();
 
@@ -48,7 +51,7 @@ public class AttackPlant : Plant
                 attackTimer += Time.deltaTime;
                 if (attackTimer >= cooldown)
                 {
-                    Shoot();
+                    StartAttackSequence();
                     attackTimer = 0f;
                 }
 
@@ -81,20 +84,40 @@ public class AttackPlant : Plant
         target = closestEnemy;
     }
 
-
-    void Shoot()
+    void StartAttackSequence()
     {
-        if (projectile != null && target != null)
+        if (target != null && animator != null)
         {
-            GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
-            Spell projectileComponent = projectileObj.GetComponent<Spell>();
+            isPerformingAttack = true;
 
-            if (projectileComponent != null)
+            queuedTarget = target;
+
+            animator.SetTrigger("Attack");
+        }
+    }
+
+    public void OnShootAnimationEvent()
+    {
+        if (projectile != null && queuedTarget != null)
+        {
+            if (queuedTarget.gameObject.activeInHierarchy)
             {
-                Vector2 direction = (target.position - firePoint.position).normalized;
-                projectileComponent.SetDirection(direction);
+                GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
+                Spell projectileComponent = projectileObj.GetComponent<Spell>();
+
+                if (projectileComponent != null)
+                {
+                    Vector2 direction = (queuedTarget.position - firePoint.position).normalized;
+                    projectileComponent.SetDirection(direction);
+                }
             }
         }
+    }
+
+    public void OnAttackAnimationEnd()
+    {
+        isPerformingAttack = false;
+        queuedTarget = null;
     }
 
     protected override void OnMature()

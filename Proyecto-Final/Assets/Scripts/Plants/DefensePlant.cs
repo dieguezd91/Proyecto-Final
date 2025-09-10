@@ -26,6 +26,16 @@ public class DefensePlant : Plant
         {
             lifeController.maxHealth = 150f;
             lifeController.currentHealth = lifeController.maxHealth;
+
+            lifeController.onDamaged.AddListener(OnDamageTaken);
+        }
+    }
+
+    private void OnDamageTaken(float damage, LifeController.DamageType damageType)
+    {
+        if (canReflect && damage > 0 && animator != null)
+        {
+            animator.SetTrigger("Attack");
         }
     }
 
@@ -92,15 +102,23 @@ public class DefensePlant : Plant
     {
         base.OnMature();
 
-        Debug.Log("DefensePlant: Plant is now fully grown and ready to defend!");
-
         LifeController lifeController = GetComponent<LifeController>();
         if (lifeController != null)
         {
             lifeController.maxHealth *= 2f;
             lifeController.currentHealth = lifeController.maxHealth;
-
             lifeController.onHealthChanged?.Invoke(lifeController.currentHealth, lifeController.maxHealth);
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        LifeController lifeController = GetComponent<LifeController>();
+        if (lifeController != null)
+        {
+            lifeController.onDamaged.RemoveListener(OnDamageTaken);
         }
     }
 

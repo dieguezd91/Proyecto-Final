@@ -26,7 +26,7 @@ public class Plant : MonoBehaviour
     private LifeController lifeController;
     [HideInInspector] public Vector3Int tilePosition;
 
-    private Animator animator;
+    protected Animator animator;
 
     protected PlayerAbilitySystem abilitySystem;
 
