@@ -360,7 +360,7 @@ MonoBehaviour:
   _enableClickSound: 1
   _onClickSound:
     clips:
-    - {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
+    - {fileID: 8300000, guid: 4229f6c289f32f843ba8e9db98d72d32, type: 3}
     volume: 0.7
     pitch: 1
     pitchVariation: 0.05
@@ -2840,7 +2840,7 @@ MonoBehaviour:
   _enableClickSound: 1
   _onClickSound:
     clips:
-    - {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
+    - {fileID: 8300000, guid: 4229f6c289f32f843ba8e9db98d72d32, type: 3}
     volume: 0.7
     pitch: 1
     pitchVariation: 0.05

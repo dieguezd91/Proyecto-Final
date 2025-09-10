@@ -110,7 +110,7 @@ MonoBehaviour:
     mute: 0
     audioSource: {fileID: 0}
   - name: ButtonClick
-    clip: {fileID: 8300000, guid: 35cf7766e9e2aa542811e896fde57989, type: 3}
+    clip: {fileID: 8300000, guid: 4229f6c289f32f843ba8e9db98d72d32, type: 3}
     volume: 0.7
     pitch: 1
     playOnAwake: 0
@@ -143,7 +143,7 @@ MonoBehaviour:
     audioSource: {fileID: 0}
   - name: HouseHit
     clip: {fileID: 8300000, guid: 25a7f5f354fd27346815ad6ba439e130, type: 3}
-    volume: 0.472
+    volume: 0.2
     pitch: 1
     playOnAwake: 0
     loop: 0
@@ -167,14 +167,6 @@ MonoBehaviour:
     audioSource: {fileID: 0}
   - name: PlayerBurn
     clip: {fileID: 8300000, guid: 5457f92d674877e44bcdb3c5dfc15456, type: 3}
-    volume: 0.7
-    pitch: 1
-    playOnAwake: 0
-    loop: 0
-    mute: 0
-    audioSource: {fileID: 0}
-  - name: PlayerHitBurn
-    clip: {fileID: 8300000, guid: 93d2af38cfa5cf14c8cc67cac495d05f, type: 3}
     volume: 0.7
     pitch: 1
     playOnAwake: 0

@@ -499,7 +499,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1823928442}
   - component: {fileID: 1823928441}
-  - component: {fileID: 1823928443}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -519,15 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f1e31c44f7f4944283b74eb99653ea6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
-  - name: ButtonClick
-    clip: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
-    volume: 0.95
-    pitch: 1
-    playOnAwake: 0
-    loop: 0
-    mute: 0
-    audioSource: {fileID: 0}
+  sounds: []
   audioSourcePool: []
   initialPoolSize: 5
 --- !u!4 &1823928442
@@ -545,142 +536,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1823928443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1823928440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a692d839e4644afb8e3c05bee3408e26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  menuButtonHover:
-    clips:
-    - {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonDisabledHover:
-    clips:
-    - {fileID: 8300000, guid: 20ddc502d6288df43a8401a4ef6060cd, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonClick:
-    clips:
-    - {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonDisabledClick:
-    clips:
-    - {fileID: 8300000, guid: 75ac255b508adda48b7ea92c0ef8e7b7, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonPlay:
-    clips:
-    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonOptions:
-    clips:
-    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonControls:
-    clips:
-    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  menuButtonExit:
-    clips:
-    - {fileID: 8300000, guid: 5f6fb209a6b10634fa7939155960acba, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.05
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  gameInventoryBookOpen:
-    clips:
-    - {fileID: 8300000, guid: ad5d42d1512d9a1459fee08fce01d238, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  gameInventoryBookClose:
-    clips:
-    - {fileID: 8300000, guid: 02ba376e25976314e95dfd3ef2685f85, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  pauseOpen:
-    clips: []
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  pauseClose:
-    clips: []
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  onAbilityChanged:
-    clips:
-    - {fileID: 8300000, guid: 5b375280484403b4d953df3a8aed2a6e, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
-  onSeedSelect:
-    clips:
-    - {fileID: 8300000, guid: 5fcbdbbd4ec11334d883ab481c766eb8, type: 3}
-    volume: 0.7
-    pitch: 1
-    pitchVariation: 0.1
-    loop: 0
-    randomizeClip: 1
-    cooldownTime: 0
 --- !u!1001 &3414399887393424781
 PrefabInstance:
   m_ObjectHideFlags: 0
