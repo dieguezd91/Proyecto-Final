@@ -227,7 +227,7 @@ public class Enemy : MonoBehaviour, IEnemy
                     float dmg = Random.Range(minDamage, maxDamage);
                     life.TakeDamage(dmg);
 
-                    if (currentTargetType == "player" && GameManager.Instance.uiManager != null)
+                    if (currentTargetType == "player" && LevelManager.Instance.uiManager != null)
                     {
                         CameraShaker.Instance?.Shake(0.3f, 0.3f);
                     }

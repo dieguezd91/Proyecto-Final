@@ -15,7 +15,7 @@ public class MusicManager : MonoBehaviour
     [Tooltip("Música de fondo durante la noche en la escena de juego")]
     public AudioClip nightMusic;
 
-    private AudioSource audioSource;
+    [SerializeField] private AudioSource audioSource;
 
     
     private GameState lastOfficialGameState = GameState.None;
@@ -30,7 +30,10 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        audioSource = gameObject.AddComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.playOnAwake = false;
         audioSource.volume = 0.4f;
@@ -59,10 +62,9 @@ public class MusicManager : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance == null)
+        if (LevelManager.Instance == null)
             return;
-
-        GameState currentState = GameManager.Instance.GetCurrentGameState();
+        GameState currentState = LevelManager.Instance.GetCurrentGameState();
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "MenuScene")
@@ -105,9 +107,9 @@ public class MusicManager : MonoBehaviour
 
         if (sceneName == "SampleScene" || sceneName == "GameScene")
         {
-            if (GameManager.Instance != null)
+            if (LevelManager.Instance != null)
             {
-                GameState current = GameManager.Instance.GetCurrentGameState();
+                GameState current = LevelManager.Instance.GetCurrentGameState();
 
                 if (IsDaylikeState(current))
                 {

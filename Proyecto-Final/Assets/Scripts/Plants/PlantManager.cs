@@ -29,17 +29,17 @@ public class PlantManager : MonoBehaviour
 
     private void Start()
     {
-        lastGameState = GameManager.Instance.currentGameState;
+        lastGameState = LevelManager.Instance.currentGameState;
 
-        if (GameManager.Instance != null && notifyPlantsOnNewDay)
-            GameManager.Instance.onNewDay.AddListener(OnGameManagerNewDay);
+        if (LevelManager.Instance != null && notifyPlantsOnNewDay)
+            LevelManager.Instance.onNewDay.AddListener(OnGameManagerNewDay);
     }
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.onNewDay.RemoveListener(OnGameManagerNewDay);
+            LevelManager.Instance.onNewDay.RemoveListener(OnGameManagerNewDay);
         }
     }
 

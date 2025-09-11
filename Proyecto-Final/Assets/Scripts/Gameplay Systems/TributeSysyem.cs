@@ -29,9 +29,9 @@ public class TributeSystem : MonoBehaviour
         anyPlantDestroyed = false;
         playerTookDamage = false;
 
-        if (GameManager.Instance != null && GameManager.Instance.home != null)
+        if (LevelManager.Instance != null && LevelManager.Instance.home != null)
         {
-            var homeLife = GameManager.Instance.home.GetComponent<LifeController>();
+            var homeLife = LevelManager.Instance.home.GetComponent<LifeController>();
             if (homeLife != null)
                 homeHealthAtNightStart = homeLife.currentHealth;
         }
@@ -63,7 +63,7 @@ public class TributeSystem : MonoBehaviour
             totalGold += rewardNoPlantsDestroyed;
         }
 
-        float currentHomeHealth = GameManager.Instance.home.GetComponent<LifeController>()?.currentHealth ?? 0f;
+        float currentHomeHealth = LevelManager.Instance.home.GetComponent<LifeController>()?.currentHealth ?? 0f;
         if (Mathf.Approximately(currentHomeHealth, homeHealthAtNightStart))
         {
             rewards.Add(new FloatingTextController.GoldReward

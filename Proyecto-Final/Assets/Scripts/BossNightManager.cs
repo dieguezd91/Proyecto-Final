@@ -48,9 +48,9 @@ public class BossNightManager : MonoBehaviour
             bossSpawnPoint = enemiesSpawner.spawnPoints[0];
         }
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.onNewDay.AddListener(OnNewDay);
+            LevelManager.Instance.onNewDay.AddListener(OnNewDay);
         }
     }
 
@@ -63,7 +63,7 @@ public class BossNightManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            int currentDay = GameManager.Instance.GetCurrentDay();
+            int currentDay = LevelManager.Instance.GetCurrentDay();
             if (currentDay != lastBossNightDay)
             {
                 isBossNight = true;
@@ -102,7 +102,7 @@ public class BossNightManager : MonoBehaviour
             return;
         }
 
-        int currentDay = GameManager.Instance.GetCurrentDay();
+        int currentDay = LevelManager.Instance.GetCurrentDay();
         bool isActuallyBossNight = IsBossNightDay(currentDay);
 
         if (!isActuallyBossNight)
@@ -182,7 +182,7 @@ public class BossNightManager : MonoBehaviour
         }
         else
         {
-            int bossNightCount = GameManager.Instance.GetCurrentDay() / bossNightInterval;
+            int bossNightCount = LevelManager.Instance.GetCurrentDay() / bossNightInterval;
             int bossIndex = (bossNightCount - 1) % bossPrefabs.Count;
             return bossPrefabs[bossIndex];
         }
@@ -227,7 +227,7 @@ public class BossNightManager : MonoBehaviour
     {
         if (InventoryManager.Instance != null)
         {
-            int goldReward = 100 + (GameManager.Instance.GetCurrentDay() / bossNightInterval) * 50;
+            int goldReward = 100 + (LevelManager.Instance.GetCurrentDay() / bossNightInterval) * 50;
             InventoryManager.Instance.AddGold(goldReward);
         }
     }
@@ -276,9 +276,9 @@ public class BossNightManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.onNewDay.RemoveListener(OnNewDay);
+            LevelManager.Instance.onNewDay.RemoveListener(OnNewDay);
         }
     }
 }

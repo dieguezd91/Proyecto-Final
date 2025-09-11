@@ -12,32 +12,17 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 {
     #region Audio Configuration
     [Header("Audio Clips Hover/Click")]
+    [SerializeField] [Range(0, 1)] private float _volume = 1f;
     [SerializeField] private bool _enableHoverSound = true;
-    [SerializeField] private SoundClipData _onHoverSound;
+    [SerializeField] private AudioClip _onHoverSound;
     [SerializeField] private bool _enableClickSound = true;
-    [SerializeField] private SoundClipData _onClickSound;
+    [SerializeField] private AudioClip _onClickSound;
     
     [Header("Audio Clips Disabled Hover/Click")]
     [SerializeField] private bool _enableDisabledClickSound = true;
-    [SerializeField] private SoundClipData _onDisabledClickSound;
+    [SerializeField] private AudioClip _onDisabledClickSound;
     [SerializeField] private bool _enableDisabledHoverSound = true;
-    [SerializeField] private SoundClipData _onDisabledHoverSound;
-    #endregion
-
-    #region Events
-    [Header("Button Events")]
-    [Space(5)]
-    public UnityEvent OnHover = new();
-    public UnityEvent OnClick = new();
-    public UnityEvent OnDisabledClick = new();
-    public UnityEvent OnDisabledHover = new();
-    private UnityEvent OnHoverExit = new();
-    private UnityEvent OnDisabledHoverExit = new();
-    #endregion
-
-    #region Advanced Settings
-    [Header("Advanced Settings")]
-    [SerializeField] private bool _enableDebugLogging;
+    [SerializeField] private AudioClip _onDisabledHoverSound;
     #endregion
 
     #region Private Fields
@@ -78,6 +63,11 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void Awake()
     {
         InitializeComponents();
+        if (buttonComponent != null)
+        {
+            buttonComponent.onClick.RemoveListener(HandleClick); // Prevent double subscription
+            buttonComponent.onClick.AddListener(HandleClick);
+        }
     }
 
     private void Start()
@@ -85,13 +75,12 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
         UpdateButtonState();
     }
 
-    private void OnValidate()
+    private void OnDestroy()
     {
-        // Validate SoundClipData settings
-        ValidateSoundClipData(_onHoverSound);
-        ValidateSoundClipData(_onClickSound);
-        ValidateSoundClipData(_onDisabledClickSound);
-        ValidateSoundClipData(_onDisabledHoverSound);
+        if (buttonComponent != null)
+        {
+            buttonComponent.onClick.RemoveListener(HandleClick);
+        }
     }
     #endregion
 
@@ -101,15 +90,7 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
         buttonComponent = GetComponent<Button>();
     }
 
-    private void ValidateSoundClipData(SoundClipData soundData)
-    {
-        if (soundData == null) return;
-        
-        // Ensure volume and pitch values are within valid ranges
-        soundData.volume = Mathf.Clamp01(soundData.volume);
-        soundData.pitch = Mathf.Clamp(soundData.pitch, 0.1f, 3f);
-        soundData.pitchVariation = Mathf.Clamp01(soundData.pitchVariation);
-    }
+    private void ValidateSoundClipData(AudioClip clip) { /* No-op for AudioClip */ }
     #endregion
 
     #region Event Handlers
@@ -119,10 +100,7 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
         {
             HandleDisabledClick();
         }
-        else
-        {
-            HandleClick();
-        }
+        // else: normal click is handled by Button.onClick (HandleClick)
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -143,15 +121,7 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         if (!isHovering) return;
         isHovering = false;
-            
-        if (currentState == ButtonState.Disabled)
-        {
-            HandleDisabledHoverExit();
-        }
-        else
-        {
-            HandleHoverExit();
-        }
+        // No UnityEvent for exit, but you can add custom logic here if needed
     }
     #endregion
 
@@ -159,58 +129,30 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void HandleClick()
     {
         PlaySound(_onClickSound, _enableClickSound);
-        OnClick?.Invoke();
     }
 
     private void HandleHover()
     {
         PlaySound(_onHoverSound, _enableHoverSound);
-        OnHover?.Invoke();
-    }
-
-    private void HandleHoverExit()
-    {
-        OnHoverExit?.Invoke();
     }
 
     private void HandleDisabledClick()
     {
         PlaySound(_onDisabledClickSound, _enableDisabledClickSound);
-        OnDisabledClick?.Invoke();
     }
 
     private void HandleDisabledHover()
     {
         PlaySound(_onDisabledHoverSound, _enableDisabledHoverSound);
-        OnDisabledHover?.Invoke();
-    }
-
-    private void HandleDisabledHoverExit()
-    {
-        OnDisabledHoverExit?.Invoke();
     }
     #endregion
 
     #region Audio Management
-    private void PlaySound(SoundClipData soundData, bool enabledFlag = true)
+    private void PlaySound(AudioClip clip, bool enabledFlag = true)
     {
-        if (!enabledFlag || soundData == null) return;
-
-        // Check if SoundManager exists
-        if (SoundManager.Instance == null)
-        {
-            return;
-        }
-
-        // Check cooldown before playing
-        if (!soundData.CanPlay())
-        {
-            return;
-        }
-        
-        SoundManager.Instance.PlayClip(soundData);
-        
-        soundData.SetLastPlayTime();
+        if (!enabledFlag || clip == null) return;
+        if (SoundManager.Instance == null) return;
+        SoundManager.Instance.PlayAudioClip(clip, _volume);
     }
     #endregion
 
@@ -235,47 +177,6 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
             HandleDisabledClick();
         else
             HandleClick();
-    }
-
-    /// <summary>
-    /// Gets a specific sound clip data for external modification
-    /// </summary>
-    /// <param name="soundType">The type of sound to get</param>
-    /// <returns>The SoundClipData for the specified type</returns>
-    public SoundClipData GetSoundData(ButtonSoundType soundType)
-    {
-        return soundType switch
-        {
-            ButtonSoundType.Hover => _onHoverSound,
-            ButtonSoundType.Click => _onClickSound,
-            ButtonSoundType.DisabledClick => _onDisabledClickSound,
-            ButtonSoundType.DisabledHover => _onDisabledHoverSound,
-            _ => null
-        };
-    }
-
-    /// <summary>
-    /// Sets a specific sound clip data
-    /// </summary>
-    /// <param name="soundType">The type of sound to set</param>
-    /// <param name="soundData">The new SoundClipData</param>
-    public void SetSoundData(ButtonSoundType soundType, SoundClipData soundData)
-    {
-        switch (soundType)
-        {
-            case ButtonSoundType.Hover:
-                _onHoverSound = soundData;
-                break;
-            case ButtonSoundType.Click:
-                _onClickSound = soundData;
-                break;
-            case ButtonSoundType.DisabledClick:
-                _onDisabledClickSound = soundData;
-                break;
-            case ButtonSoundType.DisabledHover:
-                _onDisabledHoverSound = soundData;
-                break;
-        }
     }
     #endregion
 
@@ -302,18 +203,5 @@ public enum ButtonState
 {
     Normal,
     Disabled
-}
-
-/// <summary>
-/// Represents the different types of button sounds
-/// </summary>
-public enum ButtonSoundType
-{
-    Hover,
-    Click,
-    DisabledClick,
-    DisabledHover,
-    HoverExit,
-    DisabledHoverExit
 }
 #endregion

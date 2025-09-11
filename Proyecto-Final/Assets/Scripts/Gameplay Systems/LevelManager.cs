@@ -33,7 +33,7 @@ public enum ElementEnum
     Lunar
 }
 
-public class GameManager : MonoBehaviour
+public class LevelManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private GameObject player;
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     public UIManager uiManager;
     public GameState currentGameState;
 
-    public static GameManager Instance { get; private set; }
+    public static LevelManager Instance { get; private set; }
 
     public event Action<GameState> OnGameStateChanged;
 

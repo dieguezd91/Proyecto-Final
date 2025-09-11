@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
+using UnityEngine.Audio;
 
 public class VolumeController : MonoBehaviour
 {
@@ -12,6 +12,12 @@ public class VolumeController : MonoBehaviour
     [Header("Mute Button")]
     [SerializeField] private Button muteButton;
 
+    [Header("Audio Mixer")]
+    [SerializeField] private AudioMixer audioMixer; // Assign the 'Master Volume' mixer asset here
+    // These must match the Exposed Parameter names in the 'Master Volume' mixer
+    [SerializeField] private string masterVolumeParam = "Master"; // Exposed on 'Master' group
+    [SerializeField] private string musicVolumeParam = "Music";   // Exposed on 'Music' subgroup
+    [SerializeField] private string sfxVolumeParam = "Effects";       // Exposed on 'Effects' subgroup
 
     private float _savedMasterVolume;
     private float _savedMusicVolume;
@@ -22,19 +28,15 @@ public class VolumeController : MonoBehaviour
     private float previousMusicVolume;
     private float previousSFXVolume;
 
-    private AudioSource musicSource;
-    private readonly HashSet<AudioSource> trackedSFXSources = new();
-
-    private float scanTimer = 0f;
-    private const float scanInterval = 1f;
-
     private void Awake()
     {
         _savedMasterVolume = PlayerPrefs.GetFloat("gameVolume", 0.5f);
         _savedMusicVolume = PlayerPrefs.GetFloat("musicVolume", 0.5f);
         _savedSFXVolume = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
 
-        AudioListener.volume = _savedMasterVolume;
+        SetMixerVolume(masterVolumeParam, _savedMasterVolume);
+        SetMixerVolume(musicVolumeParam, _savedMusicVolume);
+        SetMixerVolume(sfxVolumeParam, _savedSFXVolume);
         Application.quitting += OnApplicationQuit;
     }
 
@@ -60,72 +62,34 @@ public class VolumeController : MonoBehaviour
 
         if (muteButton != null)
             muteButton.onClick.AddListener(ToggleMute);
-
-        ScanAudioSources();
-    }
-
-    private void Update()
-    {
-        scanTimer += Time.unscaledDeltaTime;
-        if (scanTimer >= scanInterval)
-        {
-            ScanAudioSources();
-            scanTimer = 0f;
-        }
-    }
-
-    private void ScanAudioSources()
-    {
-        AudioSource[] allSources = FindObjectsOfType<AudioSource>();
-
-        foreach (AudioSource source in allSources)
-        {
-            if (source == null)
-                continue;
-
-            if (musicSource == null && source.loop && source.isPlaying)
-            {
-                musicSource = source;
-                musicSource.volume = _savedMusicVolume;
-                continue;
-            }
-
-            if (!trackedSFXSources.Contains(source) && source != musicSource)
-            {
-                source.volume = _savedSFXVolume;
-                trackedSFXSources.Add(source);
-            }
-        }
     }
 
     public void SetMasterVolume(float volume)
     {
         _savedMasterVolume = volume;
-        AudioListener.volume = volume;
+        SetMixerVolume(masterVolumeParam, volume);
         PlayerPrefs.SetFloat("gameVolume", volume);
     }
 
     public void SetMusicVolume(float volume)
     {
         _savedMusicVolume = volume;
-
-        if (musicSource != null)
-            musicSource.volume = volume;
-
+        SetMixerVolume(musicVolumeParam, volume);
         PlayerPrefs.SetFloat("musicVolume", volume);
     }
 
     public void SetSFXVolume(float volume)
     {
         _savedSFXVolume = volume;
-
-        foreach (var sfx in trackedSFXSources)
-        {
-            if (sfx != null && sfx != musicSource)
-                sfx.volume = volume;
-        }
-
+        SetMixerVolume(sfxVolumeParam, volume);
         PlayerPrefs.SetFloat("sfxVolume", volume);
+    }
+
+    private void SetMixerVolume(string parameter, float normalizedVolume)
+    {
+        // Convert [0,1] slider value to dB. -80 dB is silence, 0 dB is max.
+        float dB = Mathf.Log10(Mathf.Clamp(normalizedVolume, 0.0001f, 1f)) * 20f;
+        audioMixer.SetFloat(parameter, dB);
     }
 
     private void OnApplicationQuit()
@@ -143,9 +107,9 @@ public class VolumeController : MonoBehaviour
             previousMusicVolume = _savedMusicVolume;
             previousSFXVolume = _savedSFXVolume;
 
-            SetMasterVolume(0f);
-            SetMusicVolume(0f);
-            SetSFXVolume(0f);
+            SetMixerVolume(masterVolumeParam, 0f);
+            SetMixerVolume(musicVolumeParam, 0f);
+            SetMixerVolume(sfxVolumeParam, 0f);
 
             if (volumeSlider != null) volumeSlider.value = 0f;
             if (musicSlider != null) musicSlider.value = 0f;
@@ -163,7 +127,6 @@ public class VolumeController : MonoBehaviour
         }
     }
 
-
     private void OnDestroy()
     {
         if (volumeSlider != null)
@@ -175,7 +138,6 @@ public class VolumeController : MonoBehaviour
 
         if (muteButton != null)
             muteButton.onClick.RemoveListener(ToggleMute);
-
 
         Application.quitting -= OnApplicationQuit;
     }

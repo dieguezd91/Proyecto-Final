@@ -91,7 +91,7 @@ public class SeedInventory : MonoBehaviour
             selectedSlotIndex = slotIndex;
             onSlotSelected?.Invoke(selectedSlotIndex);
         }
-        GameManager.Instance.uiManager.UpdateSeedCountsUI();
+        LevelManager.Instance.uiManager.UpdateSeedCountsUI();
     }
 
     public GameObject GetSelectedPlantPrefab()
@@ -148,8 +148,8 @@ public class SeedInventory : MonoBehaviour
                 RemoveSeedFromSlot(index);
             }
 
-            GameManager.Instance.uiManager.UpdateSeedCountsUI();
-            GameManager.Instance.uiManager.InitializeSeedSlotsUI();
+            LevelManager.Instance.uiManager.UpdateSeedCountsUI();
+            LevelManager.Instance.uiManager.InitializeSeedSlotsUI();
         }
     }
 
@@ -181,6 +181,6 @@ public class SeedInventory : MonoBehaviour
 
             Debug.Log($"Unlocked new plant: {plantName} (Seed: {seedType}) in slot {slotIndex + 1}");
         }
-        GameManager.Instance.uiManager.UpdateSeedCountsUI();
+        LevelManager.Instance.uiManager.UpdateSeedCountsUI();
     }
 }

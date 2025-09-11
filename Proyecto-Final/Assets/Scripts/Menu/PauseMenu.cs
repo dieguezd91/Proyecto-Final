@@ -18,7 +18,6 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private float transitionDuration = 0.5f;
     [SerializeField] private float maxFocalLength = 200f;
 
-    public static bool isGamePaused = false;
     private GameState lastState = GameState.Day;
 
     private Coroutine blurTransition;
@@ -48,10 +47,10 @@ public class PauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape) &&
             !IsInstructionsPanelActive() &&
             !CraftingUIManager.isCraftingUIOpen && !HouseRestorationUIManager.isUIOpen &&
-            GameManager.Instance != null &&
-            GameManager.Instance.currentGameState != GameState.GameOver && GameManager.Instance.currentGameState != GameState.OnAltarRestoration && GameManager.Instance.currentGameState != GameState.OnRitual)
+            LevelManager.Instance != null &&
+            LevelManager.Instance.currentGameState != GameState.GameOver && LevelManager.Instance.currentGameState != GameState.OnAltarRestoration && LevelManager.Instance.currentGameState != GameState.OnRitual)
         {
-            if (isGamePaused)
+            if (GameManager.Instance != null && GameManager.Instance.IsGamePaused())
             {
                 Resume();
             }
@@ -73,14 +72,13 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Paused)
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
         {
-            lastState = GameManager.Instance.currentGameState;
+            lastState = LevelManager.Instance.currentGameState;
         }
 
-        Time.timeScale = 0f;
+        GameManager.Instance?.PauseGame();
         pauseMenu.SetActive(true);
-        isGamePaused = true;
         SoundManager.Instance.PauseAll();
         UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
 
@@ -89,9 +87,9 @@ public class PauseMenu : MonoBehaviour
             uiManager.HUD.SetActive(false);
         }
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.SetGameState(GameState.Paused);
+            LevelManager.Instance.SetGameState(GameState.Paused);
         }
 
         if (blurTransition != null) StopCoroutine(blurTransition);
@@ -100,10 +98,9 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance?.ResumeGame();
         pauseMenu.SetActive(false);
         OptionsMenu.SetActive(false);
-        isGamePaused = false;
         SoundManager.Instance.ResumeAll();
         UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseClose);
 
@@ -112,9 +109,9 @@ public class PauseMenu : MonoBehaviour
             uiManager.HUD.SetActive(true);
         }
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.SetGameState(lastState);
+            LevelManager.Instance.SetGameState(lastState);
         }
 
         if (blurTransition != null) StopCoroutine(blurTransition);
@@ -123,10 +120,9 @@ public class PauseMenu : MonoBehaviour
     
     public void Continue()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance?.ResumeGame();
         pauseMenu.SetActive(false);
         OptionsMenu.SetActive(false);
-        isGamePaused = false;
         SoundManager.Instance.PlayOneShot("ButtonClick");
 
         if (uiManager != null && uiManager.HUD != null && !uiManager.IsInstructionsOpen())
@@ -134,9 +130,9 @@ public class PauseMenu : MonoBehaviour
             uiManager.HUD.SetActive(true);
         }
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.SetGameState(lastState);
+            LevelManager.Instance.SetGameState(lastState);
         }
     }
 
@@ -157,8 +153,7 @@ public class PauseMenu : MonoBehaviour
             SoundManager.Instance.PlayOneShot("ButtonClick");
         }
 
-        Time.timeScale = 0f;
-        isGamePaused = true;
+        GameManager.Instance?.PauseGame();
     }
 
     public void CloseInstructions()
@@ -173,27 +168,25 @@ public class PauseMenu : MonoBehaviour
             instructionsPanel.SetActive(false);
         }
 
-        if (isGamePaused && pauseMenu != null)
+        if (GameManager.Instance != null && GameManager.Instance.IsGamePaused() && pauseMenu != null)
         {
             pauseMenu.SetActive(true);
-            Time.timeScale = 0f;
+            GameManager.Instance.PauseGame();
         }
         else
         {
-            Time.timeScale = 1f;
-
-            if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Paused)
+            GameManager.Instance?.ResumeGame();
+            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
             {
-                GameManager.Instance.SetGameState(lastState);
+                LevelManager.Instance.SetGameState(lastState);
             }
         }
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
+        GameManager.Instance?.ResumeGame();
         pauseMenu.SetActive(false);
-        isGamePaused = false;
         SoundManager.Instance.PlayOneShot("ButtonClick");
         SceneManager.LoadScene("MenuScene");
     }

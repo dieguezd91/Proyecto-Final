@@ -66,7 +66,7 @@ public class FireBullet : MonoBehaviour
             {
                 float dmg = Random.Range(minDamage, maxDamage);
                 life.TakeDamage(dmg, damageElement: LifeController.DamageElement.Fire);
-                if (collision.CompareTag("Player") && GameManager.Instance.uiManager != null)
+                if (collision.CompareTag("Player") && LevelManager.Instance.uiManager != null)
                 {
                     CameraShaker.Instance?.Shake(0.3f, 0.3f);
                 }

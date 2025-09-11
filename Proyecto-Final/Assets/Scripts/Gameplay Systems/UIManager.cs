@@ -164,9 +164,9 @@ public class UIManager : MonoBehaviour
         if (playerLife != null)
             UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
 
-        if (GameManager.Instance?.home != null)
+        if (LevelManager.Instance?.home != null)
         {
-            HouseLifeController homeLife = GameManager.Instance.home.GetComponent<HouseLifeController>();
+            HouseLifeController homeLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
             if (homeLife != null)
                 UpdateHomeHealthBar(homeLife.CurrentHealth, homeLife.MaxHealth);
         }
@@ -244,9 +244,9 @@ public class UIManager : MonoBehaviour
             lastPlayerHealth = playerLife.currentHealth;
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.home != null)
+        if (LevelManager.Instance != null && LevelManager.Instance.home != null)
         {
-            HouseLifeController homeLife = GameManager.Instance.home.GetComponent<HouseLifeController>();
+            HouseLifeController homeLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
             if (homeLife != null)
             {
                 homeLife.onHealthChanged.AddListener(UpdateHomeHealthBar);
@@ -406,9 +406,9 @@ public class UIManager : MonoBehaviour
 
     private void CheckGameStateChanges()
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != lastGameState)
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != lastGameState)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused &&
+            if (LevelManager.Instance.currentGameState == GameState.Paused &&
                 lastGameState != GameState.Paused &&
                 lastGameState != GameState.None)
             {
@@ -417,7 +417,7 @@ public class UIManager : MonoBehaviour
 
             UpdateUIElementsVisibility();
             UpdateAbilityUIVisibility();
-            lastGameState = GameManager.Instance.currentGameState;
+            lastGameState = LevelManager.Instance.currentGameState;
         }
     }
 
@@ -429,9 +429,9 @@ public class UIManager : MonoBehaviour
 
     private void UpdateUIElementsVisibility()
     {
-        if (GameManager.Instance == null) return;
+        if (LevelManager.Instance == null) return;
 
-        GameState state = GameManager.Instance.currentGameState;
+        GameState state = LevelManager.Instance.currentGameState;
 
         bool showHUD = state == GameState.Day ||
                        state == GameState.Digging ||
@@ -518,9 +518,9 @@ public class UIManager : MonoBehaviour
 
     private void UpdateAbilityUIVisibility()
     {
-        if (abilityPanel == null || GameManager.Instance == null) return;
+        if (abilityPanel == null || LevelManager.Instance == null) return;
 
-        GameState state = GameManager.Instance.currentGameState;
+        GameState state = LevelManager.Instance.currentGameState;
         bool showAbilities = state != GameState.Night &&
                              state != GameState.OnInventory &&
                              state != GameState.OnCrafting &&
@@ -551,12 +551,12 @@ public class UIManager : MonoBehaviour
     public void OpenInventory()
     {
         if (inventoryPanel == null || isInstructionsOpen) return;
-        if (GameManager.Instance != null &&
-            (GameManager.Instance.currentGameState == GameState.Night ||
-             GameManager.Instance.currentGameState == GameState.Paused ||
-             GameManager.Instance.currentGameState == GameState.OnCrafting ||
-             GameManager.Instance.currentGameState == GameState.GameOver ||
-             GameManager.Instance.currentGameState == GameState.OnAltarRestoration))
+        if (LevelManager.Instance != null &&
+            (LevelManager.Instance.currentGameState == GameState.Night ||
+             LevelManager.Instance.currentGameState == GameState.Paused ||
+             LevelManager.Instance.currentGameState == GameState.OnCrafting ||
+             LevelManager.Instance.currentGameState == GameState.GameOver ||
+             LevelManager.Instance.currentGameState == GameState.OnAltarRestoration))
         {
             return;
         }
@@ -573,7 +573,7 @@ public class UIManager : MonoBehaviour
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(false);
 
-        GameManager.Instance?.SetGameState(GameState.OnInventory);
+        LevelManager.Instance?.SetGameState(GameState.OnInventory);
         InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
         Debug.Log("Inventario abierto");
     }
@@ -590,8 +590,8 @@ public class UIManager : MonoBehaviour
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(true);
 
-        if (GameManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
-            GameManager.Instance.SetGameState(GameState.Digging);
+        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
+            LevelManager.Instance.SetGameState(GameState.Digging);
 
         InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookClose);
         Debug.Log("Inventario cerrado");
@@ -616,8 +616,8 @@ public class UIManager : MonoBehaviour
 
         openedFromPauseMenu = pausePanel != null && pausePanel.activeSelf;
 
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != GameState.Paused)
-            lastState = GameManager.Instance.currentGameState;
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
+            lastState = LevelManager.Instance.currentGameState;
 
         if (HUD != null) HUD.SetActive(false);
         if (seedSlots != null) seedSlots.SetActive(false);
@@ -629,8 +629,8 @@ public class UIManager : MonoBehaviour
         instructionsPanel.SetActive(true);
         isInstructionsOpen = true;
         SoundManager.Instance.PlayOneShot("ButtonClick");
-        if (GameManager.Instance != null)
-            GameManager.Instance.SetGameState(GameState.Paused);
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.SetGameState(GameState.Paused);
 
         if (playerController != null)
             playerController.SetMovementEnabled(false);
@@ -646,9 +646,7 @@ public class UIManager : MonoBehaviour
         if (openedFromPauseMenu && pausePanel != null)
         {
             pausePanel.SetActive(true);
-            PauseMenu.isGamePaused = true;
-            Time.timeScale = 0f;
-
+            GameManager.Instance?.PauseGame();
             if (HUD != null)
                 HUD.SetActive(false);
         }
@@ -660,8 +658,9 @@ public class UIManager : MonoBehaviour
             if (playerController != null)
                 playerController.SetMovementEnabled(true);
 
-            if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Paused)
-                GameManager.Instance.SetGameState(lastState);
+            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+                LevelManager.Instance.SetGameState(lastState);
+            GameManager.Instance?.ResumeGame();
         }
 
         Debug.Log("Panel de instrucciones cerrado");
@@ -727,8 +726,8 @@ public class UIManager : MonoBehaviour
 
     private void HandleSeedSlotInput()
     {
-        if (GameManager.Instance == null) return;
-        var state = GameManager.Instance.currentGameState;
+        if (LevelManager.Instance == null) return;
+        var state = LevelManager.Instance.currentGameState;
 
         bool validState =
             state == GameState.Day ||

@@ -42,8 +42,8 @@ public class Plant : MonoBehaviour
             plantCollider.enabled = false;
         }
 
-        plantingDay = GameManager.Instance.GetCurrentDay();
-        GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+        plantingDay = LevelManager.Instance.GetCurrentDay();
+        LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
 
         abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
 
@@ -68,9 +68,9 @@ public class Plant : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
         }
 
         if (lifeController != null)
@@ -181,7 +181,7 @@ public class Plant : MonoBehaviour
         if (growthCompleted)
             return 1.0f;
 
-        int currentDay = GameManager.Instance.GetCurrentDay();
+        int currentDay = LevelManager.Instance.GetCurrentDay();
         int daysSincePlanting = currentDay - plantingDay;
 
         if (daysSincePlanting <= 0)
@@ -202,7 +202,7 @@ public class Plant : MonoBehaviour
     {
         if (newState == GameState.Night)
         {
-            UpdateGrowthStatus(GameManager.Instance.GetCurrentDay());
+            UpdateGrowthStatus(LevelManager.Instance.GetCurrentDay());
         }
     }
 }

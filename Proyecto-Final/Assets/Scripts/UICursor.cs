@@ -38,7 +38,7 @@ public class UICursor : MonoBehaviour
 
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 
-        GameState state = GameManager.Instance != null ? GameManager.Instance.currentGameState : GameState.MainMenu;
+        GameState state = LevelManager.Instance != null ? LevelManager.Instance.currentGameState : GameState.MainMenu;
 
         SetCursorForGameState(state);
         playerAbilitySystem = FindObjectOfType<PlayerAbilitySystem>();
@@ -47,10 +47,10 @@ public class UICursor : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance == null)
+        if (LevelManager.Instance == null)
             return;
 
-        GameState state = GameManager.Instance.currentGameState;
+        GameState state = LevelManager.Instance.currentGameState;
 
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
@@ -193,7 +193,7 @@ public class UICursor : MonoBehaviour
 
     private CursorData GetCurrentCursorData()
     {
-        return GetCursorForState(GameManager.Instance.currentGameState);
+        return GetCursorForState(LevelManager.Instance.currentGameState);
     }
 
     private bool IsUsingTileSnap(GameState state)

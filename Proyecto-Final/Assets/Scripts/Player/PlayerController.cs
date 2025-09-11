@@ -56,9 +56,9 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         knockbackReceiver = GetComponent<KnockbackReceiver>();
 
-        GameManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+        LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
 
-        HandleGameStateChanged(GameManager.Instance.currentGameState);
+        HandleGameStateChanged(LevelManager.Instance.currentGameState);
 
         if (gameStateController == null)
         {
@@ -75,12 +75,12 @@ public class PlayerController : MonoBehaviour
             manaSystem = GetComponent<ManaSystem>();
         }
 
-        lastGameState = GameManager.Instance.currentGameState;
+        lastGameState = LevelManager.Instance.currentGameState;
     }
 
     void Update()
     {
-        GameState state = GameManager.Instance.currentGameState;
+        GameState state = LevelManager.Instance.currentGameState;
 
         var lifeController = GetComponent<LifeController>();
         if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
 
         movementEnabled = true;
 
-        bool isPaused = state == GameState.Paused || PauseMenu.isGamePaused;
+        bool isPaused = state == GameState.Paused || GameManager.Instance.IsGamePaused();
         if (isPaused)
         {
             movementEnabled = false;
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        GameState state = GameManager.Instance.currentGameState;
+        GameState state = LevelManager.Instance.currentGameState;
 
         var lifeController = GetComponent<LifeController>();
         if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
@@ -284,7 +284,7 @@ public class PlayerController : MonoBehaviour
     public void SetMovementEnabled(bool enabled)
     {
 
-        if (enabled && GameManager.Instance != null && (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused))
+        if (enabled && LevelManager.Instance != null && (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()))
         {
             return;
         }
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
 
     public void RefreshHandNightness()
     {
-        bool isNight = GameManager.Instance.currentGameState == GameState.Night;
+        bool isNight = LevelManager.Instance.currentGameState == GameState.Night;
         handAnimator.SetBool("IsNight", isNight);
         if (!isNight)
             handAnimator.SetBool("IsAttacking", false);

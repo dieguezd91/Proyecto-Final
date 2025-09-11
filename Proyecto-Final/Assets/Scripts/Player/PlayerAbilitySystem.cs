@@ -100,7 +100,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             float dist = Vector2.Distance(transform.position, cellWorldPos);
         }
 
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
             return;
         if (!IsAbilityGameState())
             return;
@@ -181,7 +181,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             return;
         }
 
-        if (GameManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance.currentGameState == GameState.Night)
             return;
 
         SetAbility(PlayerAbility.Planting);
@@ -199,19 +199,19 @@ public class PlayerAbilitySystem : MonoBehaviour
         switch (currentAbility)
         {
             case PlayerAbility.Digging:
-                GameManager.Instance.SetGameState(GameState.Digging);
+                LevelManager.Instance.SetGameState(GameState.Digging);
                 break;
             case PlayerAbility.Planting:
-                GameManager.Instance.SetGameState(GameState.Planting);
+                LevelManager.Instance.SetGameState(GameState.Planting);
                 break;
             case PlayerAbility.Harvesting:
-                GameManager.Instance.SetGameState(GameState.Harvesting);
+                LevelManager.Instance.SetGameState(GameState.Harvesting);
                 break;
             case PlayerAbility.Removing:
-                GameManager.Instance.SetGameState(GameState.Removing);
+                LevelManager.Instance.SetGameState(GameState.Removing);
                 break;
             default:
-                GameManager.Instance.SetGameState(GameState.Digging);
+                LevelManager.Instance.SetGameState(GameState.Digging);
                 break;
         }
     }
@@ -245,8 +245,8 @@ public class PlayerAbilitySystem : MonoBehaviour
             {
                 SoundManager.Instance.Play("Plant");
                 plantInventory.ConsumeSeedInSelectedSlot();
-                GameManager.Instance.uiManager.UpdateSeedCountsUI();
-                GameManager.Instance.uiManager.InitializeSeedSlotsUI();
+                LevelManager.Instance.uiManager.UpdateSeedCountsUI();
+                LevelManager.Instance.uiManager.InitializeSeedSlotsUI();
             }
             else if (!string.IsNullOrEmpty(reason))
             {
@@ -345,7 +345,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         while (isHarvesting && currentHarvestPlant != null)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
             {
                 yield return null;
                 continue;
@@ -446,7 +446,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void StartDigging(Vector2 position)
     {
-        if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
             return;
 
         isDigging = true;
@@ -473,7 +473,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         while (timer < digDuration)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused || PauseMenu.isGamePaused)
+            if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
             {
                 yield return null;
                 continue;
@@ -524,7 +524,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private bool IsAbilityGameState()
     {
-        var state = GameManager.Instance.currentGameState;
+        var state = LevelManager.Instance.currentGameState;
         return state == GameState.Day ||
                state == GameState.Digging ||
                state == GameState.Planting ||

@@ -65,16 +65,16 @@ public class LunarCycleManager : MonoBehaviour
         SetMoonPhase(MoonPhase.NewMoon);
         isInitialized = true;
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            GameManager.Instance.onNewDay.AddListener(OnNewDay);
-            lastGameState = GameManager.Instance.currentGameState;
+            LevelManager.Instance.onNewDay.AddListener(OnNewDay);
+            lastGameState = LevelManager.Instance.currentGameState;
 
-            if (GameManager.Instance.currentGameState != GameState.Night)
+            if (LevelManager.Instance.currentGameState != GameState.Night)
             {
                 ShowMoon(false);
             }
-            else if (GameManager.Instance.currentGameState == GameState.Night)
+            else if (LevelManager.Instance.currentGameState == GameState.Night)
             {
                 ShowMoon(true);
             }
@@ -83,9 +83,9 @@ public class LunarCycleManager : MonoBehaviour
 
     private void Update()
     {
-        if (!isInitialized || GameManager.Instance == null) return;
+        if (!isInitialized || LevelManager.Instance == null) return;
 
-        GameState currentState = GameManager.Instance.currentGameState;
+        GameState currentState = LevelManager.Instance.currentGameState;
 
         if (WasDayState(lastGameState) && currentState == GameState.Night)
         {
@@ -109,7 +109,7 @@ public class LunarCycleManager : MonoBehaviour
 
     private void OnNewDay(int dayCount)
     {
-        Debug.Log($"Nuevo día: {dayCount}. Fase lunar actual: {currentMoonPhase}");
+        Debug.Log($"Nuevo dï¿½a: {dayCount}. Fase lunar actual: {currentMoonPhase}");
     }
 
     public void SetMoonPhase(MoonPhase phase)

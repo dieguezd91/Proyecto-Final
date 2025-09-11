@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/RefactorMenu.unity
+    guid: 2a4c3b316c6a6ed4a979e895c780cf9e
+  - enabled: 1
     path: Assets/Scenes/MenuScene.unity
     guid: a2fd2b93e94c81746a009a82b5bcb22c
   - enabled: 1

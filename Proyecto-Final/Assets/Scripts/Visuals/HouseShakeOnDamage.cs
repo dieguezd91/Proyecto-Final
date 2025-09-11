@@ -61,7 +61,7 @@ public class HouseShakeOnDamage : MonoBehaviour
 
         while (elapsed < duration)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused)
+            if (LevelManager.Instance.currentGameState == GameState.Paused)
             {
                 yield return null;
                 continue;

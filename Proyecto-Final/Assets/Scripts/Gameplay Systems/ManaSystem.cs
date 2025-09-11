@@ -39,9 +39,9 @@ public class ManaSystem : MonoBehaviour
             lunarInfluenceManager = LunarInfluenceManager.Instance;
         }
 
-        if (GameManager.Instance != null)
+        if (LevelManager.Instance != null)
         {
-            lastGameState = GameManager.Instance.currentGameState;
+            lastGameState = LevelManager.Instance.currentGameState;
             isNight = lastGameState == GameState.Night;
         }
 
@@ -60,18 +60,18 @@ public class ManaSystem : MonoBehaviour
 
         StartCoroutine(RegenerateMana());
 
-        if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
         {
-            GameManager.Instance.uiManager.UpdateManaUI();
+            LevelManager.Instance.uiManager.UpdateManaUI();
         }
     }
 
     private void Update()
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState != lastGameState)
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != lastGameState)
         {
             bool wasNight = lastGameState == GameState.Night;
-            isNight = GameManager.Instance.currentGameState == GameState.Night;
+            isNight = LevelManager.Instance.currentGameState == GameState.Night;
 
             if (wasNight != isNight)
             {
@@ -90,14 +90,14 @@ public class ManaSystem : MonoBehaviour
 
                     OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-                    if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+                    if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
                     {
-                        GameManager.Instance.uiManager.UpdateManaUI();
+                        LevelManager.Instance.uiManager.UpdateManaUI();
                     }
                 }
             }
 
-            lastGameState = GameManager.Instance.currentGameState;
+            lastGameState = LevelManager.Instance.currentGameState;
         }
     }
 
@@ -106,9 +106,9 @@ public class ManaSystem : MonoBehaviour
         currentMana = Mathf.Clamp(amount, 0f, modifiedMaxMana);
         OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-        if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
         {
-            GameManager.Instance.uiManager.UpdateManaUI();
+            LevelManager.Instance.uiManager.UpdateManaUI();
         }
     }
 
@@ -125,9 +125,9 @@ public class ManaSystem : MonoBehaviour
                 {
                     currentMana = Mathf.Min(currentMana + manaToAdd, modifiedMaxMana);
 
-                    if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+                    if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
                     {
-                        GameManager.Instance.uiManager.UpdateManaUI();
+                        LevelManager.Instance.uiManager.UpdateManaUI();
                     }
                 }
             }
@@ -137,8 +137,8 @@ public class ManaSystem : MonoBehaviour
 
     private float GetCurrentRegenerationRate()
     {
-        bool isGameManagerValid = GameManager.Instance != null;
-        bool isNightState = isGameManagerValid && GameManager.Instance.currentGameState == GameState.Night;
+        bool isGameManagerValid = LevelManager.Instance != null;
+        bool isNightState = isGameManagerValid && LevelManager.Instance.currentGameState == GameState.Night;
         float baseRate = isNightState ? baseNightRegenerationRate : baseDayRegenerationRate;
         float lunarModifier = 1.0f;
 
@@ -167,14 +167,14 @@ public class ManaSystem : MonoBehaviour
 
     public bool UseMana(float amount)
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
             useLunarInfluence && lunarInfluenceManager != null)
         {
             float costModifier = lunarInfluenceManager.GetManaCostModifier();
             amount *= costModifier;
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
             useLunarInfluence && lunarCycleManager != null &&
             lunarCycleManager.GetCurrentMoonPhase() == MoonPhase.GibbousMoon)
         {
@@ -185,9 +185,9 @@ public class ManaSystem : MonoBehaviour
         {
             currentMana -= amount;
 
-            if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+            if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
             {
-                GameManager.Instance.uiManager.UpdateManaUI();
+                LevelManager.Instance.uiManager.UpdateManaUI();
             }
 
             OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
@@ -199,7 +199,7 @@ public class ManaSystem : MonoBehaviour
 
     public void AddMana(float amount)
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
             useLunarInfluence && lunarInfluenceManager != null && lunarCycleManager != null &&
             lunarCycleManager.GetCurrentMoonPhase() == MoonPhase.CrescentMoon)
         {
@@ -208,9 +208,9 @@ public class ManaSystem : MonoBehaviour
 
         currentMana = Mathf.Min(currentMana + amount, modifiedMaxMana);
 
-        if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
         {
-            GameManager.Instance.uiManager.UpdateManaUI();
+            LevelManager.Instance.uiManager.UpdateManaUI();
         }
 
         OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
@@ -223,7 +223,7 @@ public class ManaSystem : MonoBehaviour
             float maxManaModifier = lunarInfluenceManager.GetMaxManaModifier();
             float oldMax = modifiedMaxMana;
 
-            if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night)
+            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
             {
                 modifiedMaxMana = baseMaxMana * maxManaModifier;
             }
@@ -236,16 +236,16 @@ public class ManaSystem : MonoBehaviour
 
             OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-            if (GameManager.Instance != null && GameManager.Instance.uiManager != null)
+            if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
             {
-                GameManager.Instance.uiManager.UpdateManaUI();
+                LevelManager.Instance.uiManager.UpdateManaUI();
             }
         }
     }
 
     public void OnMoonPhaseChanged(MoonPhase newPhase)
     {
-        if (GameManager.Instance != null && GameManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
         {
             if (lunarInfluenceManager != null)
             {

@@ -49,7 +49,7 @@ public class DayNightLightController : MonoBehaviour
 
         if (globalVolume.profile.TryGet<Bloom>(out bloomComponent))
         {
-            bloomComponent.intensity.value = (GameManager.Instance.currentGameState != GameState.Night)
+            bloomComponent.intensity.value = (LevelManager.Instance.currentGameState != GameState.Night)
                 ? dayGlobalVolumeIntensity
                 : nightGlobalVolumeIntensity;
         }
@@ -65,18 +65,18 @@ public class DayNightLightController : MonoBehaviour
             colorAdjustmentsComponent.postExposure.overrideState = true;
         }
 
-        UpdateLightBasedOnGameState(GameManager.Instance.currentGameState, false);
-        lastGameState = GameManager.Instance.currentGameState;
+        UpdateLightBasedOnGameState(LevelManager.Instance.currentGameState, false);
+        lastGameState = LevelManager.Instance.currentGameState;
 
-        if (GameManager.Instance.currentGameState != GameState.Paused)
+        if (LevelManager.Instance.currentGameState != GameState.Paused)
         {
-            lastState = GameManager.Instance.currentGameState;
+            lastState = LevelManager.Instance.currentGameState;
         }
     }
 
     void Update()
     {
-        GameState currentState = GameManager.Instance.currentGameState;
+        GameState currentState = LevelManager.Instance.currentGameState;
 
         if (!isTransitioning && currentState != lastGameState)
         {
@@ -147,7 +147,7 @@ public class DayNightLightController : MonoBehaviour
 
         while (elapsedTime < duration)
         {
-            if (GameManager.Instance.currentGameState == GameState.Paused)
+            if (LevelManager.Instance.currentGameState == GameState.Paused)
             {
                 yield return null;
                 continue;
@@ -172,7 +172,7 @@ public class DayNightLightController : MonoBehaviour
 
     public void OnHordeCompleted()
     {
-        if (GameManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance.currentGameState == GameState.Night)
         {
             if (transitionCoroutine != null)
             {

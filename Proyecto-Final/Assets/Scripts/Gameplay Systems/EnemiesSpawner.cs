@@ -18,7 +18,7 @@ public class EnemiesSpawner : MonoBehaviour
     [SerializeField] private int enemiesPerNightIncrement;
     [SerializeField] private float difficultyScalingFactor = 1.2f;
 
-    [Header("Configuración de Spawn Individual")]
+    [Header("Configuraciï¿½n de Spawn Individual")]
     [SerializeField] private float baseSpawnInterval; // Intervalo base entre spawns
     [SerializeField] private float minSpawnInterval = 0.3f;
     [SerializeField] private float spawnIntervalDecreasePerDay = 0.1f; // Reduccion de intervalo por dia
@@ -74,7 +74,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
+        if (LevelManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
         {
             if (IsBossNight())
             {
@@ -87,7 +87,7 @@ public class EnemiesSpawner : MonoBehaviour
             }
         }
 
-        lastGameState = GameManager.Instance.currentGameState;
+        lastGameState = LevelManager.Instance.currentGameState;
 
         if (!IsBossNight())
         {
@@ -98,7 +98,7 @@ public class EnemiesSpawner : MonoBehaviour
                     trulyAliveEnemies++;
             }
 
-            if (GameManager.Instance.currentGameState == GameState.Night &&
+            if (LevelManager.Instance.currentGameState == GameState.Night &&
                 totalEnemiesKilled >= totalEnemiesToKill &&
                 trulyAliveEnemies <= 0 &&
                 !hordeCompleted)
@@ -113,13 +113,13 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (bossNightManager == null) return false;
 
-        int currentDay = GameManager.Instance.GetCurrentDay();
+        int currentDay = LevelManager.Instance.GetCurrentDay();
         return bossNightManager.IsBossNightDay(currentDay);
     }
 
     private void StartBossNight()
     {
-        Debug.Log("Iniciando noche de jefe - No se spawnearán enemigos normales");
+        Debug.Log("Iniciando noche de jefe - No se spawnearï¿½n enemigos normales");
 
         ResetHordeCounters();
         onHordeStart?.Invoke();
@@ -132,7 +132,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void StartContinuousHorde()
     {
-        if (GameManager.Instance.currentGameState != GameState.Night)
+        if (LevelManager.Instance.currentGameState != GameState.Night)
             return;
 
         if (IsBossNight())
@@ -143,7 +143,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         ResetHordeCounters();
 
-        int currentDay = GameManager.Instance.GetCurrentDay();
+        int currentDay = LevelManager.Instance.GetCurrentDay();
         totalEnemiesToKill = baseEnemiesPerNight + ((currentDay - 1) * enemiesPerNightIncrement);
 
         currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay);
@@ -166,7 +166,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        while (GameManager.Instance.currentGameState == GameState.Night &&
+        while (LevelManager.Instance.currentGameState == GameState.Night &&
                totalEnemiesSpawned < totalEnemiesToKill &&
                !IsBossNight())
         {
@@ -235,7 +235,7 @@ public class EnemiesSpawner : MonoBehaviour
                     if (Vector3.Distance(point.position, playerTransform.position) > playerCheckRadius)
                     {
                         validSpawnPoints.Add(point);
-                    }
+                      }
                 }
 
                 spawnPoint = (validSpawnPoints.Count > 0)
@@ -308,7 +308,7 @@ public class EnemiesSpawner : MonoBehaviour
         }
 
         if (totalEnemiesKilled >= totalEnemiesToKill && trulyAliveEnemies <= 0 &&
-            GameManager.Instance.currentGameState == GameState.Night && !hordeCompleted && !IsBossNight())
+            LevelManager.Instance.currentGameState == GameState.Night && !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;
             StopContinuousHorde(true);
@@ -331,7 +331,7 @@ public class EnemiesSpawner : MonoBehaviour
 
             if (!IsBossNight())
             {
-                GameManager.Instance.currentGameState = GameState.Digging;
+                LevelManager.Instance.currentGameState = GameState.Digging;
             }
         }
     }
@@ -366,7 +366,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (IsBossNight())
         {
-            return "¡NOCHE DE JEFE!";
+            return "ï¿½NOCHE DE JEFE!";
         }
 
         float adjustedInterval = AdjustSpawnIntervalByTime();
@@ -399,7 +399,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void EndNight()
     {
-        if (GameManager.Instance.currentGameState != GameState.Night)
+        if (LevelManager.Instance.currentGameState != GameState.Night)
         {
             return;
         }
@@ -457,3 +457,4 @@ public class EnemiesSpawner : MonoBehaviour
         return 1f;
     }
 }
+

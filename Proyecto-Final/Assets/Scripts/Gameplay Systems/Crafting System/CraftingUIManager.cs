@@ -42,7 +42,7 @@ public class CraftingUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && GameManager.Instance.currentGameState != GameState.Night)
+        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && LevelManager.Instance.currentGameState != GameState.Night)
         {
             ToggleCraftingUI();
         }
@@ -91,7 +91,7 @@ public class CraftingUIManager : MonoBehaviour
         if (selectedPlantDescription != null)
             selectedPlantDescription.text = "";
 
-        GameManager.Instance?.SetGameState(GameState.OnCrafting);
+        LevelManager.Instance?.SetGameState(GameState.OnCrafting);
     }
 
     private void CloseCraftingUI()
@@ -103,9 +103,9 @@ public class CraftingUIManager : MonoBehaviour
             Destroy(child.gameObject);
 
 
-        if (GameManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
+        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
         {
-            GameManager.Instance.SetGameState(GameState.Digging);
+            LevelManager.Instance.SetGameState(GameState.Digging);
         }
     }
 

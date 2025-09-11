@@ -36,7 +36,7 @@ public class MoveCamera : MonoBehaviour
         if (abilitySystem != null && (abilitySystem.IsDigging() || abilitySystem.IsHarvesting()))
             return;
 
-        var state = GameManager.Instance.currentGameState;
+        var state = LevelManager.Instance.currentGameState;
         if (state == GameState.OnInventory || state == GameState.OnCrafting || state == GameState.OnRitual)
             return;
 

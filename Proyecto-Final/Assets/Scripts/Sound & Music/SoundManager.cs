@@ -10,6 +10,7 @@ public class SoundManager : MonoBehaviour
 
     [SerializeField] private List<AudioSource> audioSourcePool = new();
     [SerializeField] private int initialPoolSize = 5;
+    [SerializeField] private GameObject audioSourcePrefab; // Prefab with AudioSource, AudioMixer, etc.
 
     private const int MaxSimultaneousSameSound = 3;
 
@@ -21,7 +22,6 @@ public class SoundManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -61,10 +61,24 @@ public class SoundManager : MonoBehaviour
 
     private AudioSource CreateNewAudioSource()
     {
-        // Create a new GameObject for each AudioSource
-        GameObject audioObj = new GameObject($"PooledAudioSource_{audioSourcePool.Count}");
-        audioObj.transform.parent = this.transform;
-        AudioSource audioSource = audioObj.AddComponent<AudioSource>();
+        AudioSource audioSource = null;
+        if (audioSourcePrefab != null)
+        {
+            GameObject audioObj = Instantiate(audioSourcePrefab, this.transform);
+            audioObj.name = $"PooledAudioSource_{audioSourcePool.Count}";
+            audioSource = audioObj.GetComponent<AudioSource>();
+            if (audioSource == null)
+            {
+                Debug.LogError("AudioSource prefab does not have an AudioSource component!");
+                audioSource = audioObj.AddComponent<AudioSource>();
+            }
+        }
+        else
+        {
+            GameObject audioObj = new GameObject($"PooledAudioSource_{audioSourcePool.Count}");
+            audioObj.transform.parent = this.transform;
+            audioSource = audioObj.AddComponent<AudioSource>();
+        }
         audioSource.playOnAwake = false;
         audioSourcePool.Add(audioSource);
         return audioSource;
@@ -319,4 +333,85 @@ public class SoundManager : MonoBehaviour
         else
             audioSource.PlayOneShot(clip, data.volume);
     }
+    
+    /// <summary>
+    /// Plays an AudioClip directly using the pooling and limiting system.
+    /// </summary>
+    public void PlayAudioClip(AudioClip clip, float volume = 0.5f, float pitch = 1f, bool loop = false)
+    {
+        if (clip == null) return;
+
+        // Find all sources currently playing this clip
+        var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
+        if (playingSources.Count >= MaxSimultaneousSameSound)
+        {
+            var sourceToRestart = playingSources[0];
+            sourceToRestart.Stop();
+            sourceToRestart.clip = clip;
+            sourceToRestart.volume = volume;
+            sourceToRestart.pitch = pitch;
+            sourceToRestart.loop = loop;
+            sourceToRestart.mute = false;
+            if (loop)
+                sourceToRestart.Play();
+            else
+                sourceToRestart.PlayOneShot(clip, volume);
+            return;
+        }
+
+        var audioSource = GetAvailableAudioSource();
+        audioSource.clip = clip;
+        audioSource.volume = volume;
+        audioSource.pitch = pitch;
+        audioSource.loop = loop;
+        audioSource.mute = false;
+        if (loop)
+            audioSource.Play();
+        else
+            audioSource.PlayOneShot(clip, volume);
+    }
+
+    #if UNITY_EDITOR
+    [ContextMenu("Regenerate Audio Source Pool")]
+    private void RegenerateAudioSourcePool()
+    {
+        ClearAudioSourcePool();
+        // Add any AudioSources on this GameObject (should be none after clear, but just in case)
+        foreach (var src in GetComponents<AudioSource>())
+        {
+            if (!audioSourcePool.Contains(src))
+                audioSourcePool.Add(src);
+        }
+
+        // Create new sources to reach initialPoolSize
+        int sourcesToCreate = Mathf.Max(0, initialPoolSize - audioSourcePool.Count);
+        for (int i = 0; i < sourcesToCreate; i++)
+        {
+            CreateNewAudioSource();
+        }
+    }
+
+    [ContextMenu("Clear Audio Source Pool")]
+    private void ClearAudioSourcePool()
+    {
+        // Remove and destroy all pooled AudioSources except those on this GameObject
+        audioSourcePool.RemoveAll(source =>
+        {
+            if (source == null) return true;
+            if (source.gameObject != this.gameObject)
+            {
+                DestroyImmediate(source.gameObject);
+                return true;
+            }
+            return false;
+        });
+        // Remove AudioSources from this GameObject except this component
+        foreach (var src in GetComponents<AudioSource>())
+        {
+            if (src != null && src != this.GetComponent<AudioSource>())
+                DestroyImmediate(src);
+        }
+        audioSourcePool.Clear();
+    }
+    #endif
 }

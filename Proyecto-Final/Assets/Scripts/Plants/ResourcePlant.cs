@@ -45,7 +45,7 @@ public class ResourcePlant : Plant
         plantRenderer = GetComponent<SpriteRenderer>();
         originalColor = plantRenderer.color;
 
-        cycleStartDay = GameManager.Instance.GetCurrentDay();
+        cycleStartDay = LevelManager.Instance.GetCurrentDay();
 
         if (harvestProgressIndicator != null)
         {
@@ -56,7 +56,7 @@ public class ResourcePlant : Plant
     protected override void OnMature()
     {
         base.OnMature();
-        cycleStartDay = GameManager.Instance.GetCurrentDay();
+        cycleStartDay = LevelManager.Instance.GetCurrentDay();
     }
 
     private void CheckProduction(int currentDay)
@@ -100,7 +100,7 @@ public class ResourcePlant : Plant
         if (!isReadyToHarvest || isBeingHarvested)
             return;
 
-        if (GameManager.Instance.currentGameState != GameState.Harvesting)
+        if (LevelManager.Instance.currentGameState != GameState.Harvesting)
         {
             return;
         }
@@ -119,7 +119,7 @@ public class ResourcePlant : Plant
         float harvestTimer = 0f;
         while (harvestTimer < harvestDuration)
         {
-            if (GameManager.Instance.currentGameState != GameState.Harvesting)
+            if (LevelManager.Instance.currentGameState != GameState.Harvesting)
             {
                 CancelHarvest();
                 yield break;
@@ -173,7 +173,7 @@ public class ResourcePlant : Plant
 
         isReadyToHarvest = false;
         isBeingHarvested = false;
-        cycleStartDay = GameManager.Instance.GetCurrentDay();
+        cycleStartDay = LevelManager.Instance.GetCurrentDay();
 
         DeactivateHarvestReadyParticles();
     }
@@ -189,7 +189,7 @@ public class ResourcePlant : Plant
          if (newState == GameState.Night)
          {
              base.HandleGameStateChanged(newState);
-             CheckProduction(GameManager.Instance.GetCurrentDay());
+             CheckProduction(LevelManager.Instance.GetCurrentDay());
          }
     }
 
@@ -197,8 +197,8 @@ public class ResourcePlant : Plant
     {
         base.OnDestroy();
 
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
     }
 
     void OnMouseOver()
@@ -237,7 +237,7 @@ public class ResourcePlant : Plant
         if (isReadyToHarvest)
             return 1f;
 
-        int currentDay = GameManager.Instance.GetCurrentDay();
+        int currentDay = LevelManager.Instance.GetCurrentDay();
         int elapsed = currentDay - cycleStartDay;
 
         int required = IsFullyGrown() ? daysToProduceResources : plantData.daysToGrow;

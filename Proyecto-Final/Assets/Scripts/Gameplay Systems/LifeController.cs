@@ -165,11 +165,11 @@ public class LifeController : MonoBehaviour
         else if (isPlayer)
         {
             GetComponent<ManaSystem>()?.SetMana(0f);
-            GameManager.Instance?.uiManager?.UpdateManaUI();
+            LevelManager.Instance?.uiManager?.UpdateManaUI();
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
-                GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(true);
+                LevelManager.Instance?.uiManager?.SetGrayscaleGhostEffect(true);
                 animator.SetTrigger("Death");
                 animator.SetBool("IsDead", true);
 
@@ -251,10 +251,10 @@ public class LifeController : MonoBehaviour
 
     private IEnumerator DelayedRevive()
     {
-        float delay = GameManager.Instance != null ?
-            GameManager.Instance.playerRespawnTime : 2f;
+        float delay = LevelManager.Instance != null ?
+            LevelManager.Instance.playerRespawnTime : 2f;
 
-        GameManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
+        LevelManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -299,28 +299,28 @@ public class LifeController : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.ResetTrigger("Death");
         animator.SetTrigger("Revive");
-        GameManager.Instance?.uiManager?.SetGrayscaleGhostEffect(false);
+        LevelManager.Instance?.uiManager?.SetGrayscaleGhostEffect(false);
 
         RefreshPlayerUI();
     }
 
     private void RefreshPlayerUI()
     {
-        if (GameManager.Instance?.uiManager != null)
+        if (LevelManager.Instance?.uiManager != null)
         {
-            GameManager.Instance.uiManager.UpdateHealthBar(currentHealth, maxHealth);
+            LevelManager.Instance.uiManager.UpdateHealthBar(currentHealth, maxHealth);
 
             var manaSystem = GetComponent<ManaSystem>();
             if (manaSystem != null)
             {
-                GameManager.Instance.uiManager.UpdateManaUI();
+                LevelManager.Instance.uiManager.UpdateManaUI();
             }
         }
 
         UICursor cursorController = FindObjectOfType<UICursor>();
         if (cursorController != null)
         {
-            cursorController.SetCursorForGameState(GameManager.Instance.currentGameState);
+            cursorController.SetCursorForGameState(LevelManager.Instance.currentGameState);
         }
     }
 

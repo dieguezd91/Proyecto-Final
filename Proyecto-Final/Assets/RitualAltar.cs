@@ -32,7 +32,7 @@ public class RitualAltar : MonoBehaviour
 
     private bool isPerformingRitual = false;
     private bool playerInRange = false;
-    private GameManager gameManager;
+    private LevelManager gameManager;
     private LifeController playerLife;
     private DayNightLightController lightController;
     private GameObject player;
@@ -43,7 +43,7 @@ public class RitualAltar : MonoBehaviour
 
     private void Start()
     {
-        gameManager = GameManager.Instance;
+        gameManager = LevelManager.Instance;
 
         if (interactionPromptCanvas != null)
             interactionPromptCanvas.SetActive(false);
@@ -363,7 +363,7 @@ public class RitualAltar : MonoBehaviour
 
             if (CanPerformRitual())
             {
-                Debug.Log("Presiona E para realizar el ritual de preparación");
+                Debug.Log("Presiona E para realizar el ritual de preparaciï¿½n");
             }
         }
     }

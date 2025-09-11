@@ -46,7 +46,7 @@ public class PlantGrowthUI : MonoBehaviour
         transform.position = resourcePlant.transform.position + offset;
 
         float dist = Vector2.Distance(resourcePlant.transform.position, player.position);
-        bool shouldShow = dist <= showDistance && !resourcePlant.IsBeingHarvested() && GameManager.Instance.currentGameState != GameState.Night;
+        bool shouldShow = dist <= showDistance && !resourcePlant.IsBeingHarvested() && LevelManager.Instance.currentGameState != GameState.Night;
 
         float targetAlpha = shouldShow ? 1f : 0f;
         canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);

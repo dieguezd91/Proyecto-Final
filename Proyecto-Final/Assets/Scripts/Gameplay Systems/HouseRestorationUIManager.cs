@@ -43,7 +43,7 @@ public class HouseRestorationUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && GameManager.Instance.currentGameState != GameState.Night)
+        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && LevelManager.Instance.currentGameState != GameState.Night)
         {
             ToggleUI();
         }
@@ -83,7 +83,7 @@ public class HouseRestorationUIManager : MonoBehaviour
     {
         isUIOpen = true;
         altarUIPanel.SetActive(true);
-        GameManager.Instance?.SetGameState(GameState.OnAltarRestoration);
+        LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
 
         int currentGold = InventoryManager.Instance.GetGold()   ;
         goldSlider.maxValue = currentGold;
@@ -101,8 +101,8 @@ public class HouseRestorationUIManager : MonoBehaviour
         isUIOpen = false;
         altarUIPanel.SetActive(false);
 
-        if (GameManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
-            GameManager.Instance.SetGameState(GameState.Digging);
+        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
+            LevelManager.Instance.SetGameState(GameState.Digging);
     }
 
     private void TryRestore(int index)

@@ -19,7 +19,7 @@ public class HouseRestorationSystem : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.onNewDay.AddListener(OnNewDayStarted);
+        LevelManager.Instance.onNewDay.AddListener(OnNewDayStarted);
     }
 
     public bool CanRestore() => !hasRestoredToday;
@@ -38,12 +38,12 @@ public class HouseRestorationSystem : MonoBehaviour
         {
             InventoryManager.Instance.UseMaterial(opt.materialRequired, 1);
 
-            var house = GameManager.Instance.home.GetComponent<HouseLifeController>();
+            var house = LevelManager.Instance.home.GetComponent<HouseLifeController>();
             float missingHealth = house.MaxHealth - house.CurrentHealth;
             float desiredRestore = house.MaxHealth * (opt.restorePercentage / 100f);
             float finalRestore = Mathf.Min(desiredRestore, missingHealth);
             house.Restore(finalRestore);
-            GameManager.Instance.uiManager.UpdateHomeHealthBar(house.CurrentHealth, house.MaxHealth);
+            LevelManager.Instance.uiManager.UpdateHomeHealthBar(house.CurrentHealth, house.MaxHealth);
 
             hasRestoredToday = true;
             return true;

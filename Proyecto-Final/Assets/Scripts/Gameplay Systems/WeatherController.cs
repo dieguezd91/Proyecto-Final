@@ -17,12 +17,12 @@ public class WeatherController : MonoBehaviour
 
     void Start()
     {
-        GameManager.Instance.onNewDay.AddListener(HandleNewDay);
+        LevelManager.Instance.onNewDay.AddListener(HandleNewDay);
     }
 
     void OnDisable()
     {
-        GameManager.Instance.onNewDay.RemoveListener(HandleNewDay);
+        LevelManager.Instance.onNewDay.RemoveListener(HandleNewDay);
     }
 
     private void HandleNewDay(int dayIndex)
