@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public SettingsManager SettingsManager { get; private set; }
     private bool isPaused = false;
 
     private void Awake()
@@ -13,6 +14,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            SettingsManager = FindObjectOfType<SettingsManager>();
         }
         else
         {
