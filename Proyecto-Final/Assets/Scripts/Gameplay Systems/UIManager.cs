@@ -1,1193 +1,227 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+﻿using UnityEngine;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
+    [Header("UI Module Components")]
+    [SerializeField] private HealthUIController healthUI;
+    [SerializeField] private ManaUIController manaUI;
+    [SerializeField] private InventoryUIController inventoryUIController;
+    [SerializeField] private SeedSlotsUIController seedSlotsUI;
+    [SerializeField] private GameStateUIController gameStateUI;
+    [SerializeField] private FeedbackUIController feedbackUI;
+    [SerializeField] private TooltipUIController tooltipUI;
+
+    [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
 
-    [Header("HEALTH BAR")]
-    [SerializeField] private Slider healthBar;
-    [SerializeField] private Image fillImage;
-    [SerializeField] private Gradient healthGradient;
-    [SerializeField] private TextMeshProUGUI playerHealthText;
-    [SerializeField] private Image whiteFillImage;
-    [SerializeField] private float whiteBarSpeed = 1.5f;
-
-    private float targetFill = 1f;
-
-    [Header("HOME HEALTH BAR")]
-    [SerializeField] private Slider homeHealthBar;
-    [SerializeField] private Image homeFillImage;
-    [SerializeField] private Gradient homeHealthGradient;
-    [SerializeField] private TextMeshProUGUI homeHealthText;
-
-    [Header("FLOATING DAMAGE")]
-    [SerializeField] private GameObject floatingDamagePrefab;
-    private float lastPlayerHealth;
-
-    [Header("MANA BAR")]
-    [SerializeField] private Slider manaBar;
-    [SerializeField] private Image manaFillImage;
-    [SerializeField] private Gradient manaGradient;
-    [SerializeField] private TextMeshProUGUI manaText;
-
-    [Header("REFERENCES")]
-    [SerializeField] private GameObject player;
-
-    [Header("UI")]
+    [Header("UI References")]
     public GameObject gameOverPanel;
     public GameObject HUD;
     public GameObject pausePanel;
-    public GameObject seedSlots;
-    [SerializeField] private CanvasGroup seedSlotsCanvasGroup;
-    [SerializeField] private GameObject dayControlPanel;
-
-    [Header("PLANT SLOTS")]
-    [SerializeField] private GameObject[] slotObjects = new GameObject[9];
-    [SerializeField] private Image[] slotIcons = new Image[9];
-    [SerializeField] private Image[] slotBackgrounds = new Image[9];
-    [SerializeField] private TextMeshProUGUI[] slotNumbers = new TextMeshProUGUI[9];
-    [SerializeField] private TextMeshProUGUI[] seedCount = new TextMeshProUGUI[9];
-    [SerializeField] private Color slotHighlightColor = new Color(1f, 1f, 0.5f, 1f);
-
-    private int _hoveredSlotIndex = -1;
-
-    [Header("SELECTION COLORS")]
-    [SerializeField] private Color normalColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
-    [SerializeField] private Color selectedColor = Color.white;
-    [SerializeField] private float selectedScale = 1.2f;
-    [SerializeField] private float normalScale = 1.0f;
-
-    [Header("INVENTORY UI")]
-    [SerializeField] private GameObject inventoryPanel;
-    [SerializeField] private KeyCode toggleInventoryKey = KeyCode.I;
-    [SerializeField] private KeyCode alternateToggleKey = KeyCode.Tab;
-    [SerializeField] private bool closeInventoryOnEscape = true;
-    [SerializeField] private bool disablePlayerMovementWhenOpen = true;
-    [SerializeField] public InventoryUI inventoryUI;
-
-    [Header("INSTRUCTIONS")]
-    [SerializeField] private GameObject instructionsPanel;
-    [SerializeField] private Button instructionsButton;
-    [SerializeField] private Button closeInstructionsButton;
-    [SerializeField] private Button continueButton;
-
-    [Header("FEEDBACK")]
-    [SerializeField] private GameObject damagedScreen;
-    private CanvasGroup damagedScreenCanvasGroup;
-    private float targetDamageAlpha = 0f;
-    private float damageFadeSpeed = 2f;
-    private float damageFadeOutDelay = 1f;
-    private float lastDamageTime = 0f;
-
-    [Header("PLAYER ABILITY UI")]
-    [SerializeField] private GameObject abilityPanel;
-
-    [Header("TOOLTIP")]
-    [SerializeField] private GameObject tooltipPanel;
-    [SerializeField] private TextMeshProUGUI seedNameText;
-    [SerializeField] private TextMeshProUGUI seedDescriptionText;
-    [SerializeField] private Image fullyGrownImage;
-    [SerializeField] private Vector2 tooltipOffset = new Vector2(20f, -20f);
-
-    [Header("POST-PROCESS")]
-    [SerializeField] private Volume bloomVolume;
-    private Bloom bloom;
-    private ColorAdjustments colorAdjustments;
-
-    [Header("RITUAL OVERLAY")]
-    [SerializeField] private Image ritualOverlayImage;
-    [SerializeField] private float overlayFadeDuration = 1.2f;
-    private Coroutine ritualOverlayCoroutine;
-
-    private bool openedFromPauseMenu = false;
-    private LifeController playerLife;
-    private ManaSystem manaSystem;
-    private GameState lastGameState = GameState.None;
-    private GameState lastState = GameState.Day;
-    private bool isInventoryOpen = false;
-    private bool isInstructionsOpen = false;
-    private PlayerController playerController;
-    private PauseMenu pauseMenu;
-    private Coroutine fadeCoroutine;
-    private Coroutine warningCoroutine;
-
-    private int lastPressSlot = -1;
-    private float lastPressTime = 0f;
-    [SerializeField] private float doublePressThreshold = 0.3f;
-
-    private Transform _slotsParent;
-    private Transform _draggingSlot;
-    private GameObject _placeholder;
-    private int _originalSiblingIndex;
-
-
-    private int pendingSwapSlot = -1;
+    public InventoryUI inventoryUI;
 
     public InterfaceSoundBase InterfaceSounds => interfaceSounds;
-
     public static UIManager Instance { get; private set; }
 
-    void Awake()
+    public HealthUIController Health => healthUI;
+    public ManaUIController Mana => manaUI;
+    public InventoryUIController Inventory => inventoryUIController;
+    public SeedSlotsUIController SeedSlots => seedSlotsUI;
+    public GameStateUIController GameState => gameStateUI;
+    public FeedbackUIController Feedback => feedbackUI;
+    public TooltipUIController Tooltip => tooltipUI;
+
+    private void Awake()
     {
         if (Instance == null)
+        {
             Instance = this;
+            InitializeModules();
+        }
         else
+        {
             Destroy(gameObject);
-    }
-
-    void Start()
-    {
-        InitializeReferences();
-        SetupListeners();
-        InitializeUI();
-
-
-        foreach (var go in slotObjects)
-        {
-            if (go != null && go.GetComponent<CanvasGroup>() == null)
-                go.AddComponent<CanvasGroup>();
-        }
-
-        if (slotObjects.Length > 0 && slotObjects[0] != null)
-            _slotsParent = slotObjects[0].transform.parent;
-
-        RegisterSlotDragEvents();
-
-
-        if (playerLife != null)
-            UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-
-        if (LevelManager.Instance?.home != null)
-        {
-            HouseLifeController homeLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
-            if (homeLife != null)
-                UpdateHomeHealthBar(homeLife.CurrentHealth, homeLife.MaxHealth);
-        }
-
-
-        if (damagedScreen != null)
-        {
-            damagedScreenCanvasGroup = damagedScreen.GetComponent<CanvasGroup>()
-                                   ?? damagedScreen.AddComponent<CanvasGroup>();
-            damagedScreenCanvasGroup.alpha = 0f;
-            damagedScreen.SetActive(true);
-        }
-
-        lastDamageTime = Time.time;
-
-        UpdateManaUI();
-
-        if (whiteFillImage != null)
-            whiteFillImage.fillAmount = playerLife.GetHealthPercentage();
-
-        if (bloomVolume != null && bloomVolume.profile != null)
-        {
-            bloomVolume.profile.TryGet(out bloom);
-            bloomVolume.profile.TryGet(out colorAdjustments);
         }
     }
 
-    void Update()
+    private void Start()
     {
-        CheckGameStateChanges();
-        HandleGameOverState();
-        HandleInventoryInput();
-        HandleSeedSlotInput();
-        UpdateTooltipPosition();
+        SetupModules();
+        RegisterGlobalEvents();
+    }
 
-        if (damagedScreenCanvasGroup != null)
-        {
-            if (Time.time - lastDamageTime > damageFadeOutDelay)
-                targetDamageAlpha = 0f;
+    private void Update()
+    {
+        gameStateUI?.HandleUpdate();
+        tooltipUI?.HandleUpdate();
+        feedbackUI?.HandleUpdate();
+        inventoryUIController?.HandleUpdate();
+        seedSlotsUI?.HandleUpdate();
+    }
 
-            damagedScreenCanvasGroup.alpha = Mathf.Lerp(
-                damagedScreenCanvasGroup.alpha,
-                targetDamageAlpha,
-                damageFadeSpeed * Time.deltaTime
-            );
-        }
-        UpdateWhiteBar();
+    private void InitializeModules()
+    {
+        if (healthUI == null) healthUI = GetComponentInChildren<HealthUIController>();
+        if (manaUI == null) manaUI = GetComponentInChildren<ManaUIController>();
+        if (inventoryUIController == null) inventoryUIController = GetComponentInChildren<InventoryUIController>();
+        if (seedSlotsUI == null) seedSlotsUI = GetComponentInChildren<SeedSlotsUIController>();
+        if (gameStateUI == null) gameStateUI = GetComponentInChildren<GameStateUIController>();
+        if (feedbackUI == null) feedbackUI = GetComponentInChildren<FeedbackUIController>();
+        if (tooltipUI == null) tooltipUI = GetComponentInChildren<TooltipUIController>();
 
+        healthUI?.Initialize();
+        manaUI?.Initialize();
+        inventoryUIController?.Initialize();
+        seedSlotsUI?.Initialize();
+        gameStateUI?.Initialize();
+        feedbackUI?.Initialize();
+        tooltipUI?.Initialize();
+    }
 
+    private void SetupModules()
+    {
+        healthUI?.Setup();
+        manaUI?.Setup();
+        inventoryUIController?.Setup();
+        seedSlotsUI?.Setup();
+        gameStateUI?.Setup();
+        feedbackUI?.Setup();
+        tooltipUI?.Setup();
+    }
 
+    private void RegisterGlobalEvents()
+    {
+        UIEvents.OnPlayerHealthChanged += Health.UpdatePlayerHealth;
+        UIEvents.OnHomeHealthChanged += Health.UpdateHomeHealth;
+
+        UIEvents.OnManaChanged += Mana.UpdateMana;
+
+        UIEvents.OnInventoryToggleRequested += Inventory.ToggleInventory;
+
+        UIEvents.OnGameStateChanged += GameState.OnGameStateChanged;
+
+        UIEvents.OnPlayerDamaged += Feedback.ShowDamageEffect;
     }
 
     private void OnDestroy()
     {
-        if (SeedInventory.Instance != null)
-            SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
-
-        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
-            abilitySystem.OnAbilityChanged -= OnAbilityChanged;
-    }
-
-    private void InitializeReferences()
-    {
-        if (player == null)
-            player = GameObject.FindGameObjectWithTag("Player");
-
-        if (pauseMenu == null)
-            pauseMenu = FindObjectOfType<PauseMenu>();
-
-        if (player != null)
-        {
-            playerLife = player.GetComponent<LifeController>();
-            playerController = player.GetComponent<PlayerController>();
-            manaSystem = player.GetComponent<ManaSystem>();
-            lastPlayerHealth = playerLife.currentHealth;
-        }
-
-        if (LevelManager.Instance != null && LevelManager.Instance.home != null)
-        {
-            HouseLifeController homeLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
-            if (homeLife != null)
-            {
-                homeLife.onHealthChanged.AddListener(UpdateHomeHealthBar);
-                InitializeHomeHealthBar(homeLife);
-            }
-        }
-    }
-
-    private void SetupListeners()
-    {
-        if (playerLife != null)
-        {
-            playerLife.onHealthChanged.AddListener(UpdateHealthBar);
-            InitializeHealthBar();
-        }
-
-        if (SeedInventory.Instance != null)
-            SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
-
-        if (instructionsButton != null)
-            instructionsButton.onClick.AddListener(OpenInstructions);
-
-        if (closeInstructionsButton != null)
-            closeInstructionsButton.onClick.AddListener(CloseInstructions);
-
-        if (continueButton != null && pauseMenu != null)
-            continueButton.onClick.AddListener(pauseMenu.Continue);
-
-        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
-            abilitySystem.OnAbilityChanged += OnAbilityChanged;
-    }
-
-    private void InitializeUI()
-    {
-
-        if (FindObjectOfType<PlayerAbilitySystem>()?.CurrentAbility != PlayerAbility.Planting)
-        {
-            seedSlotsCanvasGroup.alpha = 0.1f;
-
-        }
-
-        if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
-
-        if (instructionsPanel != null)
-        {
-            instructionsPanel.SetActive(false);
-            isInstructionsOpen = false;
-        }
-
-        if (SeedInventory.Instance != null)
-        {
-            InitializeSeedSlotsUI();
-            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
-        }
-
-        InitializeInventory();
-        UpdateUIElementsVisibility();
-    }
-
-    private void InitializeInventory()
-    {
-        if (inventoryPanel == null)
-            inventoryPanel = GameObject.FindGameObjectWithTag("InventoryPanel");
-
-        if (inventoryUI == null && inventoryPanel != null)
-            inventoryUI = inventoryPanel.GetComponent<InventoryUI>();
-
-        if (inventoryPanel != null)
-        {
-            inventoryPanel.SetActive(false);
-            isInventoryOpen = false;
-        }
-    }
-
-    public void InitializeSeedSlotsUI()
-    {
-        for (int i = 0; i < slotObjects.Length; i++)
-        {
-
-            if (slotObjects[i] == null) continue;
-
-            var tooltip = slotObjects[i].GetComponent<PlantSlotTooltipHandler>();
-            if (tooltip == null)
-                tooltip = slotObjects[i].AddComponent<PlantSlotTooltipHandler>();
-
-            tooltip.slotIndex = i;
-
-
-
-            if (slotNumbers[i] != null)
-                slotNumbers[i].text = (i + 1).ToString();
-
-            PlantSlot plantSlot = SeedInventory.Instance.GetPlantSlot(i);
-
-            if (plantSlot != null && plantSlot.seedCount > 0 && plantSlot.plantPrefab != null)
-            {
-                if (slotIcons[i] != null)
-                {
-                    slotIcons[i].sprite = plantSlot.plantIcon;
-                    slotIcons[i].preserveAspect = true;
-                    slotIcons[i].gameObject.SetActive(true);
-                }
-                if (seedCount[i] != null)
-                {
-                    seedCount[i].text = plantSlot.seedCount.ToString();
-                    seedCount[i].enabled = true;
-                }
-            }
-            else
-            {
-                if (slotIcons[i] != null) slotIcons[i].gameObject.SetActive(false);
-                if (seedCount[i] != null) seedCount[i].enabled = false;
-            }
-        }
-    }
-
-    void InitializeHealthBar()
-    {
-        if (healthBar != null && playerLife != null)
-        {
-            healthBar.minValue = 0;
-            healthBar.maxValue = playerLife.maxHealth;
-            healthBar.value = playerLife.currentHealth;
-            UpdateFillColor(playerLife.GetHealthPercentage());
-        }
-    }
-
-    private void InitializeHomeHealthBar(HouseLifeController homeLife)
-    {
-        if (homeHealthBar != null)
-        {
-            homeHealthBar.minValue = 0;
-            homeHealthBar.maxValue = homeLife.maxHealth;
-            homeHealthBar.value = homeLife.currentHealth;
-            UpdateHomeFillColor(homeLife.GetHealthPercent());
-        }
-    }
-
-    public void UpdateHomeHealthBar(float currentHealth, float maxHealth)
-    {
-        if (homeHealthBar != null)
-        {
-            homeHealthBar.value = currentHealth;
-            UpdateHomeFillColor(currentHealth / maxHealth);
-        }
-
-        if (homeHealthText != null)
-            homeHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
-    }
-
-    private void UpdateHomeFillColor(float healthPercentage)
-    {
-        if (homeFillImage != null && homeHealthGradient != null)
-            homeFillImage.color = homeHealthGradient.Evaluate(healthPercentage);
-    }
-
-    private void CheckGameStateChanges()
-    {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != lastGameState)
-        {
-            if (LevelManager.Instance.currentGameState == GameState.Paused &&
-                lastGameState != GameState.Paused &&
-                lastGameState != GameState.None)
-            {
-                lastState = lastGameState;
-            }
-
-            UpdateUIElementsVisibility();
-            UpdateAbilityUIVisibility();
-            lastGameState = LevelManager.Instance.currentGameState;
-        }
-    }
-
-    private void HandleGameOverState()
-    {
-        if (gameOverPanel != null && gameOverPanel.activeInHierarchy && HUD != null)
-            HUD.SetActive(false);
-    }
-
-    private void UpdateUIElementsVisibility()
-    {
-        if (LevelManager.Instance == null) return;
-
-        GameState state = LevelManager.Instance.currentGameState;
-
-        bool showHUD = state == GameState.Day ||
-                       state == GameState.Digging ||
-                       state == GameState.Planting ||
-                       state == GameState.Harvesting ||
-                       state == GameState.Removing ||
-                       state == GameState.Night;
-
-        if (HUD != null) HUD.SetActive(showHUD);
-
-        bool showGameplayUI = state == GameState.Day ||
-                              state == GameState.Digging ||
-                              state == GameState.Planting ||
-                              state == GameState.Harvesting ||
-                              state == GameState.Removing;
-
-        if (seedSlots != null) seedSlots.SetActive(showGameplayUI && !isInstructionsOpen);
-        if (dayControlPanel != null) dayControlPanel.SetActive(showGameplayUI && !isInstructionsOpen);
+        if (Health != null) UIEvents.OnPlayerHealthChanged -= Health.UpdatePlayerHealth;
+        if (Health != null) UIEvents.OnHomeHealthChanged -= Health.UpdateHomeHealth;
+        if (Mana != null) UIEvents.OnManaChanged -= Mana.UpdateMana;
+        if (Inventory != null) UIEvents.OnInventoryToggleRequested -= Inventory.ToggleInventory;
+        if (GameState != null) UIEvents.OnGameStateChanged -= GameState.OnGameStateChanged;
+        if (Feedback != null) UIEvents.OnPlayerDamaged -= Feedback.ShowDamageEffect;
     }
 
     public void UpdateHealthBar(float currentHealth, float maxHealth)
     {
-        if (healthBar != null)
-        {
-            float percent = currentHealth / maxHealth;
-            healthBar.value = currentHealth;
-            targetFill = percent;
-            UpdateFillColor(percent);
-        }
-
-
-        float damageTaken = lastPlayerHealth - currentHealth;
-        if (damageTaken > 0f && floatingDamagePrefab != null)
-        {
-            lastDamageTime = Time.time;
-            var existing = player.GetComponentInChildren<FloatingDamageText>();
-            if (existing != null)
-            {
-                existing.AddDamage(damageTaken);
-            }
-            else
-            {
-                Vector3 spawnPos = player.transform.position + Vector3.up * 1f;
-                var go = Instantiate(floatingDamagePrefab, spawnPos, Quaternion.identity);
-                var fdt = go.GetComponent<FloatingDamageText>();
-                fdt.Initialize(player.transform);
-                fdt.AddDamage(damageTaken);
-            }
-        }
-
-        float healthPerc = currentHealth / maxHealth;
-        targetDamageAlpha = 1f - healthPerc;
-
-        lastPlayerHealth = currentHealth;
-
-        if (currentHealth < lastPlayerHealth)
-            TributeSystem.Instance?.NotifyPlayerDamaged();
-
-        lastPlayerHealth = currentHealth;
-
-        if (playerHealthText != null)
-            playerHealthText.text = $"{Mathf.CeilToInt(currentHealth)} / {Mathf.CeilToInt(maxHealth)}";
+        if (Health != null)
+            Health.UpdatePlayerHealth(currentHealth, maxHealth);
     }
 
-    private void UpdateFillColor(float healthPercentage)
+    public void UpdateHomeHealthBar(float currentHealth, float maxHealth)
     {
-        if (fillImage != null && healthGradient != null)
-            fillImage.color = healthGradient.Evaluate(healthPercentage);
+        if (Health != null)
+            Health.UpdateHomeHealth(currentHealth, maxHealth);
     }
 
-    private void UpdateSelectedSlotUI(int selectedIndex)
+    public void UpdateManaUI()
     {
-        for (int i = 0; i < slotObjects.Length; i++)
-        {
-            if (slotBackgrounds[i] == null) continue;
-
-            bool isSelected = (i == selectedIndex);
-            slotBackgrounds[i].color = isSelected ? selectedColor : normalColor;
-            slotObjects[i].transform.localScale = isSelected
-                ? new Vector3(selectedScale, selectedScale, 1f)
-                : new Vector3(normalScale, normalScale, 1f);
-        }
-    }
-
-    private void UpdateAbilityUIVisibility()
-    {
-        if (abilityPanel == null || LevelManager.Instance == null) return;
-
-        GameState state = LevelManager.Instance.currentGameState;
-        bool showAbilities = state != GameState.Night &&
-                             state != GameState.OnInventory &&
-                             state != GameState.OnCrafting &&
-                             state != GameState.OnAltarRestoration &&
-                             state != GameState.Paused &&
-                             state != GameState.GameOver;
-
-        abilityPanel.SetActive(showAbilities);
-    }
-
-    private void HandleInventoryInput()
-    {
-        if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
-            ToggleInventory();
-
-        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
-            CloseInventory();
-    }
-
-    public void ToggleInventory()
-    {
-        if (isInventoryOpen)
-            CloseInventory();
-        else
-            OpenInventory();
+        if (Mana != null)
+            Mana.UpdateMana();
     }
 
     public void OpenInventory()
     {
-        if (inventoryPanel == null || isInstructionsOpen) return;
-        if (LevelManager.Instance != null &&
-            (LevelManager.Instance.currentGameState == GameState.Night ||
-             LevelManager.Instance.currentGameState == GameState.Paused ||
-             LevelManager.Instance.currentGameState == GameState.OnCrafting ||
-             LevelManager.Instance.currentGameState == GameState.GameOver ||
-             LevelManager.Instance.currentGameState == GameState.OnAltarRestoration))
-        {
-            return;
-        }
-
-        inventoryPanel.SetActive(true);
-        isInventoryOpen = true;
-
-        if (inventoryUI != null)
-        {
-            inventoryUI.UpdateAllSlots();
-            inventoryUI.ForceRefresh();
-        }
-
-        if (disablePlayerMovementWhenOpen && playerController != null)
-            playerController.SetMovementEnabled(false);
-
-        LevelManager.Instance?.SetGameState(GameState.OnInventory);
-        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
-        Debug.Log("Inventario abierto");
+        if (Inventory != null)
+            Inventory.OpenInventory();
     }
 
     public void CloseInventory()
     {
-        if (inventoryPanel == null) return;
-        inventoryPanel.SetActive(false);
-        isInventoryOpen = false;
-
-        if (inventoryUI != null)
-            inventoryUI.ClearDescriptionPanel();
-
-        if (disablePlayerMovementWhenOpen && playerController != null)
-            playerController.SetMovementEnabled(true);
-
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
-            LevelManager.Instance.SetGameState(GameState.Digging);
-
-        InterfaceSounds.PlaySound(InterfaceSoundType.GameInventoryBookClose);
-        Debug.Log("Inventario cerrado");
+        if (Inventory != null)
+            Inventory.CloseInventory();
     }
 
-    public bool IsInventoryOpen() => isInventoryOpen;
-
-    public void SetInventoryOpen(bool open)
+    public void ToggleInventory()
     {
-        if (open != isInventoryOpen)
-        {
-            if (open)
-                OpenInventory();
-            else
-                CloseInventory();
-        }
+        if (Inventory != null)
+            Inventory.ToggleInventory();
+    }
+
+    public bool IsInventoryOpen()
+    {
+        return Inventory != null ? Inventory.IsInventoryOpen : false;
     }
 
     public void OpenInstructions()
     {
-        if (instructionsPanel == null) return;
-
-        openedFromPauseMenu = pausePanel != null && pausePanel.activeSelf;
-
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
-            lastState = LevelManager.Instance.currentGameState;
-
-        if (HUD != null) HUD.SetActive(false);
-        if (seedSlots != null) seedSlots.SetActive(false);
-        if (dayControlPanel != null) dayControlPanel.SetActive(false);
-        if (inventoryPanel != null && isInventoryOpen) inventoryPanel.SetActive(false);
-
-        if (pausePanel != null) pausePanel.SetActive(false);
-
-        instructionsPanel.SetActive(true);
-        isInstructionsOpen = true;
-        SoundManager.Instance.PlayOneShot("ButtonClick");
-        if (LevelManager.Instance != null)
-            LevelManager.Instance.SetGameState(GameState.Paused);
-
-        if (playerController != null)
-            playerController.SetMovementEnabled(false);
+        if (GameState != null)
+            GameState.OpenInstructions();
     }
 
     public void CloseInstructions()
     {
-        if (instructionsPanel == null) return;
-
-        instructionsPanel.SetActive(false);
-        isInstructionsOpen = false;
-        SoundManager.Instance.PlayOneShot("ButtonClick");
-        if (openedFromPauseMenu && pausePanel != null)
-        {
-            pausePanel.SetActive(true);
-            GameManager.Instance?.PauseGame();
-            if (HUD != null)
-                HUD.SetActive(false);
-        }
-        else
-        {
-            if (HUD != null) HUD.SetActive(true);
-            UpdateUIElementsVisibility();
-
-            if (playerController != null)
-                playerController.SetMovementEnabled(true);
-
-            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
-                LevelManager.Instance.SetGameState(lastState);
-            GameManager.Instance?.ResumeGame();
-        }
-
-        Debug.Log("Panel de instrucciones cerrado");
+        if (GameState != null)
+            GameState.CloseInstructions();
     }
 
-    public bool IsInstructionsOpen() => isInstructionsOpen;
-
-    public void UpdateManaUI()
+    public bool IsInstructionsOpen()
     {
-        if (manaBar == null || manaSystem == null) return;
+        return GameState != null ? GameState.IsInstructionsOpen : false;
+    }
 
-        float current = manaSystem.GetCurrentMana();
-        float max = manaSystem.GetMaxMana();
-        float percent = current / max;
-
-        manaBar.maxValue = max;
-        manaBar.value = current;
-
-        if (manaFillImage != null && manaGradient != null)
-            manaFillImage.color = manaGradient.Evaluate(percent);
-
-        if (manaText != null)
-            manaText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
+    public void InitializeSeedSlotsUI()
+    {
+        if (SeedSlots != null)
+            SeedSlots.InitializeSlots();
     }
 
     public void UpdateSeedCountsUI()
     {
-        for (int i = 0; i < seedCount.Length; i++)
-        {
-            var slot = SeedInventory.Instance.GetPlantSlot(i);
-            if (slot != null)
-                seedCount[i].text = slot.seedCount > 0 ? slot.seedCount.ToString() : "";
-        }
-    }
-
-    private void OnAbilityChanged(PlayerAbility newAbility)
-    {
-        if (seedSlotsCanvasGroup == null) return;
-
-        bool show = newAbility == PlayerAbility.Planting;
-        if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(FadePlantSlots(show));
-    }
-
-    private IEnumerator FadePlantSlots(bool fadeIn)
-    {
-        float duration = 0.35f;
-        float startAlpha = seedSlotsCanvasGroup.alpha;
-        float targetAlpha = fadeIn ? 1f : 0.1f;
-        float time = 0f;
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float t = time / duration;
-            seedSlotsCanvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-            yield return null;
-        }
-
-        seedSlotsCanvasGroup.alpha = targetAlpha;
-    }
-
-
-    private void HandleSeedSlotInput()
-    {
-        if (LevelManager.Instance == null) return;
-        var state = LevelManager.Instance.currentGameState;
-
-        bool validState =
-            state == GameState.Day ||
-            state == GameState.Digging ||
-            state == GameState.Planting ||
-            state == GameState.Harvesting ||
-            state == GameState.Removing;
-        if (!validState) return;
-
-        for (int i = 0; i < slotObjects.Length; i++)
-        {
-            KeyCode key = KeyCode.Alpha1 + i;
-            if (Input.GetKeyDown(key))
-            {
-                OnSlotKeyPressed(i);
-                break;
-            }
-        }
-    }
-
-    private void RegisterSlotDragEvents()
-    {
-        for (int i = 0; i < slotObjects.Length; i++)
-        {
-            var go = slotObjects[i];
-            if (go == null) continue;
-            var trigger = go.GetComponent<EventTrigger>() ?? go.AddComponent<EventTrigger>();
-            trigger.triggers.Clear();
-
-            int copy = i;
-
-            var clickEntry = new EventTrigger.Entry
-            {
-                eventID = EventTriggerType.PointerClick
-            };
-            clickEntry.callback.AddListener(evt => OnSlotClicked(copy));
-            trigger.triggers.Add(clickEntry);
-
-            var bd = new EventTrigger.Entry { eventID = EventTriggerType.BeginDrag };
-            bd.callback.AddListener(_ => BeginDragIcon(copy));
-            trigger.triggers.Add(bd);
-
-            var dd = new EventTrigger.Entry { eventID = EventTriggerType.Drag };
-            dd.callback.AddListener(evt => OnDragIcon((PointerEventData)evt));
-            trigger.triggers.Add(dd);
-
-            var ed = new EventTrigger.Entry { eventID = EventTriggerType.EndDrag };
-            ed.callback.AddListener(evt => EndDragIcon((PointerEventData)evt));
-            trigger.triggers.Add(ed);
-
-
-            var enter = new EventTrigger.Entry { eventID = EventTriggerType.PointerEnter };
-            enter.callback.AddListener(evt => ShowTooltipForSlot(copy));
-            trigger.triggers.Add(enter);
-
-            var exit = new EventTrigger.Entry { eventID = EventTriggerType.PointerExit };
-            exit.callback.AddListener(evt => HideTooltip());
-            trigger.triggers.Add(exit);
-        }
+        if (SeedSlots != null)
+            SeedSlots.UpdateSeedCounts();
     }
 
     public void ShowTooltipForSlot(int slotIndex)
     {
-        if (tooltipPanel == null || seedNameText == null || seedDescriptionText == null || fullyGrownImage == null)
-            return;
-
-        PlantSlot slot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
-        if (slot == null || slot.seedCount <= 0)
-        {
-            HideTooltip();
-            return;
-        }
-
-        PlantDataSO data = slot.data;
-        if (data == null)
-        {
-            HideTooltip();
-            return;
-        }
-
-        tooltipPanel.SetActive(true);
-        tooltipPanel.transform.position = Input.mousePosition + new Vector3(100f, -50f);
-
-        seedNameText.text = data.plantName;
-        seedDescriptionText.text = $"{data.description}\nDays to fully grow: {data.daysToGrow}";
-
-        if (data.fullyGrownSprite != null)
-        {
-            fullyGrownImage.sprite = data.fullyGrownSprite;
-            fullyGrownImage.preserveAspect = true;
-            fullyGrownImage.gameObject.SetActive(true);
-        }
-        else
-        {
-            fullyGrownImage.sprite = null;
-            fullyGrownImage.gameObject.SetActive(false);
-        }
+        if (Tooltip != null)
+            Tooltip.ShowSlotTooltip(slotIndex);
     }
 
     public void HideTooltip()
     {
-        if (tooltipPanel != null)
-            tooltipPanel.SetActive(false);
-    }
-
-    private void UpdateTooltipPosition()
-    {
-        if (tooltipPanel != null && tooltipPanel.activeSelf)
-            tooltipPanel.transform.position = Input.mousePosition + (Vector3)tooltipOffset;
-    }
-
-    private GameObject _dragIcon;
-    private int _dragSourceIndex;
-
-    public void BeginDragIcon(int slotIndex)
-    {
-        PlantSlot slot = SeedInventory.Instance.GetPlantSlot(slotIndex);
-
-        if (slot == null || slot.data == null || slot.seedCount <= 0)
-        {
-            return;
-        }
-
-        _dragSourceIndex = slotIndex;
-
-        _dragIcon = new GameObject("DragIcon");
-        var rt = _dragIcon.AddComponent<RectTransform>();
-        rt.SetParent(transform.root, false);
-        rt.sizeDelta = slotObjects[slotIndex].GetComponent<RectTransform>().sizeDelta;
-
-        var img = _dragIcon.AddComponent<UnityEngine.UI.Image>();
-        img.raycastTarget = false;
-        img.sprite = slotIcons[slotIndex].sprite;
-
-        slotIcons[slotIndex].gameObject.SetActive(false);
-
-        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem ability)
-        {
-            ability.SetAbility(PlayerAbility.Planting);
-        }
-    }
-
-    public void OnDragIcon(PointerEventData data)
-    {
-        if (_dragIcon == null) return;
-
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            transform.root as RectTransform,
-            data.position,
-            data.pressEventCamera,
-            out Vector2 localPos);
-        (_dragIcon.transform as RectTransform).anchoredPosition = localPos;
-
-        var pointerData = new PointerEventData(EventSystem.current) { position = data.position };
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
-
-        int newHover = -1;
-        foreach (var r in results)
-        {
-            for (int i = 0; i < slotObjects.Length; i++)
-            {
-                if (r.gameObject == slotObjects[i] ||
-                    r.gameObject.transform.IsChildOf(slotObjects[i].transform))
-                {
-                    newHover = i;
-                    break;
-                }
-            }
-            if (newHover != -1) break;
-        }
-
-        if (newHover != _hoveredSlotIndex)
-        {
-            ClearSlotHighlight();
-
-            if (newHover >= 0)
-            {
-                slotBackgrounds[newHover].color = slotHighlightColor;
-                _hoveredSlotIndex = newHover;
-            }
-        }
-    }
-
-    public void EndDragIcon(PointerEventData data)
-    {
-        if (_dragIcon != null)
-            Destroy(_dragIcon);
-
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(data, results);
-
-        int hitIndex = -1;
-        foreach (var r in results)
-        {
-            for (int i = 0; i < slotObjects.Length; i++)
-            {
-                if (r.gameObject == slotObjects[i] ||
-                    r.gameObject.transform.IsChildOf(slotObjects[i].transform))
-                {
-                    hitIndex = i;
-                    break;
-                }
-            }
-            if (hitIndex != -1) break;
-        }
-
-        if (hitIndex == _dragSourceIndex)
-        {
-            if (slotIcons[_dragSourceIndex] != null)
-                slotIcons[_dragSourceIndex].gameObject.SetActive(true);
-
-            _dragSourceIndex = -1;
-            return;
-        }
-
-        if (hitIndex >= 0 && hitIndex != _dragSourceIndex)
-        {
-            SwapSeedSlots(_dragSourceIndex, hitIndex);
-
-            var rt = seedSlots.GetComponent<RectTransform>();
-            if (rt != null)
-                LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
-
-            InitializeSeedSlotsUI();
-
-            SeedInventory.Instance.SelectSlot(hitIndex);
-            UpdateSelectedSlotUI(hitIndex);
-        }
-        else
-        {
-            if (slotIcons[_dragSourceIndex] != null)
-                slotIcons[_dragSourceIndex].gameObject.SetActive(true);
-        }
-
-        UpdateTooltipHandlers();
-        ClearSlotHighlight();
-        _dragSourceIndex = -1;
-    }
-
-    private void OnSlotKeyPressed(int i)
-    {
-        float now = Time.time;
-
-        if (pendingSwapSlot >= 0)
-        {
-            int first = pendingSwapSlot;
-            int second = i;
-
-            if (first == second)
-            {
-                HighlightSlot(first, false);
-                pendingSwapSlot = -1;
-                return;
-            }
-
-            SwapSeedSlots(first, second);
-            HighlightSlot(first, false);
-            pendingSwapSlot = -1;
-
-            InitializeSeedSlotsUI();
-            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
-            return;
-        }
-
-        if (i == lastPressSlot && (now - lastPressTime) < doublePressThreshold)
-        {
-            pendingSwapSlot = i;
-            HighlightSlot(i, true);
-        }
-        else
-        {
-            SeedInventory.Instance.SelectSlot(i);
-            InterfaceSounds.PlaySound(InterfaceSoundType.OnSeedSelect);
-            UpdateSelectedSlotUI(i);
-        }
-
-        lastPressSlot = i;
-        lastPressTime = now;
-    }
-
-    private void HighlightSlot(int idx, bool highlight)
-    {
-        if (idx < 0 || idx >= slotObjects.Length) return;
-
-        if (highlight)
-        {
-            slotBackgrounds[idx].color = selectedColor;
-            slotObjects[idx].transform.localScale = new Vector3(selectedScale, selectedScale, 1f);
-        }
-        else
-        {
-            slotBackgrounds[idx].color = normalColor;
-            slotObjects[idx].transform.localScale = new Vector3(normalScale, normalScale, 1f);
-        }
-    }
-
-    private void SwapSeedSlots(int a, int b)
-    {
-        PlantSlot slotA = SeedInventory.Instance.GetPlantSlot(a);
-        PlantSlot slotB = SeedInventory.Instance.GetPlantSlot(b);
-
-        if (slotA == null || slotB == null) return;
-
-        SeedsEnum tmpSeedType = slotA.seedType;
-        GameObject tmpPrefab = slotA.plantPrefab;
-        Sprite tmpIcon = slotA.plantIcon;
-        int tmpCount = slotA.seedCount;
-        int tmpDaysToGrow = slotA.daysToGrow;
-        string tmpDescription = slotA.description;
-        PlantDataSO tmpData = slotA.data;
-
-        slotA.seedType = slotB.seedType;
-        slotA.plantPrefab = slotB.plantPrefab;
-        slotA.plantIcon = slotB.plantIcon;
-        slotA.seedCount = slotB.seedCount;
-        slotA.daysToGrow = slotB.daysToGrow;
-        slotA.description = slotB.description;
-        slotA.data = slotB.data;
-
-        slotB.seedType = tmpSeedType;
-        slotB.plantPrefab = tmpPrefab;
-        slotB.plantIcon = tmpIcon;
-        slotB.seedCount = tmpCount;
-        slotB.daysToGrow = tmpDaysToGrow;
-        slotB.description = tmpDescription;
-        slotB.data = tmpData;
+        if (Tooltip != null)
+            Tooltip.HideTooltip();
     }
 
     public void AnimateRespawnRecovery(float duration)
-    {
-        if (playerLife == null || manaSystem == null) return;
-        StartCoroutine(AnimateBarsCoroutine(duration));
-    }
-
-    private IEnumerator AnimateBarsCoroutine(float duration)
-    {
-        float time = 0f;
-
-        float startHealth = 0f;
-        float endHealth = playerLife.maxHealth;
-
-        float startMana = 0f;
-        float endMana = manaSystem.GetMaxMana();
-
-        playerLife.currentHealth = 0f;
-        manaSystem.SetMana(0f);
-        while (time < duration)
-        {
-            float t = time / duration;
-
-            playerLife.currentHealth = Mathf.Lerp(startHealth, endHealth, t);
-            manaSystem.SetMana(Mathf.Lerp(startMana, endMana, t));
-
-            UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-            UpdateManaUI();
-
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        playerLife.currentHealth = endHealth;
-        manaSystem.SetMana(endMana);
-
-        UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-        UpdateManaUI();
-    }
-
-    private void OnSlotClicked(int slotIndex)
-    {
-        SeedInventory.Instance.SelectSlot(slotIndex);
-        UpdateSelectedSlotUI(slotIndex);
-
-        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem ability)
-        {
-            ability.SetAbility(PlayerAbility.Planting);
-        }
-
-        InterfaceSounds.PlaySound(InterfaceSoundType.MenuButtonHover);
-    }
-
-
-    private void UpdateTooltipHandlers()
-    {
-        for (int i = 0; i < slotObjects.Length; i++)
-        {
-            var tooltip = slotObjects[i]?.GetComponent<PlantSlotTooltipHandler>();
-            if (tooltip != null)
-            {
-                tooltip.slotIndex = i;
-            }
-        }
-    }
-
-    private void UpdateWhiteBar()
-    {
-        if (whiteFillImage == null || fillImage == null) return;
-
-        float current = whiteFillImage.fillAmount;
-        float target = fillImage.fillAmount;
-
-        if (current > target)
-        {
-            whiteFillImage.fillAmount = Mathf.MoveTowards(current, target, whiteBarSpeed * Time.deltaTime);
-        }
-        else
-        {
-            whiteFillImage.fillAmount = target;
-        }
-    }
+        => StartCoroutine(AnimateRespawnCoroutine(duration));
 
     public void SetGrayscaleGhostEffect(bool enabled)
     {
-        if (bloom != null)
-            bloom.active = !enabled;
-
-        if (colorAdjustments != null)
-            colorAdjustments.saturation.value = enabled ? -100f : 15f;
-    }
-
-
-    private void ClearSlotHighlight()
-    {
-        if (_hoveredSlotIndex >= 0)
-        {
-            slotBackgrounds[_hoveredSlotIndex].color = normalColor;
-            _hoveredSlotIndex = -1;
-        }
+        if (Feedback != null)
+            Feedback.SetGrayscaleEffect(enabled);
     }
 
     public void ShowRitualOverlay()
     {
-        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
-        ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(0f, 1f));
+        if (Feedback != null)
+            Feedback.ShowRitualOverlay();
     }
 
     public void HideRitualOverlay()
     {
-        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
-        ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(ritualOverlayImage.color.a, 0f));
+        if (Feedback != null)
+            Feedback.HideRitualOverlay();
     }
 
-    private IEnumerator FadeRitualOverlay(float from, float to)
+    private IEnumerator AnimateRespawnCoroutine(float duration)
     {
-        if (ritualOverlayImage == null) yield break;
-
-        ritualOverlayImage.gameObject.SetActive(true);
-        float elapsed = 0f;
-        Color color = ritualOverlayImage.color;
-
-        while (elapsed < overlayFadeDuration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            color.a = Mathf.Lerp(from, to, elapsed / overlayFadeDuration);
-            ritualOverlayImage.color = color;
-            yield return null;
-        }
-        color.a = to;
-        ritualOverlayImage.color = color;
-
-        if (to == 0f) ritualOverlayImage.gameObject.SetActive(false);
+        if (Health != null)
+            yield return Health.AnimateRespawnRecovery(duration);
+        if (Mana != null)
+            yield return Mana.AnimateRespawnRecovery(duration);
     }
 }

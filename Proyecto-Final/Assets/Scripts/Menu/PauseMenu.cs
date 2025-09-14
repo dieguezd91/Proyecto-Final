@@ -31,11 +31,10 @@ public class PauseMenu : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
         }
 
-        // buscamos el componente DepthOfField en el VolumeProfile
         if (blurVolume != null && blurVolume.profile.TryGet(out dof))
         {
             dof.focalLength.overrideState = true;
-            dof.focalLength.value = 0f; // sin blur al inicio
+            dof.focalLength.value = 0f;
         }
     }
 

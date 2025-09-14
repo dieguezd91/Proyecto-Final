@@ -57,16 +57,16 @@ public class SeedInventory : MonoBehaviour
         SelectSlot(0);
     }
 
-    private void Update()
-    {
-        for (int i = 0; i < 9; i++)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1 + i))
-            {
-                SelectSlot(i);
-            }
-        }
-    }
+    //private void Update()
+    //{
+    //    for (int i = 0; i < 9; i++)
+    //    {
+    //        if (Input.GetKeyDown(KeyCode.Alpha1 + i))
+    //        {
+    //            SelectSlot(i);
+    //        }
+    //    }
+    //}
 
     public void RemoveSeedFromSlot(int slotIndex)
     {
