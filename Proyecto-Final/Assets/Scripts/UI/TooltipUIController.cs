@@ -10,7 +10,11 @@ public class TooltipUIController : UIControllerBase
     [SerializeField] private TextMeshProUGUI seedNameText;
     [SerializeField] private TextMeshProUGUI seedDescriptionText;
     [SerializeField] private Image fullyGrownImage;
-    [SerializeField] private Vector2 tooltipOffset = new Vector2(100f, -100f);
+    [SerializeField] private Vector2 tooltipOffset = new Vector2(0f, 120f);
+
+    [SerializeField] private Canvas rootCanvas;
+    private RectTransform canvasRect;
+    private RectTransform tooltipRect;
 
     private bool isTooltipVisible = false;
     private int currentSlotIndex = -1;
@@ -19,7 +23,12 @@ public class TooltipUIController : UIControllerBase
     private bool pendingShow = false;
     private bool pendingHide = false;
 
-    protected override void CacheReferences() { }
+    protected override void CacheReferences()
+    {
+        if (rootCanvas == null) rootCanvas = GetComponentInParent<Canvas>(true);
+        if (tooltipPanel != null) tooltipRect = tooltipPanel.GetComponent<RectTransform>();
+        if (rootCanvas != null) canvasRect = rootCanvas.GetComponent<RectTransform>();
+    }
 
     protected override void SetupEventListeners()
     {
@@ -73,6 +82,11 @@ public class TooltipUIController : UIControllerBase
 
     private void OnTooltipRequested(int slotIndex)
     {
+        if (LevelManager.Instance.currentGameState != GameState.Planting)
+        {
+            return;
+        }
+
         if (isTooltipVisible && currentSlotIndex == slotIndex)
         {
             return;
@@ -142,10 +156,14 @@ public class TooltipUIController : UIControllerBase
 
     public void ShowSlotTooltip(int slotIndex)
     {
-        if (!ValidateTooltipComponents())
+        if (LevelManager.Instance.currentGameState != GameState.Planting)
         {
+            HideTooltip();
             return;
         }
+
+        if (!ValidateTooltipComponents())
+            return;
 
         PlantSlot slot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
         if (slot == null || slot.seedCount <= 0)
@@ -175,18 +193,16 @@ public class TooltipUIController : UIControllerBase
         tooltipPanel.SetActive(true);
         isTooltipVisible = true;
 
-        Vector3 targetPosition = Input.mousePosition + (Vector3)tooltipOffset;
-        targetPosition = ClampTooltipToScreen(targetPosition);
-        tooltipPanel.transform.position = targetPosition;
-
         seedNameText.text = data.plantName;
         seedDescriptionText.text = FormatPlantDescription(data);
         ConfigureTooltipImage(data);
+
+        UpdateTooltipPosition();
     }
 
     private string FormatPlantDescription(PlantDataSO data)
     {
-        return $"{data.description}\n<color=#FFD700>Días para crecer: {data.daysToGrow}</color>";
+        return $"{data.description}\n<color=#FFD700>DAYS TO GROW: {data.daysToGrow}</color>";
     }
 
     private void ConfigureTooltipImage(PlantDataSO data)
@@ -226,31 +242,43 @@ public class TooltipUIController : UIControllerBase
 
     private void UpdateTooltipPosition()
     {
-        if (tooltipPanel != null && isTooltipVisible)
+        if (!isTooltipVisible || tooltipRect == null || canvasRect == null) return;
+
+        var cam = (rootCanvas != null && rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay)
+            ? rootCanvas.worldCamera
+            : null;
+
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                canvasRect, Input.mousePosition, cam, out Vector2 localMouse))
         {
-            Vector3 targetPosition = Input.mousePosition + (Vector3)tooltipOffset;
-            targetPosition = ClampTooltipToScreen(targetPosition);
-            tooltipPanel.transform.position = targetPosition;
+            Vector2 target = localMouse + tooltipOffset;
+
+            float margin = 10f;
+            float halfHeight = tooltipRect.rect.height * (1f - tooltipRect.pivot.y);
+            if (target.y + halfHeight + margin > canvasRect.rect.yMax)
+            {
+                target.y = localMouse.y - Mathf.Abs(tooltipOffset.y);
+            }
+
+            tooltipRect.anchoredPosition = ClampToCanvas(target, tooltipRect, canvasRect, margin);
         }
     }
 
-    private Vector3 ClampTooltipToScreen(Vector3 position)
+    private static Vector2 ClampToCanvas(
+    Vector2 anchored, RectTransform tooltip, RectTransform canvas, float margin)
     {
-        if (tooltipPanel == null) return position;
+        Rect c = canvas.rect;
+        Vector2 size = tooltip.rect.size;
+        Vector2 pivot = tooltip.pivot;
 
-        RectTransform tooltipRect = tooltipPanel.GetComponent<RectTransform>();
-        if (tooltipRect == null) return position;
+        float minX = c.xMin + size.x * pivot.x + margin;
+        float maxX = c.xMax - size.x * (1f - pivot.x) - margin;
+        float minY = c.yMin + size.y * pivot.y + margin;
+        float maxY = c.yMax - size.y * (1f - pivot.y) - margin;
 
-        Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        Vector2 tooltipSize = tooltipRect.sizeDelta;
-
-        float margin = 10f;
-        position.x = Mathf.Clamp(position.x, tooltipSize.x * 0.5f + margin,
-                                screenSize.x - tooltipSize.x * 0.5f - margin);
-        position.y = Mathf.Clamp(position.y, tooltipSize.y * 0.5f + margin,
-                                screenSize.y - tooltipSize.y * 0.5f - margin);
-
-        return position;
+        anchored.x = Mathf.Clamp(anchored.x, minX, maxX);
+        anchored.y = Mathf.Clamp(anchored.y, minY, maxY);
+        return anchored;
     }
 
     public void ForceHide()
