@@ -133,7 +133,6 @@ public class LifeController : MonoBehaviour
 
         isDead = true;
 
-        // INMEDIATAMENTE deshabilitar movimiento y acciones
         if (isPlayer)
         {
             var playerController = GetComponent<PlayerController>();
@@ -288,9 +287,10 @@ public class LifeController : MonoBehaviour
 
     public void ResetLife()
     {
+        isRespawning = false;
         isDead = false;
-        currentHealth = maxHealth;
 
+        currentHealth = maxHealth;
         onHealthChanged?.Invoke(currentHealth, maxHealth);
 
         foreach (var col in GetComponents<Collider2D>())

@@ -20,6 +20,8 @@ public class HealthUIController : UIControllerBase
     [SerializeField] private TextMeshProUGUI homeHealthText;
 
     private float targetFill = 1f;
+    private float lastHealth = 1f;
+    private Coroutine whiteBarRoutine;
     private LifeController playerLife;
     private HouseLifeController homeLife;
     private GameObject player;
@@ -59,8 +61,8 @@ public class HealthUIController : UIControllerBase
             homeHealthBar.value = homeLife.CurrentHealth;
         }
 
-        if (whiteFillImage != null && playerLife != null)
-            whiteFillImage.fillAmount = playerLife.GetHealthPercentage();
+        if (whiteFillImage != null && healthBar != null)
+            whiteFillImage.fillAmount = healthBar.value / healthBar.maxValue;
     }
 
     public override void HandleUpdate()
@@ -78,6 +80,47 @@ public class HealthUIController : UIControllerBase
         healthBar.value = currentHealth;
         UpdatePlayerFillColor(healthPercentage);
         UpdatePlayerHealthText(currentHealth, maxHealth);
+
+        if (whiteFillImage != null)
+        {
+            if (healthPercentage < lastHealth)
+            {
+                if (whiteBarRoutine != null) StopCoroutine(whiteBarRoutine);
+                whiteBarRoutine = StartCoroutine(BlinkWhiteBar(healthPercentage));
+            }
+            else
+            {
+                whiteFillImage.fillAmount = healthPercentage;
+            }
+        }
+
+        lastHealth = healthPercentage;
+    }
+    private IEnumerator BlinkWhiteBar(float targetNormalized)
+    {
+        const int blinks = 2;
+        const float interval = 0.1f;
+
+        for (int i = 0; i < blinks; i++)
+        {
+            whiteFillImage.enabled = false;
+            yield return new WaitForSeconds(interval);
+            whiteFillImage.enabled = true;
+            yield return new WaitForSeconds(interval);
+        }
+
+        while (whiteFillImage.fillAmount > targetNormalized)
+        {
+            whiteFillImage.fillAmount = Mathf.MoveTowards(
+                whiteFillImage.fillAmount,
+                targetNormalized,
+                whiteBarSpeed * Time.deltaTime
+            );
+            yield return null;
+        }
+
+        whiteFillImage.fillAmount = targetNormalized;
+        whiteBarRoutine = null;
     }
 
     public void UpdateHomeHealth(float currentHealth, float maxHealth)
@@ -116,10 +159,10 @@ public class HealthUIController : UIControllerBase
 
     private void UpdateWhiteBar()
     {
-        if (whiteFillImage == null || fillImage == null) return;
+        if (whiteFillImage == null || healthBar == null) return;
 
         float current = whiteFillImage.fillAmount;
-        float target = fillImage.fillAmount;
+        float target = healthBar.maxValue > 0f ? (healthBar.value / healthBar.maxValue) : 0f;
 
         if (current > target)
         {
