@@ -178,7 +178,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void OnAbilityChanged(PlayerAbility newAbility)
     {
-        if (seedSlotsCanvasGroup == null) return;
+        if (seedSlotsCanvasGroup == null || !isActiveAndEnabled) return;
 
         bool shouldShow = newAbility == PlayerAbility.Planting;
         if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);

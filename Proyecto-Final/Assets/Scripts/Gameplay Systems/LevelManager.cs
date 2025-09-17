@@ -336,22 +336,30 @@ public class LevelManager : MonoBehaviour
 
     public void ResetGameData()
     {
-        Debug.Log("Reseteando datos del juego...");
+        Debug.Log("Reseteando");
         Time.timeScale = 1f;
+
+        if (uiManager != null)
+        {
+            uiManager.CloseInventory();
+            if (uiManager.gameOverPanel != null)
+                uiManager.gameOverPanel.SetActive(false);
+        }
+
+        uiManager?.InitializeSeedSlotsUI();
+
+        if (SeedInventory.Instance != null)
+        {
+            for (int i = 0; i < 9; i++)
+                SeedInventory.Instance.RemoveSeedFromSlot(i);
+
+            SeedInventory.Instance.SelectSlot(0);
+        }
 
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.ClearAllMaterials();
             InventoryManager.Instance.SetGold(0);
-        }
-
-        if (SeedInventory.Instance != null)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                SeedInventory.Instance.RemoveSeedFromSlot(i);
-            }
-            SeedInventory.Instance.SelectSlot(0);
         }
 
         ResetDayCount();
@@ -404,16 +412,6 @@ public class LevelManager : MonoBehaviour
         uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
         uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
         uiManager?.UpdateManaUI();
-        uiManager?.InitializeSeedSlotsUI();
-
-        if (uiManager != null)
-        {
-            uiManager.CloseInventory();
-            if (uiManager.gameOverPanel != null)
-            {
-                uiManager.gameOverPanel.SetActive(false);
-            }
-        }
 
         Debug.Log("Reset completado.");
     }

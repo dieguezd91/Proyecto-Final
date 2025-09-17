@@ -77,20 +77,16 @@ public class DayNightLightController : MonoBehaviour
     void Update()
     {
         GameState currentState = LevelManager.Instance.currentGameState;
+        if (currentState == GameState.GameOver) return;
 
         if (!isTransitioning && currentState != lastGameState)
         {
             if (currentState != GameState.Paused)
-            {
                 lastState = currentState;
-            }
 
             bool isPauseTransition = (currentState == GameState.Paused || lastGameState == GameState.Paused);
-
             if (!isPauseTransition)
-            {
                 UpdateLightBasedOnGameState(currentState, useSmoothTransition);
-            }
 
             lastGameState = currentState;
         }
@@ -98,7 +94,7 @@ public class DayNightLightController : MonoBehaviour
 
     void UpdateLightBasedOnGameState(GameState gameState, bool useTransition)
     {
-        if (gameState == GameState.Paused || gameState == GameState.OnRitual)
+        if (gameState == GameState.Paused || gameState == GameState.OnRitual || gameState == GameState.GameOver)
             return;
 
         bool isDayState = gameState != GameState.Night;
