@@ -9,7 +9,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
     public float acceleration = 2f;
     public float stopDistance = 0.1f;
 
-    [Tooltip("Cu�nto hacia abajo persigue el gnomo respecto al centro del jugador")]
+    [Tooltip("Cuánto hacia abajo persigue el gnomo respecto al centro del jugador")]
     [SerializeField] private float chaseYOffset = 0.5f;
 
     [Header("EXPLOSION")]
@@ -43,8 +43,10 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         _rb = GetComponent<Rigidbody2D>();
         _rb.gravityScale = 0f;
         _rb.drag = 0.5f;
+
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
+
         soundBase = GetComponent<EnemySoundBase>();
         lifeController = GetComponent<LifeController>();
         if (lifeController != null)
@@ -55,29 +57,17 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     void Start()
     {
-        var p = GameObject.FindGameObjectWithTag("Player");
-        if (p != null) _player = p.transform;
+        CachePlayerReference();
         soundBase?.PlaySound(EnemySoundType.Spawning, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     void Update()
     {
-        var pObj = GameObject.FindGameObjectWithTag("Player");
-        if (pObj != null)
+        if (_player == null || _playerLife == null)
         {
-            var life = pObj.GetComponent<LifeController>();
-            if (life != null && life.IsTargetable())
-            {
-                _player = pObj.transform;
-                _playerLife = life;
-            }
-            else
-            {
-                _player = null;
-                _playerLife = null;
-            }
+            CachePlayerReference();
         }
-        else
+        else if (!_playerLife.IsTargetable())
         {
             _player = null;
             _playerLife = null;
@@ -86,7 +76,8 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     void FixedUpdate()
     {
-        if (_isClinging || _player == null) return;
+        if (_isClinging || _player == null || _playerLife == null || !_playerLife.IsTargetable())
+            return;
 
         if (GetComponent<KnockbackReceiver>()?.IsBeingKnockedBack() == true)
             return;
@@ -94,6 +85,7 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         Vector2 targetPos = (Vector2)_player.position + Vector2.down * chaseYOffset;
         Vector2 disp = targetPos - (Vector2)transform.position;
         float dist = disp.magnitude;
+
         Vector2 desired = dist > stopDistance
             ? disp.normalized * maxSpeed
             : Vector2.zero;
@@ -101,10 +93,9 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         _velocity = Vector2.Lerp(_velocity, desired, acceleration * Time.fixedDeltaTime);
         _rb.velocity = _velocity;
 
-        // Step sound logic (do not play audio yet)
         if (_velocity.sqrMagnitude > 0.01f && Time.time - lastFootstepTime >= footstepCooldown)
         {
-            soundBase.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+            soundBase?.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
             lastFootstepTime = Time.time;
         }
 
@@ -113,13 +104,15 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        if (_isClinging || _player == null) return;
+        if (_isClinging || _player == null || _playerLife == null) return;
 
         if ((playerLayerMask.value & (1 << col.gameObject.layer)) != 0)
         {
             var life = col.GetComponent<LifeController>();
             if (life != null && life.IsTargetable())
+            {
                 StartCoroutine(ClingAndExplode(col.attachedRigidbody));
+            }
         }
     }
 
@@ -153,10 +146,9 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         Explode();
     }
 
-
     public void Explode()
     {
-        if (targetLife != null)
+        if (targetLife != null && targetLife.IsTargetable())
         {
             float dmg = Random.Range(minExplosionDamage, maxExplosionDamage);
             targetLife.TakeDamage(dmg);
@@ -169,7 +161,6 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         Destroy(gameObject);
     }
 
-
     private void LookDir(Vector2 targetPos, Vector2 currentPos)
     {
         Vector2 lookDir = targetPos - currentPos;
@@ -181,12 +172,10 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         if (direction.x > 0.1f)
         {
             spriteRenderer.flipX = true;
-            
         }
         else if (direction.x < -0.1f)
         {
             spriteRenderer.flipX = false;
-            
         }
     }
 
@@ -208,6 +197,20 @@ public class GardenGnomeController : MonoBehaviour, IEnemy
         if (lifeController != null)
         {
             lifeController.onDamaged.RemoveListener(OnDamaged);
+        }
+    }
+
+    private void CachePlayerReference()
+    {
+        var pObj = GameObject.FindGameObjectWithTag("Player");
+        if (pObj != null)
+        {
+            var life = pObj.GetComponent<LifeController>();
+            if (life != null && life.IsTargetable())
+            {
+                _player = pObj.transform;
+                _playerLife = life;
+            }
         }
     }
 }

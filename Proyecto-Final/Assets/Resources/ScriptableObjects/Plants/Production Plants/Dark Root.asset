@@ -17,6 +17,6 @@ MonoBehaviour:
   plantIcon: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 3
-  description: Production plant. Produces materials used for crafting.
+  description: <u>Production plant</u>. Produces materials used for crafting.
   seedType: 3
   slotIndex: 0

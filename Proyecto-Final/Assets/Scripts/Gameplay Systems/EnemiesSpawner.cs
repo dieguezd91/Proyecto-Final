@@ -18,10 +18,10 @@ public class EnemiesSpawner : MonoBehaviour
     [SerializeField] private int enemiesPerNightIncrement;
     [SerializeField] private float difficultyScalingFactor = 1.2f;
 
-    [Header("Configuraci�n de Spawn Individual")]
-    [SerializeField] private float baseSpawnInterval; // Intervalo base entre spawns
+    [Header("Configuración de Spawn Individual")]
+    [SerializeField] private float baseSpawnInterval;
     [SerializeField] private float minSpawnInterval = 0.3f;
-    [SerializeField] private float spawnIntervalDecreasePerDay = 0.1f; // Reduccion de intervalo por dia
+    [SerializeField] private float spawnIntervalDecreasePerDay = 0.1f;
 
     [Header("Spawn Points")]
     public List<Transform> spawnPoints;
@@ -42,7 +42,6 @@ public class EnemiesSpawner : MonoBehaviour
     public UnityEvent<int, int> onHordeProgress;
 
     private int totalEnemiesKilled;
-    private int currentEnemiesAlive;
     private int totalEnemiesToKill;
     private int totalEnemiesSpawned;
     private bool isSpawning = false;
@@ -91,16 +90,9 @@ public class EnemiesSpawner : MonoBehaviour
 
         if (!IsBossNight())
         {
-            int trulyAliveEnemies = 0;
-            foreach (var enemy in activeEnemies)
-            {
-                if (enemy != null)
-                    trulyAliveEnemies++;
-            }
-
             if (LevelManager.Instance.currentGameState == GameState.Night &&
                 totalEnemiesKilled >= totalEnemiesToKill &&
-                trulyAliveEnemies <= 0 &&
+                GetTrulyAliveEnemiesCount() <= 0 &&
                 !hordeCompleted)
             {
                 hordeCompleted = true;
@@ -119,7 +111,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     private void StartBossNight()
     {
-        Debug.Log("Iniciando noche de jefe - No se spawnear�n enemigos normales");
+        Debug.Log("Iniciando noche de jefe - No se spawnearán enemigos normales");
 
         ResetHordeCounters();
         onHordeStart?.Invoke();
@@ -187,7 +179,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         Debug.Log($"Total de enemigos generados: {totalEnemiesSpawned}");
 
-        if (currentEnemiesAlive <= 0 && !hordeCompleted && !IsBossNight())
+        if (GetTrulyAliveEnemiesCount() <= 0 && !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;
             StopContinuousHorde(true);
@@ -235,7 +227,7 @@ public class EnemiesSpawner : MonoBehaviour
                     if (Vector3.Distance(point.position, playerTransform.position) > playerCheckRadius)
                     {
                         validSpawnPoints.Add(point);
-                      }
+                    }
                 }
 
                 spawnPoint = (validSpawnPoints.Count > 0)
@@ -256,7 +248,6 @@ public class EnemiesSpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(selectedEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
         enemy.transform.SetParent(this.transform);
-        currentEnemiesAlive++;
         activeEnemies.Add(enemy);
 
         LifeController enemyLife = enemy.GetComponent<LifeController>();
@@ -270,7 +261,6 @@ public class EnemiesSpawner : MonoBehaviour
     {
         totalEnemiesKilled = 0;
         totalEnemiesSpawned = 0;
-        currentEnemiesAlive = 0;
         totalEnemiesToKill = baseEnemiesPerNight;
         hordeCompleted = false;
         currentHordeTime = 0f;
@@ -289,26 +279,19 @@ public class EnemiesSpawner : MonoBehaviour
     void OnEnemyDeath(GameObject enemy)
     {
         totalEnemiesKilled++;
-        currentEnemiesAlive--;
-
-        activeEnemies.RemoveAll(e => e == null);
 
         if (activeEnemies.Contains(enemy))
         {
             activeEnemies.Remove(enemy);
         }
+        activeEnemies.RemoveAll(e => e == null);
 
         onHordeProgress?.Invoke(totalEnemiesKilled, totalEnemiesToKill);
 
-        int trulyAliveEnemies = 0;
-        foreach (var e in activeEnemies)
-        {
-            if (e != null)
-                trulyAliveEnemies++;
-        }
-
-        if (totalEnemiesKilled >= totalEnemiesToKill && trulyAliveEnemies <= 0 &&
-            LevelManager.Instance.currentGameState == GameState.Night && !hordeCompleted && !IsBossNight())
+        if (totalEnemiesKilled >= totalEnemiesToKill &&
+            GetTrulyAliveEnemiesCount() <= 0 &&
+            LevelManager.Instance.currentGameState == GameState.Night &&
+            !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;
             StopContinuousHorde(true);
@@ -353,7 +336,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     public int GetCurrentEnemiesAlive()
     {
-        return currentEnemiesAlive;
+        return GetTrulyAliveEnemiesCount();
     }
 
     public float GetHordeProgress()
@@ -366,7 +349,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (IsBossNight())
         {
-            return "�NOCHE DE JEFE!";
+            return "¡NOCHE DE JEFE!";
         }
 
         float adjustedInterval = AdjustSpawnIntervalByTime();
@@ -434,7 +417,6 @@ public class EnemiesSpawner : MonoBehaviour
         }
 
         totalEnemiesKilled = totalEnemiesToKill;
-        currentEnemiesAlive = 0;
         activeEnemies.Clear();
 
         hordeCompleted = true;
@@ -452,9 +434,9 @@ public class EnemiesSpawner : MonoBehaviour
         }
     }
 
-    private float CalculateEnemyWeight(GameObject prefab)
+    private int GetTrulyAliveEnemiesCount()
     {
-        return 1f;
+        activeEnemies.RemoveAll(e => e == null);
+        return activeEnemies.Count;
     }
 }
-

@@ -67,7 +67,7 @@ public class MusicManager : MonoBehaviour
         GameState currentState = LevelManager.Instance.GetCurrentGameState();
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName == "MenuScene")
+        if (sceneName == "RefactorMenu")
             return;
 
         if (sceneName == "SampleScene" || sceneName == "GameScene")
@@ -98,7 +98,7 @@ public class MusicManager : MonoBehaviour
     {
         string sceneName = SceneManager.GetActiveScene().name;
 
-        if (sceneName == "MenuScene")
+        if (sceneName == "RefactorMenu")
         {
             lastOfficialGameState = GameState.None;
             PlayMusic(menuMusic);

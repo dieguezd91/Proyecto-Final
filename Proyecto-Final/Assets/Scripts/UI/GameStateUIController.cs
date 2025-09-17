@@ -17,6 +17,7 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private Button instructionsButton;
     [SerializeField] private Button closeInstructionsButton;
     [SerializeField] private Button continueButton;
+    [SerializeField] private Button MainMenuButton;
 
     private bool isInstructionsOpen = false;
     private bool openedFromPauseMenu = false;
@@ -43,6 +44,9 @@ public class GameStateUIController : UIControllerBase
 
         if (closeInstructionsButton != null)
             closeInstructionsButton.onClick.AddListener(CloseInstructions);
+        
+        if (MainMenuButton != null)
+            MainMenuButton.onClick.AddListener(pauseMenu.GoToMainMenu);
 
         if (continueButton != null && pauseMenu != null)
             continueButton.onClick.AddListener(pauseMenu.Continue);
@@ -239,6 +243,9 @@ public class GameStateUIController : UIControllerBase
 
         if (closeInstructionsButton != null)
             closeInstructionsButton.onClick.RemoveListener(CloseInstructions);
+        
+        if (MainMenuButton != null)
+            MainMenuButton.onClick.RemoveListener(pauseMenu.GoToMainMenu);
 
         if (continueButton != null && pauseMenu != null)
             continueButton.onClick.RemoveListener(pauseMenu.Continue);

@@ -187,7 +187,7 @@ public class PauseMenu : MonoBehaviour
         GameManager.Instance?.ResumeGame();
         pauseMenu.SetActive(false);
         SoundManager.Instance.PlayOneShot("ButtonClick");
-        SceneManager.LoadScene("MenuScene");
+        SceneManager.LoadScene("RefactorMenu");
     }
 
     private IEnumerator FadeFocalLength(float target)

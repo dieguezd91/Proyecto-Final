@@ -381,8 +381,27 @@ public class Jefe : MonoBehaviour
         rb.velocity = Vector2.zero;
         isAttacking = true;
         soundBase?.PlaySound(EnemySoundType.Die);
+
+        foreach (var minion in currentMinions)
+        {
+            if (minion != null)
+            {
+                var life = minion.GetComponent<LifeController>();
+                if (life != null)
+                {
+                    life.Die();
+                }
+                else
+                {
+                    Destroy(minion);
+                }
+            }
+        }
+        currentMinions.Clear();
+
         StartCoroutine(DeathSequence());
     }
+
 
     private IEnumerator DeathSequence()
     {

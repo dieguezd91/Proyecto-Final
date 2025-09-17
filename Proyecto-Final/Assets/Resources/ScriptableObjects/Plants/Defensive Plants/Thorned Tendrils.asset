@@ -17,7 +17,7 @@ MonoBehaviour:
   plantIcon: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 1
-  description: 'Defensive plant. Deals damage to enemies that attack it. WARNING:
-    Infermun is immune.'
+  description: '<u>Defensive plant</u>. Deals damage to enemies that attack it. <u>WARNING:
+    Infermun is immune</u>.'
   seedType: 7
   slotIndex: 0
