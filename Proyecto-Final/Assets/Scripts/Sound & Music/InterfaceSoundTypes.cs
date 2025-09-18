@@ -1,6 +1,6 @@
 public enum InterfaceSoundType
 {
-    // Generic Button Options
+    // Generic Button ShowOptions
     GenericButtonClick,
     GenericButtonDisabledClick,
     GenericButtonHover,
@@ -13,7 +13,7 @@ public enum InterfaceSoundType
     GenericButtonDeselect,
     GenericButtonSubmit,
     
-    // Main Menu Button Options
+    // Main Menu Button ShowOptions
     MenuButtonPlay,
     MenuButtonOptions,
     MenuButtonControls,

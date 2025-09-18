@@ -12,7 +12,7 @@ public class HouseRestorationSystem : MonoBehaviour
         public int restorePercentage;
     }
 
-    [Header("Restoration Options")]
+    [Header("Restoration ShowOptions")]
     public RestorationOption[] options;
 
     private bool hasRestoredToday = false;

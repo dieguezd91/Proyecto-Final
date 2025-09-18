@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6090409121947563872, guid: aaa7c97a45a36f2449cd20e1607175a2, type: 3}
       propertyPath: m_Name
-      value: Slider Generic
+      value: Slider Master Volume
       objectReference: {fileID: 0}
     - target: {fileID: 6966006443333217296, guid: aaa7c97a45a36f2449cd20e1607175a2, type: 3}
       propertyPath: m_Pivot.x

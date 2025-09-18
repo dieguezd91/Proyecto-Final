@@ -129,11 +129,13 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void HandleClick()
     {
         PlaySound(_onClickSound, _enableClickSound);
+        OnClick.Invoke();
     }
 
     private void HandleHover()
     {
         PlaySound(_onHoverSound, _enableHoverSound);
+        OnHover.Invoke();
     }
 
     private void HandleDisabledClick()
@@ -192,6 +194,14 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
             currentState = newState;
         }
     }
+    #endregion
+
+    #region Public Events
+    [Header("Button Events")]
+    [HideInInspector]
+    public UnityEvent OnClick = new();
+    [HideInInspector]
+    public UnityEvent OnHover = new();
     #endregion
 }
 
