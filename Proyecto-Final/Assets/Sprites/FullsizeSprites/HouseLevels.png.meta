@@ -550,6 +550,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TreeHouse
+      rect:
+        serializedVersion: 2
+        x: 1360
+        y: 288
+        width: 210
+        height: 339
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84082e25a6297e045b68acb637eb7dfe
+      internalID: 75001168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -582,6 +603,7 @@ TextureImporter:
       HouseRoof5D: 1598785333
       HouseRoof5HD: -1709602296
       HouseRoof5MD: -587759188
+      TreeHouse: 75001168
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

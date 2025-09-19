@@ -764,9 +764,9 @@ TextureImporter:
       name: RestorationButtonHeart
       rect:
         serializedVersion: 2
-        x: 140
-        y: 83
-        width: 41
+        x: 91
+        y: 35
+        width: 42
         height: 42
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -786,9 +786,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 96
-        y: 142
+        y: 141
         width: 96
-        height: 18
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -953,10 +953,10 @@ TextureImporter:
       name: InventoryDeco
       rect:
         serializedVersion: 2
-        x: 463
-        y: 5
-        width: 39
-        height: 77
+        x: 462
+        y: 4
+        width: 41
+        height: 79
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -974,10 +974,10 @@ TextureImporter:
       name: HealthFull
       rect:
         serializedVersion: 2
-        x: 424
-        y: 33
-        width: 17
-        height: 17
+        x: 423
+        y: 32
+        width: 19
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -995,10 +995,10 @@ TextureImporter:
       name: HealthEmpty
       rect:
         serializedVersion: 2
-        x: 442
-        y: 33
-        width: 17
-        height: 17
+        x: 441
+        y: 32
+        width: 19
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1016,10 +1016,10 @@ TextureImporter:
       name: ManaEmpty
       rect:
         serializedVersion: 2
-        x: 442
-        y: 14
-        width: 17
-        height: 17
+        x: 441
+        y: 13
+        width: 19
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1037,10 +1037,10 @@ TextureImporter:
       name: ManaFull
       rect:
         serializedVersion: 2
-        x: 424
-        y: 14
-        width: 17
-        height: 17
+        x: 423
+        y: 13
+        width: 19
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1058,10 +1058,10 @@ TextureImporter:
       name: HouseHealthFull
       rect:
         serializedVersion: 2
-        x: 384
-        y: 16
-        width: 32
-        height: 32
+        x: 383
+        y: 15
+        width: 34
+        height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1079,10 +1079,10 @@ TextureImporter:
       name: HouseHealthEmpty
       rect:
         serializedVersion: 2
-        x: 336
-        y: 16
-        width: 32
-        height: 32
+        x: 335
+        y: 15
+        width: 34
+        height: 34
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1113,6 +1113,111 @@ TextureImporter:
       bones: []
       spriteID: b010e24ce67e0034fbb525aa41d00b4f
       internalID: 1496787134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationButtonUIPress
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 142
+        width: 96
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98376ffd3ecb5af4d8b3f36df635c3c4
+      internalID: -1569556968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationExitUI
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 109
+        width: 46
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfa6db7f12eb0fc4292c8fdd16d8f47a
+      internalID: 774320644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationExitUIPress
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 110
+        width: 46
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92eb762cbdaa9034085f0bae47219825
+      internalID: -1595310454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationExitUIHover
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 80
+        width: 46
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e162996f659de664f82603c2c35b95d4
+      internalID: 726165551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationButtonUIHover
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 110
+        width: 96
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 589fb67d2c245bf4399f03c6a6392b55
+      internalID: -236189874
       vertices: []
       indices: 
       edges: []
@@ -1173,6 +1278,11 @@ TextureImporter:
       MoonStage4: -1529809225
       RestorationButtonHeart: -678659094
       RestorationButtonUI: 924556296
+      RestorationButtonUIHover: -236189874
+      RestorationButtonUIPress: -1569556968
+      RestorationExitUI: 774320644
+      RestorationExitUIHover: 726165551
+      RestorationExitUIPress: -1595310454
       RestorationHeartUI: -1738444724
       RestorationScreen: -1775831014
       RitualUI: -972838167
@@ -1195,7 +1305,6 @@ TextureImporter:
       UISprites_13: -1371413568
       UISprites_14: -1732533042
       UISprites_15: -2082857234
-      UISprites_17: 774320644
       UISprites_2: -713296351
       UISprites_3: 1425165297
       UISprites_4: -281481597
