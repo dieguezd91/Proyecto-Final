@@ -4,6 +4,7 @@ using System.Collections;
 public class UIManager : MonoBehaviour
 {
     [Header("UI Module Components")]
+    [SerializeField] private PauseMenuController pauseMenuController;
     [SerializeField] private HealthUIController healthUI;
     [SerializeField] private ManaUIController manaUI;
     [SerializeField] private InventoryUIController inventoryUIController;
@@ -24,6 +25,7 @@ public class UIManager : MonoBehaviour
     public InterfaceSoundBase InterfaceSounds => interfaceSounds;
     public static UIManager Instance { get; private set; }
 
+    public PauseMenuController PauseMenu => pauseMenuController;
     public HealthUIController Health => healthUI;
     public ManaUIController Mana => manaUI;
     public InventoryUIController Inventory => inventoryUIController;
@@ -53,6 +55,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
+        pauseMenuController?.HandleUpdate();
         gameStateUI?.HandleUpdate();
         tooltipUI?.HandleUpdate();
         feedbackUI?.HandleUpdate();
@@ -62,6 +65,7 @@ public class UIManager : MonoBehaviour
 
     private void InitializeModules()
     {
+        if (pauseMenuController == null) pauseMenuController = GetComponentInChildren<PauseMenuController>();
         if (healthUI == null) healthUI = GetComponentInChildren<HealthUIController>();
         if (manaUI == null) manaUI = GetComponentInChildren<ManaUIController>();
         if (inventoryUIController == null) inventoryUIController = GetComponentInChildren<InventoryUIController>();
@@ -70,6 +74,7 @@ public class UIManager : MonoBehaviour
         if (feedbackUI == null) feedbackUI = GetComponentInChildren<FeedbackUIController>();
         if (tooltipUI == null) tooltipUI = GetComponentInChildren<TooltipUIController>();
 
+        pauseMenuController?.Initialize();
         healthUI?.Initialize();
         manaUI?.Initialize();
         inventoryUIController?.Initialize();
@@ -81,6 +86,7 @@ public class UIManager : MonoBehaviour
 
     private void SetupModules()
     {
+        pauseMenuController?.Setup();
         healthUI?.Setup();
         manaUI?.Setup();
         inventoryUIController?.Setup();

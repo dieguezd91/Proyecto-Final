@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,18 +14,12 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject dayControlPanel;
     [SerializeField] private GameObject abilityPanel;
 
-    [Header("Instructions")]
-    [SerializeField] private Button instructionsButton;
-    [SerializeField] private Button closeInstructionsButton;
-    [SerializeField] private Button continueButton;
-    [SerializeField] private Button MainMenuButton;
-
     private bool isInstructionsOpen = false;
     private bool openedFromPauseMenu = false;
     private GameState lastGameState = GameState.None;
     private GameState lastState = GameState.Day;
     private PlayerController playerController;
-    private PauseMenu pauseMenu;
+    [SerializeField] private PauseMenuController _pauseMenuController;
 
     public bool IsInstructionsOpen => isInstructionsOpen;
 
@@ -33,25 +28,11 @@ public class GameStateUIController : UIControllerBase
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
             playerController = player.GetComponent<PlayerController>();
-
-        pauseMenu = FindObjectOfType<PauseMenu>();
     }
 
     protected override void SetupEventListeners()
     {
-        if (instructionsButton != null)
-            instructionsButton.onClick.AddListener(OpenInstructions);
-
-        if (closeInstructionsButton != null)
-            closeInstructionsButton.onClick.AddListener(CloseInstructions);
         
-        if (MainMenuButton != null)
-            MainMenuButton.onClick.AddListener(pauseMenu.GoToMainMenu);
-
-        if (continueButton != null && pauseMenu != null)
-            continueButton.onClick.AddListener(pauseMenu.Continue);
-
-        UIEvents.OnInstructionsRequested += OpenInstructions;
     }
 
     protected override void ConfigureInitialState()
@@ -65,16 +46,48 @@ public class GameStateUIController : UIControllerBase
             isInstructionsOpen = false;
         }
 
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
+
         if (LevelManager.Instance != null)
             lastGameState = LevelManager.Instance.currentGameState;
 
         UpdateUIElementsVisibility();
     }
-
+    
     public override void HandleUpdate()
     {
         CheckGameStateChanges();
         HandleGameOverState();
+        HandlePauseInput();
+    }
+
+    private void HandlePauseInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            HandlePauseToggle();
+        }
+    }
+
+    private void HandlePauseToggle()
+    {
+        bool canPause = !isInstructionsOpen && 
+                       !CraftingUIManager.isCraftingUIOpen && 
+                       !HouseRestorationUIManager.isUIOpen && 
+                       LevelManager.Instance != null &&
+                       LevelManager.Instance.currentGameState != GameState.GameOver && 
+                       LevelManager.Instance.currentGameState != GameState.OnAltarRestoration && 
+                       LevelManager.Instance.currentGameState != GameState.OnRitual;
+        
+        if (!canPause) return;
+
+        bool isGamePaused = GameManager.Instance != null && GameManager.Instance.IsGamePaused();
+        
+        if (isGamePaused)
+            ResumeGame();
+        else
+            PauseGame();
     }
 
     public void OnGameStateChanged(GameState newState)
@@ -238,18 +251,60 @@ public class GameStateUIController : UIControllerBase
 
     protected override void CleanupEventListeners()
     {
-        if (instructionsButton != null)
-            instructionsButton.onClick.RemoveListener(OpenInstructions);
-
-        if (closeInstructionsButton != null)
-            closeInstructionsButton.onClick.RemoveListener(CloseInstructions);
         
-        if (MainMenuButton != null)
-            MainMenuButton.onClick.RemoveListener(pauseMenu.GoToMainMenu);
+    }
 
-        if (continueButton != null && pauseMenu != null)
-            continueButton.onClick.RemoveListener(pauseMenu.Continue);
 
-        UIEvents.OnInstructionsRequested -= OpenInstructions;
+    public void PauseGame()
+    {
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
+            lastState = LevelManager.Instance.currentGameState;
+
+        GameManager.Instance?.PauseGame();
+
+        if (pausePanel != null)
+            pausePanel.SetActive(true);
+
+        // Show the PauseMenuController (this will handle blur effect automatically)
+        if (_pauseMenuController != null)
+        {
+            _pauseMenuController.Show();
+        }
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PauseAll();
+            UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
+        }
+
+        if (HUD != null)
+            HUD.SetActive(false);
+
+        LevelManager.Instance?.SetGameState(GameState.Paused);
+    }
+
+    public void ResumeGame()
+    {
+        // Hide the PauseMenuController (this will handle blur effect automatically)
+        if (_pauseMenuController != null)
+        {
+            _pauseMenuController.Hide();
+        }
+        
+        GameManager.Instance?.ResumeGame();
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.ResumeAll();
+            UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseClose);
+        }
+
+        if (HUD != null && !isInstructionsOpen)
+            HUD.SetActive(true);
+
+        LevelManager.Instance?.SetGameState(lastState);
     }
 }

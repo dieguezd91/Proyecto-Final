@@ -420,10 +420,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7244442731833716619, guid: d32a5f61f61b93f4b84e739fbda2410b, type: 3}
-      propertyPath: valueChangedSoundDelay
-      value: 0.1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

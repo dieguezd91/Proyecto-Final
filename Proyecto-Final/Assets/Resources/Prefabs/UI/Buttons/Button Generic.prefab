@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1159294866262010515}
   - component: {fileID: 564081831426989095}
   - component: {fileID: 4696120000059815133}
-  - component: {fileID: 4858681260781332442}
   m_Layer: 5
   m_Name: Button Generic
   m_TagString: Untagged
@@ -30,7 +29,7 @@ RectTransform:
   m_GameObject: {fileID: 7654868973609511931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.1384, y: 2.1384, z: 2.1384}
+  m_LocalScale: {x: 1.7424, y: 1.7424, z: 1.7424}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1029450753615087186}
@@ -122,19 +121,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1159294866262010515}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Menu, Assembly-CSharp
-        m_MethodName: OnPlay
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &4696120000059815133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -156,51 +143,12 @@ MonoBehaviour:
   _onDisabledClickSound: {fileID: 8300000, guid: 75ac255b508adda48b7ea92c0ef8e7b7, type: 3}
   _enableDisabledHoverSound: 1
   _onDisabledHoverSound: {fileID: 8300000, guid: 999e62bf5963edd438962fb6445d31e8, type: 3}
---- !u!114 &4858681260781332442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7654868973609511931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 0
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4696120000059815133}
-          m_TargetAssemblyTypeName: ImprovedUIButton, Assembly-CSharp
-          m_MethodName: TriggerHover
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - eventID: 4
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 4696120000059815133}
-          m_TargetAssemblyTypeName: ImprovedUIButton, Assembly-CSharp
-          m_MethodName: TriggerClick
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7763530402273652011
 GameObject:
   m_ObjectHideFlags: 0
