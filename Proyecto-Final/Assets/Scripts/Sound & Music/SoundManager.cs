@@ -119,7 +119,7 @@ public class SoundManager : MonoBehaviour
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
-            // Restart the first one
+            // GameOverRestart the first one
             var sourceToRestart = playingSources[0];
             ConfigureAudioSource(sourceToRestart, sound);
             sourceToRestart.Stop();

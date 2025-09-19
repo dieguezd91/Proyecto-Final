@@ -327,11 +327,18 @@ public class LevelManager : MonoBehaviour
         return playerRespawnPoint;
     }
 
-    public void Restart()
+    public void GameOverRestart()
     {
         SetGameState(GameState.Digging);
         ResetGameData();
-        SceneManager.LoadScene(sceneBuildIndex: 0);
+        SceneLoaderManager.Instance.LoadGameScene();
+    }
+    
+    public void GameOverMainMenu()
+    {
+        SetGameState(GameState.Digging);
+        ResetGameData();
+        SceneLoaderManager.Instance.LoadMenuScene();
     }
 
     public void ResetGameData()

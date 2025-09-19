@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
     {
         return isPaused;
     }
+
+    public void LoadGameScene()
+    {
+        SceneLoaderManager.Instance.LoadSceneByName(name);
+    }
     
     public void QuitGame()
     {

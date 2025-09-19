@@ -20,6 +20,9 @@ public class SceneLoaderManager : MonoBehaviour
             return;
         }
     }
+    
+    public void LoadMenuScene() => LoadSceneByIndex(0);
+    public void LoadGameScene() => LoadSceneByIndex(1);
 
     public void LoadSceneByIndex(int loadSceneIndex)
     {
