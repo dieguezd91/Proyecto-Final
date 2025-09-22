@@ -113,10 +113,10 @@ TextureImporter:
       name: PotDeco
       rect:
         serializedVersion: 2
-        x: 16
-        y: 128
+        x: 0
+        y: 144
         width: 32
-        height: 16
+        height: 19
       alignment: 9
       pivot: {x: 0.5, y: 0.3125}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -672,11 +672,8 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
-      - - {x: 24.5, y: 3}
-        - {x: 20.5, y: 11}
-        - {x: -1.5, y: 14}
-        - {x: -19.5, y: 11}
-        - {x: -24.5, y: 3}
+      - - {x: 24.5, y: -5}
+        - {x: -24.5, y: -5}
         - {x: -19.5, y: -12}
         - {x: -0.5, y: -15}
         - {x: 20.5, y: -12}
@@ -1329,7 +1326,7 @@ TextureImporter:
         x: 32
         y: 16
         width: 32
-        height: 33
+        height: 38
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1376,10 +1373,10 @@ TextureImporter:
       name: DecoSprites_3
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
+        x: 82
+        y: 32
         width: 12
-        height: 16
+        height: 19
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1442,7 +1439,7 @@ TextureImporter:
         x: 146
         y: 16
         width: 13
-        height: 17
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1484,7 +1481,7 @@ TextureImporter:
         x: 97
         y: 16
         width: 14
-        height: 16
+        height: 22
       alignment: 9
       pivot: {x: 0.5, y: 0.77}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1505,7 +1502,7 @@ TextureImporter:
         x: 112
         y: 16
         width: 16
-        height: 16
+        height: 21
       alignment: 9
       pivot: {x: 0.5, y: 0.725}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1526,7 +1523,7 @@ TextureImporter:
         x: 129
         y: 16
         width: 14
-        height: 18
+        height: 22
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1838,7 +1835,7 @@ TextureImporter:
         x: 15
         y: 111
         width: 34
-        height: 17
+        height: 20
       alignment: 9
       pivot: {x: 0.5, y: 0.29411766}
       border: {x: 0, y: 0, z: 0, w: 0}
