@@ -70,7 +70,7 @@ public class MusicManager : MonoBehaviour
         if (sceneName == "RefactorMenu")
             return;
 
-        if (sceneName == "SampleScene" || sceneName == "GameScene")
+        if (sceneName == "SampleScene" || sceneName == "GameScene" || sceneName == "TreeScene")
         {
             if (IsDaylikeState(currentState))
             {
@@ -105,7 +105,7 @@ public class MusicManager : MonoBehaviour
             return;
         }
 
-        if (sceneName == "SampleScene" || sceneName == "GameScene")
+        if (sceneName == "SampleScene" || sceneName == "GameScene" || sceneName == "TreeScene")
         {
             if (LevelManager.Instance != null)
             {
