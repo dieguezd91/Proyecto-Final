@@ -98,25 +98,30 @@ public class RitualAltar : MonoBehaviour
         StartRitualEffects();
 
         if (UIManager.Instance != null)
+        {
             UIManager.Instance.ShowRitualOverlay();
+            Debug.Log("[RitualAltar] Ritual overlay mostrado");
+        }
 
         yield return new WaitForSeconds(ritualDuration);
 
         ApplyRitualEffects();
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.HideRitualOverlay();
+
+            yield return new WaitForSeconds(0.1f);
+        }
 
         if (canTransitionToNight && levelManager.GetCurrentGameState() != GameState.Night)
             levelManager.TransitionToNight();
         else
             levelManager.SetGameState(previousState);
 
-        if (UIManager.Instance != null)
-            UIManager.Instance.HideRitualOverlay();
-
         EndRitualEffects();
-
         isPerformingRitual = false;
     }
-
 
     private void StartRitualEffects()
     {

@@ -32,7 +32,7 @@ public class MainMenuController : UIControllerBase
         
         if (_playButton != null)
         {
-            _playButton.OnClick.AddListener(() => PlayGame("GameScene"));
+            _playButton.OnClick.AddListener(() => PlayGame("TreeScene"));
             _playButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Play button hovered"));
             Debug.Log("[MainMenuController] Play button listeners added");
         }
