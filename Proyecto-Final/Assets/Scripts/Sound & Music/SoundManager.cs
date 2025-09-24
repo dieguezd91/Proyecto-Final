@@ -69,7 +69,6 @@ public class SoundManager : MonoBehaviour
             audioSource = audioObj.GetComponent<AudioSource>();
             if (audioSource == null)
             {
-                Debug.LogError("AudioSource prefab does not have an AudioSource component!");
                 audioSource = audioObj.AddComponent<AudioSource>();
             }
         }
@@ -94,41 +93,36 @@ public class SoundManager : MonoBehaviour
         {
             availableSource = CreateNewAudioSource();
         }
-
         return availableSource;
     }
 
-    private void ConfigureAudioSource(AudioSource source, Sound sound)
+    private void ConfigureAudioSource(AudioSource source, Sound sound, float spatialBlend = 0f)
     {
         source.clip = sound.clip;
         source.volume = sound.volume;
         source.pitch = sound.pitch;
         source.mute = sound.mute;
         source.loop = sound.loop;
+        source.spatialBlend = spatialBlend;
     }
 
     public void PlayOneShot(string name)
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
-            Debug.LogWarning($"Sound '{name}' not found");
             return;
         }
-
-        // Find all sources currently playing this sound
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
-            // GameOverRestart the first one
             var sourceToRestart = playingSources[0];
-            ConfigureAudioSource(sourceToRestart, sound);
+            ConfigureAudioSource(sourceToRestart, sound, 0f);
             sourceToRestart.Stop();
             sourceToRestart.PlayOneShot(sound.clip, sound.volume);
             return;
         }
-
         var audioSource = GetAvailableAudioSource();
-        ConfigureAudioSource(audioSource, sound);
+        ConfigureAudioSource(audioSource, sound, 0f);
         audioSource.PlayOneShot(sound.clip, sound.volume);
     }
 
@@ -136,43 +130,35 @@ public class SoundManager : MonoBehaviour
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
-            Debug.LogWarning($"Sound '{name}' not found");
             return;
         }
-
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
+        float spatialBlend = (sourceType == EnemySoundBase.SoundSourceType.Global) ? 0f : 0.75f;
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
             var sourceToRestart = playingSources[0];
-            ConfigureAudioSource(sourceToRestart, sound);
+            ConfigureAudioSource(sourceToRestart, sound, spatialBlend);
             sourceToRestart.Stop();
-            // Set position and spatial blend based on sourceType
             if (sourceType == EnemySoundBase.SoundSourceType.Global)
             {
                 sourceToRestart.transform.position = Camera.main.transform.position;
-                sourceToRestart.spatialBlend = 0f;
             }
             else if (parent != null)
             {
                 sourceToRestart.transform.position = parent.position;
-                sourceToRestart.spatialBlend = 0.75f;
             }
             sourceToRestart.Play();
             return;
         }
-
         var audioSource = GetAvailableAudioSource();
-        ConfigureAudioSource(audioSource, sound);
-        // Set position and spatial blend based on sourceType
+        ConfigureAudioSource(audioSource, sound, spatialBlend);
         if (sourceType == EnemySoundBase.SoundSourceType.Global)
         {
             audioSource.transform.position = Vector3.zero;
-            audioSource.spatialBlend = 0f;
         }
         else if (parent != null)
         {
             audioSource.transform.position = parent.position;
-            audioSource.spatialBlend = 0.75f;
         }
         audioSource.Play();
     }
@@ -181,31 +167,26 @@ public class SoundManager : MonoBehaviour
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
-            Debug.LogWarning($"Sound '{name}' not found");
             return;
         }
-
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip && s.loop).ToList();
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
             var sourceToRestart = playingSources[0];
-            ConfigureAudioSource(sourceToRestart, sound);
+            ConfigureAudioSource(sourceToRestart, sound, 0f);
             sourceToRestart.Stop();
             sourceToRestart.loop = true;
             sourceToRestart.Play();
             return;
         }
-
-        // Check if this sound is already playing and looping
         var existingSource = audioSourcePool.FirstOrDefault(source =>
             source.isPlaying && source.clip == sound.clip && source.loop);
         if (existingSource != null)
         {
-            return; // Already playing this looped sound
+            return;
         }
-
         var audioSource = GetAvailableAudioSource();
-        ConfigureAudioSource(audioSource, sound);
+        ConfigureAudioSource(audioSource, sound, 0f);
         audioSource.loop = true;
         audioSource.Play();
     }
@@ -214,7 +195,6 @@ public class SoundManager : MonoBehaviour
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
-            Debug.LogWarning($"Sound '{name}' not found");
             return;
         }
 
@@ -281,9 +261,8 @@ public class SoundManager : MonoBehaviour
         if (data == null) return;
         var clip = data.GetClip();
         if (clip == null) return;
-
-        // Find all sources currently playing this clip
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
+        float spatialBlend = (sourceType == EnemySoundBase.SoundSourceType.Global) ? 0f : 0.75f;
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
             var sourceToRestart = playingSources[0];
@@ -293,16 +272,14 @@ public class SoundManager : MonoBehaviour
             sourceToRestart.pitch = data.GetPitch();
             sourceToRestart.loop = data.loop;
             sourceToRestart.mute = false;
-            // Set position and spatial blend based on sourceType
+            sourceToRestart.spatialBlend = spatialBlend;
             if (sourceType == EnemySoundBase.SoundSourceType.Global)
             {
                 sourceToRestart.transform.position = Vector3.zero;
-                sourceToRestart.spatialBlend = 0f;
             }
             else if (parent != null)
             {
                 sourceToRestart.transform.position = parent.position;
-                sourceToRestart.spatialBlend = 0.75f;
             }
             if (data.loop)
                 sourceToRestart.Play();
@@ -310,23 +287,20 @@ public class SoundManager : MonoBehaviour
                 sourceToRestart.PlayOneShot(clip, data.volume);
             return;
         }
-
         var audioSource = GetAvailableAudioSource();
         audioSource.clip = clip;
         audioSource.volume = data.volume;
         audioSource.pitch = data.GetPitch();
         audioSource.loop = data.loop;
         audioSource.mute = false;
-        // Set position and spatial blend based on sourceType
+        audioSource.spatialBlend = spatialBlend;
         if (sourceType == EnemySoundBase.SoundSourceType.Global)
         {
             audioSource.transform.position = Vector3.zero;
-            audioSource.spatialBlend = 0f;
         }
         else if (parent != null)
         {
             audioSource.transform.position = parent.position;
-            audioSource.spatialBlend = 0.75f;
         }
         if (data.loop)
             audioSource.Play();
@@ -340,8 +314,6 @@ public class SoundManager : MonoBehaviour
     public void PlayAudioClip(AudioClip clip, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {
         if (clip == null) return;
-
-        // Find all sources currently playing this clip
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
@@ -352,19 +324,20 @@ public class SoundManager : MonoBehaviour
             sourceToRestart.pitch = pitch;
             sourceToRestart.loop = loop;
             sourceToRestart.mute = false;
+            sourceToRestart.spatialBlend = 0f;
             if (loop)
                 sourceToRestart.Play();
             else
                 sourceToRestart.PlayOneShot(clip, volume);
             return;
         }
-
         var audioSource = GetAvailableAudioSource();
         audioSource.clip = clip;
         audioSource.volume = volume;
         audioSource.pitch = pitch;
         audioSource.loop = loop;
         audioSource.mute = false;
+        audioSource.spatialBlend = 0f;
         if (loop)
             audioSource.Play();
         else
