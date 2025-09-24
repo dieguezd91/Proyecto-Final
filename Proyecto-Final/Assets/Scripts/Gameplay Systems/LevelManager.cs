@@ -90,43 +90,46 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
-
         if (home == null)
-        {
             home = GameObject.FindGameObjectWithTag("Home");
-        }
 
         if (home != null)
         {
             HomeLife = home.GetComponent<HouseLifeController>();
-
             if (HomeLife != null)
-            {
                 HomeLife.onHouseDestroyed.AddListener(HandleHomeDeath);
-            }
         }
 
         if (waveSpawner == null)
         {
             waveSpawner = FindObjectOfType<EnemiesSpawner>();
-
             if (waveSpawner != null)
-            {
                 waveSpawner.onHordeEnd.AddListener(HandleHordeCompleted);
-            }
         }
 
         if (uiManager == null)
-        {
             uiManager = FindObjectOfType<UIManager>();
-        }
+
+        if (ambienceSoundManager == null)
+            ambienceSoundManager = FindObjectOfType<AmbienceSoundManager>();
 
         dayCount = 0;
         SetGameState(GameState.Digging);
         StartDayCycle();
     }
+
+    private void StartDayCycle()
+    {
+        SetGameState(GameState.Digging);
+
+        if (ambienceSoundManager != null)
+            ambienceSoundManager.TransitionAmbience(AmbienceType.Forest, 1f);
+
+        onNewDay?.Invoke(dayCount);
+    }
+
 
     private void Update()
     {
@@ -138,13 +141,6 @@ public class LevelManager : MonoBehaviour
             InventoryManager.Instance.AddGold(100);
             Debug.Log("+100 oro agregado");
         }
-    }
-
-    private void StartDayCycle()
-    {
-        SetGameState(GameState.Digging);
-        ambienceSoundManager.TransitionAmbience(AmbienceType.Forest,1);
-        onNewDay.Invoke(dayCount);
     }
 
     public void TransitionToNight()

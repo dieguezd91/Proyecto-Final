@@ -38,6 +38,7 @@ public class HouseRestorationUIManager : MonoBehaviour
         altarUIPanel.SetActive(false);
         goldSlider.onValueChanged.AddListener(OnSliderChanged);
         goldInputField.onEndEdit.AddListener(OnInputFieldChanged);
+
         UpdateOptionLabels();
     }
 
@@ -85,7 +86,8 @@ public class HouseRestorationUIManager : MonoBehaviour
         altarUIPanel.SetActive(true);
         LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
 
-        int currentGold = InventoryManager.Instance.GetGold()   ;
+        int currentGold = InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
+
         goldSlider.maxValue = currentGold;
         goldSlider.minValue = 0;
         goldSlider.wholeNumbers = true;
@@ -120,6 +122,8 @@ public class HouseRestorationUIManager : MonoBehaviour
 
     private void UpdateOptionLabels()
     {
+        if (restorationSystem == null) return;
+
         for (int i = 0; i < optionLabels.Length; i++)
         {
             if (i < restorationSystem.OptionCount)
@@ -127,22 +131,20 @@ public class HouseRestorationUIManager : MonoBehaviour
                 var opt = restorationSystem.GetOption(i);
                 string materialIcon = GetMaterialSpriteName(opt.materialRequired);
 
-                bool hasGold = InventoryManager.Instance.GetGold() >= opt.goldCost;
-                bool hasMaterial = InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
+                int gold = InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
+                bool hasGold = gold >= opt.goldCost;
+                bool hasMaterial = InventoryManager.Instance != null && InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
 
                 string goldText = $"<color={(hasGold ? "green" : "red")}><sprite name=\"GoldIcon\"> {opt.goldCost}</color>";
-
                 string materialText = $"<color={(hasMaterial ? "green" : "red")}><sprite name=\"{materialIcon}\"> 1</color>";
 
                 optionLabels[i].text = $"{opt.restorePercentage}% HP\n{goldText}  +  {materialText}";
             }
 
-            optionButtons[i].interactable = !restorationSystem.HasRestoredToday();
+            if (optionButtons[i] != null)
+                optionButtons[i].interactable = restorationSystem != null && !restorationSystem.HasRestoredToday();
         }
     }
-
-
-
 
     private void OnSliderChanged(float value)
     {
