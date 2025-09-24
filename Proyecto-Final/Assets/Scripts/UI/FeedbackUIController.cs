@@ -42,6 +42,7 @@ public class FeedbackUIController : UIControllerBase
     {
         SetupDamagedScreen();
         SetupPostProcessing();
+        SetupRitualOverlay();
         lastDamageTime = Time.time;
     }
 
@@ -157,37 +158,87 @@ public class FeedbackUIController : UIControllerBase
 
     public void ShowRitualOverlay()
     {
-        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
+        if (ritualOverlayImage == null)
+        {
+            return;
+        }
+
+        if (ritualOverlayCoroutine != null)
+        {
+            StopCoroutine(ritualOverlayCoroutine);
+        }
+
+        if (!ritualOverlayImage.gameObject.activeInHierarchy)
+        {
+            ritualOverlayImage.gameObject.SetActive(true);
+        }
+
         ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(0f, 1f));
     }
 
     public void HideRitualOverlay()
     {
-        if (ritualOverlayCoroutine != null) StopCoroutine(ritualOverlayCoroutine);
-        if (ritualOverlayImage != null)
-            ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(ritualOverlayImage.color.a, 0f));
+        if (ritualOverlayImage == null)
+        {
+            return;
+        }
+
+        if (ritualOverlayCoroutine != null)
+        {
+            StopCoroutine(ritualOverlayCoroutine);
+        }
+
+        float currentAlpha = ritualOverlayImage.color.a;
+        ritualOverlayCoroutine = StartCoroutine(FadeRitualOverlay(currentAlpha, 0f));
     }
 
     private IEnumerator FadeRitualOverlay(float from, float to)
     {
-        if (ritualOverlayImage == null) yield break;
+        if (ritualOverlayImage == null)
+        {
+            yield break;
+        }
 
-        ritualOverlayImage.gameObject.SetActive(true);
+        if (to > 0f && !ritualOverlayImage.gameObject.activeInHierarchy)
+        {
+            ritualOverlayImage.gameObject.SetActive(true);
+        }
+
         float elapsed = 0f;
         Color color = ritualOverlayImage.color;
 
         while (elapsed < overlayFadeDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-            color.a = Mathf.Lerp(from, to, elapsed / overlayFadeDuration);
+            float t = elapsed / overlayFadeDuration;
+
+            color.a = Mathf.Lerp(from, to, t);
             ritualOverlayImage.color = color;
+
             yield return null;
         }
 
         color.a = to;
         ritualOverlayImage.color = color;
 
-        if (to == 0f)
+        if (Mathf.Approximately(to, 0f))
+        {
             ritualOverlayImage.gameObject.SetActive(false);
+        }
+
+        ritualOverlayCoroutine = null;
+    }
+
+    private void SetupRitualOverlay()
+    {
+        if (ritualOverlayImage == null)
+        {
+            return;
+        }
+
+        Color color = ritualOverlayImage.color;
+        color.a = 0f;
+        ritualOverlayImage.color = color;
+        ritualOverlayImage.gameObject.SetActive(false);
     }
 }
