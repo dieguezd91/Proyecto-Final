@@ -9,6 +9,7 @@ public class MainMenuController : UIControllerBase
     [SerializeField] private ImprovedUIButton _optionsButton;
     [SerializeField] private ImprovedUIButton _controlsButton;
     [SerializeField] private ImprovedUIButton _exitButton;
+    [SerializeField] private ImprovedUIButton _BackButton;
     
     [Header("Panels")]
     [SerializeField] private UIControllerBase _optionsPanel;
@@ -72,6 +73,17 @@ public class MainMenuController : UIControllerBase
         {
             Debug.LogWarning("[MainMenuController] Exit button is null!");
         }
+        
+        if (_BackButton != null)
+        {
+            _BackButton.OnClick.AddListener(HideOptions);
+            _BackButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Back button hovered"));
+            Debug.Log("[MainMenuController] Back button listeners added");
+        }
+        else
+        {
+            Debug.LogWarning("[MainMenuController] Exit button is null!");
+        }
     }
 
     protected override void ConfigureInitialState()
@@ -92,6 +104,15 @@ public class MainMenuController : UIControllerBase
         if (_optionsPanel != null)
         {
             _optionsPanel.Show();
+        }
+    }
+    
+    public void HideOptions()
+    {
+        Debug.Log("[MainMenuController] ShowOptions button clicked, showing options panel");
+        if (_optionsPanel != null)
+        {
+            _optionsPanel.Hide();
         }
     }
 }

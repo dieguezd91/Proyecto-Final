@@ -127,6 +127,7 @@ MonoBehaviour:
   _optionsButton: {fileID: 7699388350134023847}
   _controlsButton: {fileID: 3591964394348000203}
   _exitButton: {fileID: 3981710539053999007}
+  _BackButton: {fileID: 2646097768769883968}
   _optionsPanel: {fileID: 1655354959919205927}
 --- !u!1 &6699898721449503778
 GameObject:
@@ -556,6 +557,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf2bff80d23aaa24f8e27e016b85f20b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2646097768769883968 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4053254887612581449, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+  m_PrefabInstance: {fileID: 2087662788581787913}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!224 &6791689734898665752 stripped
