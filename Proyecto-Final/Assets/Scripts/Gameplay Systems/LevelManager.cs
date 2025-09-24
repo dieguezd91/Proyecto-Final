@@ -131,13 +131,7 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.K))
-        {
-            EnemiesSpawner spawner = FindObjectOfType<EnemiesSpawner>();
-            if (spawner != null)
-            {
-                spawner.EndNight();
-            }
-        }
+            ForceEndNight();
 
         if (Input.GetKeyDown(KeyCode.L))
         {
@@ -414,5 +408,16 @@ public class LevelManager : MonoBehaviour
         uiManager?.UpdateManaUI();
 
         Debug.Log("Reset completado.");
+    }
+
+    public void ForceEndNight()
+    {
+        var altars = FindObjectsOfType<RitualAltar>();
+        foreach (var altar in altars)
+            altar.ForceStopRitual();
+
+        var spawner = FindObjectOfType<EnemiesSpawner>();
+        if (spawner != null)
+            spawner.EndNight();
     }
 }

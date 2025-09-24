@@ -63,6 +63,24 @@ public class RitualAltar : MonoBehaviour
         UpdateAltarAppearance();
     }
 
+    private void OnEnable()
+    {
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+    }
+
+    private void HandleGameStateChanged(GameState newState)
+    {
+        if (isPerformingRitual && newState != GameState.OnRitual)
+            ForceStopRitual();
+    }
+
     private void Update()
     {
         if (playerInRange)
@@ -395,5 +413,22 @@ public class RitualAltar : MonoBehaviour
         {
             StartCoroutine(PerformRitualCoroutine());
         }
+    }
+
+    public void ForceStopRitual()
+    {
+        if (!isPerformingRitual) return;
+
+        isPerformingRitual = false;
+        StopAllCoroutines();
+
+        UIManager.Instance?.HideRitualOverlay();
+
+        TurnOffAllCandles();
+        RestoreCorrectVignette();
+        UpdateAltarAppearance();
+
+        if (levelManager != null && levelManager.GetCurrentGameState() != GameState.Night)
+            lightController?.RestoreLightAfterRitual(GameState.Day, 0.5f);
     }
 }

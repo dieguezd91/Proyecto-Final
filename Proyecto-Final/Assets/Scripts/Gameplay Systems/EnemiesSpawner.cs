@@ -382,14 +382,20 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void EndNight()
     {
-        if (LevelManager.Instance.currentGameState != GameState.Night)
-        {
-            return;
-        }
+        var state = LevelManager.Instance.currentGameState;
 
+        // Permitir terminar si es Noche o si estás en Ritual (para casos en los que el ritual sigue activo)
+        if (state != GameState.Night && state != GameState.OnRitual)
+            return;
+
+        // Boss night: final forcado
         if (IsBossNight() && bossNightManager != null)
         {
             bossNightManager.ForceEndBossNight();
+
+            if (LevelManager.Instance.currentGameState != GameState.Digging)
+                LevelManager.Instance.SetGameState(GameState.Digging);
+
             return;
         }
 
@@ -402,25 +408,22 @@ public class EnemiesSpawner : MonoBehaviour
         List<GameObject> enemiesCopy = new List<GameObject>(activeEnemies);
         foreach (GameObject enemy in enemiesCopy)
         {
-            if (enemy != null)
-            {
-                LifeController enemyLife = enemy.GetComponent<LifeController>();
-                if (enemyLife != null)
-                {
-                    enemyLife.Kill();
-                }
-                else
-                {
-                    OnEnemyDeath(enemy);
-                }
-            }
+            if (enemy == null) continue;
+
+            LifeController enemyLife = enemy.GetComponent<LifeController>();
+            if (enemyLife != null)
+                enemyLife.Kill();
+            else
+                OnEnemyDeath(enemy);
         }
 
         totalEnemiesKilled = totalEnemiesToKill;
         activeEnemies.Clear();
-
         hordeCompleted = true;
+
         StopContinuousHorde(true);
+
+        StopAllCoroutines();
     }
 
     private void ConfigureEnemyRoulette()
