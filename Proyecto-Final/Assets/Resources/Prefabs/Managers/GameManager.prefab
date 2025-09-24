@@ -91,13 +91,57 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sound Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.size
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[13].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: b2d3fe090d4f9dd46ac24c275ddb8730, type: 3}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[13].name
+      value: EnemyHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[14].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: cb67cfd8ae8f00e4cb9e7dd88e8494dc, type: 3}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[14].name
+      value: PlayerHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[15].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 93d2af38cfa5cf14c8cc67cac495d05f, type: 3}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[15].name
+      value: PlayerHitBurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[16].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 5457f92d674877e44bcdb3c5dfc15456, type: 3}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[16].name
+      value: PlayerBurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[16].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743081911768204083, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
+      propertyPath: sounds.Array.data[16].volume
+      value: 0.7
+      objectReference: {fileID: 0}
     - target: {fileID: 8820529735856217214, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 150
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8820529735856217214, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1005
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8820529735856217214, guid: 92565da741ac6fa4698e4124c9e9a123, type: 3}
       propertyPath: m_LocalPosition.z
