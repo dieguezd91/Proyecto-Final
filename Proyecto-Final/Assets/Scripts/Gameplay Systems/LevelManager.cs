@@ -239,7 +239,8 @@ public class LevelManager : MonoBehaviour
         GameState.OnInventory,
         GameState.OnCrafting,
         GameState.OnAltarRestoration,
-        GameState.OnRitual
+        GameState.OnRitual,
+        GameState.Paused
     };
 
         if (nonTransitionStates.Contains(newState))
@@ -247,30 +248,19 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
-        bool currentlyNight = worldAnimator.IsNightMode;
-
-        if (newState == GameState.Paused)
+        switch (newState)
         {
-            bool wasNight = (currentGameState == GameState.Night);
-
-            if (wasNight != currentlyNight)
-            {
-                if (wasNight)
-                    worldAnimator.ForceNightMode();
-                else
-                    worldAnimator.ForceDayMode();
-            }
-            return;
-        }
-
-        bool shouldBeNight = newState == GameState.Night;
-
-        if (shouldBeNight != currentlyNight)
-        {
-            if (shouldBeNight)
+            case GameState.Night:
                 worldAnimator.TransitionToNight();
-            else
+                break;
+
+            case GameState.Day:
+            case GameState.Digging:
+            case GameState.Planting:
+            case GameState.Harvesting:
+            case GameState.Removing:
                 worldAnimator.TransitionToDay();
+                break;
         }
     }
 

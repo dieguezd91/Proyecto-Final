@@ -29,10 +29,9 @@ public class RitualAltar : MonoBehaviour
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private Sprite nearSprite;
 
-
     private bool isPerformingRitual = false;
     private bool playerInRange = false;
-    private LevelManager gameManager;
+    private LevelManager levelManager;
     private LifeController playerLife;
     private DayNightLightController lightController;
     private GameObject player;
@@ -43,14 +42,14 @@ public class RitualAltar : MonoBehaviour
 
     private void Start()
     {
-        gameManager = LevelManager.Instance;
+        levelManager = LevelManager.Instance;
 
         if (interactionPromptCanvas != null)
             interactionPromptCanvas.SetActive(false);
 
-        if (gameManager != null && gameManager.playerLife != null)
+        if (levelManager != null && levelManager.playerLife != null)
         {
-            playerLife = gameManager.playerLife;
+            playerLife = levelManager.playerLife;
             player = playerLife.gameObject;
         }
 
@@ -80,10 +79,10 @@ public class RitualAltar : MonoBehaviour
 
     private bool CanPerformRitual()
     {
-        if (isPerformingRitual || gameManager == null || playerLife == null)
+        if (isPerformingRitual || levelManager == null || playerLife == null)
             return false;
 
-        GameState currentState = gameManager.GetCurrentGameState();
+        GameState currentState = levelManager.GetCurrentGameState();
         return currentState == GameState.Digging ||
                currentState == GameState.Planting ||
                currentState == GameState.Harvesting ||
@@ -93,8 +92,8 @@ public class RitualAltar : MonoBehaviour
     private IEnumerator PerformRitualCoroutine()
     {
         isPerformingRitual = true;
-        GameState previousState = gameManager.GetCurrentGameState();
-        gameManager.SetGameState(GameState.OnRitual);
+        GameState previousState = levelManager.GetCurrentGameState();
+        levelManager.SetGameState(GameState.OnRitual);
 
         StartRitualEffects();
 
@@ -105,10 +104,10 @@ public class RitualAltar : MonoBehaviour
 
         ApplyRitualEffects();
 
-        if (canTransitionToNight && gameManager.GetCurrentGameState() != GameState.Night)
-            gameManager.TransitionToNight();
+        if (canTransitionToNight && levelManager.GetCurrentGameState() != GameState.Night)
+            levelManager.TransitionToNight();
         else
-            gameManager.SetGameState(previousState);
+            levelManager.SetGameState(previousState);
 
         if (UIManager.Instance != null)
             UIManager.Instance.HideRitualOverlay();
@@ -186,9 +185,9 @@ public class RitualAltar : MonoBehaviour
             playerLife.currentHealth = playerLife.maxHealth;
             playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
 
-            if (gameManager.uiManager != null)
+            if (levelManager.uiManager != null)
             {
-                gameManager.uiManager.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+                levelManager.uiManager.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
             }
         }
     }
@@ -303,7 +302,7 @@ public class RitualAltar : MonoBehaviour
 
         if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
         {
-            bool isNight = gameManager.GetCurrentGameState() == GameState.Night;
+            bool isNight = levelManager.GetCurrentGameState() == GameState.Night;
             float targetVignette = isNight ? lightController.nightVignetteIntensity : lightController.dayVignetteIntensity;
 
             float current = vignetteComponent.intensity.value;
@@ -316,9 +315,9 @@ public class RitualAltar : MonoBehaviour
 
     private void UpdateAltarAppearance()
     {
-        if (gameManager != null)
+        if (levelManager != null)
         {
-            bool isCurrentlyNight = gameManager.GetCurrentGameState() == GameState.Night;
+            bool isCurrentlyNight = levelManager.GetCurrentGameState() == GameState.Night;
 
             if (candleLights != null)
             {
