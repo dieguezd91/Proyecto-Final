@@ -314,7 +314,7 @@ public class EnemiesSpawner : MonoBehaviour
 
             if (!IsBossNight())
             {
-                LevelManager.Instance.currentGameState = GameState.Digging;
+                LevelManager.Instance.SetGameState(GameState.Digging);
             }
         }
     }

@@ -94,7 +94,7 @@ public class CraftingUIManager : MonoBehaviour
         LevelManager.Instance?.SetGameState(GameState.OnCrafting);
     }
 
-    private void CloseCraftingUI()
+    public void CloseCraftingUI()
     {
         craftingUIPanel.SetActive(false);
         isCraftingUIOpen = false;
