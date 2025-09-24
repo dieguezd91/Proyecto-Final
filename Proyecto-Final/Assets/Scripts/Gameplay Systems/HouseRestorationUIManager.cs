@@ -126,25 +126,34 @@ public class HouseRestorationUIManager : MonoBehaviour
 
         for (int i = 0; i < optionLabels.Length; i++)
         {
-            if (i < restorationSystem.OptionCount)
+            bool within = i < restorationSystem.OptionCount;
+
+            if (within)
             {
                 var opt = restorationSystem.GetOption(i);
                 string materialIcon = GetMaterialSpriteName(opt.materialRequired);
 
                 int gold = InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
                 bool hasGold = gold >= opt.goldCost;
-                bool hasMaterial = InventoryManager.Instance != null && InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
+                bool hasMaterial = InventoryManager.Instance != null &&
+                                   InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
 
                 string goldText = $"<color={(hasGold ? "green" : "red")}><sprite name=\"GoldIcon\"> {opt.goldCost}</color>";
                 string materialText = $"<color={(hasMaterial ? "green" : "red")}><sprite name=\"{materialIcon}\"> 1</color>";
 
                 optionLabels[i].text = $"{opt.restorePercentage}% HP\n{goldText}  +  {materialText}";
-            }
 
-            if (optionButtons[i] != null)
-                optionButtons[i].interactable = restorationSystem != null && !restorationSystem.HasRestoredToday();
+                if (optionButtons[i] != null)
+                    optionButtons[i].interactable = !restorationSystem.HasRestoredToday() && hasGold && hasMaterial;
+            }
+            else
+            {
+                if (optionButtons[i] != null) optionButtons[i].interactable = false;
+                if (optionLabels[i] != null) optionLabels[i].text = "-";
+            }
         }
     }
+
 
     private void OnSliderChanged(float value)
     {
