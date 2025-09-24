@@ -426,14 +426,6 @@ PrefabInstance:
       propertyPath: abilityType
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onClickSound
-      value: 
-      objectReference: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onHoverSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
     - target: {fileID: 3523265234506917669, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Name
       value: Ability REMOVE
@@ -551,14 +543,6 @@ PrefabInstance:
       propertyPath: abilityType
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onClickSound
-      value: 
-      objectReference: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onHoverSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
     - target: {fileID: 3523265234506917669, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Name
       value: Ability HARVEST
@@ -676,10 +660,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 278824154666496669}
     m_Modifications:
+    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
+      propertyPath: abilityType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3523265234506917669, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Name
       value: Ability DIG
       objectReference: {fileID: 0}
+    - target: {fileID: 4563111408109222044, guid: 6fdd75275640b234583f63ce21488490, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1576750221, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     - target: {fileID: 6976442626807566214, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -791,16 +783,8 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: abilityType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onClickSound
-      value: 
-      objectReference: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: _onHoverSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
     - target: {fileID: 3523265234506917669, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Name
       value: Ability PLANT
