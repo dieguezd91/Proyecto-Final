@@ -332,7 +332,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _volume: 1
-  _enableHoverSound: 1
+  _enableHoverSound: 0
   _onHoverSound: {fileID: 8300000, guid: 5d17f8d8078e2b54ab62ba6755295363, type: 3}
   _enableValueChangedSound: 1
   _onValueChangedSound: {fileID: 8300000, guid: d6a976ee327cf834d9e2edebcd950802, type: 3}
@@ -341,6 +341,9 @@ MonoBehaviour:
   _enableDisabledHoverSound: 1
   _onDisabledHoverSound: {fileID: 8300000, guid: 999e62bf5963edd438962fb6445d31e8, type: 3}
   valueChangedSoundDelay: 0.1
+  slowMovementDelayMultiplier: 2.5
+  smallMovementThreshold: 0.05
+  slowMovementThreshold: 0.1
 --- !u!1 &6771712347742786359
 GameObject:
   m_ObjectHideFlags: 0

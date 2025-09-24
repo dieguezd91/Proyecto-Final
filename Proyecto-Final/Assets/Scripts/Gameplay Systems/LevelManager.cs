@@ -41,7 +41,8 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private EnemiesSpawner waveSpawner;
     [SerializeField] private List<HouseController> houseControllers = new List<HouseController>();
     [SerializeField] private List<SpawnPointAnimator> spawnpoints = new List<SpawnPointAnimator>();
-
+    [SerializeField] private AmbienceSoundManager ambienceSoundManager;
+    
     [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
 
@@ -148,6 +149,7 @@ public class LevelManager : MonoBehaviour
     private void StartDayCycle()
     {
         SetGameState(GameState.Digging);
+        ambienceSoundManager.TransitionAmbience(AmbienceType.Forest,1);
         onNewDay.Invoke(dayCount);
     }
 
@@ -155,6 +157,7 @@ public class LevelManager : MonoBehaviour
     {
         dayCount++;
         SetGameState(GameState.Night);
+        ambienceSoundManager.TransitionAmbience(AmbienceType.Infernum, 1);
         TributeSystem.Instance?.StartNightEvaluation();
     }
 
