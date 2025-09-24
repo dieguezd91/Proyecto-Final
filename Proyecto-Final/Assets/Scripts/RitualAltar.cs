@@ -83,9 +83,12 @@ public class RitualAltar : MonoBehaviour
 
     private void Update()
     {
+
         if (playerInRange)
         {
-            interactionPromptCanvas.SetActive(true);
+            if (interactionPromptCanvas != null)
+                interactionPromptCanvas.SetActive(playerInRange);
+
             if (Input.GetKeyDown(KeyCode.F) && CanPerformRitual())
             {
                 StartCoroutine(PerformRitualCoroutine());
@@ -250,7 +253,9 @@ public class RitualAltar : MonoBehaviour
 
         StartCoroutine(ExtinguishCandlesGradually());
 
-        lightController.RestoreLightAfterRitual(GameState.Night, 1.5f);
+        if (lightController != null)
+            lightController.RestoreLightAfterRitual(GameState.Night, 1.5f);
+
         UpdateAltarAppearance();
     }
 

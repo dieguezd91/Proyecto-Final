@@ -147,9 +147,16 @@ public class LevelManager : MonoBehaviour
     {
         dayCount++;
         SetGameState(GameState.Night);
-        ambienceSoundManager.TransitionAmbience(AmbienceType.Infernum, 1);
+
+        if (ambienceSoundManager == null)
+            ambienceSoundManager = FindObjectOfType<AmbienceSoundManager>();
+
+        if (ambienceSoundManager != null)
+            ambienceSoundManager.TransitionAmbience(AmbienceType.Infernum, 1f);
+
         TributeSystem.Instance?.StartNightEvaluation();
     }
+
 
     private void HandleHordeCompleted()
     {
