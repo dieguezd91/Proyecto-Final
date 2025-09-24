@@ -6,22 +6,8 @@ using TMPro;
 
 public class AbilityUIManager : MonoBehaviour
 {
-    [Header("UI ELEMENTS")]
-    [SerializeField] private Button plantButton;
-    [SerializeField] private Button harvestButton;
-    [SerializeField] private Button digButton; 
-    [SerializeField] private Button removeButton;
-
-    [Header("ICONS")]
-    [SerializeField] private Sprite plantIcon;
-    [SerializeField] private Sprite harvestIcon;
-    [SerializeField] private Sprite digIcon;
-    [SerializeField] private Sprite removeIcon;
-
-    [Header("BUTTONS SETTINGS")]
-    [SerializeField] private Color normalColor = Color.white;
-    [SerializeField] private Color selectedColor = new Color(0.5f, 1f, 0.5f);
-    [SerializeField] private Color disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+    [Header("Ability Slots")]
+    [SerializeField] private AbilitySlot[] abilitySlots = new AbilitySlot[4];
 
     private PlayerAbilitySystem playerAbilitySystem;
 
@@ -31,108 +17,109 @@ public class AbilityUIManager : MonoBehaviour
 
         if (playerAbilitySystem == null)
         {
+            Debug.LogError("PlayerAbilitySystem not found!");
             return;
         }
 
         playerAbilitySystem.OnAbilityChanged += OnAbilityChanged;
 
-        SetupButtons();
-
-        UpdateButtonVisuals(playerAbilitySystem.CurrentAbility);
+        InitializeAbilitySlots();
+        UpdateAllSlotVisuals();
     }
 
     private void OnDestroy()
     {
-        if (playerAbilitySystem != null)
+        CleanupEventListeners();
+    }
+
+    private void InitializeAbilitySlots()
+    {
+        foreach (var slot in abilitySlots)
         {
-            playerAbilitySystem.OnAbilityChanged -= OnAbilityChanged;
+            if (slot == null) continue;
+
+            // Use the ability type that's already configured on the slot
+            // No need to set it again since it's configured in Unity Inspector
+            slot.OnAbilitySelected += OnAbilitySlotSelected;
         }
     }
 
-    private void SetupButtons()
+    private void OnAbilitySlotSelected(PlayerAbility selectedAbility)
     {
-        if (plantButton == null || harvestButton == null || digButton == null || removeButton == null)
-            return;
-
-        DisableButtonNavigation(plantButton);
-        DisableButtonNavigation(harvestButton);
-        DisableButtonNavigation(digButton);
-        DisableButtonNavigation(removeButton);
-
-        AssignButtonEvents();
-    }
-
-    private void DisableButtonNavigation(Button button)
-    {
-        Navigation nav = button.navigation;
-        nav.mode = Navigation.Mode.None;
-        button.navigation = nav;
-    }
-
-    private void AssignButtonEvents()
-    {
-        plantButton.onClick.RemoveAllListeners();
-        harvestButton.onClick.RemoveAllListeners();
-        digButton.onClick.RemoveAllListeners();
-        removeButton.onClick.RemoveAllListeners();
-
-        plantButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Planting));
-        harvestButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Harvesting));
-        digButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Digging));
-        removeButton.onClick.AddListener(() => playerAbilitySystem.SetAbility(PlayerAbility.Removing));
+        if (playerAbilitySystem != null)
+        {
+            playerAbilitySystem.SetAbility(selectedAbility);
+        }
     }
 
     private void OnAbilityChanged(PlayerAbility newAbility)
     {
-        UpdateButtonVisuals(newAbility);
-        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.OnAbilityChanged);
+        UpdateAllSlotVisuals();
+        UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.OnAbilityChanged);
     }
 
-    private void UpdateButtonVisuals(PlayerAbility currentAbility)
+    private void UpdateAllSlotVisuals()
     {
-        // Plantar
-        Image plantButtonImage = plantButton.GetComponent<Image>();
-        if (plantButtonImage != null)
-        {
-            plantButtonImage.color = (currentAbility == PlayerAbility.Planting) ? selectedColor : normalColor;
-        }
+        bool isDaytime = LevelManager.Instance?.currentGameState != GameState.Night;
+        PlayerAbility currentAbility = playerAbilitySystem?.CurrentAbility ?? PlayerAbility.Planting;
 
-        // Cosechar
-        Image harvestButtonImage = harvestButton.GetComponent<Image>();
-        if (harvestButtonImage != null)
+        foreach (var slot in abilitySlots)
         {
-            harvestButtonImage.color = (currentAbility == PlayerAbility.Harvesting) ? selectedColor : normalColor;
-        }
-
-        // Cavar
-        Image digButtonImage = digButton.GetComponent<Image>();
-        if (digButtonImage != null)
-        {
-            digButtonImage.color = (currentAbility == PlayerAbility.Digging) ? selectedColor : normalColor;
-        }
-
-        //Remover
-        Image removeButtonImage = removeButton.GetComponent<Image>();
-        if (removeButtonImage != null)
-        {
-            removeButtonImage.color = (currentAbility == PlayerAbility.Removing) ? selectedColor : normalColor;
+            if (slot != null)
+            {
+                slot.RefreshVisualState(currentAbility, isDaytime);
+            }
         }
     }
 
     void Update()
     {
-        bool isDaytime = LevelManager.Instance.currentGameState != GameState.Night;
+        UpdateSlotInteractability();
+    }
 
-        if (plantButton != null)
-            plantButton.interactable = isDaytime;
+    private void UpdateSlotInteractability()
+    {
+        bool isDaytime = LevelManager.Instance?.currentGameState != GameState.Night;
 
-        if (harvestButton != null)
-            harvestButton.interactable = isDaytime;
+        foreach (var slot in abilitySlots)
+        {
+            if (slot != null)
+            {
+                slot.SetInteractable(isDaytime);
+            }
+        }
+    }
 
-        if (digButton != null)
-            digButton.interactable = isDaytime;
+    private void CleanupEventListeners()
+    {
+        if (playerAbilitySystem != null)
+        {
+            playerAbilitySystem.OnAbilityChanged -= OnAbilityChanged;
+        }
 
-        if (removeButton != null)
-            removeButton.interactable = isDaytime;
+        foreach (var slot in abilitySlots)
+        {
+            if (slot != null)
+            {
+                slot.OnAbilitySelected -= OnAbilitySlotSelected;
+            }
+        }
+    }
+
+    public AbilitySlot GetSlotForAbility(PlayerAbility ability)
+    {
+        foreach (var slot in abilitySlots)
+        {
+            if (slot != null && slot.AbilityType == ability)
+            {
+                return slot;
+            }
+        }
+        return null;
+    }
+
+    public void RefreshSlotVisuals()
+    {
+        UpdateAllSlotVisuals();
     }
 }
