@@ -74,8 +74,8 @@ public class SeedSlot : ImprovedUIButton, IBeginDragHandler, IDragHandler, IEndD
     // Implement IPointerExitHandler to add our custom logic alongside ImprovedUIButton's exit handling
     public new void OnPointerExit(PointerEventData eventData)
     {
-        // Call the base implementation first
-        ((IPointerExitHandler)this).OnPointerExit(eventData);
+        // Call the base ImprovedUIButton implementation first
+        base.OnPointerExit(eventData);
         
         // Add our custom logic
         OnSlotUnhovered?.Invoke(SlotIndex);
