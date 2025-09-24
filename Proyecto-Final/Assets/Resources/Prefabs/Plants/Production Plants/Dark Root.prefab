@@ -119,7 +119,7 @@ MonoBehaviour:
   harvestReadyParticles: {fileID: 3190134809603557918}
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   clickColor: {r: 1, g: 0, b: 0, a: 1}
-  rewardType: 9
+  rewardType: 0
   rewardAmount: 1
 --- !u!114 &5857128013590860986
 MonoBehaviour:
@@ -151,10 +151,11 @@ MonoBehaviour:
   objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 0
   isPlayer: 0
-  hasDeathAnimation: 0
+  hasDeathAnimation: 1
 --- !u!61 &6625974310736771145
 BoxCollider2D:
   m_ObjectHideFlags: 0

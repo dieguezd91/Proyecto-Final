@@ -195,7 +195,8 @@ public class Plant : MonoBehaviour
         DeactivatePreMatureParticles();
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         TributeSystem.Instance?.NotifyPlantDestroyed();
-        Debug.Log("Plant has been destroyed!");
+
+        Destroy(gameObject);
     }
 
     protected virtual void HandleGameStateChanged(GameState newState)

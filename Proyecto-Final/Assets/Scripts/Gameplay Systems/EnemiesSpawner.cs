@@ -384,11 +384,9 @@ public class EnemiesSpawner : MonoBehaviour
     {
         var state = LevelManager.Instance.currentGameState;
 
-        // Permitir terminar si es Noche o si estás en Ritual (para casos en los que el ritual sigue activo)
         if (state != GameState.Night && state != GameState.OnRitual)
             return;
 
-        // Boss night: final forcado
         if (IsBossNight() && bossNightManager != null)
         {
             bossNightManager.ForceEndBossNight();

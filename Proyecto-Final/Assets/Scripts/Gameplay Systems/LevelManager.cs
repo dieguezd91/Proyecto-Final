@@ -412,15 +412,15 @@ public class LevelManager : MonoBehaviour
 
         Debug.Log("Reset completado.");
     }
-
     public void ForceEndNight()
     {
-        var altars = FindObjectsOfType<RitualAltar>();
-        foreach (var altar in altars)
+        foreach (var altar in FindObjectsOfType<RitualAltar>())
             altar.ForceStopRitual();
 
         var spawner = FindObjectOfType<EnemiesSpawner>();
-        if (spawner != null)
-            spawner.EndNight();
+        if (spawner != null) spawner.EndNight();
+        else SetGameState(GameState.Digging);
+
+        StartDayCycle();
     }
 }
