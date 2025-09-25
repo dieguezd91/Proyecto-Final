@@ -7,7 +7,6 @@ public class PlantSlotTooltipHandler : MonoBehaviour, IPointerEnterHandler, IPoi
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log($"Pointer entered slot {slotIndex}");
         UIManager.Instance?.ShowTooltipForSlot(slotIndex);
     }
 
