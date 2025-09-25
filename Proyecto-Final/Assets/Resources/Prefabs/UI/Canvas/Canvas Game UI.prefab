@@ -1487,6 +1487,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7789017057021615446, guid: a5fa038344b370749b2e0583e0750862, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 25.099976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7789017057021615446, guid: a5fa038344b370749b2e0583e0750862, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 3.2999878
+      objectReference: {fileID: 0}
     - target: {fileID: 8467609180587292173, guid: a5fa038344b370749b2e0583e0750862, type: 3}
       propertyPath: m_Name
       value: Panel HUD
