@@ -430,6 +430,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ability REMOVE
       objectReference: {fileID: 0}
+    - target: {fileID: 4563111408109222044, guid: 6fdd75275640b234583f63ce21488490, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -777051087, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     - target: {fileID: 6976442626807566214, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
