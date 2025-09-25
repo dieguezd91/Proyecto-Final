@@ -539,18 +539,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 278824154666496669}
     m_Modifications:
-    - target: {fileID: 133734667363067642, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: abilityType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 3523265234506917669, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Name
       value: Ability HARVEST
       objectReference: {fileID: 0}
-    - target: {fileID: 4563111408109222044, guid: 6fdd75275640b234583f63ce21488490, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -1594061710, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     - target: {fileID: 6976442626807566214, guid: 6fdd75275640b234583f63ce21488490, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
