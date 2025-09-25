@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 
-public class AbilitySlot : ImprovedUIButton
+public class AbilitySlot : ImprovedUIButton, IPointerExitHandler
 {
     [Header("UI References")]
     [SerializeField] private Image buttonImage;
@@ -18,64 +19,74 @@ public class AbilitySlot : ImprovedUIButton
     public PlayerAbility AbilityType => abilityType;
     
     public event Action<PlayerAbility> OnAbilitySelected;
+    public event Action<PlayerAbility> OnAbilityHovered;
+    public event Action<PlayerAbility> OnAbilityUnhovered;
 
-    public void Initialize(PlayerAbility abilityType)
+    public void Initialize()
     {
-        this.abilityType = abilityType;
+        // Don't overwrite the abilityType - it's already set in the Inspector
         
-        CacheReferences();
-        SetupButtonEvents();
-    }
-
-    private void CacheReferences()
-    {
         if (buttonImage == null)
             buttonImage = GetComponent<Image>();
+            
+        SetupButtonEvents();
     }
 
     private void SetupButtonEvents()
     {
-        // Subscribe to ImprovedUIButton events
         OnClick.RemoveAllListeners();
         OnClick.AddListener(() => OnAbilitySelected?.Invoke(AbilityType));
+        
+        OnHover.RemoveAllListeners();
+        OnHover.AddListener(() => OnAbilityHovered?.Invoke(AbilityType));
+    }
+
+    public new void OnPointerExit(PointerEventData eventData)
+    {
+        base.OnPointerExit(eventData);
+        OnAbilityUnhovered?.Invoke(AbilityType);
     }
 
     public void SetSelected(bool selected)
     {
         if (buttonImage == null) return;
-
         buttonImage.color = selected ? selectedColor : normalColor;
     }
 
     public void SetInteractable(bool interactable)
     {
-        // Use ImprovedUIButton's Interactable property
         Interactable = interactable;
         
-        if (buttonImage != null)
-        {
-            // Only apply disabled color if not selected
-            bool isSelected = buttonImage.color == selectedColor;
-            if (!interactable && !isSelected)
-            {
-                buttonImage.color = disabledColor;
-            }
-            else if (interactable && !isSelected)
-            {
-                buttonImage.color = normalColor;
-            }
-        }
-    }
-
-    public bool IsSelected()
-    {
-        return buttonImage != null && buttonImage.color == selectedColor;
+        // Don't change color if the slot is actually selected - let SetSelected handle that
+        // Only apply interactable colors when the slot is not selected
     }
 
     public void RefreshVisualState(PlayerAbility currentAbility, bool isInteractable)
     {
         bool isSelected = currentAbility == AbilityType;
-        SetSelected(isSelected);
-        SetInteractable(isInteractable);
+        
+        Debug.Log($"[AbilitySlot] RefreshVisualState - Slot: {AbilityType}, Current: {currentAbility}, IsSelected: {isSelected}, IsInteractable: {isInteractable}");
+        
+        // Set interactability first
+        Interactable = isInteractable;
+        
+        // Then set the visual state based on selection and interactability
+        if (buttonImage == null) return;
+        
+        if (isSelected)
+        {
+            buttonImage.color = selectedColor;
+            Debug.Log($"[AbilitySlot] Setting {AbilityType} to SELECTED color");
+        }
+        else if (isInteractable)
+        {
+            buttonImage.color = normalColor;
+            Debug.Log($"[AbilitySlot] Setting {AbilityType} to NORMAL color");
+        }
+        else
+        {
+            buttonImage.color = disabledColor;
+            Debug.Log($"[AbilitySlot] Setting {AbilityType} to DISABLED color");
+        }
     }
 }

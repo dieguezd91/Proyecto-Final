@@ -38,8 +38,8 @@ public class AbilityUIManager : MonoBehaviour
         {
             if (slot == null) continue;
 
-            // Use the ability type that's already configured on the slot
-            // No need to set it again since it's configured in Unity Inspector
+            // Initialize the slot without overwriting its Inspector-configured ability type
+            slot.Initialize();
             slot.OnAbilitySelected += OnAbilitySlotSelected;
         }
     }
@@ -63,32 +63,18 @@ public class AbilityUIManager : MonoBehaviour
         bool isDaytime = LevelManager.Instance?.currentGameState != GameState.Night;
         PlayerAbility currentAbility = playerAbilitySystem?.CurrentAbility ?? PlayerAbility.Planting;
 
+        Debug.Log($"[AbilityUIManager] UpdateAllSlotVisuals - CurrentAbility: {currentAbility}, IsDaytime: {isDaytime}");
+
         foreach (var slot in abilitySlots)
         {
             if (slot != null)
             {
+                Debug.Log($"[AbilityUIManager] Updating slot with AbilityType: {slot.AbilityType}");
                 slot.RefreshVisualState(currentAbility, isDaytime);
             }
         }
     }
 
-    void Update()
-    {
-        UpdateSlotInteractability();
-    }
-
-    private void UpdateSlotInteractability()
-    {
-        bool isDaytime = LevelManager.Instance?.currentGameState != GameState.Night;
-
-        foreach (var slot in abilitySlots)
-        {
-            if (slot != null)
-            {
-                slot.SetInteractable(isDaytime);
-            }
-        }
-    }
 
     private void CleanupEventListeners()
     {
