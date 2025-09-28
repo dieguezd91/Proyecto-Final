@@ -290,7 +290,7 @@ public class GameStateUIController : UIControllerBase
         {
             _pauseMenuController.Hide();
         }
-        
+
         GameManager.Instance?.ResumeGame();
 
         if (pausePanel != null)

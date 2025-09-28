@@ -16,7 +16,8 @@ public class PauseMenuController : UIControllerBase
 
     [Header("Blur Settings")]
     [SerializeField] private Volume blurVolume;
-    [SerializeField] private float transitionDuration = 0.5f;
+    [SerializeField] private float showTransitionDuration = 0.5f;
+    [SerializeField] private float hideTransitionDuration = 0.8f;
     [SerializeField] private float maxFocalLength = 200f;
 
     private Coroutine blurTransition;
@@ -49,19 +50,19 @@ public class PauseMenuController : UIControllerBase
 
     protected override void ConfigureInitialState()
     {
-        
+
     }
-    
+
     public override void Show()
     {
         if (_currentState == PanelState.Shown) return;
         Debug.Log($"[PauseMenuController] Show called on {gameObject.name}");
         gameObject.SetActive(true);
         _currentState = PanelState.Shown;
-        
+
         // Show the main pause menu panel by default when controller is shown
         ShowPauseMenu();
-            
+
         OnShowAnimation();
     }
 
@@ -70,38 +71,36 @@ public class PauseMenuController : UIControllerBase
         if (_currentState == PanelState.Hidden) return;
         Debug.Log($"[PauseMenuController] Hide called on {gameObject.name}");
         OnHideAnimation();
-            
-        gameObject.SetActive(false);
+
+        //gameObject.SetActive(false);
         _currentState = PanelState.Hidden;
     }
 
     protected override void OnShowAnimation()
     {
         Debug.Log("[PauseMenuController] OnShowAnimation - applying blur effect");
-        // Apply blur effect when showing
         if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength));
+        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength, showTransitionDuration));
     }
 
     protected override void OnHideAnimation()
     {
         Debug.Log("[PauseMenuController] OnHideAnimation - removing blur effect");
-        // Remove blur effect when hiding
         if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLength(0f));
+        blurTransition = StartCoroutine(FadeFocalLength(0f, hideTransitionDuration));
     }
 
-    private IEnumerator FadeFocalLength(float target)
+    private IEnumerator FadeFocalLength(float target, float duration)
     {
         if (dof == null) yield break;
 
         float start = dof.focalLength.value;
         float elapsed = 0f;
 
-        while (elapsed < transitionDuration)
+        while (elapsed < duration)
         {
             elapsed += Time.unscaledDeltaTime;
-            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / transitionDuration);
+            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
             yield return null;
         }
 
@@ -121,7 +120,7 @@ public class PauseMenuController : UIControllerBase
     protected override void SetupEventListeners()
     {
         Debug.Log("[PauseMenuController] Setting up event listeners");
-        
+
         // Subscribe to PauseMenuPanel events
         if (_pauseMenuPanel != null)
         {
@@ -207,13 +206,13 @@ public class PauseMenuController : UIControllerBase
         Debug.Log("[PauseMenuController] ShowOptions called");
         Debug.Log($"[PauseMenuController] _pauseMenuPanel null: {_pauseMenuPanel == null}");
         Debug.Log($"[PauseMenuController] _optionsMenuPanel null: {_optionsMenuPanel == null}");
-        
+
         if (_pauseMenuPanel != null)
         {
             Debug.Log($"[PauseMenuController] Hiding _pauseMenuPanel, current state: {_pauseMenuPanel.CurrentState}");
             _pauseMenuPanel.Hide();
         }
-        
+
         if (_optionsMenuPanel != null)
         {
             Debug.Log($"[PauseMenuController] Showing _optionsMenuPanel, current state: {_optionsMenuPanel.CurrentState}");
@@ -224,7 +223,7 @@ public class PauseMenuController : UIControllerBase
         {
             Debug.LogError("[PauseMenuController] _optionsMenuPanel is null! Cannot show options panel.");
         }
-        
+
         SoundManager.Instance.PlayOneShot("ButtonClick");
     }
 
@@ -238,7 +237,7 @@ public class PauseMenuController : UIControllerBase
     }
 
     public void ShowInstructions()
-    { 
+    {
         if (uiManager != null)
         {
             uiManager.OpenInstructions();
@@ -251,7 +250,7 @@ public class PauseMenuController : UIControllerBase
     }
 
     public void CloseInstructions()
-    { 
+    {
         if (uiManager != null)
         {
             uiManager.CloseInstructions();
@@ -266,10 +265,10 @@ public class PauseMenuController : UIControllerBase
     public void GoToMainMenu()
     {
         GameManager.Instance?.ResumeGame();
-        
+
         if (_pauseMenuPanel != null)
             _pauseMenuPanel.Hide();
-            
+
         SoundManager.Instance.PlayOneShot("ButtonClick");
         SceneLoaderManager.Instance.LoadSceneByName("RefactorMenu");
     }
