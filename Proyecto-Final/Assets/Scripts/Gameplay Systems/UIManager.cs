@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     public GameObject pausePanel;
     public InventoryUI inventoryUI;
 
+
     public InterfaceSoundBase InterfaceSounds => interfaceSounds;
     public static UIManager Instance { get; private set; }
 
@@ -63,12 +64,14 @@ public class UIManager : MonoBehaviour
         seedSlotsUI?.HandleUpdate();
     }
 
+
     private void InitializeModules()
     {
         if (pauseMenuController == null) pauseMenuController = GetComponentInChildren<PauseMenuController>();
         if (healthUI == null) healthUI = GetComponentInChildren<HealthUIController>();
         if (manaUI == null) manaUI = GetComponentInChildren<ManaUIController>();
         if (inventoryUIController == null) inventoryUIController = GetComponentInChildren<InventoryUIController>();
+        if (inventoryUI == null) inventoryUI = GetComponentInChildren<InventoryUI>();
         if (seedSlotsUI == null) seedSlotsUI = GetComponentInChildren<SeedSlotsUIController>();
         if (gameStateUI == null) gameStateUI = GetComponentInChildren<GameStateUIController>();
         if (feedbackUI == null) feedbackUI = GetComponentInChildren<FeedbackUIController>();
@@ -83,6 +86,19 @@ public class UIManager : MonoBehaviour
         feedbackUI?.Initialize();
         tooltipUI?.Initialize();
     }
+
+    public void OpenInventoryOptions()
+    {
+        if (inventoryUI != null)
+        {
+            inventoryUI.OpenOptionsTab();
+        }
+        else
+        {
+            Debug.LogWarning("[UIManager] OpenInventoryOptions: inventoryUI referencia nula.");
+        }
+    }
+
 
     private void SetupModules()
     {

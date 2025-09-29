@@ -104,10 +104,16 @@ public class InventoryUIController : UIControllerBase
 
         if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
             LevelManager.Instance.SetGameState(GameState.Digging);
+        
+        if (LevelManager.Instance?.GetCurrentGameState() == GameState.Paused)
+            LevelManager.Instance.SetGameState(GameState.Digging);
 
         UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
-
+        GameManager.Instance?.ResumeGame();
+        UIManager.Instance.HUD.SetActive(true);
+        playerController.SetMovementEnabled(true);
         UIEvents.TriggerInventoryClosed();
+
     }
 
     private bool CanOpenInventory()
