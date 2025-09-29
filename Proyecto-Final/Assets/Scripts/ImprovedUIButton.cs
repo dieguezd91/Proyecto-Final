@@ -90,7 +90,7 @@ public class ImprovedUIButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
         buttonComponent = GetComponent<Button>();
     }
 
-    private void ValidateSoundClipData(AudioClip clip) { /* No-op for AudioClip */ }
+    private void ValidateSoundClipData(AudioClip clip) { /* No-op for GetAudioClip */ }
     #endregion
 
     #region Event Handlers

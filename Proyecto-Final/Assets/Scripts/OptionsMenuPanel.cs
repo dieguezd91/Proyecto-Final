@@ -9,7 +9,7 @@ public class OptionsMenuPanel : UIControllerBase
     [SerializeField] private ImprovedUIButton _goBackButton;
 
     [Header("Panel Events")]
-    [HideInInspector] public UnityEvent OnGoBackClicked = new UnityEvent();
+    [HideInInspector] public UnityEvent OnGoBackClicked = new ();
 
     private void Start()
     {
@@ -25,19 +25,9 @@ public class OptionsMenuPanel : UIControllerBase
 
     protected override void SetupEventListeners()
     {
-        Debug.Log("[OptionsMenuPanel] Setting up event listeners");
-        
         if (_goBackButton != null)
         {
-            _goBackButton.OnClick.AddListener(() => {
-                Debug.Log("[OptionsMenuPanel] Go Back button clicked, notifying controller");
-                OnGoBackClicked.Invoke();
-            });
-            Debug.Log("[OptionsMenuPanel] Go Back button listener added");
-        }
-        else
-        {
-            Debug.LogWarning("[OptionsMenuPanel] Go Back button is null!");
+            _goBackButton.OnClick.AddListener(() => { OnGoBackClicked.Invoke(); });
         }
     }
 }

@@ -31,61 +31,34 @@ public class PauseMenuPanel : UIControllerBase
 
     protected override void SetupEventListeners()
     {
-        Debug.Log("[PauseMenuPanel] Setting up event listeners");
-        
         if (_continueButton != null)
         {
             _continueButton.OnClick.AddListener(() => OnContinueClicked.Invoke());
-            _continueButton.OnHover.AddListener(() => Debug.Log("[PauseMenuPanel] Continue button hovered"));
-            Debug.Log("[PauseMenuPanel] Continue button listeners added");
-        }
-        else
-        {
-            Debug.LogWarning("[PauseMenuPanel] Continue button is null!");
+            _continueButton.OnHover.AddListener(() => { });
         }
         
         if (_optionsButton != null)
         {
             _optionsButton.OnClick.AddListener(() => OnOptionsClicked.Invoke());
-            _optionsButton.OnHover.AddListener(() => Debug.Log("[PauseMenuPanel] Options button hovered"));
-            Debug.Log("[PauseMenuPanel] Options button listeners added");
-        }
-        else
-        {
-            Debug.LogWarning("[PauseMenuPanel] Options button is null!");
+            _optionsButton.OnHover.AddListener(() => { });
         }
         
         if (_instructionsButton != null)
         {
             _instructionsButton.OnClick.AddListener(() => OnInstructionsClicked.Invoke());
-            _instructionsButton.OnHover.AddListener(() => Debug.Log("[PauseMenuPanel] Instructions button hovered"));
-            Debug.Log("[PauseMenuPanel] Instructions button listeners added");
-        }
-        else
-        {
-            Debug.LogWarning("[PauseMenuPanel] Instructions button is null!");
-        }
-        
+            _instructionsButton.OnHover.AddListener(() => { });
+    }
+
         if (_mainMenuButton != null)
         {
             _mainMenuButton.OnClick.AddListener(() => OnMainMenuClicked.Invoke());
-            _mainMenuButton.OnHover.AddListener(() => Debug.Log("[PauseMenuPanel] Main Menu button hovered"));
-            Debug.Log("[PauseMenuPanel] Main Menu button listeners added");
+            _mainMenuButton.OnHover.AddListener(() => { });
         }
-        else
-        {
-            Debug.LogWarning("[PauseMenuPanel] Main Menu button is null!");
-        }
-        
+
         if (_exitButton != null)
         {
             _exitButton.OnClick.AddListener(() => OnExitClicked.Invoke());
-            _exitButton.OnHover.AddListener(() => Debug.Log("[PauseMenuPanel] Exit button hovered"));
-            Debug.Log("[PauseMenuPanel] Exit button listeners added");
-        }
-        else
-        {
-            Debug.LogWarning("[PauseMenuPanel] Exit button is null!");
+            _exitButton.OnHover.AddListener(() => { });
         }
     }
 }

@@ -65,8 +65,6 @@ public class AbilitySlot : ImprovedUIButton, IPointerExitHandler
     {
         bool isSelected = currentAbility == AbilityType;
         
-        Debug.Log($"[AbilitySlot] RefreshVisualState - Slot: {AbilityType}, Current: {currentAbility}, IsSelected: {isSelected}, IsInteractable: {isInteractable}");
-        
         // Set interactability first
         Interactable = isInteractable;
         
@@ -76,17 +74,14 @@ public class AbilitySlot : ImprovedUIButton, IPointerExitHandler
         if (isSelected)
         {
             buttonImage.color = selectedColor;
-            Debug.Log($"[AbilitySlot] Setting {AbilityType} to SELECTED color");
         }
         else if (isInteractable)
         {
             buttonImage.color = normalColor;
-            Debug.Log($"[AbilitySlot] Setting {AbilityType} to NORMAL color");
         }
         else
         {
             buttonImage.color = disabledColor;
-            Debug.Log($"[AbilitySlot] Setting {AbilityType} to DISABLED color");
         }
     }
 }

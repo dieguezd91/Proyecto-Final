@@ -59,6 +59,7 @@ public class LevelManager : MonoBehaviour
 
     public LifeController playerLife;
     private HouseLifeController HomeLife;
+    public AmbienceSoundManager AmbienceSoundManager => ambienceSoundManager;
     public UIManager uiManager;
     public GameState currentGameState;
 
@@ -112,9 +113,6 @@ public class LevelManager : MonoBehaviour
         if (uiManager == null)
             uiManager = FindObjectOfType<UIManager>();
 
-        if (ambienceSoundManager == null)
-            ambienceSoundManager = FindObjectOfType<AmbienceSoundManager>();
-
         dayCount = 0;
         SetGameState(GameState.Digging);
         StartDayCycle();
@@ -123,9 +121,6 @@ public class LevelManager : MonoBehaviour
     private void StartDayCycle()
     {
         SetGameState(GameState.Digging);
-
-        if (ambienceSoundManager != null)
-            ambienceSoundManager.TransitionAmbience(AmbienceType.Forest, 1f);
 
         onNewDay?.Invoke(dayCount);
     }
@@ -147,12 +142,6 @@ public class LevelManager : MonoBehaviour
     {
         dayCount++;
         SetGameState(GameState.Night);
-
-        if (ambienceSoundManager == null)
-            ambienceSoundManager = FindObjectOfType<AmbienceSoundManager>();
-
-        if (ambienceSoundManager != null)
-            ambienceSoundManager.TransitionAmbience(AmbienceType.Infernum, 1f);
 
         TributeSystem.Instance?.StartNightEvaluation();
     }

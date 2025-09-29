@@ -9,7 +9,7 @@ public class MainMenuController : UIControllerBase
     [SerializeField] private ImprovedUIButton _optionsButton;
     [SerializeField] private ImprovedUIButton _controlsButton;
     [SerializeField] private ImprovedUIButton _exitButton;
-    [SerializeField] private ImprovedUIButton _BackButton;
+    [SerializeField] private ImprovedUIButton _backButton;
     
     [Header("Panels")]
     [SerializeField] private UIControllerBase _optionsPanel;
@@ -28,61 +28,36 @@ public class MainMenuController : UIControllerBase
 
     protected override void SetupEventListeners()
     {
-        Debug.Log("[MainMenuController] Setting up event listeners");
-        
+
         if (_playButton != null)
         {
-            _playButton.OnClick.AddListener(() => PlayGame("TreeScene"));
-            _playButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Play button hovered"));
-            Debug.Log("[MainMenuController] Play button listeners added");
+            _playButton.OnClick.AddListener(PlayGame);
+            _playButton.OnHover.AddListener(() => { });
         }
-        else
-        {
-            Debug.LogWarning("[MainMenuController] Play button is null!");
-        }
-        
+
         if (_optionsButton != null)
         {
             _optionsButton.OnClick.AddListener(ShowOptions);
-            _optionsButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] ShowOptions button hovered"));
-            Debug.Log("[MainMenuController] Options button listeners added");
+            _optionsButton.OnHover.AddListener(() => { });
         }
-        else
-        {
-            Debug.LogWarning("[MainMenuController] Options button is null!");
-        }
-        
+
         if (_controlsButton != null)
         {
-            _controlsButton.OnClick.AddListener(() => Debug.Log("[MainMenuController] Controls button clicked"));
-            _controlsButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Controls button hovered"));
-            Debug.Log("[MainMenuController] Controls button listeners added");
+            _controlsButton.OnClick.AddListener(() => { });
+            _controlsButton.OnHover.AddListener(() => { });
         }
-        else
-        {
-            Debug.LogWarning("[MainMenuController] Controls button is null!");
-        }
-        
+
         if (_exitButton != null)
         {
             _exitButton.OnClick.AddListener(GameManager.Instance.QuitGame);
-            _exitButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Exit button hovered"));
-            Debug.Log("[MainMenuController] Exit button listeners added");
+            _exitButton.OnHover.AddListener(() => { });
         }
-        else
-        {
-            Debug.LogWarning("[MainMenuController] Exit button is null!");
-        }
+
         
-        if (_BackButton != null)
+        if (_backButton != null)
         {
-            _BackButton.OnClick.AddListener(HideOptions);
-            _BackButton.OnHover.AddListener(() => Debug.Log("[MainMenuController] Back button hovered"));
-            Debug.Log("[MainMenuController] Back button listeners added");
-        }
-        else
-        {
-            Debug.LogWarning("[MainMenuController] Exit button is null!");
+            _backButton.OnClick.AddListener(HideOptions);
+            _backButton.OnHover.AddListener(() => { });
         }
     }
 
@@ -92,24 +67,18 @@ public class MainMenuController : UIControllerBase
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void PlayGame(string name)
-    {
-        // Example: Unload menu (index 0), load game (index 1)
-        SceneLoaderManager.Instance.LoadSceneByName(name);
-    }
+    private static void PlayGame() => SceneLoaderManager.Instance.LoadGameScene();
 
-    public void ShowOptions()
+    private void ShowOptions()
     {
-        Debug.Log("[MainMenuController] ShowOptions button clicked, showing options panel");
         if (_optionsPanel != null)
         {
             _optionsPanel.Show();
         }
     }
-    
-    public void HideOptions()
+
+    private void HideOptions()
     {
-        Debug.Log("[MainMenuController] ShowOptions button clicked, showing options panel");
         if (_optionsPanel != null)
         {
             _optionsPanel.Hide();

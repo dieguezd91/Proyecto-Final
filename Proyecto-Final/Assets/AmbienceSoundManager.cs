@@ -1,101 +1,38 @@
-using System.Collections;
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-
-public enum AmbienceType { Forest, Infernum }
+using System.Linq;
 
 public class AmbienceSoundManager : MonoBehaviour
 {
-    [SerializeField] private SoundClipData _ambienceForest = new();
-    [SerializeField] private SoundClipData _ambienceInfernum = new();
+    [Header("Weather Audio Sources")]
+    [SerializeField] private List<AmbienceWeatherAudioSource> _weatherAudioSources = new();
+    private AmbienceWeatherAudioSource currentPlayingSource;
 
-    [SerializeField] private AudioSource _audioSourceForest;
-    [SerializeField] private AudioSource _audioSourceInfernum;
-
-    [SerializeField] private float _crossfadeDuration = 1.5f;
-
-    private Coroutine crossfadeCoroutine;
-    
-    public void StartForestAmbience()
-    {
-        if (!_audioSourceForest || !_ambienceForest.GetClip()) return;
-        _audioSourceForest.clip = _ambienceForest.GetClip();
-        _audioSourceForest.loop = true;
-        _audioSourceForest.volume = 1f;
-        _audioSourceForest.Play();
+    private void Awake() {
+        // Find all AmbienceWeatherAudioSource components in children if not assigned
+        if (_weatherAudioSources == null || _weatherAudioSources.Count == 0)
+            _weatherAudioSources = GetComponentsInChildren<AmbienceWeatherAudioSource>().ToList();
     }
 
-    public void StopForestAmbience()
-    {
-        if (_audioSourceForest)
-            _audioSourceForest.Stop();
+    private AmbienceWeatherAudioSource GetWeatherSource(AmbienceType type, AmbienceWeather weather) {
+        return _weatherAudioSources.FirstOrDefault(s => s.AmbienceType == type && s.AmbienceWeather == weather);
     }
 
-    public void StartInfernumAmbience()
-    {
-        if (!_audioSourceInfernum || !_ambienceInfernum.GetClip()) return;
-        _audioSourceInfernum.clip = _ambienceInfernum.GetClip();
-        _audioSourceInfernum.loop = true;
-        _audioSourceInfernum.volume = 1f;
-        _audioSourceInfernum.Play();
-    }
-
-    public void StopInfernumAmbience()
-    {
-        if (_audioSourceInfernum)
-            _audioSourceInfernum.Stop();
-    }
-
-    public void TransitionAmbience(AmbienceType target, float duration = 1f)
-    {
-        if (crossfadeCoroutine != null)
-            StopCoroutine(crossfadeCoroutine);
-        crossfadeCoroutine = StartCoroutine(CrossfadeCoroutine(target, duration));
-    }
-
-    private IEnumerator CrossfadeCoroutine(AmbienceType target, float duration = 1f)
-    {
-        AudioSource fadeInSource = null;
-        AudioSource fadeOutSource = null;
-        SoundClipData fadeInClip = null;
-
-        if (target == AmbienceType.Forest)
-        {
-            fadeInSource = _audioSourceForest;
-            fadeOutSource = _audioSourceInfernum;
-            fadeInClip = _ambienceForest;
+    private void StartAmbience(AmbienceType type, AmbienceWeather weather) {
+        var source = GetWeatherSource(type, weather);
+        
+        if (source == null) {
+            return;
         }
-        else
-        {
-            fadeInSource = _audioSourceInfernum;
-            fadeOutSource = _audioSourceForest;
-            fadeInClip = _ambienceInfernum;
-        }
+        
+        if (currentPlayingSource != null && currentPlayingSource != source)
+            currentPlayingSource.StopClip();
+        
+        source.Play();
+        currentPlayingSource = source;
+    }
 
-        if (!fadeInSource.isPlaying)
-        {
-            fadeInSource.clip = fadeInClip.GetClip();
-            fadeInSource.loop = true;
-            fadeInSource.volume = 0f;
-            fadeInSource.Play();
-        }
-
-        float startFadeIn = fadeInSource.volume;
-        float startFadeOut = fadeOutSource.volume;
-        float time = 0f;
-
-        while (time < duration)
-        {
-            float t = time / duration;
-            fadeInSource.volume = Mathf.Lerp(startFadeIn, 1f, t);
-            fadeOutSource.volume = Mathf.Lerp(startFadeOut, 0f, t);
-            time += Time.unscaledDeltaTime;
-            yield return null;
-        }
-        fadeInSource.volume = 1f;
-        fadeOutSource.volume = 0f;
-        if (fadeOutSource.isPlaying)
-            fadeOutSource.Stop();
-        crossfadeCoroutine = null;
+    public void TransitionAmbience(AmbienceType target, AmbienceWeather weather) {
+        StartAmbience(target, weather);
     }
 }

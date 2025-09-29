@@ -309,7 +309,7 @@ public class SoundManager : MonoBehaviour
     }
     
     /// <summary>
-    /// Plays an AudioClip directly using the pooling and limiting system.
+    /// Plays an GetAudioClip directly using the pooling and limiting system.
     /// </summary>
     public void PlayAudioClip(AudioClip clip, float volume = 0.5f, float pitch = 1f, bool loop = false)
     {

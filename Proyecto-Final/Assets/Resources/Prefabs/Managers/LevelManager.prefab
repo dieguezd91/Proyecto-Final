@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  ambienceSoundManager: {fileID: 0}
   gameOverDelay: 2
   dayCount: 0
   onNewDay:

@@ -19,13 +19,11 @@ public class SettingsManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("[SettingsManager] Awake called");
         Load();
     }
 
     private void Start()
     {
-        Debug.Log("[SettingsManager] Start called - ensuring mixer values are set after audio system is ready");
         SetMixerVolume(_masterVolumeParam, _masterVolume);
         SetMixerVolume(_musicVolumeParam, _musicVolume);
         SetMixerVolume(_sfxVolumeParam, _sfxVolume);
@@ -35,17 +33,14 @@ public class SettingsManager : MonoBehaviour
     {
         if (_audioMixer == null)
         {
-            Debug.LogWarning($"[SettingsManager] AudioMixer is null when trying to set {parameter} to {normalizedVolume}");
             return;
         }
         float dB = Mathf.Log10(Mathf.Clamp(normalizedVolume, 0.0001f, 1f)) * 20f;
-        Debug.Log($"[SettingsManager] Setting mixer parameter '{parameter}' to {dB} dB (normalized: {normalizedVolume})");
         _audioMixer.SetFloat(parameter, dB);
     }
 
     public void SetMasterVolume(float value)
     {
-        Debug.Log($"[SettingsManager] SetMasterVolume called with value: {value}");
         _masterVolume = value;
         PlayerPrefs.SetFloat(_masterVolumeParam, value);
         SetMixerVolume(_masterVolumeParam, value);
@@ -53,7 +48,6 @@ public class SettingsManager : MonoBehaviour
 
     public void SetMusicVolume(float value)
     {
-        Debug.Log($"[SettingsManager] SetMusicVolume called with value: {value}");
         _musicVolume = value;
         PlayerPrefs.SetFloat(_musicVolumeParam, value);
         SetMixerVolume(_musicVolumeParam, value);
@@ -61,7 +55,6 @@ public class SettingsManager : MonoBehaviour
 
     public void SetSFXVolume(float value)
     {
-        Debug.Log($"[SettingsManager] SetSFXVolume called with value: {value}");
         _sfxVolume = value;
         PlayerPrefs.SetFloat(_sfxVolumeParam, value);
         SetMixerVolume(_sfxVolumeParam, value);
@@ -71,11 +64,9 @@ public class SettingsManager : MonoBehaviour
 
     public void Load()
     {
-        Debug.Log("[SettingsManager] Load called");
         _masterVolume = PlayerPrefs.GetFloat(_masterVolumeParam, 0.5f);
         _musicVolume = PlayerPrefs.GetFloat(_musicVolumeParam, 0.5f);
         _sfxVolume = PlayerPrefs.GetFloat(_sfxVolumeParam, 0.5f);
-        Debug.Log($"[SettingsManager] Loaded values: Master={_masterVolume}, Music={_musicVolume}, SFX={_sfxVolume}");
         SetMasterVolume(_masterVolume);
         SetMusicVolume(_musicVolume);
         SetSFXVolume(_sfxVolume);
