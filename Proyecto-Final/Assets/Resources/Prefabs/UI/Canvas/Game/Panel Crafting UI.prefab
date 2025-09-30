@@ -1530,7 +1530,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1094415563152046549}
         m_TargetAssemblyTypeName: CraftingUIManager, Assembly-CSharp
         m_MethodName: CloseCraftingUI
         m_Mode: 1
@@ -1746,6 +1746,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7177410150620398362}
+  - component: {fileID: 1094415563152046549}
   m_Layer: 5
   m_Name: Panel Crafting UI
   m_TagString: Untagged
@@ -1773,6 +1774,30 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1094415563152046549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7418085635518981879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29bc2d31da3baa644887396eb81f5dd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  craftingUIPanel: {fileID: 8666372750011356693}
+  recipeListContainer: {fileID: 6918443726541225761}
+  recipeButtonPrefab: {fileID: 188925997496119417, guid: b30e57c9b64484e488429c9e38d4234b, type: 3}
+  selectedPlantName: {fileID: 4851245434709828639}
+  selectedPlantIcon: {fileID: 2735944723952262905}
+  selectedPlantDescription: {fileID: 304653869269578303}
+  materialListContainer: {fileID: 273999519425940939}
+  materialRequirementPrefab: {fileID: 984204977795388131, guid: e17f418677f066f4dbe4a2092ff01dd7, type: 3}
+  craftButton: {fileID: 3975478083653675555}
+  materialIconSlots:
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &7485159846086971654
 GameObject:
   m_ObjectHideFlags: 0

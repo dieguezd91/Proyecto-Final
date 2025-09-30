@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class RitualAltar : MonoBehaviour
+public class RitualAltar : MonoBehaviour, IInteractable
 {
     [Header("Ritual Configuration")]
     [SerializeField] private float ritualDuration = 10f;
@@ -30,7 +30,6 @@ public class RitualAltar : MonoBehaviour
     [SerializeField] private Sprite nearSprite;
 
     private bool isPerformingRitual = false;
-    private bool playerInRange = false;
     private LevelManager levelManager;
     private LifeController playerLife;
     private DayNightLightController lightController;
@@ -38,14 +37,9 @@ public class RitualAltar : MonoBehaviour
     private Camera mainCamera;
     private Vector2 originalVignetteCenter;
 
-    [SerializeField] private GameObject interactionPromptCanvas;
-
     private void Start()
     {
         levelManager = LevelManager.Instance;
-
-        if (interactionPromptCanvas != null)
-            interactionPromptCanvas.SetActive(false);
 
         if (levelManager != null && levelManager.playerLife != null)
         {
@@ -57,9 +51,7 @@ public class RitualAltar : MonoBehaviour
         mainCamera = Camera.main;
 
         VerifyVignetteSetup();
-
         TurnOffAllCandles();
-
         UpdateAltarAppearance();
     }
 
@@ -81,24 +73,14 @@ public class RitualAltar : MonoBehaviour
             ForceStopRitual();
     }
 
-    private void Update()
+    #region IInteractable Implementation
+
+    public void Interact()
     {
-
-        if (playerInRange)
-        {
-            if (interactionPromptCanvas != null)
-                interactionPromptCanvas.SetActive(playerInRange);
-
-            if (Input.GetKeyDown(KeyCode.F) && CanPerformRitual())
-            {
-                StartCoroutine(PerformRitualCoroutine());
-            }
-        }
-        else
-            interactionPromptCanvas.SetActive(false);
+        StartCoroutine(PerformRitualCoroutine());
     }
 
-    private bool CanPerformRitual()
+    public bool CanInteract()
     {
         if (isPerformingRitual || levelManager == null || playerLife == null)
             return false;
@@ -109,6 +91,8 @@ public class RitualAltar : MonoBehaviour
                currentState == GameState.Harvesting ||
                currentState == GameState.Removing;
     }
+
+    #endregion
 
     private IEnumerator PerformRitualCoroutine()
     {
@@ -121,7 +105,6 @@ public class RitualAltar : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowRitualOverlay();
-            Debug.Log("[RitualAltar] Ritual overlay mostrado");
         }
 
         yield return new WaitForSeconds(ritualDuration);
@@ -131,7 +114,6 @@ public class RitualAltar : MonoBehaviour
         if (UIManager.Instance != null)
         {
             UIManager.Instance.HideRitualOverlay();
-
             yield return new WaitForSeconds(0.1f);
         }
 
@@ -160,7 +142,6 @@ public class RitualAltar : MonoBehaviour
         lightController?.DimLightForRitual(0.05f, 1.5f);
 
         yield return new WaitForSeconds(1.5f);
-
         yield return StartCoroutine(LightCandlesSequentially());
     }
 
@@ -178,7 +159,6 @@ public class RitualAltar : MonoBehaviour
                 StartCoroutine(FlickerCandle(candleLights[i], i));
             }
             yield return new WaitForSeconds(candleIgnitionDelay);
-
         }
     }
 
@@ -188,8 +168,8 @@ public class RitualAltar : MonoBehaviour
 
         float originalIntensity = candle.intensity;
         float randomOffset = candleIndex * 0.5f;
-
         float elapsed = 0f;
+
         while (elapsed < ritualDuration - (candleIndex * candleIgnitionDelay))
         {
             elapsed += Time.deltaTime;
@@ -198,7 +178,6 @@ public class RitualAltar : MonoBehaviour
             float ritualPulse = Mathf.PingPong(elapsed * 1.5f, 1f) * 0.5f;
 
             candle.intensity = originalIntensity + flicker + ritualPulse;
-
             yield return null;
         }
         candle.intensity = originalIntensity;
@@ -313,10 +292,7 @@ public class RitualAltar : MonoBehaviour
 
     private void VerifyVignetteSetup()
     {
-        if (lightController == null || lightController.globalVolume == null)
-        {
-            return;
-        }
+        if (lightController == null || lightController.globalVolume == null) return;
 
         if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
         {
@@ -383,15 +359,8 @@ public class RitualAltar : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
-
             if (altarSpriteRenderer != null && nearSprite != null)
                 altarSpriteRenderer.sprite = nearSprite;
-
-            if (CanPerformRitual())
-            {
-                Debug.Log("Presiona E para realizar el ritual de preparaci�n");
-            }
         }
     }
 
@@ -399,24 +368,8 @@ public class RitualAltar : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = false;
-
             if (altarSpriteRenderer != null && defaultSprite != null)
                 altarSpriteRenderer.sprite = defaultSprite;
-        }
-    }
-
-
-    public bool IsRitualAvailable()
-    {
-        return !isPerformingRitual && CanPerformRitual();
-    }
-
-    public void ActivateRitual()
-    {
-        if (CanPerformRitual())
-        {
-            StartCoroutine(PerformRitualCoroutine());
         }
     }
 

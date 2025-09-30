@@ -194,7 +194,7 @@ public class Plant : MonoBehaviour
     {
         DeactivatePreMatureParticles();
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
-        TributeSystem.Instance?.NotifyPlantDestroyed();
+        RewardsSystem.Instance?.NotifyPlantDestroyed();
 
         Destroy(gameObject);
     }

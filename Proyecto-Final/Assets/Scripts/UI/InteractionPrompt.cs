@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InteractionPrompt : MonoBehaviour
 {
-    [SerializeField] private float showDistance = 2.5f;
+    [SerializeField] private float showDistance;
     [SerializeField] private Transform player;
     [SerializeField] private GameObject promptCanvas;
 
@@ -10,9 +10,7 @@ public class InteractionPrompt : MonoBehaviour
     {
         if (player == null)
             player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        //if (promptCanvas != null)
-        //    promptCanvas.SetActive(false);
+        promptCanvas.SetActive(false);
     }
 
     private void Update()
@@ -21,19 +19,6 @@ public class InteractionPrompt : MonoBehaviour
             return;
 
         float dist = Vector2.Distance(player.position, transform.position);
-
-        //if (dist <= showDistance)
-        //{
-        //    promptCanvas.SetActive(true);
-        //}
-        //else
-        //{
-        //    promptCanvas.SetActive(false);
-        //}
-
-
-
-
     }
 
 
@@ -47,6 +32,5 @@ public class InteractionPrompt : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         promptCanvas.SetActive(false);
-
     }
 }

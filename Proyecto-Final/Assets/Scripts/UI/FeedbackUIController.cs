@@ -144,7 +144,7 @@ public class FeedbackUIController : UIControllerBase
         float intensity = Mathf.Clamp01(damage / 50f);
         targetDamageAlpha = 0.3f + (intensity * 0.4f);
 
-        TributeSystem.Instance?.NotifyPlayerDamaged();
+        RewardsSystem.Instance?.NotifyPlayerDamaged();
     }
 
     public void SetGrayscaleEffect(bool enabled)

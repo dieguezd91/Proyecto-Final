@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5147248584766362346}
   - component: {fileID: 1329851061052254288}
-  - component: {fileID: 3527716523135669578}
   - component: {fileID: 263092139008026724}
   - component: {fileID: 548649806298159851}
-  - component: {fileID: 4353532493074727709}
   - component: {fileID: 7580847324679401973}
+  - component: {fileID: 8647160673624715951}
+  - component: {fileID: 3861239586405840910}
   m_Layer: 0
   m_Name: Crafting Cauldron
   m_TagString: Untagged
@@ -30,14 +30,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4018760531033073672}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.77, y: 4.66, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1207180659418158141}
   - {fileID: 3428779855838031477}
-  - {fileID: 1761834185133897076}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1329851061052254288
@@ -92,32 +91,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3527716523135669578
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4018760531033073672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29bc2d31da3baa644887396eb81f5dd8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  craftingUIPanel: {fileID: 0}
-  recipeListContainer: {fileID: 0}
-  recipeButtonPrefab: {fileID: 188925997496119417, guid: b30e57c9b64484e488429c9e38d4234b, type: 3}
-  selectedPlantName: {fileID: 0}
-  selectedPlantIcon: {fileID: 0}
-  selectedPlantDescription: {fileID: 0}
-  materialListContainer: {fileID: 0}
-  materialRequirementPrefab: {fileID: 984204977795388131, guid: e17f418677f066f4dbe4a2092ff01dd7, type: 3}
-  craftButton: {fileID: 0}
-  materialIconSlots:
-  - {fileID: 0}
-  - {fileID: 0}
-  interactionPromptCanvas: {fileID: 1342742963470355501}
-  promptDistance: 2.5
 --- !u!58 &263092139008026724
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -198,21 +171,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 0.9375}
   m_EdgeRadius: 0
---- !u!114 &4353532493074727709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4018760531033073672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba004e310efe6934aae44d55e02520b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  showDistance: 0.4
-  player: {fileID: 0}
-  promptCanvas: {fileID: 1342742963470355501}
 --- !u!114 &7580847324679401973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,37 +189,33 @@ MonoBehaviour:
   defaultSprite: {fileID: 1046542882, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   nearSprite: {fileID: -320180591, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   gizmoColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
---- !u!1 &5910868662144453827
-GameObject:
+--- !u!114 &8647160673624715951
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1761834185133897076}
-  m_Layer: 0
-  m_Name: Interaction
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1761834185133897076
-Transform:
+  m_GameObject: {fileID: 4018760531033073672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c48df8a02879424e85edc880997e677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3861239586405840910
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5910868662144453827}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5147248584766362346}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 4018760531033073672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acb2e8610e87ac249ba0ef75314ad47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionPromptCanvas: {fileID: 1342742963470355501}
+  interactionKey: 102
+  hidePromptDuringInteraction: 1
 --- !u!1 &8542196716748449406
 GameObject:
   m_ObjectHideFlags: 0

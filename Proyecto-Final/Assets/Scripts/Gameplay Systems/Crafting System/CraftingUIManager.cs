@@ -7,7 +7,6 @@ public class CraftingUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject craftingUIPanel;
 
-    private bool isPlayerNear = false;
     public static bool isCraftingUIOpen = false;
 
     [SerializeField] private Transform recipeListContainer;
@@ -22,10 +21,6 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private Button craftButton;
     [SerializeField] private List<Image> materialIconSlots;
 
-    [SerializeField] private GameObject interactionPromptCanvas;
-    [SerializeField] private float promptDistance = 2.5f;
-    private Transform player;
-
     private CraftingSystem craftingSystem;
     private SeedsEnum selectedSeed;
 
@@ -33,39 +28,14 @@ public class CraftingUIManager : MonoBehaviour
     {
         craftingSystem = FindObjectOfType<CraftingSystem>();
 
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        if (interactionPromptCanvas != null)
-            interactionPromptCanvas.SetActive(false);
+        UIEvents.OnCraftingUIToggleRequested += ToggleCraftingUI;
 
         PopulateRecipeList();
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        if (isPlayerNear && Input.GetKeyDown(KeyCode.F) && LevelManager.Instance.currentGameState != GameState.Night)
-        {
-            ToggleCraftingUI();
-        }
-
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-        //if (interactionPromptCanvas != null)
-        //    interactionPromptCanvas.SetActive(false);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-            isPlayerNear = true;
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            isPlayerNear = false;
-            if (isCraftingUIOpen)
-                CloseCraftingUI();
-        }
+        UIEvents.OnCraftingUIToggleRequested -= ToggleCraftingUI;
     }
 
     private void ToggleCraftingUI()
@@ -102,11 +72,12 @@ public class CraftingUIManager : MonoBehaviour
         foreach (Transform child in materialListContainer)
             Destroy(child.gameObject);
 
-
         if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
         {
             LevelManager.Instance.SetGameState(GameState.Digging);
         }
+
+        UIEvents.TriggerCraftingUIClosed();
     }
 
     private void PopulateRecipeList()
@@ -239,7 +210,6 @@ public class CraftingUIManager : MonoBehaviour
 
         craftButton.interactable = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
     }
-
 
     public void ShowSelectedRecipe(PlantDataSO plantData)
     {

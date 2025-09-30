@@ -33,6 +33,11 @@ public static class UIEvents
     public static event Action<PlayerAbility> OnAbilityTooltipRequested;
     public static event Action OnAbilityTooltipHideRequested;
 
+    public static event Action OnCraftingUIToggleRequested;
+    public static event Action OnRestorationAltarUIToggleRequested;
+    public static event Action OnCraftingUIClosed;
+    public static event Action OnRestorationAltarUIClosed;
+
     public static void TriggerAbilityTooltipRequested(PlayerAbility ability)
         => OnAbilityTooltipRequested?.Invoke(ability);
 
@@ -80,4 +85,16 @@ public static class UIEvents
 
     public static void TriggerGrayscaleRequested(bool enabled)
         => OnGrayscaleRequested?.Invoke(enabled);
+
+    public static void TriggerCraftingUIToggle()
+    => OnCraftingUIToggleRequested?.Invoke();
+
+    public static void TriggerRestorationAltarUIToggle()
+    => OnRestorationAltarUIToggleRequested?.Invoke();
+
+    public static void TriggerCraftingUIClosed()
+    => OnCraftingUIClosed?.Invoke();
+
+    public static void TriggerRestorationAltarUIClosed()
+        => OnRestorationAltarUIClosed?.Invoke();
 }

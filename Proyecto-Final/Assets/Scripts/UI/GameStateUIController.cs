@@ -110,7 +110,7 @@ public class GameStateUIController : UIControllerBase
     {
         bool canOpen = !isInstructionsOpen &&
                        !CraftingUIManager.isCraftingUIOpen &&
-                       !HouseRestorationUIManager.isUIOpen &&
+                       !RestorationAltarUIManager.isUIOpen &&
                        LevelManager.Instance != null &&
                        LevelManager.Instance.currentGameState != GameState.GameOver &&
                        LevelManager.Instance.currentGameState != GameState.OnAltarRestoration &&

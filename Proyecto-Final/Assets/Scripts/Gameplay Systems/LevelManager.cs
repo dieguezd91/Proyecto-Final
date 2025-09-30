@@ -143,13 +143,13 @@ public class LevelManager : MonoBehaviour
         dayCount++;
         SetGameState(GameState.Night);
 
-        TributeSystem.Instance?.StartNightEvaluation();
+        RewardsSystem.Instance?.StartNightEvaluation();
     }
 
 
     private void HandleHordeCompleted()
     {
-        TributeSystem.Instance?.EvaluateAndGrantReward();
+        RewardsSystem.Instance?.EvaluateAndGrantReward();
         StartDayCycle();
     }
 
