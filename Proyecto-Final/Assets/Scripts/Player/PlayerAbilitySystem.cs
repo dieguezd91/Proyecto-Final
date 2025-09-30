@@ -18,6 +18,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] public LayerMask diggableLayer;
     [SerializeField] public float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
+    [SerializeField] private float digManaCost = 10f;
 
     [Header("Harvest System")]
     [SerializeField] public float interactionDistance = 2f;
@@ -30,6 +31,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [Header("References")]
     [SerializeField] private SeedInventory plantInventory;
     [SerializeField] public TileBase tilledSoilTile;
+    private ManaSystem manaSystem;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
@@ -55,6 +57,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void Awake()
     {
         playerController = GetComponent<PlayerController>();
+        manaSystem = GetComponent<ManaSystem>();
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         plantInventory ??= FindObjectOfType<SeedInventory>();
@@ -427,7 +430,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         TileBase existingTile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cell);
         if (existingTile == tilledSoilTile)
         {
-            Vector3 warnPos = transform.position + Vector3.up * 1.5f;
             warningBubble?.ShowMessage("There is already tilled soil at this position.");
             return false;
         }
@@ -435,8 +437,21 @@ public class PlayerAbilitySystem : MonoBehaviour
         float distance = Vector2.Distance(transform.position, position);
         if (distance > digDistance)
         {
-            Vector3 warnPos = transform.position + Vector3.up * 1.5f;
             warningBubble?.ShowMessage("The spot is too far away.");
+            return false;
+        }
+
+        if (manaSystem != null && !manaSystem.UseMana(digManaCost))
+        {
+            warningBubble?.ShowMessage("Not enough mana to dig!");
+
+            if (floatingTextController != null)
+            {
+                warningBubble.ShowMessage("Insufficient Mana");
+            }
+
+            SoundManager.Instance?.PlayOneShot("Error");
+
             return false;
         }
 
