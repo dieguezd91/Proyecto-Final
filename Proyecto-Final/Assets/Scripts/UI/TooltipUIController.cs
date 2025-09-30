@@ -23,6 +23,8 @@ public class TooltipUIController : UIControllerBase
     private bool pendingShow = false;
     private bool pendingHide = false;
 
+    private PlayerAbility currentAbilityData;
+
     protected override void CacheReferences()
     {
         if (rootCanvas == null) rootCanvas = GetComponentInParent<Canvas>(true);
@@ -34,6 +36,9 @@ public class TooltipUIController : UIControllerBase
     {
         UIEvents.OnTooltipRequested += OnTooltipRequested;
         UIEvents.OnTooltipHideRequested += OnTooltipHideRequested;
+
+        UIEvents.OnAbilityTooltipRequested += OnAbilityTooltipRequested;
+        UIEvents.OnAbilityTooltipHideRequested += OnTooltipHideRequested;
     }
 
     protected override void ConfigureInitialState()
@@ -119,6 +124,12 @@ public class TooltipUIController : UIControllerBase
         pendingShow = true;
     }
 
+    private void ScheduleShowAbility()
+    {
+        pendingShow = true;
+        showTimer = 0.3f;
+    }
+
     private void ScheduleHide()
     {
         pendingHide = true;
@@ -145,7 +156,33 @@ public class TooltipUIController : UIControllerBase
     private void ExecuteShowTooltip()
     {
         pendingShow = false;
-        ShowSlotTooltip(currentSlotIndex);
+
+        if (currentSlotIndex >= 0)
+        {
+            ShowSlotTooltip(currentSlotIndex);
+        }
+        else if (currentAbilityData != PlayerAbility.None)
+        {
+            ShowAbilityTooltip(currentAbilityData);
+        }
+    }
+
+    private void ShowAbilityTooltip(PlayerAbility ability)
+    {
+        if (!ValidateTooltipComponents()) return;
+
+        tooltipPanel.SetActive(true);
+        isTooltipVisible = true;
+
+        seedNameText.text = GetAbilityName(ability);
+        seedDescriptionText.text = GetAbilityDescription(ability);
+
+        if (fullyGrownImage != null)
+        {
+            fullyGrownImage.gameObject.SetActive(false);
+        }
+
+        UpdateTooltipPosition();
     }
 
     private void ExecuteHideTooltip()
@@ -288,10 +325,51 @@ public class TooltipUIController : UIControllerBase
         HideTooltip();
     }
 
+    private void OnAbilityTooltipRequested(PlayerAbility ability)
+    {
+        CancelHide();
+
+        if (isTooltipVisible)
+        {
+            ShowAbilityTooltip(ability);
+        }
+        else
+        {
+            currentAbilityData = ability;
+            ScheduleShowAbility();
+        }
+    }
+
     protected override void CleanupEventListeners()
     {
         UIEvents.OnTooltipRequested -= OnTooltipRequested;
         UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
+        UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
+        UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
+    }
+
+    private string GetAbilityName(PlayerAbility ability)
+    {
+        return ability switch
+        {
+            PlayerAbility.Planting => "PLANT",
+            PlayerAbility.Harvesting => "HARVEST",
+            PlayerAbility.Digging => "DIG",
+            PlayerAbility.Removing => "REMOVE",
+            _ => "UNKNOWN"
+        };
+    }
+
+    private string GetAbilityDescription(PlayerAbility ability)
+    {
+        return ability switch
+        {
+            PlayerAbility.Planting => "Plant seeds in prepared soil.\n<color=#FFD700>Select a seed from inventory first</color>",
+            PlayerAbility.Harvesting => "Harvest mature plants to obtain resources.\n<color=#FFD700>Only available during daytime</color>",
+            PlayerAbility.Digging => "Prepare the soil for planting.\n<color=#FFD700>Click and hold to dig</color>",
+            PlayerAbility.Removing => "Remove unwanted plants.\n<color=#FFD700>Recover some seeds when removing</color>",
+            _ => "Unknown ability"
+        };
     }
 
     protected override void OnDestroy()

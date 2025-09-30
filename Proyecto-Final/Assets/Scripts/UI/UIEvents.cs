@@ -30,6 +30,15 @@ public static class UIEvents
     public static event Action<int> OnTooltipRequested;
     public static event Action OnTooltipHideRequested;
 
+    public static event Action<PlayerAbility> OnAbilityTooltipRequested;
+    public static event Action OnAbilityTooltipHideRequested;
+
+    public static void TriggerAbilityTooltipRequested(PlayerAbility ability)
+        => OnAbilityTooltipRequested?.Invoke(ability);
+
+    public static void TriggerAbilityTooltipHide()
+        => OnAbilityTooltipHideRequested?.Invoke();
+
     public static void TriggerPlayerHealthChanged(float current, float max)
         => OnPlayerHealthChanged?.Invoke(current, max);
 
