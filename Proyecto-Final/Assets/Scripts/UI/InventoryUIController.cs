@@ -102,19 +102,22 @@ public class InventoryUIController : UIControllerBase
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(true);
 
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnInventory)
-            LevelManager.Instance.SetGameState(GameState.Digging);
-        
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.Paused)
-            LevelManager.Instance.SetGameState(GameState.Digging);
+        if (LevelManager.Instance != null)
+        {
+            var uiController = UIManager.Instance?.GameState;
+            if (uiController != null)
+            {
+                LevelManager.Instance.SetGameState(uiController.LastState);
+            }
+        }
 
         UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
         GameManager.Instance?.ResumeGame();
         UIManager.Instance.HUD.SetActive(true);
-        playerController.SetMovementEnabled(true);
+        playerController?.SetMovementEnabled(true);
         UIEvents.TriggerInventoryClosed();
-
     }
+
 
     private bool CanOpenInventory()
     {

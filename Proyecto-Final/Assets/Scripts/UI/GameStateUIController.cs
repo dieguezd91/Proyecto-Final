@@ -17,11 +17,12 @@ public class GameStateUIController : UIControllerBase
     private bool isInstructionsOpen = false;
     private bool openedFromPauseMenu = false;
     private GameState lastGameState = GameState.None;
-    private GameState lastState = GameState.Day;
+    private GameState lastState = GameState.None;
     private PlayerController playerController;
     [SerializeField] private PauseMenuController _pauseMenuController;
 
     public bool IsInstructionsOpen => isInstructionsOpen;
+    public GameState LastState => lastState;
 
     protected override void CacheReferences()
     {
@@ -37,7 +38,12 @@ public class GameStateUIController : UIControllerBase
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (instructionsPanel != null) { instructionsPanel.SetActive(false); isInstructionsOpen = false; }
         if (pausePanel != null) pausePanel.SetActive(true);
-        if (LevelManager.Instance != null) lastGameState = LevelManager.Instance.currentGameState;
+
+        if (LevelManager.Instance != null)
+        {
+            lastGameState = LevelManager.Instance.currentGameState;
+            lastState = lastGameState;
+        }
         UpdateUIElementsVisibility();
     }
 
@@ -89,17 +95,29 @@ public class GameStateUIController : UIControllerBase
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        if (isInstructionsOpen)
         {
-            CloseInventoryAndResume();
+            CloseInstructions();
             return;
         }
 
         if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
+            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+            {
+                ResumeGame();
+                return;
+            }
+
             UIManager.Instance.CloseInventory();
             if (playerController != null) playerController.SetMovementEnabled(true);
             if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
+            return;
+        }
+
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        {
+            ResumeGame();
             return;
         }
 
@@ -121,7 +139,7 @@ public class GameStateUIController : UIControllerBase
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
             lastState = LevelManager.Instance.currentGameState;
 
-        UIManager.Instance?.inventoryUI?.OpenOptionsTab();
+        UIManager.Instance?.OpenInventoryOptions();
 
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
@@ -138,10 +156,9 @@ public class GameStateUIController : UIControllerBase
         if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
 
         GameManager.Instance?.ResumeGame();
-        if (LevelManager.Instance != null)
+        if (LevelManager.Instance != null && lastState != GameState.None)
             LevelManager.Instance.SetGameState(lastState);
     }
-
 
     private void HandleGameOverState()
     {
@@ -265,7 +282,6 @@ public class GameStateUIController : UIControllerBase
 
     protected override void CleanupEventListeners() { }
 
-    
     public void PauseGame()
     {
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
@@ -295,14 +311,14 @@ public class GameStateUIController : UIControllerBase
 
     public void ResumeGame()
     {
+        UIManager.Instance?.CloseInventory();
+
         if (_pauseMenuController != null)
-        {
-            UIManager.Instance.CloseInventory();
-        }
+            _pauseMenuController.Hide();
 
         GameManager.Instance?.ResumeGame();
-        UIManager.Instance?.inventoryUI?.HideInventory();
 
+        UIManager.Instance?.inventoryUI?.HideInventory();
 
         if (SoundManager.Instance != null)
         {
@@ -313,8 +329,7 @@ public class GameStateUIController : UIControllerBase
         if (HUD != null && !isInstructionsOpen)
             HUD.SetActive(true);
 
-        LevelManager.Instance?.SetGameState(lastState);
+        if (LevelManager.Instance != null && lastState != GameState.None)
+            LevelManager.Instance.SetGameState(lastState);
     }
 }
-
-
