@@ -36,7 +36,7 @@ public class AbilitySlot : ImprovedUIButton, IPointerExitHandler
     {
         OnClick.RemoveAllListeners();
         OnClick.AddListener(() => OnAbilitySelected?.Invoke(AbilityType));
-        
+
         OnHover.RemoveAllListeners();
         OnHover.AddListener(() => OnAbilityHovered?.Invoke(AbilityType));
     }

@@ -95,6 +95,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
 
+        // Si está cavando, mostrar feedback de distancia (mantener lógica original)
         if (currentAbility == PlayerAbility.Digging && !isDigging)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -103,8 +104,14 @@ public class PlayerAbilitySystem : MonoBehaviour
             float dist = Vector2.Distance(transform.position, cellWorldPos);
         }
 
+        if (!isDigging && !isHarvesting)
+        {
+            HandleMouseScroll();
+        }
+
         if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
             return;
+
         if (!IsAbilityGameState())
             return;
 
@@ -138,13 +145,14 @@ public class PlayerAbilitySystem : MonoBehaviour
                 HandleRemoving();
                 break;
         }
-
-        HandleMouseScroll();
     }
 
     private void CycleAbility(int direction)
     {
         if (isDigging || isHarvesting)
+            return;
+
+        if (!IsAbilityGameState())
             return;
 
         PlayerAbility[] validAbilities = {
@@ -168,6 +176,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             return;
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
+
         if (Mathf.Abs(scroll) > 0.01f)
         {
             int direction = scroll > 0 ? -1 : 1;

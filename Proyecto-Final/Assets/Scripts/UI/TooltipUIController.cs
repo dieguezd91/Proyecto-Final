@@ -24,6 +24,16 @@ public class TooltipUIController : UIControllerBase
 
     private PlayerAbility currentAbilityData;
 
+    private void Awake()
+    {
+        Initialize();
+    }
+
+    private void Start()
+    {
+        Setup();
+    }
+
     protected override void CacheReferences()
     {
         if (rootCanvas == null) rootCanvas = GetComponentInParent<Canvas>(true);
@@ -139,12 +149,14 @@ public class TooltipUIController : UIControllerBase
     private void ScheduleShow(int slotIndex)
     {
         currentSlotIndex = slotIndex;
+        currentAbilityData = PlayerAbility.None;
         pendingShow = true;
         showTimer = 0.3f;
     }
 
     private void ScheduleShowAbility()
     {
+        currentSlotIndex = -1;
         pendingShow = true;
         showTimer = 0.3f;
     }
@@ -190,6 +202,11 @@ public class TooltipUIController : UIControllerBase
     private void ShowAbilityTooltip(PlayerAbility ability)
     {
         if (!ValidateTooltipComponents()) return;
+
+        if (!CanShowTooltipInState(LevelManager.Instance.currentGameState))
+        {
+            return;
+        }
 
         tooltipPanel.SetActive(true);
         isTooltipVisible = true;
@@ -349,6 +366,8 @@ public class TooltipUIController : UIControllerBase
     private void OnAbilityTooltipRequested(PlayerAbility ability)
     {
         CancelHide();
+        currentAbilityData = ability;
+        currentSlotIndex = -1;
 
         if (isTooltipVisible)
         {
@@ -356,7 +375,6 @@ public class TooltipUIController : UIControllerBase
         }
         else
         {
-            currentAbilityData = ability;
             ScheduleShowAbility();
         }
     }
@@ -367,7 +385,6 @@ public class TooltipUIController : UIControllerBase
         UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
         UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
         UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
-
         UIEvents.OnGameStateChanged -= OnGameStateChanged;
     }
 

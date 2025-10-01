@@ -38,9 +38,12 @@ public class AbilityUIManager : MonoBehaviour
         {
             if (slot == null) continue;
 
-            // Initialize the slot without overwriting its Inspector-configured ability type
             slot.Initialize();
+
             slot.OnAbilitySelected += OnAbilitySlotSelected;
+
+            slot.OnAbilityHovered += OnAbilitySlotHovered;
+            slot.OnAbilityUnhovered += OnAbilitySlotUnhovered;
         }
     }
 
@@ -72,6 +75,16 @@ public class AbilityUIManager : MonoBehaviour
         }
     }
 
+    private void OnAbilitySlotHovered(PlayerAbility ability)
+    {
+        UIEvents.TriggerAbilityTooltipRequested(ability);
+    }
+
+    private void OnAbilitySlotUnhovered(PlayerAbility ability)
+    {
+        UIEvents.TriggerAbilityTooltipHide();
+    }
+
 
     private void CleanupEventListeners()
     {
@@ -85,6 +98,8 @@ public class AbilityUIManager : MonoBehaviour
             if (slot != null)
             {
                 slot.OnAbilitySelected -= OnAbilitySlotSelected;
+                slot.OnAbilityHovered -= OnAbilitySlotHovered;
+                slot.OnAbilityUnhovered -= OnAbilitySlotUnhovered;
             }
         }
     }
