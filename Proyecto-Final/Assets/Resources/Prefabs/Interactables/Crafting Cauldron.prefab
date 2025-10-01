@@ -201,6 +201,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c48df8a02879424e85edc880997e677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactSound:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  completeSound:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!114 &3861239586405840910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +232,24 @@ MonoBehaviour:
   interactionPromptCanvas: {fileID: 1342742963470355501}
   interactionKey: 102
   hidePromptDuringInteraction: 1
+  interactSound:
+    clips:
+    - {fileID: 8300000, guid: 719f44f75d52a9b45b0b4ca94c447a13, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  completeSound:
+    clips:
+    - {fileID: 8300000, guid: e00fa9c3d22cc1a479bb027179606bcf, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1 &8542196716748449406
 GameObject:
   m_ObjectHideFlags: 0

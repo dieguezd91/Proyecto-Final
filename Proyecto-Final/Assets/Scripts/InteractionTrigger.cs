@@ -6,6 +6,10 @@ public class InteractionTrigger : MonoBehaviour
     [SerializeField] private KeyCode interactionKey = KeyCode.F;
     [SerializeField] private bool hidePromptDuringInteraction = false;
 
+    [Header("Audio")]
+    [SerializeField] private SoundClipData interactSound;
+    [SerializeField] private SoundClipData completeSound;
+
     private bool isPlayerNear = false;
     private bool isInteracting = false;
     private IInteractable interactable;
@@ -53,6 +57,13 @@ public class InteractionTrigger : MonoBehaviour
                     interactionPromptCanvas.SetActive(false);
             }
 
+            // Play interaction sound globally through SoundManager
+            if (interactSound != null && interactSound.CanPlay())
+            {
+                SoundManager.Instance.PlayClip(interactSound);
+                interactSound.SetLastPlayTime();
+            }
+
             interactable.Interact();
         }
 
@@ -94,5 +105,12 @@ public class InteractionTrigger : MonoBehaviour
     {
         isInteracting = false;
         UpdatePromptVisibility();
+
+        // Play completion sound globally through SoundManager
+        if (completeSound != null && completeSound.CanPlay())
+        {
+            SoundManager.Instance.PlayClip(completeSound);
+            completeSound.SetLastPlayTime();
+        }
     }
 }

@@ -193,6 +193,24 @@ MonoBehaviour:
   interactionPromptCanvas: {fileID: 8476366119938780838}
   interactionKey: 102
   hidePromptDuringInteraction: 1
+  interactSound:
+    clips:
+    - {fileID: 8300000, guid: b83d02bd85257bc4b9123622d3a76d02, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  completeSound:
+    clips:
+    - {fileID: 8300000, guid: 38ec203d9226ce5408c4c0f83aa3b38c, type: 3}
+    volume: 0.5
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!114 &3490902921669849349
 MonoBehaviour:
   m_ObjectHideFlags: 0
