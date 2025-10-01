@@ -3054,6 +3054,10 @@ MonoBehaviour:
   descriptionName: {fileID: 2793814952488430876}
   descriptionDetails: {fileID: 1420996450971844693}
   goldText: {fileID: 2182635558391175024}
+  tabPanels:
+  - {fileID: 2278972391395361356}
+  optionsTabIndex: 0
+  optionsPanelFallback: {fileID: 2278972391395361356}
 --- !u!114 &4185966062130047847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3083,6 +3087,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd17179c4197c1444900118349689c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultState: 0
+  _currentState: 0
   inventoryPanel: {fileID: 7927336053012653104}
   toggleInventoryKey: 105
   alternateToggleKey: 9

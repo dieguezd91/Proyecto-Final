@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -301,8 +301,8 @@ public class GameStateUIController : UIControllerBase
         }
 
         GameManager.Instance?.ResumeGame();
+        UIManager.Instance?.inventoryUI?.HideInventory();
 
-        
 
         if (SoundManager.Instance != null)
         {

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -23,6 +23,9 @@ public class InventoryUI : MonoBehaviour
     [SerializeField] private List<GameObject> tabPanels = new List<GameObject>();
     [SerializeField] private int optionsTabIndex = 0;
     [SerializeField] private GameObject optionsPanelFallback;
+
+    [Header("Book Animator")]
+    [SerializeField] private Animator bookAnimator;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
     private Dictionary<MaterialType, InventorySlotUI> resourceToSlot = new Dictionary<MaterialType, InventorySlotUI>();
@@ -163,21 +166,78 @@ public class InventoryUI : MonoBehaviour
         return null;
     }
 
+    
     public void ShowInventory()
     {
-        if (inventoryPanel == null) return;
-
-        inventoryPanel.SetActive(true);
+        OpenTab(0);
         UpdateAllSlots();
         ClearDescriptionPanel();
         descriptionPanel.SetActive(false);
-        
+    }
+
+    
+    public void ShowOptions()
+    {
+        if (bookAnimator == null)
+            bookAnimator = GetComponentInChildren<Animator>(true);
+
+        if (bookAnimator != null)
+        {
+            
+            bool wasEnabled = bookAnimator.enabled;
+            bookAnimator.enabled = false;
+
+            if (inventoryPanel != null) inventoryPanel.SetActive(true);
+
+            bookAnimator.enabled = true;
+
+            int optionsHash = Animator.StringToHash("Options");
+            if (bookAnimator.HasState(5, optionsHash))
+            {
+                bookAnimator.Play(optionsHash, 0, 0f);
+            }
+            else
+            {
+                bookAnimator.Play("Options", 0, 0f);
+            }
+
+            bookAnimator.Update(0f);
+
+            bookAnimator.enabled = true;
+        }
+        else
+        {
+            if (inventoryPanel != null) inventoryPanel.SetActive(true);
+        }
+
+        if (tabPanels != null && tabPanels.Count > 0)
+        {
+            for (int i = 0; i < tabPanels.Count; i++)
+                if (tabPanels[i] != null) tabPanels[i].SetActive(i == optionsTabIndex);
+        }
+        else
+        {
+            if (optionsPanelFallback != null) optionsPanelFallback.SetActive(true);
+        }
+
+        UpdateAllSlots();
+        ClearDescriptionPanel();
+        descriptionPanel.SetActive(false);
+
+        Debug.Log("ShowOptions");
     }
 
     public void HideInventory()
     {
         if (inventoryPanel == null) return;
         inventoryPanel.SetActive(false);
+        ClearDescriptionPanel();
+    }
+
+    public void HideOptions()
+    {
+        if (inventoryPanel == null) return;
+        if (optionsPanelFallback != null) optionsPanelFallback.SetActive(false);
         ClearDescriptionPanel();
     }
 
@@ -214,35 +274,20 @@ public class InventoryUI : MonoBehaviour
     
     public void OpenOptionsTab()
     {
-        ShowInventory();
-        StartCoroutine(SelectTabNextFrame(optionsTabIndex));
+        ShowOptions();
     }
 
-    private IEnumerator SelectTabNextFrame(int index)
+    public void OpenTab(int tabIndex)
     {
-        yield return null;
-        SelectTab(index);
-    }
+        if (inventoryPanel == null) return;
 
-    
-    public void SelectTab(int index)
-    {
-        if (tabPanels == null || tabPanels.Count == 0)
+        inventoryPanel.SetActive(true);
+
+        if (tabPanels != null)
         {
-            if (index == optionsTabIndex && optionsPanelFallback != null)
-            {
-                descriptionPanel.SetActive(true);
-
-            }
-            return;
+            for (int i = 0; i < tabPanels.Count; i++)
+                if (tabPanels[i] != null) tabPanels[i].SetActive(i == tabIndex);
         }
-
-        for (int i = 0; i < tabPanels.Count; i++)
-        {
-            var panel = tabPanels[i];
-            if (panel != null) panel.SetActive(i == index);
-        }
-
-        if (descriptionPanel != null) descriptionPanel.SetActive(true);
+        
     }
 }

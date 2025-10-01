@@ -93,10 +93,7 @@ public class UIManager : MonoBehaviour
         {
             inventoryUI.OpenOptionsTab();
         }
-        else
-        {
-            Debug.LogWarning("[UIManager] OpenInventoryOptions: inventoryUI referencia nula.");
-        }
+        
     }
 
 

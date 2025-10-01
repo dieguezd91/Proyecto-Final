@@ -34,12 +34,12 @@ public class GameManager : MonoBehaviour
 
     public void ResumeGame()
     {
-        if (isPaused)
-        {
-            Time.timeScale = 1f;
-            isPaused = false;
-        }
+        isPaused = false;
+        Time.timeScale = 1f;
+
+        UIManager.Instance?.inventoryUI?.HideInventory();
     }
+
 
     public bool IsGamePaused()
     {

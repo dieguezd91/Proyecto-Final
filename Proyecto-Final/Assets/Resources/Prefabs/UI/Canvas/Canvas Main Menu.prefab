@@ -127,7 +127,7 @@ MonoBehaviour:
   _optionsButton: {fileID: 7699388350134023847}
   _controlsButton: {fileID: 3591964394348000203}
   _exitButton: {fileID: 3981710539053999007}
-  _BackButton: {fileID: 2646097768769883968}
+  _backButton: {fileID: 2646097768769883968}
   _optionsPanel: {fileID: 1655354959919205927}
 --- !u!1 &6699898721449503778
 GameObject:
