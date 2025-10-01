@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,6 +38,8 @@ public class TooltipUIController : UIControllerBase
 
         UIEvents.OnAbilityTooltipRequested += OnAbilityTooltipRequested;
         UIEvents.OnAbilityTooltipHideRequested += OnTooltipHideRequested;
+
+        UIEvents.OnGameStateChanged += OnGameStateChanged;
     }
 
     protected override void ConfigureInitialState()
@@ -47,6 +48,23 @@ public class TooltipUIController : UIControllerBase
             tooltipPanel.SetActive(false);
 
         ResetState();
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        if (!CanShowTooltipInState(newState))
+        {
+            ForceHide();
+        }
+    }
+
+    private bool CanShowTooltipInState(GameState state)
+    {
+        return state == GameState.Planting ||
+               state == GameState.Digging ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing ||
+               state == GameState.Day;
     }
 
     void Update()
@@ -122,6 +140,7 @@ public class TooltipUIController : UIControllerBase
     {
         currentSlotIndex = slotIndex;
         pendingShow = true;
+        showTimer = 0.3f;
     }
 
     private void ScheduleShowAbility()
@@ -133,6 +152,7 @@ public class TooltipUIController : UIControllerBase
     private void ScheduleHide()
     {
         pendingHide = true;
+        hideTimer = 0.2f;
     }
 
     private void CancelShow()
@@ -273,6 +293,7 @@ public class TooltipUIController : UIControllerBase
     {
         isTooltipVisible = false;
         currentSlotIndex = -1;
+        currentAbilityData = PlayerAbility.None;
         CancelShow();
         CancelHide();
     }
@@ -302,7 +323,7 @@ public class TooltipUIController : UIControllerBase
     }
 
     private static Vector2 ClampToCanvas(
-    Vector2 anchored, RectTransform tooltip, RectTransform canvas, float margin)
+        Vector2 anchored, RectTransform tooltip, RectTransform canvas, float margin)
     {
         Rect c = canvas.rect;
         Vector2 size = tooltip.rect.size;
@@ -346,6 +367,8 @@ public class TooltipUIController : UIControllerBase
         UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
         UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
         UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
+
+        UIEvents.OnGameStateChanged -= OnGameStateChanged;
     }
 
     private string GetAbilityName(PlayerAbility ability)
