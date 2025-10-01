@@ -1,6 +1,7 @@
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class RestorationAltarUIManager : MonoBehaviour
 {
@@ -70,6 +71,8 @@ public class RestorationAltarUIManager : MonoBehaviour
     {
         isUIOpen = false;
         altarUIPanel.SetActive(false);
+
+        EventSystem.current.SetSelectedGameObject(null);
 
         if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
             LevelManager.Instance.SetGameState(GameState.Digging);
