@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 3490012533480708921}
   - component: {fileID: 2623570534910068206}
   - component: {fileID: 3975478083653675555}
+  - component: {fileID: 6522134462753226560}
   m_Layer: 5
   m_Name: CraftButton
   m_TagString: Untagged
@@ -271,19 +272,34 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2623570534910068206}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: CraftingUIManager, Assembly-CSharp
-        m_MethodName: OnCraftButtonPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
+--- !u!114 &6522134462753226560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 367223499724420388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _volume: 1
+  _enableHoverSound: 1
+  _onHoverSound: {fileID: 0}
+  _enableClickSound: 1
+  _onClickSound: {fileID: 0}
+  _enableDisabledClickSound: 1
+  _onDisabledClickSound: {fileID: 0}
+  _enableDisabledHoverSound: 1
+  _onDisabledHoverSound: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &569542676522785876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,6 +1437,7 @@ GameObject:
   - component: {fileID: 8395063793920269679}
   - component: {fileID: 5559482827787189913}
   - component: {fileID: 8944351368737269965}
+  - component: {fileID: 2818337709705110878}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -1542,6 +1559,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2818337709705110878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5285624034709013443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _volume: 1
+  _enableHoverSound: 1
+  _onHoverSound: {fileID: 0}
+  _enableClickSound: 1
+  _onClickSound: {fileID: 0}
+  _enableDisabledClickSound: 1
+  _onDisabledClickSound: {fileID: 0}
+  _enableDisabledHoverSound: 1
+  _onDisabledHoverSound: {fileID: 0}
+  OnClick:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHover:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &5582292572748443005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,10 +1838,11 @@ MonoBehaviour:
   selectedPlantDescription: {fileID: 304653869269578303}
   materialListContainer: {fileID: 273999519425940939}
   materialRequirementPrefab: {fileID: 984204977795388131, guid: e17f418677f066f4dbe4a2092ff01dd7, type: 3}
-  craftButton: {fileID: 3975478083653675555}
   materialIconSlots:
   - {fileID: 0}
   - {fileID: 0}
+  craftButton: {fileID: 6522134462753226560}
+  closeButton: {fileID: 2818337709705110878}
 --- !u!1 &7485159846086971654
 GameObject:
   m_ObjectHideFlags: 0

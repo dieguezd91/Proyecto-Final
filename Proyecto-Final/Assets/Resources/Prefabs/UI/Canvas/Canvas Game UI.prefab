@@ -260,7 +260,7 @@ MonoBehaviour:
   interfaceSounds: {fileID: 6375595165552625574}
   gameOverPanel: {fileID: 2740163807364435899}
   HUD: {fileID: 1087430937299666142}
-  pausePanel: {fileID: 797963119955334537}
+  pausePanel: {fileID: 7107370810946311792}
   inventoryUI: {fileID: 5399662508043278900}
 --- !u!114 &6375595165552625574
 MonoBehaviour:
@@ -407,8 +407,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3246d8b072880c24390565b3776e3fd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _defaultState: 0
-  _currentState: 0
+  _defaultState: 1
+  _currentState: 1
   HUD: {fileID: 1087430937299666142}
   gameOverPanel: {fileID: 2740163807364435899}
   pausePanel: {fileID: 797963119955334537}
@@ -1935,6 +1935,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd019b4275a7ed949af13d366873a048, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7107370810946311792 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2278972391395361356, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
+  m_PrefabInstance: {fileID: 9008040691907187772}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7278896005136402551 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1729707788257336395, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}

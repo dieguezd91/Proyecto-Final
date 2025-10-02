@@ -5,42 +5,90 @@ using UnityEngine.UI;
 
 public class RestorationAltarUIManager : MonoBehaviour
 {
-    [Header("References")]
+    [Header("UI Panel")]
     [SerializeField] private GameObject altarUIPanel;
+
+    [Header("Restoration Options")]
     [SerializeField] private TextMeshProUGUI[] optionLabels;
-    [SerializeField] private Button[] optionButtons;
+    [SerializeField] private ImprovedUIButton[] optionButtons;
+
+    [Header("Gold Controls")]
     [SerializeField] private Slider goldSlider;
     [SerializeField] private TextMeshProUGUI goldAmountText;
     [SerializeField] private TMP_InputField goldInputField;
 
-    public static bool isUIOpen = false;
+    [Header("Close Button")]
+    [SerializeField] private ImprovedUIButton closeButton;
 
     private HouseRestorationSystem restorationSystem;
+    private const int GOLD_STEP = 10;
 
+    public static bool isUIOpen = false;
+
+    #region Unity Lifecycle
     private void Start()
     {
-        restorationSystem = FindObjectOfType<HouseRestorationSystem>();
+        InitializeReferences();
+        SubscribeToEvents();
+        InitializeUI();
+    }
 
+    private void OnDestroy()
+    {
+        UnsubscribeFromEvents();
+    }
+    #endregion
+
+    #region Initialization
+    private void InitializeReferences()
+    {
+        restorationSystem = FindObjectOfType<HouseRestorationSystem>();
+    }
+
+    private void SubscribeToEvents()
+    {
         UIEvents.OnRestorationAltarUIToggleRequested += ToggleUI;
 
         for (int i = 0; i < optionButtons.Length; i++)
         {
             int index = i;
-            optionButtons[i].onClick.AddListener(() => TryRestore(index));
+
+            if (optionButtons[i] != null)
+                optionButtons[i].OnClick.AddListener(() => HandleRestorationAttempt(index));
         }
 
-        altarUIPanel.SetActive(false);
         goldSlider.onValueChanged.AddListener(OnSliderChanged);
         goldInputField.onEndEdit.AddListener(OnInputFieldChanged);
 
-        UpdateOptionLabels();
+        if (closeButton != null)
+            closeButton.OnClick.AddListener(CloseUI);
     }
 
-    private void OnDestroy()
+    private void UnsubscribeFromEvents()
     {
         UIEvents.OnRestorationAltarUIToggleRequested -= ToggleUI;
+
+        for (int i = 0; i < optionButtons.Length; i++)
+        {
+            if (optionButtons[i] != null)
+                optionButtons[i].OnClick.RemoveAllListeners();
+        }
+
+        goldSlider.onValueChanged.RemoveListener(OnSliderChanged);
+        goldInputField.onEndEdit.RemoveListener(OnInputFieldChanged);
+
+        if (closeButton != null)
+            closeButton.OnClick.RemoveListener(CloseUI);
     }
 
+    private void InitializeUI()
+    {
+        altarUIPanel.SetActive(false);
+        UpdateOptionLabels();
+    }
+    #endregion
+
+    #region UI Toggle
     private void ToggleUI()
     {
         if (isUIOpen)
@@ -51,107 +99,188 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     private void OpenUI()
     {
-        isUIOpen = true;
         altarUIPanel.SetActive(true);
+        isUIOpen = true;
+
         LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
 
-        int currentGold = InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
-
-        goldSlider.maxValue = currentGold;
-        goldSlider.minValue = 0;
-        goldSlider.wholeNumbers = true;
-
-        goldSlider.value = currentGold;
-        goldInputField.text = currentGold.ToString();
-
+        InitializeGoldControls();
         UpdateOptionLabels();
     }
 
     public void CloseUI()
     {
-        isUIOpen = false;
         altarUIPanel.SetActive(false);
+        isUIOpen = false;
 
-        EventSystem.current.SetSelectedGameObject(null);
-
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
-            LevelManager.Instance.SetGameState(GameState.Digging);
+        ClearEventSystemSelection();
+        RestoreGameState();
 
         UIEvents.TriggerRestorationAltarUIClosed();
     }
+    #endregion
 
-    private void TryRestore(int index)
+    private void InitializeGoldControls()
     {
-        bool success = restorationSystem.TryRestore(index);
-        if (success)
-        {
-            CloseUI();
-        }
-        else
-        {
-            Debug.Log("No se pudo restaurar (recursos insuficientes o ya usado).");
-        }
+        int currentGold = GetPlayerGold();
+
+        ConfigureGoldSlider(currentGold);
+        SetGoldDisplayValue(currentGold);
     }
 
-    private void UpdateOptionLabels()
+    private void ConfigureGoldSlider(int maxGold)
     {
-        if (restorationSystem == null) return;
+        goldSlider.maxValue = maxGold;
+        goldSlider.minValue = 0;
+        goldSlider.wholeNumbers = true;
+        goldSlider.value = maxGold;
+    }
 
-        for (int i = 0; i < optionLabels.Length; i++)
-        {
-            bool within = i < restorationSystem.OptionCount;
-
-            if (within)
-            {
-                var opt = restorationSystem.GetOption(i);
-                string materialIcon = GetMaterialSpriteName(opt.materialRequired);
-
-                int gold = InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
-                bool hasGold = gold >= opt.goldCost;
-                bool hasMaterial = InventoryManager.Instance != null &&
-                                   InventoryManager.Instance.HasEnoughMaterial(opt.materialRequired, 1);
-
-                string goldText = $"<color={(hasGold ? "green" : "red")}><sprite name=\"GoldIcon\"> {opt.goldCost}</color>";
-                string materialText = $"<color={(hasMaterial ? "green" : "red")}><sprite name=\"{materialIcon}\"> 1</color>";
-
-                optionLabels[i].text = $"{opt.restorePercentage}% HP\n{goldText}  +  {materialText}";
-
-                if (optionButtons[i] != null)
-                    optionButtons[i].interactable = !restorationSystem.HasRestoredToday() && hasGold && hasMaterial;
-            }
-            else
-            {
-                if (optionButtons[i] != null) optionButtons[i].interactable = false;
-                if (optionLabels[i] != null) optionLabels[i].text = "-";
-            }
-        }
+    private void SetGoldDisplayValue(int amount)
+    {
+        goldInputField.text = amount.ToString();
+        goldAmountText.text = $"{amount} oro ofrecido";
     }
 
     private void OnSliderChanged(float value)
     {
-        int stepped = Mathf.FloorToInt(value / 10f) * 10;
-        goldSlider.SetValueWithoutNotify(stepped);
-        goldInputField.SetTextWithoutNotify(stepped.ToString());
-        goldAmountText.text = $"{stepped} oro ofrecido";
+        int steppedValue = CalculateSteppedValue(value);
+        UpdateGoldDisplay(steppedValue);
     }
 
     private void OnInputFieldChanged(string input)
     {
         if (int.TryParse(input, out int value))
         {
-            int stepped = Mathf.FloorToInt(value / 10f) * 10;
-            stepped = Mathf.Clamp(stepped, 0, (int)goldSlider.maxValue);
-
-            goldSlider.SetValueWithoutNotify(stepped);
-            goldAmountText.text = $"{stepped} oro ofrecido";
-            goldInputField.SetTextWithoutNotify(stepped.ToString());
+            int steppedValue = CalculateSteppedValue(value);
+            int clampedValue = Mathf.Clamp(steppedValue, 0, (int)goldSlider.maxValue);
+            UpdateGoldDisplay(clampedValue);
         }
         else
         {
-            goldInputField.SetTextWithoutNotify("0");
+            ResetGoldInput();
         }
     }
 
+    private int CalculateSteppedValue(float value)
+    {
+        return Mathf.FloorToInt(value / GOLD_STEP) * GOLD_STEP;
+    }
+
+    private void UpdateGoldDisplay(int amount)
+    {
+        goldSlider.SetValueWithoutNotify(amount);
+        goldInputField.SetTextWithoutNotify(amount.ToString());
+        goldAmountText.text = $"{amount} oro ofrecido";
+    }
+
+    private void ResetGoldInput()
+    {
+        goldInputField.SetTextWithoutNotify("0");
+    }
+
+    #region Restoration Logic
+    private void HandleRestorationAttempt(int optionIndex)
+    {
+        bool success = restorationSystem.TryRestore(optionIndex);
+
+        if (success)
+        {
+            CloseUI();
+        }
+        else
+        {
+            HandleRestorationFailure();
+        }
+    }
+
+    private void HandleRestorationFailure()
+    {
+        Debug.Log("No se pudo restaurar (recursos insuficientes o ya usado).");
+    }
+    #endregion
+
+    #region Option Labels Update
+    private void UpdateOptionLabels()
+    {
+        if (restorationSystem == null) return;
+
+        for (int i = 0; i < optionLabels.Length; i++)
+        {
+            UpdateSingleOptionLabel(i);
+        }
+    }
+
+    private void UpdateSingleOptionLabel(int index)
+    {
+        bool isValidOption = index < restorationSystem.OptionCount;
+
+        if (isValidOption)
+        {
+            DisplayRestorationOption(index);
+        }
+        else
+        {
+            DisplayEmptyOption(index);
+        }
+    }
+
+    private void DisplayRestorationOption(int index)
+    {
+        var option = restorationSystem.GetOption(index);
+
+        bool hasGold = HasSufficientGold(option.goldCost);
+        bool hasMaterial = HasSufficientMaterial(option.materialRequired);
+        bool canRestore = !restorationSystem.HasRestoredToday();
+
+        optionLabels[index].text = FormatOptionText(option, hasGold, hasMaterial);
+
+        if (optionButtons[index] != null)
+            optionButtons[index].Interactable = canRestore && hasGold && hasMaterial;
+    }
+
+    private void DisplayEmptyOption(int index)
+    {
+        if (optionLabels[index] != null)
+            optionLabels[index].text = "-";
+
+        if (optionButtons[index] != null)
+            optionButtons[index].Interactable = false;
+    }
+
+    private string FormatOptionText(HouseRestorationSystem.RestorationOption option, bool hasGold, bool hasMaterial)
+    {
+        string goldColor = hasGold ? "green" : "red";
+        string materialColor = hasMaterial ? "green" : "red";
+        string materialIcon = GetMaterialSpriteName(option.materialRequired);
+
+        string goldText = $"<color={goldColor}><sprite name=\"GoldIcon\"> {option.goldCost}</color>";
+        string materialText = $"<color={materialColor}><sprite name=\"{materialIcon}\"> 1</color>";
+
+        return $"{option.restorePercentage}% HP\n{goldText}  +  {materialText}";
+    }
+    #endregion
+
+    #region Resource Validation
+    private bool HasSufficientGold(int requiredAmount)
+    {
+        int playerGold = GetPlayerGold();
+        return playerGold >= requiredAmount;
+    }
+
+    private bool HasSufficientMaterial(MaterialType materialType)
+    {
+        if (InventoryManager.Instance == null) return false;
+        return InventoryManager.Instance.HasEnoughMaterial(materialType, 1);
+    }
+
+    private int GetPlayerGold()
+    {
+        return InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
+    }
+    #endregion
+
+    #region Material Sprite Mapping
     private string GetMaterialSpriteName(MaterialType type)
     {
         return type switch
@@ -173,4 +302,18 @@ public class RestorationAltarUIManager : MonoBehaviour
             _ => type.ToString(),
         };
     }
+    #endregion
+
+    #region Helper Methods
+    private void ClearEventSystemSelection()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    private void RestoreGameState()
+    {
+        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
+            LevelManager.Instance.SetGameState(GameState.Digging);
+    }
+    #endregion
 }

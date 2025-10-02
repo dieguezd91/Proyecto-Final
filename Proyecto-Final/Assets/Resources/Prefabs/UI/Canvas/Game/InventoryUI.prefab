@@ -482,7 +482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -30}
+  m_AnchoredPosition: {x: 0, y: 45}
   m_SizeDelta: {x: 48, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7525461665102859007
@@ -1756,7 +1756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8014109572340995769
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2428,7 +2428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1309301278908773467
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2804,7 +2804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &111040836588339594
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2822,7 +2822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000015258789, y: 45.000004}
+  m_AnchoredPosition: {x: 0.000015258789, y: -30}
   m_SizeDelta: {x: 48, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7908419030458785402
@@ -2982,7 +2982,7 @@ GameObject:
   - component: {fileID: 4185966062130047847}
   - component: {fileID: 1729707788257336395}
   m_Layer: 5
-  m_Name: Panel New Inventory
+  m_Name: InventoryUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3049,15 +3049,17 @@ MonoBehaviour:
   slotsContainer: {fileID: 4855892113364524423}
   inventoryPanel: {fileID: 7927336053012653104}
   maxDisplayedResources: 12
-  descriptionPanel: {fileID: 6749617565522287687}
+  descriptionPanel: {fileID: 2278972391395361356}
   descriptionIcon: {fileID: 8659197964459947275}
   descriptionName: {fileID: 2793814952488430876}
   descriptionDetails: {fileID: 1420996450971844693}
   goldText: {fileID: 2182635558391175024}
   tabPanels:
+  - {fileID: 6749617565522287687}
   - {fileID: 2278972391395361356}
-  optionsTabIndex: 0
+  optionsTabIndex: 1
   optionsPanelFallback: {fileID: 2278972391395361356}
+  bookAnimator: {fileID: 4855249191798630347}
 --- !u!114 &4185966062130047847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3092,7 +3094,7 @@ MonoBehaviour:
   inventoryPanel: {fileID: 7927336053012653104}
   toggleInventoryKey: 105
   alternateToggleKey: 9
-  closeInventoryOnEscape: 1
+  closeInventoryOnEscape: 0
   disablePlayerMovementWhenOpen: 1
   inventoryUI: {fileID: 4030028119901359624}
 --- !u!1 &8182901073964742935
@@ -3116,7 +3118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2987289402762178009
 RectTransform:
   m_ObjectHideFlags: 0

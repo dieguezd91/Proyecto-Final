@@ -858,12 +858,13 @@ MonoBehaviour:
   - {fileID: 6155496104082069718}
   - {fileID: 2876787880479951088}
   optionButtons:
-  - {fileID: 2260523449273812364}
-  - {fileID: 1003753067314780377}
-  - {fileID: 2534669248280467612}
+  - {fileID: 7681817511766798485}
+  - {fileID: 3299884326410827956}
+  - {fileID: 239116569630389031}
   goldSlider: {fileID: 2304085472848662141}
   goldAmountText: {fileID: 1285569422488718849}
   goldInputField: {fileID: 1807083503507592994}
+  closeButton: {fileID: 2403457156925987339}
 --- !u!1 &2425423079352442020
 GameObject:
   m_ObjectHideFlags: 0
@@ -2432,7 +2433,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1860979088802913391
 RectTransform:
   m_ObjectHideFlags: 0
