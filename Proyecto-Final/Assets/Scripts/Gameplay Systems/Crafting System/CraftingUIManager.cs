@@ -23,14 +23,12 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private List<Image> materialIconSlots;
 
     [Header("Action Buttons")]
-    [SerializeField] private ImprovedUIButton craftButton;
-    [SerializeField] private ImprovedUIButton closeButton;
+    [SerializeField] private CraftButton craftButton;
+    [SerializeField] private CloseButton closeButton;
 
-    [Header("Empty State")]
-    [SerializeField] private GameObject emptyStatePanel;
     private CraftingSystem craftingSystem;
     private SeedsEnum selectedSeed;
-    private List<ImprovedUIButton> recipeButtons = new List<ImprovedUIButton>();
+    private List<RecipeButton> recipeButtons = new List<RecipeButton>();
     private bool hasSelectedRecipe = false;
 
     public static bool isCraftingUIOpen = false;
@@ -96,7 +94,6 @@ public class CraftingUIManager : MonoBehaviour
 
         ResetRecipeDisplay();
         HideCraftButton();
-        ShowEmptyState();
 
         LevelManager.Instance?.SetGameState(GameState.OnCrafting);
     }
@@ -130,40 +127,20 @@ public class CraftingUIManager : MonoBehaviour
     private void CreateRecipeButton(CraftingRecipeSeedData recipe)
     {
         GameObject buttonObj = Instantiate(recipeButtonPrefab, recipeListContainer);
-        ImprovedUIButton improvedBtn = buttonObj.GetComponent<ImprovedUIButton>();
+        RecipeButton recipeBtn = buttonObj.GetComponent<RecipeButton>();
 
-        SetupRecipeButtonVisuals(buttonObj, recipe);
-        SetupRecipeButtonEvents(improvedBtn, buttonObj, recipe);
-    }
+        if (recipeBtn == null)
+        {
+            Destroy(buttonObj);
+            return;
+        }
 
-    private void SetupRecipeButtonVisuals(GameObject buttonObj, CraftingRecipeSeedData recipe)
-    {
         var plantData = craftingSystem.GetPlantData(recipe.SeedToCraft);
-        if (plantData == null) return;
+        recipeBtn.Setup(recipe, plantData);
 
-        var nameText = buttonObj.GetComponentInChildren<TextMeshProUGUI>();
-        if (nameText != null)
-            nameText.text = plantData.plantName;
+        recipeBtn.OnClick.AddListener(() => SelectRecipe(recipe));
 
-        var iconTransform = buttonObj.transform.Find("SeedIcon");
-        if (iconTransform != null)
-        {
-            var iconImage = iconTransform.GetComponent<Image>();
-            if (iconImage != null)
-            {
-                iconImage.sprite = recipe.SeedIcon;
-                iconImage.preserveAspect = true;
-            }
-        }
-    }
-
-    private void SetupRecipeButtonEvents(ImprovedUIButton improvedBtn, GameObject buttonObj, CraftingRecipeSeedData recipe)
-    {
-        if (improvedBtn != null)
-        {
-            improvedBtn.OnClick.AddListener(() => SelectRecipe(recipe));
-            recipeButtons.Add(improvedBtn);
-        }
+        recipeButtons.Add(recipeBtn);
     }
 
     private void CleanupRecipeButtons()
@@ -189,10 +166,9 @@ public class CraftingUIManager : MonoBehaviour
 
         var plantData = craftingSystem.GetPlantData(selectedSeed);
 
-        HideEmptyState();
         UpdateRecipeDisplay(plantData, recipe);
         UpdateMaterialsList(recipe);
-        UpdateCraftButtonState(recipe);
+        UpdateCraftButton(recipe);
     }
 
     private void UpdateRecipeDisplay(PlantDataSO plantData, CraftingRecipeSeedData recipe)
@@ -301,21 +277,21 @@ public class CraftingUIManager : MonoBehaviour
         slot.enabled = false;
     }
 
-    private void UpdateCraftButtonState(CraftingRecipeSeedData recipe)
+    private void UpdateCraftButton(CraftingRecipeSeedData recipe)
     {
         if (craftButton == null) return;
 
-        bool hasRequiredMaterials = craftingSystem.HasRequiredMaterials(recipe.MaterialsRequired);
-
+        craftButton.Setup(recipe);
         ShowCraftButton();
-        craftButton.Interactable = hasRequiredMaterials;
     }
     #endregion
 
     #region Crafting Action
     private void HandleCraftButtonClick()
     {
-        if (!hasSelectedRecipe) return;
+        if (!hasSelectedRecipe || craftButton == null) return;
+
+        if (!craftButton.HasRecipe()) return;
 
         craftingSystem.CraftSeed(selectedSeed);
 
@@ -324,7 +300,6 @@ public class CraftingUIManager : MonoBehaviour
     }
     #endregion
 
-    #region Craft Button Visibility
     private void ShowCraftButton()
     {
         if (craftButton != null)
@@ -334,23 +309,11 @@ public class CraftingUIManager : MonoBehaviour
     private void HideCraftButton()
     {
         if (craftButton != null)
+        {
+            craftButton.Clear();
             craftButton.gameObject.SetActive(false);
+        }
     }
-    #endregion
-
-    #region Empty State Management
-    private void ShowEmptyState()
-    {
-        if (emptyStatePanel != null)
-            emptyStatePanel.SetActive(true);
-    }
-
-    private void HideEmptyState()
-    {
-        if (emptyStatePanel != null)
-            emptyStatePanel.SetActive(false);
-    }
-    #endregion
 
     #region Helper Methods
     private void ResetRecipeDisplay()

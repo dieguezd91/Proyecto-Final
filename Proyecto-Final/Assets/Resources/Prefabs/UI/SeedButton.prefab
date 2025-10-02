@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8147512322959713641}
   - component: {fileID: 7133299831076273446}
   - component: {fileID: 8391051147789597061}
-  - component: {fileID: 1373726473854999556}
+  - component: {fileID: 3194396800754264556}
   m_Layer: 5
   m_Name: SeedButton
   m_TagString: Untagged
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1373726473854999556
+--- !u!114 &3194396800754264556
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 188925997496119417}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
+  m_Script: {fileID: 11500000, guid: d5be9348debc85844a0d6910fc1f37cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _volume: 1
@@ -150,6 +150,8 @@ MonoBehaviour:
   OnHover:
     m_PersistentCalls:
       m_Calls: []
+  seedIcon: {fileID: 2037029425933334109}
+  seedNameText: {fileID: 3246791649957392962}
 --- !u!1 &938361907781478324
 GameObject:
   m_ObjectHideFlags: 0

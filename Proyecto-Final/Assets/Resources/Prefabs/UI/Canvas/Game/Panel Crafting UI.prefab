@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 3490012533480708921}
   - component: {fileID: 2623570534910068206}
   - component: {fileID: 3975478083653675555}
-  - component: {fileID: 6522134462753226560}
+  - component: {fileID: 3625071056200753786}
   m_Layer: 5
   m_Name: CraftButton
   m_TagString: Untagged
@@ -273,7 +273,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &6522134462753226560
+--- !u!114 &3625071056200753786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 367223499724420388}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5eb2c3521b537bb45b46562ba0e96860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _volume: 1
@@ -1437,7 +1437,7 @@ GameObject:
   - component: {fileID: 8395063793920269679}
   - component: {fileID: 5559482827787189913}
   - component: {fileID: 8944351368737269965}
-  - component: {fileID: 2818337709705110878}
+  - component: {fileID: 491175219283892968}
   m_Layer: 5
   m_Name: CloseButton
   m_TagString: Untagged
@@ -1546,20 +1546,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5559482827787189913}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1094415563152046549}
-        m_TargetAssemblyTypeName: CraftingUIManager, Assembly-CSharp
-        m_MethodName: CloseCraftingUI
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &2818337709705110878
+      m_Calls: []
+--- !u!114 &491175219283892968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1568,7 +1556,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5285624034709013443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b18d56fc92374dcb937c42dfa01ab0dd, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f37ef8f6e11d9a4197b6e5a42367b18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _volume: 1
@@ -1586,6 +1574,7 @@ MonoBehaviour:
   OnHover:
     m_PersistentCalls:
       m_Calls: []
+  closeOnEscape: 1
 --- !u!1 &5582292572748443005
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,8 +1830,9 @@ MonoBehaviour:
   materialIconSlots:
   - {fileID: 0}
   - {fileID: 0}
-  craftButton: {fileID: 6522134462753226560}
-  closeButton: {fileID: 2818337709705110878}
+  craftButton: {fileID: 3625071056200753786}
+  closeButton: {fileID: 491175219283892968}
+  emptyStatePanel: {fileID: 0}
 --- !u!1 &7485159846086971654
 GameObject:
   m_ObjectHideFlags: 0
