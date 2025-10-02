@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 8102336949729422656}
   - component: {fileID: -2459830002070391110}
   m_Layer: 8
-  m_Name: HellShaw
+  m_Name: CrystalGolem
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -279,27 +279,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b2305390559c94eb8e335f76d5952d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPriority: 1.5
-  plantPriority: 1
-  homePriority: 1.2
+  enemyData: {fileID: 11400000, guid: 17c65fa8ea6edba4c88d8f7a054a55d5, type: 2}
+  spriteRenderer: {fileID: 7905766180791579066}
+  overrideDataValues: 0
+  moveSpeedOverride: 0
+  detectionRangeOverride: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
-  moveSpeed: 3
-  detectionRange: 20
-  spriteRenderer: {fileID: 7905766180791579066}
-  footstepCooldown: 0.2
-  minAttackDistance: 3
-  meleeRadius: 3
-  specialRadius: 4
-  meleeDamage: 10
-  specialDamage: 30
-  attackCooldown: 1
-  meleeDelay: 0.6
-  specialDelay: 1
+  bossData: {fileID: 11400000, guid: 17c65fa8ea6edba4c88d8f7a054a55d5, type: 2}
   attackPoint: {fileID: 324195009587380907}
-  bossMaxHealth: 500
-  minionPrefab: {fileID: 654258422932643597, guid: 37023b10428f5c54694cf40bfcb73928, type: 3}
   minionSpawnPoints:
   - {fileID: 2383357137646065240}
   - {fileID: 9053484454607534713}
@@ -307,7 +296,6 @@ MonoBehaviour:
   - {fileID: 3881544068041907327}
   - {fileID: 8601602631486866943}
   - {fileID: 8477042811649829947}
-  spawnDelayAfterMinionsDie: 6
 --- !u!95 &8102336949729422656
 Animator:
   serializedVersion: 5

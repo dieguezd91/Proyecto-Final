@@ -3,18 +3,40 @@ using System.Collections.Generic;
 
 public class Skeleton : EnemyBase
 {
-    [Header("Melee Combat")]
-    [SerializeField] private float attackDistance = 1f;
-    [SerializeField] private float minDamage = 8f;
-    [SerializeField] private float maxDamage = 12f;
-    [SerializeField] private float attackCooldown = 0.75f;
+    [Header("Melee Data")]
+    [SerializeField] private MeleeEnemyDataSO meleeData;
+
+    [Header("Combat References")]
     [SerializeField] private Transform attackPoint;
-    [SerializeField] private float attackRange = 0.7f;
     [SerializeField] private LayerMask attackableLayers;
+
+    private float attackDistance;
+    private float minDamage;
+    private float maxDamage;
+    private float attackCooldown;
+    private float attackRange;
 
     private bool isCurrentlyAttacking = false;
     private bool chasingTarget = false;
     private Vector2 moveDirection;
+
+    protected override void LoadEnemyData()
+    {
+        base.LoadEnemyData();
+
+        if (meleeData != null)
+        {
+            attackDistance = meleeData.AttackDistance;
+            minDamage = meleeData.MinDamage;
+            maxDamage = meleeData.MaxDamage;
+            attackCooldown = meleeData.AttackCooldown;
+            attackRange = meleeData.AttackRange;
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] No MeleeEnemyDataSO assigned!");
+        }
+    }
 
     protected override void Update()
     {

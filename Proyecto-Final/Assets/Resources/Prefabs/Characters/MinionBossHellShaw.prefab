@@ -106,22 +106,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a44703f4fea2e499a1d2443692648a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPriority: 1
-  plantPriority: 1.2
-  homePriority: 1.5
+  enemyData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
+  spriteRenderer: {fileID: 0}
+  overrideDataValues: 0
+  moveSpeedOverride: 0
+  detectionRangeOverride: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
-  moveSpeed: 2.2
-  detectionRange: 20
-  spriteRenderer: {fileID: 0}
-  footstepCooldown: 0.2
-  attackDistance: 1
-  minDamage: 8
-  maxDamage: 12
-  attackCooldown: 2
+  meleeData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   attackPoint: {fileID: 7171890095304449723}
-  attackRange: 0.5
   attackableLayers:
     serializedVersion: 2
     m_Bits: 2688

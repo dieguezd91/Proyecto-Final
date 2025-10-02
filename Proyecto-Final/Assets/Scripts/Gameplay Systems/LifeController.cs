@@ -38,7 +38,7 @@ public class LifeController : MonoBehaviour
 
     [Header("MANA DROP")]
     [SerializeField] private GameObject manaPickupPrefab;
-    [SerializeField] private float manaDropChance = 1f;
+    [SerializeField] public float manaDropChance = 1f;
 
     [Header("AUDIO SETTINGS")]
     [SerializeField] private float dotSoundCooldown = 0.2f;

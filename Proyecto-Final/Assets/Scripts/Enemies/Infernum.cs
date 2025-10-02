@@ -2,13 +2,28 @@
 
 public class Infernum : EnemyBase
 {
-    [Header("Ranged Combat")]
-    [SerializeField] private float shootingRange = 5f;
-    [SerializeField] private Transform firingPoint;
-    [SerializeField] private float fireRate = 1f;
-    [SerializeField] private float aimYOffset = 0.5f;
+    [Header("Ranged Data")]
+    [SerializeField] private RangedEnemyDataSO rangedData;
 
+    [Header("Combat References")]
+    [SerializeField] private Transform firingPoint;
+
+    private float shootingRange;
+    private float fireRate;
+    private float aimYOffset;
     private float nextTimeToFire = 0f;
+
+    protected override void LoadEnemyData()
+    {
+        base.LoadEnemyData();
+
+        if (rangedData != null)
+        {
+            shootingRange = rangedData.ShootingRange;
+            fireRate = rangedData.FireRate;
+            aimYOffset = rangedData.AimYOffset;
+        }
+    }
 
     protected override void ProcessMovement()
     {

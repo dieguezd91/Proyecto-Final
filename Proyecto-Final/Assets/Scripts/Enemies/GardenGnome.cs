@@ -3,15 +3,18 @@ using System.Collections;
 
 public class GardenGnome : EnemyBase
 {
-    [SerializeField] private float acceleration = 2f;
-    [SerializeField] private float stopDistance = 0.1f;
-    [SerializeField] private float chaseYOffset = 0.5f;
+    [Header("Kamikaze Data")]
+    [SerializeField] private GardenGnomeEnemyDataSO kamikazeData;
 
-    [Header("Explosion")]
-    [SerializeField] private float clingDuration = 2f;
-    [SerializeField] private float minExplosionDamage = 25f;
-    [SerializeField] private float maxExplosionDamage = 35f;
+    [Header("Combat References")]
     [SerializeField] private LayerMask playerLayerMask;
+
+    private float acceleration;
+    private float stopDistance;
+    private float chaseYOffset;
+    private float clingDuration;
+    private float minExplosionDamage;
+    private float maxExplosionDamage;
 
     private Vector2 velocity;
     private bool isClinging = false;
@@ -19,11 +22,35 @@ public class GardenGnome : EnemyBase
     private LifeController playerLife;
     private LifeController targetLife;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        rb.gravityScale = 0f;
+        rb.drag = 0.5f;
+    }
+
+    protected override void LoadEnemyData()
+    {
+        base.LoadEnemyData();
+
+        if (kamikazeData != null)
+        {
+            acceleration = kamikazeData.Acceleration;
+            stopDistance = kamikazeData.StopDistance;
+            chaseYOffset = kamikazeData.ChaseYOffset;
+            clingDuration = kamikazeData.ClingDuration;
+            minExplosionDamage = kamikazeData.MinExplosionDamage;
+            maxExplosionDamage = kamikazeData.MaxExplosionDamage;
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] No GnomeEnemyDataSO assigned!");
+        }
+    }
+
     protected override void Start()
     {
         base.Start();
-        rb.gravityScale = 0f;
-        rb.drag = 0.5f;
         CachePlayerReference();
     }
 

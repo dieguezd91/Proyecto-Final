@@ -302,20 +302,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41252cafa02768498a23dc6b31d2d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPriority: 1
-  plantPriority: 1.2
-  homePriority: 1.5
+  enemyData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
+  spriteRenderer: {fileID: 0}
+  overrideDataValues: 0
+  moveSpeedOverride: 0
+  detectionRangeOverride: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
-  moveSpeed: 3
-  detectionRange: 20
-  spriteRenderer: {fileID: 0}
-  footstepCooldown: 0.4
-  shootingRange: 9
+  rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
   firingPoint: {fileID: 1303027347511237169}
-  fireRate: 0.5
-  aimYOffset: 0.5
 --- !u!114 &935879750160187858
 MonoBehaviour:
   m_ObjectHideFlags: 0

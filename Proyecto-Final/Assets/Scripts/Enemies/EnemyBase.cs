@@ -2,21 +2,25 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IEnemy
 {
-    [Header("Target Settings")]
-    [SerializeField] protected float playerPriority = 1.0f;
-    [SerializeField] protected float plantPriority = 1.2f;
-    [SerializeField] protected float homePriority = 1.5f;
-    [SerializeField] protected LayerMask plantLayer;
-
-    [Header("Movement")]
-    [SerializeField] protected float moveSpeed = 3f;
-    [SerializeField] protected float detectionRange = 10f;
+    [Header("Enemy Data")]
+    [SerializeField] protected EnemyDataSO enemyData;
 
     [Header("Visual")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
 
-    [Header("Footsteps")]
-    [SerializeField] protected float footstepCooldown = 0.2f;
+    [Header("Runtime Overrides (opcional)")]
+    [SerializeField] private bool overrideDataValues = false;
+    [SerializeField] private float moveSpeedOverride;
+    [SerializeField] private float detectionRangeOverride;
+
+    protected float playerPriority;
+    protected float plantPriority;
+    protected float homePriority;
+    protected float moveSpeed;
+    protected float detectionRange;
+    protected float footstepCooldown;
+
+    [SerializeField] protected LayerMask plantLayer;
 
     protected Rigidbody2D rb;
     protected Animator animator;
@@ -36,6 +40,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected virtual void Awake()
     {
         CacheComponents();
+        LoadEnemyData();
     }
 
     protected virtual void Start()
@@ -75,6 +80,29 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    protected virtual void LoadEnemyData()
+    {
+        if (enemyData == null)
+        {
+            Debug.LogWarning($"[{gameObject.name}] No EnemyDataSO assigned!");
+            return;
+        }
+
+        playerPriority = enemyData.PlayerPriority;
+        plantPriority = enemyData.PlantPriority;
+        homePriority = enemyData.HomePriority;
+        moveSpeed = overrideDataValues ? moveSpeedOverride : enemyData.MoveSpeed;
+        detectionRange = overrideDataValues ? detectionRangeOverride : enemyData.DetectionRange;
+        footstepCooldown = enemyData.FootstepCooldown;
+
+        if (lifeController != null)
+        {
+            lifeController.maxHealth = enemyData.MaxHealth;
+            lifeController.currentHealth = enemyData.MaxHealth;
+            lifeController.manaDropChance = enemyData.ManaDropChance;
+        }
     }
 
     protected virtual void InitializeEnemy()

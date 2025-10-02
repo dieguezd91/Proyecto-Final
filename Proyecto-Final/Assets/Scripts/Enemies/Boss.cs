@@ -4,24 +4,23 @@ using System.Collections.Generic;
 
 public class Boss : EnemyBase
 {
-    [Header("Boss Combat")]
-    [SerializeField] private float minAttackDistance = 1.5f;
-    [SerializeField] private float meleeRadius = 1.2f;
-    [SerializeField] private float specialRadius = 2.5f;
-    [SerializeField] private int meleeDamage = 10;
-    [SerializeField] private int specialDamage = 20;
-    [SerializeField] private float attackCooldown = 1f;
-    [SerializeField] private float meleeDelay = 0.5f;
-    [SerializeField] private float specialDelay = 0.7f;
+    [Header("Boss Data")]
+    [SerializeField] private BossEnemyDataSO bossData;
+
+    [Header("Combat References")]
     [SerializeField] private Transform attackPoint;
-
-    [Header("Boss Health")]
-    [SerializeField] private float bossMaxHealth = 300f;
-
-    [Header("Minion Settings")]
-    [SerializeField] private GameObject minionPrefab;
     [SerializeField] private Transform[] minionSpawnPoints;
-    [SerializeField] private float spawnDelayAfterMinionsDie = 6f;
+
+    private float minAttackDistance;
+    private float meleeRadius;
+    private float specialRadius;
+    private int meleeDamage;
+    private int specialDamage;
+    private float attackCooldown;
+    private float meleeDelay;
+    private float specialDelay;
+    private GameObject minionPrefab;
+    private float spawnDelayAfterMinionsDie;
 
     private List<GameObject> currentMinions = new List<GameObject>();
     private bool isSpawningMinions = false;
@@ -32,18 +31,41 @@ public class Boss : EnemyBase
     private HashSet<GameObject> specialDamagedObjects = new HashSet<GameObject>();
 
     #region Initialization
+    protected override void LoadEnemyData()
+    {
+        base.LoadEnemyData();
+
+        if (bossData != null)
+        {
+            minAttackDistance = bossData.MinAttackDistance;
+            meleeRadius = bossData.MeleeRadius;
+            specialRadius = bossData.SpecialRadius;
+            meleeDamage = bossData.MeleeDamage;
+            specialDamage = bossData.SpecialDamage;
+            attackCooldown = bossData.AttackCooldown;
+            meleeDelay = bossData.MeleeDelay;
+            specialDelay = bossData.SpecialDelay;
+            minionPrefab = bossData.MinionPrefab;
+            spawnDelayAfterMinionsDie = bossData.SpawnDelayAfterMinionsDie;
+
+            if (lifeController != null)
+            {
+                lifeController.maxHealth = bossData.BossMaxHealth;
+                lifeController.currentHealth = bossData.BossMaxHealth;
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"[{gameObject.name}] No BossEnemyDataSO assigned!");
+        }
+    }
+
     protected override void InitializeEnemy()
     {
         base.InitializeEnemy();
-        SetupBossLifeController();
-    }
 
-    private void SetupBossLifeController()
-    {
         if (lifeController != null)
         {
-            lifeController.maxHealth = bossMaxHealth;
-            lifeController.currentHealth = bossMaxHealth;
             lifeController.onDeath.AddListener(OnBossDeath);
         }
     }
@@ -126,11 +148,7 @@ public class Boss : EnemyBase
         return false;
     }
 
-    #region Movement Override
-    protected override void ProcessMovement()
-    {
-
-    }
+    protected override void ProcessMovement() { }
 
     protected override void SetMovementAnimation(bool isMoving)
     {
@@ -297,7 +315,6 @@ public class Boss : EnemyBase
             OnBossDeath();
         }
     }
-    #endregion
 
     #region Public API
     public float GetCurrentHealth()

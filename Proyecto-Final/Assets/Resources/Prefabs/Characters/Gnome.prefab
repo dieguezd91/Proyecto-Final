@@ -4996,22 +4996,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402e85a22234cc24289e24a547fbf3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPriority: 1
-  plantPriority: 1.2
-  homePriority: 1.5
+  enemyData: {fileID: 11400000, guid: 271b7f031505943428b1975ff9d24b31, type: 2}
+  spriteRenderer: {fileID: 0}
+  overrideDataValues: 0
+  moveSpeedOverride: 0
+  detectionRangeOverride: 0
   plantLayer:
     serializedVersion: 2
-    m_Bits: 0
-  moveSpeed: 3
-  detectionRange: 20
-  spriteRenderer: {fileID: 0}
-  footstepCooldown: 0.35
-  acceleration: 2
-  stopDistance: 0.1
-  chaseYOffset: 0.5
-  clingDuration: 2
-  minExplosionDamage: 25
-  maxExplosionDamage: 35
+    m_Bits: 512
+  kamikazeData: {fileID: 11400000, guid: 271b7f031505943428b1975ff9d24b31, type: 2}
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 128
