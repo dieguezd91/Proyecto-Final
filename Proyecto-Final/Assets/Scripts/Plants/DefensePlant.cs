@@ -15,7 +15,7 @@ public class DefensePlant : Plant
 
     private float reflectTimer = 0f;
     private bool canReflect = false;
-    private List<Enemy> enemiesAttracted = new List<Enemy>();
+    private Dictionary<EnemyBase, Coroutine> attractedEnemies = new Dictionary<EnemyBase, Coroutine>();
 
     protected override void Start()
     {
@@ -26,7 +26,6 @@ public class DefensePlant : Plant
         {
             lifeController.maxHealth = 150f;
             lifeController.currentHealth = lifeController.maxHealth;
-
             lifeController.onDamaged.AddListener(OnDamageTaken);
         }
     }
@@ -58,39 +57,62 @@ public class DefensePlant : Plant
     void AttractEnemies()
     {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attractionRadius, enemyLayer);
-        enemiesAttracted.Clear();
 
-        foreach (Collider2D enemigo in enemiesInRange)
+        foreach (Collider2D enemyCollider in enemiesInRange)
         {
-            Enemy enemy = enemigo.GetComponent<Enemy>();
-            if (enemy != null)
+            EnemyBase enemy = enemyCollider.GetComponent<EnemyBase>();
+
+            if (enemy != null && !attractedEnemies.ContainsKey(enemy))
             {
-                if (enemy.player != transform)
+                if (enemy.GetCurrentTarget() != transform)
                 {
-                    Transform player = enemy.player;
-                    enemy.player = transform;
-                    enemiesAttracted.Add(enemy);
-                    StartCoroutine(RestoreTarget(enemy, player, 10f));
+                    enemy.SetTargetOverride(transform);
+
+                    Coroutine restoreCoroutine = StartCoroutine(RestoreTargetAfterTime(enemy, 10f));
+                    attractedEnemies.Add(enemy, restoreCoroutine);
                 }
+            }
+        }
+
+        List<EnemyBase> enemiesToRemove = new List<EnemyBase>();
+        foreach (var kvp in attractedEnemies)
+        {
+            if (kvp.Key == null || !kvp.Key.gameObject.activeInHierarchy)
+            {
+                enemiesToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (var enemy in enemiesToRemove)
+        {
+            if (attractedEnemies.ContainsKey(enemy))
+            {
+                if (attractedEnemies[enemy] != null)
+                    StopCoroutine(attractedEnemies[enemy]);
+
+                attractedEnemies.Remove(enemy);
             }
         }
     }
 
-    IEnumerator RestoreTarget(Enemy enemy, Transform originalTarget, float time)
+    IEnumerator RestoreTargetAfterTime(EnemyBase enemy, float time)
     {
         yield return new WaitForSeconds(time);
+
         if (enemy != null && enemy.gameObject.activeInHierarchy)
         {
-            enemy.player = originalTarget;
+            enemy.ClearTargetOverride();
+            attractedEnemies.Remove(enemy);
         }
     }
 
     void ReflectDamage()
     {
         Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, reflectRadius, enemyLayer);
-        foreach (Collider2D enemy in enemiesInRange)
+
+        foreach (Collider2D enemyCollider in enemiesInRange)
         {
-            LifeController enemyHealth = enemy.GetComponent<LifeController>();
+            LifeController enemyHealth = enemyCollider.GetComponent<LifeController>();
             if (enemyHealth != null)
             {
                 enemyHealth.TakeDamage(reflectDamage);
@@ -114,6 +136,18 @@ public class DefensePlant : Plant
     protected override void OnDestroy()
     {
         base.OnDestroy();
+
+        foreach (var kvp in attractedEnemies)
+        {
+            if (kvp.Key != null && kvp.Key.gameObject.activeInHierarchy)
+            {
+                kvp.Key.ClearTargetOverride();
+            }
+
+            if (kvp.Value != null)
+                StopCoroutine(kvp.Value);
+        }
+        attractedEnemies.Clear();
 
         LifeController lifeController = GetComponent<LifeController>();
         if (lifeController != null)

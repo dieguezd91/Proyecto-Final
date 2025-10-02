@@ -4996,7 +4996,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 402e85a22234cc24289e24a547fbf3b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 4
+  playerPriority: 1
+  plantPriority: 1.2
+  homePriority: 1.5
+  plantLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  moveSpeed: 3
+  detectionRange: 20
+  spriteRenderer: {fileID: 0}
+  footstepCooldown: 0.35
   acceleration: 2
   stopDistance: 0.1
   chaseYOffset: 0.5
@@ -5006,8 +5015,6 @@ MonoBehaviour:
   playerLayerMask:
     serializedVersion: 2
     m_Bits: 128
-  spriteRenderer: {fileID: 0}
-  footstepCooldown: 0.35
 --- !u!114 &100918762742878077
 MonoBehaviour:
   m_ObjectHideFlags: 0

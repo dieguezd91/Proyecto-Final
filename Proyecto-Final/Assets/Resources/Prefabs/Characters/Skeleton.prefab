@@ -106,8 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a44703f4fea2e499a1d2443692648a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  home: {fileID: 0}
   playerPriority: 1
   plantPriority: 1.2
   homePriority: 1.5
@@ -115,7 +113,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 1.25
-  detectionDistance: 20
+  detectionRange: 20
+  spriteRenderer: {fileID: 0}
+  footstepCooldown: 0.45
   attackDistance: 1
   minDamage: 8
   maxDamage: 12
@@ -125,9 +125,6 @@ MonoBehaviour:
   attackableLayers:
     serializedVersion: 2
     m_Bits: 2688
-  chasingTarget: 0
-  rb: {fileID: 0}
-  footstepCooldown: 0.45
 --- !u!114 &8855017348105390996
 MonoBehaviour:
   m_ObjectHideFlags: 0

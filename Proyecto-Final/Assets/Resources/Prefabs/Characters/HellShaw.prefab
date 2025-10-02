@@ -259,8 +259,8 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 0}
-  manaPickupPrefab: {fileID: 0}
+  objetDrop: {fileID: 1768544347340343859, guid: 7419d92434dcb4f40aa3be3f64cc669d, type: 3}
+  manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 1
   dotSoundCooldown: 0.2
   isRespawning: 0
@@ -279,8 +279,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b2305390559c94eb8e335f76d5952d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 7905766180791579066}
-  chaseYOffset: 0.5
   playerPriority: 1.5
   plantPriority: 1
   homePriority: 1.2
@@ -288,7 +286,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   moveSpeed: 3
-  detectionRange: 15
+  detectionRange: 20
+  spriteRenderer: {fileID: 7905766180791579066}
+  footstepCooldown: 0.2
   minAttackDistance: 3
   meleeRadius: 3
   specialRadius: 4
@@ -297,9 +297,6 @@ MonoBehaviour:
   attackCooldown: 1
   meleeDelay: 0.6
   specialDelay: 1
-  animator: {fileID: 8102336949729422656}
-  rb: {fileID: 5633985108502546552}
-  player: {fileID: 0}
   attackPoint: {fileID: 324195009587380907}
   bossMaxHealth: 500
   minionPrefab: {fileID: 654258422932643597, guid: 37023b10428f5c54694cf40bfcb73928, type: 3}

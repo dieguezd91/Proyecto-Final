@@ -70,7 +70,7 @@ public class AttackPlant : Plant
 
         foreach (Collider2D enemy in enemiesInRange)
         {
-            if (enemy.GetComponent<GardenGnomeController>() != null)
+            if (enemy.GetComponent<GardenGnome>() != null)
                 continue;
 
             float distance = Vector2.Distance(transform.position, enemy.transform.position);
