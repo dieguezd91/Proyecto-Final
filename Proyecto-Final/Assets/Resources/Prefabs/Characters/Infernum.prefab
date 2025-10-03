@@ -302,11 +302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f41252cafa02768498a23dc6b31d2d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
   spriteRenderer: {fileID: 0}
-  overrideDataValues: 0
-  moveSpeedOverride: 0
-  detectionRangeOverride: 0
+  overrideDataValues: 1
+  moveSpeedOverride: 1
+  detectionRangeOverride: 20
   plantLayer:
     serializedVersion: 2
     m_Bits: 512

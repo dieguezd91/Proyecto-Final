@@ -106,9 +106,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a44703f4fea2e499a1d2443692648a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   spriteRenderer: {fileID: 0}
-  overrideDataValues: 0
+  overrideDataValues: 1
   moveSpeedOverride: 0
   detectionRangeOverride: 0
   plantLayer:

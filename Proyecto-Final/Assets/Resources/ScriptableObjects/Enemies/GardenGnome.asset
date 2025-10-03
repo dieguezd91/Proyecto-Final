@@ -12,6 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b049daf03e5082944b2d506e7738f916, type: 3}
   m_Name: GardenGnome
   m_EditorClassIdentifier: 
+  enemyName: Garden Gnome
+  enemyIcon: {fileID: 86988598, guid: 494fce19c09feb14ebcd3992662734f6, type: 3}
+  description: 
+  maxHealth: 50
+  moveSpeed: 4
+  detectionRange: 20
+  playerPriority: 1
+  plantPriority: 0
+  homePriority: 0
+  footstepCooldown: 0.35
+  manaDropChance: 0.5
   acceleration: 2
   stopDistance: 0.1
   chaseYOffset: 0.5

@@ -20,6 +20,8 @@ public class Skeleton : EnemyBase
     private bool chasingTarget = false;
     private Vector2 moveDirection;
 
+    protected override EnemyDataSO GetEnemyData() => meleeData;
+
     protected override void LoadEnemyData()
     {
         base.LoadEnemyData();

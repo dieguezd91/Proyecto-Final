@@ -3,8 +3,8 @@ using System.Collections;
 
 public class GardenGnome : EnemyBase
 {
-    [Header("Kamikaze Data")]
-    [SerializeField] private GardenGnomeEnemyDataSO kamikazeData;
+    [Header("Gnome Data")]
+    [SerializeField] private GardenGnomeEnemyDataSO gnomeData;
 
     [Header("Combat References")]
     [SerializeField] private LayerMask playerLayerMask;
@@ -29,18 +29,20 @@ public class GardenGnome : EnemyBase
         rb.drag = 0.5f;
     }
 
+    protected override EnemyDataSO GetEnemyData() => gnomeData;
+
     protected override void LoadEnemyData()
     {
         base.LoadEnemyData();
 
-        if (kamikazeData != null)
+        if (gnomeData != null)
         {
-            acceleration = kamikazeData.Acceleration;
-            stopDistance = kamikazeData.StopDistance;
-            chaseYOffset = kamikazeData.ChaseYOffset;
-            clingDuration = kamikazeData.ClingDuration;
-            minExplosionDamage = kamikazeData.MinExplosionDamage;
-            maxExplosionDamage = kamikazeData.MaxExplosionDamage;
+            acceleration = gnomeData.Acceleration;
+            stopDistance = gnomeData.StopDistance;
+            chaseYOffset = gnomeData.ChaseYOffset;
+            clingDuration = gnomeData.ClingDuration;
+            minExplosionDamage = gnomeData.MinExplosionDamage;
+            maxExplosionDamage = gnomeData.MaxExplosionDamage;
         }
         else
         {

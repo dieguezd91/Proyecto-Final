@@ -13,6 +13,8 @@ public class Infernum : EnemyBase
     private float aimYOffset;
     private float nextTimeToFire = 0f;
 
+    protected override EnemyDataSO GetEnemyData() => rangedData;
+
     protected override void LoadEnemyData()
     {
         base.LoadEnemyData();

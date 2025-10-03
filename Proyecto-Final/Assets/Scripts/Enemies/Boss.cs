@@ -31,6 +31,8 @@ public class Boss : EnemyBase
     private HashSet<GameObject> specialDamagedObjects = new HashSet<GameObject>();
 
     #region Initialization
+    protected override EnemyDataSO GetEnemyData() => bossData;
+
     protected override void LoadEnemyData()
     {
         base.LoadEnemyData();

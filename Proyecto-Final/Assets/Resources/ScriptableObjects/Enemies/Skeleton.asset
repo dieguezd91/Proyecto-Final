@@ -16,16 +16,15 @@ MonoBehaviour:
   enemyIcon: {fileID: -1222204734, guid: 494fce19c09feb14ebcd3992662734f6, type: 3}
   description: 
   maxHealth: 50
-  moveSpeed: 3
-  detectionRange: 10
+  moveSpeed: 1.25
+  detectionRange: 20
   playerPriority: 1
   plantPriority: 1.2
   homePriority: 1.5
-  footstepCooldown: 0.2
-  experienceValue: 10
+  footstepCooldown: 0.45
   manaDropChance: 0.5
   attackDistance: 1
   minDamage: 8
   maxDamage: 12
-  attackCooldown: 0.75
-  attackRange: 0.7
+  attackCooldown: 2
+  attackRange: 0.5

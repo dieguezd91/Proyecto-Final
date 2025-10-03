@@ -23,7 +23,6 @@ public class EnemyDataSO : ScriptableObject
     [SerializeField] private float footstepCooldown = 0.2f;
 
     [Header("Rewards")]
-    [SerializeField] private int experienceValue = 10;
     [SerializeField] private float manaDropChance = 0.5f;
 
     public string EnemyName => enemyName;
@@ -36,6 +35,5 @@ public class EnemyDataSO : ScriptableObject
     public float PlantPriority => plantPriority;
     public float HomePriority => homePriority;
     public float FootstepCooldown => footstepCooldown;
-    public int ExperienceValue => experienceValue;
     public float ManaDropChance => manaDropChance;
 }

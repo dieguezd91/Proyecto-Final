@@ -2,16 +2,8 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour, IEnemy
 {
-    [Header("Enemy Data")]
-    [SerializeField] protected EnemyDataSO enemyData;
-
     [Header("Visual")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
-
-    [Header("Runtime Overrides (opcional)")]
-    [SerializeField] private bool overrideDataValues = false;
-    [SerializeField] private float moveSpeedOverride;
-    [SerializeField] private float detectionRangeOverride;
 
     protected float playerPriority;
     protected float plantPriority;
@@ -82,26 +74,30 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
             spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    protected abstract EnemyDataSO GetEnemyData();
+
     protected virtual void LoadEnemyData()
     {
-        if (enemyData == null)
+        EnemyDataSO data = GetEnemyData();
+
+        if (data == null)
         {
             Debug.LogWarning($"[{gameObject.name}] No EnemyDataSO assigned!");
             return;
         }
 
-        playerPriority = enemyData.PlayerPriority;
-        plantPriority = enemyData.PlantPriority;
-        homePriority = enemyData.HomePriority;
-        moveSpeed = overrideDataValues ? moveSpeedOverride : enemyData.MoveSpeed;
-        detectionRange = overrideDataValues ? detectionRangeOverride : enemyData.DetectionRange;
-        footstepCooldown = enemyData.FootstepCooldown;
+        playerPriority = data.PlayerPriority;
+        plantPriority = data.PlantPriority;
+        homePriority = data.HomePriority;
+        moveSpeed = data.MoveSpeed;
+        detectionRange = data.DetectionRange;
+        footstepCooldown = data.FootstepCooldown;
 
         if (lifeController != null)
         {
-            lifeController.maxHealth = enemyData.MaxHealth;
-            lifeController.currentHealth = enemyData.MaxHealth;
-            lifeController.manaDropChance = enemyData.ManaDropChance;
+            lifeController.maxHealth = data.MaxHealth;
+            lifeController.currentHealth = data.MaxHealth;
+            lifeController.manaDropChance = data.ManaDropChance;
         }
     }
 
