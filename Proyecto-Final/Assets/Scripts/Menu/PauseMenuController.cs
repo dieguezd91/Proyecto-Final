@@ -22,6 +22,7 @@ public class PauseMenuController : UIControllerBase
 
     private Coroutine blurTransition;
     private DepthOfField dof;
+    private bool isHiding = false;
 
     private void Start()
     {
@@ -67,10 +68,9 @@ public class PauseMenuController : UIControllerBase
 
     public override void Hide()
     {
-        if (_currentState == PanelState.Hidden) return;
+        if (_currentState == PanelState.Hidden || isHiding || !gameObject.activeInHierarchy) return;
+        isHiding = true;
         OnHideAnimation();
-
-        //gameObject.SetActive(false);
         _currentState = PanelState.Hidden;
     }
 
@@ -83,7 +83,7 @@ public class PauseMenuController : UIControllerBase
     protected override void OnHideAnimation()
     {
         if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLength(0f, hideTransitionDuration));
+        blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
     }
 
     private IEnumerator FadeFocalLength(float target, float duration)
@@ -101,6 +101,30 @@ public class PauseMenuController : UIControllerBase
         }
 
         dof.focalLength.value = target;
+    }
+
+    private IEnumerator FadeFocalLengthAndDeactivate(float target, float duration)
+    {
+        if (dof == null)
+        {
+            gameObject.SetActive(false);
+            isHiding = false;
+            yield break;
+        }
+
+        float start = dof.focalLength.value;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
+            yield return null;
+        }
+
+        dof.focalLength.value = target;
+        gameObject.SetActive(false); // Deactivate after animation
+        isHiding = false;
     }
 
     private bool IsInstructionsPanelActive()
