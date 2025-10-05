@@ -11,11 +11,6 @@ public class RestorationAltarUIManager : MonoBehaviour
     [Header("Restoration Options")]
     [SerializeField] private RestorationOptionButton[] optionButtons;
 
-    [Header("Gold Controls")]
-    [SerializeField] private Slider goldSlider;
-    [SerializeField] private TextMeshProUGUI goldAmountText;
-    [SerializeField] private TMP_InputField goldInputField;
-
     [Header("Close Button")]
     [SerializeField] private CloseButton closeButton;
     private HouseRestorationSystem restorationSystem;
@@ -49,9 +44,6 @@ public class RestorationAltarUIManager : MonoBehaviour
 
         SetupOptionButtons();
 
-        goldSlider.onValueChanged.AddListener(OnSliderChanged);
-        goldInputField.onEndEdit.AddListener(OnInputFieldChanged);
-
         if (closeButton != null)
             closeButton.OnClick.AddListener(CloseUI);
     }
@@ -65,9 +57,6 @@ public class RestorationAltarUIManager : MonoBehaviour
             if (optionButtons[i] != null)
                 optionButtons[i].OnClick.RemoveAllListeners();
         }
-
-        goldSlider.onValueChanged.RemoveListener(OnSliderChanged);
-        goldInputField.onEndEdit.RemoveListener(OnInputFieldChanged);
 
         if (closeButton != null)
             closeButton.OnClick.RemoveListener(CloseUI);
@@ -115,8 +104,6 @@ public class RestorationAltarUIManager : MonoBehaviour
         isUIOpen = true;
 
         LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
-
-        InitializeGoldControls();
         UpdateAllOptionButtons();
     }
 
@@ -129,72 +116,6 @@ public class RestorationAltarUIManager : MonoBehaviour
         RestoreGameState();
 
         UIEvents.TriggerRestorationAltarUIClosed();
-    }
-    #endregion
-
-    #region Gold Controls
-    private void InitializeGoldControls()
-    {
-        int currentGold = GetPlayerGold();
-
-        ConfigureGoldSlider(currentGold);
-        SetGoldDisplayValue(currentGold);
-    }
-
-    private void ConfigureGoldSlider(int maxGold)
-    {
-        goldSlider.maxValue = maxGold;
-        goldSlider.minValue = 0;
-        goldSlider.wholeNumbers = true;
-        goldSlider.value = maxGold;
-    }
-
-    private void SetGoldDisplayValue(int amount)
-    {
-        goldInputField.text = amount.ToString();
-        goldAmountText.text = $"{amount} oro ofrecido";
-    }
-
-    private void OnSliderChanged(float value)
-    {
-        int steppedValue = CalculateSteppedValue(value);
-        UpdateGoldDisplay(steppedValue);
-    }
-
-    private void OnInputFieldChanged(string input)
-    {
-        if (int.TryParse(input, out int value))
-        {
-            int steppedValue = CalculateSteppedValue(value);
-            int clampedValue = Mathf.Clamp(steppedValue, 0, (int)goldSlider.maxValue);
-            UpdateGoldDisplay(clampedValue);
-        }
-        else
-        {
-            ResetGoldInput();
-        }
-    }
-
-    private int CalculateSteppedValue(float value)
-    {
-        return Mathf.FloorToInt(value / GOLD_STEP) * GOLD_STEP;
-    }
-
-    private void UpdateGoldDisplay(int amount)
-    {
-        goldSlider.SetValueWithoutNotify(amount);
-        goldInputField.SetTextWithoutNotify(amount.ToString());
-        goldAmountText.text = $"{amount} oro ofrecido";
-    }
-
-    private void ResetGoldInput()
-    {
-        goldInputField.SetTextWithoutNotify("0");
-    }
-
-    private int GetPlayerGold()
-    {
-        return InventoryManager.Instance != null ? InventoryManager.Instance.GetGold() : 0;
     }
     #endregion
 
