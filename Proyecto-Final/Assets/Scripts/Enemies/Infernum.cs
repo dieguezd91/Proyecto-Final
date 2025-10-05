@@ -13,6 +13,9 @@ public class Infernum : EnemyBase
     private float aimYOffset;
     private float nextTimeToFire = 0f;
 
+    public bool CanShootNow => Time.time >= rangedData.FireRate;
+
+
     protected override EnemyDataSO GetEnemyData() => rangedData;
 
     protected override void LoadEnemyData()
@@ -27,29 +30,16 @@ public class Infernum : EnemyBase
         }
     }
 
-    protected override void ProcessMovement()
+    
+
+    public void PerformAttack()
     {
+        if (Time.time < nextTimeToFire) return;
+
         if (currentTarget == null) return;
 
-        float distance = GetDistanceToTarget();
-        if (distance > detectionRange) return;
-
-        if (distance > shootingRange)
-        {
-            Vector2 direction = (currentTarget.position - transform.position).normalized;
-            MoveTowardsTarget(direction, moveSpeed);
-        }
-        else
-        {
-            StopMovement();
-            UpdateSpriteDirection((currentTarget.position - transform.position).normalized);
-
-            if (Time.time >= nextTimeToFire)
-            {
-                Shoot();
-                nextTimeToFire = Time.time + 1f / fireRate;
-            }
-        }
+        Shoot();
+        nextTimeToFire = Time.time + fireRate / fireRate;
     }
 
     private void Shoot()
@@ -71,5 +61,9 @@ public class Infernum : EnemyBase
 
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, shootingRange);
+    }
+
+    protected override void ProcessMovement()
+    {
     }
 }

@@ -107,17 +107,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
-  overrideDataValues: 1
-  moveSpeedOverride: 1.25
-  detectionRangeOverride: 200
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
+  animator: {fileID: 0}
+  currentTargetType: none
+  isDead: 0
+  isCurrentlyAttacking: 0
+  nextAttackTime: 0
+  attackCooldown: 0
   meleeData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   attackPoint: {fileID: 7171890095304449723}
   attackableLayers:
     serializedVersion: 2
     m_Bits: 2688
+  minDamage: 0
+  maxDamage: 0
+  attackRange: 0
 --- !u!114 &8855017348105390996
 MonoBehaviour:
   m_ObjectHideFlags: 0

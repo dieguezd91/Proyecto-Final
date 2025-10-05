@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Skeleton : EnemyBase
 {
@@ -7,20 +7,23 @@ public class Skeleton : EnemyBase
     [SerializeField] private MeleeEnemyDataSO meleeData;
 
     [Header("Combat References")]
-    [SerializeField] private Transform attackPoint;
-    [SerializeField] private LayerMask attackableLayers;
+    public Transform attackPoint;
+    public LayerMask attackableLayers;
 
     private float attackDistance;
-    private float minDamage;
-    private float maxDamage;
-    private float attackCooldown;
-    private float attackRange;
+    public float minDamage;
+    public float maxDamage;
+    public float attackRange;
 
-    private bool isCurrentlyAttacking = false;
-    private bool chasingTarget = false;
-    private Vector2 moveDirection;
+    
 
     protected override EnemyDataSO GetEnemyData() => meleeData;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        LoadEnemyData();
+    }
 
     protected override void LoadEnemyData()
     {
@@ -44,63 +47,44 @@ public class Skeleton : EnemyBase
     {
         base.Update();
 
-        if (isDead) return;
+        if (isDead)
+        {
+           return;
+        }
 
-        UpdateCombatState();
     }
+
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+        StateMachine?.CurrentState?.OnFixedUpdate();
+    }
+
+    
 
     protected override void ProcessMovement()
     {
-        float distanceToTarget = GetDistanceToTarget();
-
-        if (chasingTarget && distanceToTarget > attackDistance)
-        {
-            MoveTowardsTarget(moveDirection.normalized, moveSpeed);
-        }
-        else
-        {
-            StopMovement();
-        }
     }
 
-    private void UpdateCombatState()
+
+    public bool CanAttack()
     {
-        if (currentTarget == null)
-        {
-            chasingTarget = false;
-            moveDirection = Vector2.zero;
-            return;
-        }
-
-        float distanceToTarget = GetDistanceToTarget();
-
-        if (distanceToTarget <= detectionRange)
-        {
-            chasingTarget = true;
-            moveDirection = (currentTarget.position - transform.position).normalized;
-
-            if (distanceToTarget <= attackDistance && !isCurrentlyAttacking)
-            {
-                StartAttack();
-            }
-        }
-        else
-        {
-            chasingTarget = false;
-            moveDirection = Vector2.zero;
-        }
+        return !isCurrentlyAttacking && Time.time >= nextAttackTime;
     }
 
-    private void StartAttack()
+    public void StartAttack()
     {
-        animator.SetBool("isAttacking", true);
+        if (isCurrentlyAttacking) return;
+
         isCurrentlyAttacking = true;
+        nextAttackTime = Time.time + attackCooldown;
+
+        animator?.SetBool("isAttacking", true);
+        soundBase?.PlaySound(EnemySoundType.Attack, EnemySoundBase.SoundSourceType.Localized, transform);
     }
 
     public void PerformSwordHit()
     {
-        soundBase?.PlaySound(EnemySoundType.Attack, EnemySoundBase.SoundSourceType.Localized, transform);
-
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
         HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
 
@@ -118,8 +102,7 @@ public class Skeleton : EnemyBase
     {
         float damage = Random.Range(minDamage, maxDamage);
 
-        LifeController life = target.GetComponent<LifeController>();
-        if (life != null)
+        if (target.TryGetComponent(out LifeController life))
         {
             life.TakeDamage(damage);
 
@@ -127,11 +110,8 @@ public class Skeleton : EnemyBase
             {
                 CameraShaker.Instance?.Shake(0.3f, 0.3f);
             }
-            return;
         }
-
-        HouseLifeController houseLife = target.GetComponent<HouseLifeController>();
-        if (houseLife != null)
+        else if (target.TryGetComponent(out HouseLifeController houseLife))
         {
             houseLife.TakeDamage(damage);
         }
@@ -139,8 +119,21 @@ public class Skeleton : EnemyBase
 
     public void OnAttackAnimationEnd()
     {
-        animator.SetBool("isAttacking", false);
         isCurrentlyAttacking = false;
+        animator?.SetBool("isAttacking", false);
+
+        if (isDead)
+        {
+            StateMachine.ChangeState<EnemyDeadState>();
+        }
+        else if (currentTarget != null && GetDistanceToTarget() <= detectionRange)
+        {
+            StateMachine.ChangeState<EnemyChaseState>();
+        }
+        else
+        {
+            StateMachine.ChangeState<EnemyIdleState>();
+        }
     }
 
     protected override void OnDrawGizmosSelected()

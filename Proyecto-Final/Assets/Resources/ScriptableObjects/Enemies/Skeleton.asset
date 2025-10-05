@@ -27,4 +27,4 @@ MonoBehaviour:
   minDamage: 8
   maxDamage: 12
   attackCooldown: 2
-  attackRange: 0.5
+  attackRange: 1

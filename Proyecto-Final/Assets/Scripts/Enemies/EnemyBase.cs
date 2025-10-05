@@ -15,18 +15,31 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     [SerializeField] protected LayerMask plantLayer;
 
     protected Rigidbody2D rb;
-    protected Animator animator;
+    public Animator animator;
     protected EnemySoundBase soundBase;
     protected LifeController lifeController;
     protected KnockbackReceiver knockbackReceiver;
 
     protected Transform currentTarget;
-    protected string currentTargetType = "none";
-    protected bool isDead = false;
+    public string currentTargetType = "none";
+    public bool isDead = false;
     protected float lastFootstepTime = 0f;
 
     private Transform overrideTarget = null;
     private bool hasOverrideTarget = false;
+
+    public StateMachine StateMachine { get; protected set; }
+
+    public bool isCurrentlyAttacking = false;
+    public float nextAttackTime = 0f;
+    public float attackCooldown;
+
+
+    #region Exposed properties (para estados)
+    public float MoveSpeed => moveSpeed;
+    public Animator Animator => animator;
+    public bool IsDead => isDead;
+    #endregion
 
     #region Unity Lifecycle
     protected virtual void Awake()
@@ -39,6 +52,14 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     {
         InitializeEnemy();
         PlaySpawnSound();
+
+        StateMachine = new StateMachine();
+        StateMachine.RegisterState(new EnemyIdleState(this));
+        StateMachine.RegisterState(new EnemyChaseState(this));
+        StateMachine.RegisterState(new EnemyAttackState(this));
+        StateMachine.RegisterState(new EnemyDeadState(this));
+
+        StateMachine.ChangeState<EnemyIdleState>();
     }
 
     protected virtual void Update()
@@ -46,13 +67,14 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         if (isDead) return;
 
         UpdateTargeting();
+        StateMachine.Tick();
     }
 
     protected virtual void FixedUpdate()
     {
         if (isDead || IsBeingKnockedBack()) return;
 
-        ProcessMovement();
+        StateMachine.FixedTick();
     }
 
     protected virtual void OnDestroy()
@@ -119,7 +141,6 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     #endregion
 
     #region Targeting
-
     public Transform GetCurrentTarget()
     {
         return hasOverrideTarget ? overrideTarget : currentTarget;
@@ -144,9 +165,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         string bestTargetType = "none";
 
         EvaluatePlayerAsTarget(ref closestScore, ref bestTarget, ref bestTargetType);
-
         EvaluatePlantsAsTargets(ref closestScore, ref bestTarget, ref bestTargetType);
-
         EvaluateHomeAsTarget(ref closestScore, ref bestTarget, ref bestTargetType);
 
         currentTarget = bestTarget;
@@ -225,7 +244,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     #region Movement
     protected abstract void ProcessMovement();
 
-    protected void MoveTowardsTarget(Vector2 direction, float speed)
+    public void MoveTowardsTarget(Vector2 direction, float speed)
     {
         rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
         SetMovementAnimation(true);
@@ -233,7 +252,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         UpdateSpriteDirection(direction);
     }
 
-    protected void StopMovement()
+    public void StopMovement()
     {
         rb.velocity = Vector2.zero;
         SetMovementAnimation(false);
@@ -243,7 +262,6 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected void UpdateSpriteDirection(Vector2 direction)
     {
         if (Mathf.Abs(direction.x) < 0.1f) return;
-
         spriteRenderer.flipX = direction.x > 0;
     }
 
@@ -280,6 +298,9 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         rb.isKinematic = true;
 
         soundBase?.PlaySound(EnemySoundType.Die, EnemySoundBase.SoundSourceType.Localized, transform);
+
+        animator.SetTrigger("Death");
+        StateMachine.ChangeState<EnemyDeadState>();
     }
 
     #region Utility
@@ -288,7 +309,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         return knockbackReceiver?.IsBeingKnockedBack() == true;
     }
 
-    protected float GetDistanceToTarget()
+    public float GetDistanceToTarget()
     {
         return currentTarget != null
             ? Vector2.Distance(transform.position, currentTarget.position)

@@ -54,6 +54,8 @@ public class GardenGnome : EnemyBase
     {
         base.Start();
         CachePlayerReference();
+
+       
     }
 
     protected override void Update()
@@ -71,40 +73,14 @@ public class GardenGnome : EnemyBase
         }
     }
 
-    protected override void ProcessMovement()
-    {
-        if (isClinging || player == null || playerLife == null || !playerLife.IsTargetable())
-            return;
-
-        Vector2 targetPos = (Vector2)player.position + Vector2.down * chaseYOffset;
-        Vector2 displacement = targetPos - (Vector2)transform.position;
-        float distance = displacement.magnitude;
-
-        Vector2 desiredVelocity = distance > stopDistance
-            ? displacement.normalized * moveSpeed
-            : Vector2.zero;
-
-        velocity = Vector2.Lerp(velocity, desiredVelocity, acceleration * Time.fixedDeltaTime);
-        rb.velocity = velocity;
-
-        if (velocity.sqrMagnitude > 0.01f)
-        {
-            PlayFootstepSound();
-            UpdateSpriteDirection(velocity);
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
+    public void PerformAttack()
     {
         if (isClinging || player == null || playerLife == null) return;
 
-        if ((playerLayerMask.value & (1 << col.gameObject.layer)) != 0)
+        float distance = Vector2.Distance(transform.position, player.position);
+        if (distance <= stopDistance)
         {
-            LifeController life = col.GetComponent<LifeController>();
-            if (life != null && life.IsTargetable())
-            {
-                StartCoroutine(ClingAndExplode(col.attachedRigidbody));
-            }
+            StartCoroutine(ClingAndExplode(player.GetComponent<Rigidbody2D>()));
         }
     }
 
@@ -164,5 +140,9 @@ public class GardenGnome : EnemyBase
             player = playerObj.transform;
             playerLife = life;
         }
+    }
+
+    protected override void ProcessMovement()
+    {
     }
 }

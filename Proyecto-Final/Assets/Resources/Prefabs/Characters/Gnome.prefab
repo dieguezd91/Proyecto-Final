@@ -4997,12 +4997,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
-  overrideDataValues: 1
-  moveSpeedOverride: 4
-  detectionRangeOverride: 20
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
+  animator: {fileID: 0}
+  currentTargetType: none
+  isDead: 0
+  isCurrentlyAttacking: 0
+  nextAttackTime: 0
+  attackCooldown: 0
   gnomeData: {fileID: 11400000, guid: 271b7f031505943428b1975ff9d24b31, type: 2}
   playerLayerMask:
     serializedVersion: 2
