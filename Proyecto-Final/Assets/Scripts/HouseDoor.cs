@@ -18,8 +18,6 @@ public class HouseDoor : MonoBehaviour
     private bool canEnterAtNight = true;
     private LevelManager levelManager;
 
-
-
     private void Awake()
     {
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
@@ -28,10 +26,48 @@ public class HouseDoor : MonoBehaviour
     private void Start()
     {
         levelManager = LevelManager.Instance;
+
         if (insideCollider != null) insideCollider.isTrigger = false;
         if (outsideCollider != null) outsideCollider.isTrigger = false;
 
+        if (levelManager != null)
+        {
+            levelManager.OnGameStateChanged += OnGameStateChanged;
+        }
+
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged += OnWorldStateChanged;
+        }
+
         UpdateDoorColliders();
+    }
+
+    private void OnDestroy()
+    {
+        if (levelManager != null)
+        {
+            levelManager.OnGameStateChanged -= OnGameStateChanged;
+        }
+
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged -= OnWorldStateChanged;
+        }
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        if (newState == GameState.Day || newState == GameState.Digging)
+        {
+            canEnterAtNight = true;
+        }
+    }
+
+    private void OnWorldStateChanged(WorldState newWorldState)
+    {
+        bool isInInterior = (newWorldState == WorldState.Interior);
+        UpdateDoorColliders(isInInterior);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -41,16 +77,17 @@ public class HouseDoor : MonoBehaviour
         if (Time.time - lastUseTime < cooldown) return;
 
         player = other.transform;
-
         bool goingInside = !worldTransition.IsInInterior;
 
-        if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
-            canEnterAtNight = false;
-
         if (goingInside && levelManager.GetCurrentGameState() == GameState.Night && !canEnterAtNight)
+        {
             return;
+        }
 
-        
+        if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
+        {
+            canEnterAtNight = false;
+        }
 
         HandleTransition(goingInside);
         lastUseTime = Time.time;
@@ -69,8 +106,6 @@ public class HouseDoor : MonoBehaviour
             worldTransition.EnterHouse();
         else
             worldTransition.ExitHouse();
-
-        UpdateDoorColliders(goingInside);
     }
 
     private void UpdateDoorColliders()
