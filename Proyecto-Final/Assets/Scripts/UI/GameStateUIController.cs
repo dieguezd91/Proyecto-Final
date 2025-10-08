@@ -140,7 +140,7 @@ public class GameStateUIController : UIControllerBase
             lastState = LevelManager.Instance.currentGameState;
 
         UIManager.Instance?.OpenInventoryOptions();
-
+        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
