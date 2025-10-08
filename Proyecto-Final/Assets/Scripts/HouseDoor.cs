@@ -62,7 +62,12 @@ public class HouseDoor : MonoBehaviour
         {
             canEnterAtNight = true;
         }
+        else if (newState == GameState.Night)
+        {
+            canEnterAtNight = false;
+        }
     }
+
 
     private void OnWorldStateChanged(WorldState newWorldState)
     {
@@ -79,10 +84,11 @@ public class HouseDoor : MonoBehaviour
         player = other.transform;
         bool goingInside = !worldTransition.IsInInterior;
 
-        if (goingInside && levelManager.GetCurrentGameState() == GameState.Night && !canEnterAtNight)
+        if (goingInside && !canEnterAtNight)
         {
             return;
         }
+
 
         if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
         {
