@@ -222,8 +222,8 @@ BoxCollider2D:
   m_Offset: {x: -0.42054462, y: -0.7973952}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5, y: 5}
+    pivot: {x: 0.46875, y: 0.49206352}
+    oldSize: {x: 4, y: 3.9375}
     newSize: {x: 2.5416667, y: 2.0833333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -280,12 +280,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7905766180791579066}
-  overrideDataValues: 1
-  moveSpeedOverride: 3
-  detectionRangeOverride: 20
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
+  animator: {fileID: 0}
+  currentTargetType: none
+  isDead: 0
+  isCurrentlyAttacking: 0
+  nextAttackTime: 0
+  attackCooldown: 0
   bossData: {fileID: 11400000, guid: 17c65fa8ea6edba4c88d8f7a054a55d5, type: 2}
   attackPoint: {fileID: 324195009587380907}
   minionSpawnPoints:
@@ -329,37 +332,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steps:
-    clips: []
-    volume: 1
-    pitch: 1
-    pitchVariation: 0.1
+    clips:
+    - {fileID: 8300000, guid: f822e50e9d1b9e945875c9a94eac7876, type: 3}
+    - {fileID: 8300000, guid: 823d9bf6673b1de49a49383e575ffa4e, type: 3}
+    - {fileID: 8300000, guid: 39dd00b031b978a42a126512242e7e67, type: 3}
+    volume: 0.5
+    pitch: 0.8
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   spawning:
     clips:
-    - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: 1122d5de4a766e945b40a895050f9fae, type: 3}
+    volume: 1
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0
     loop: 0
-    randomizeClip: 1
+    randomizeClip: 0
     cooldownTime: 0
   die:
     clips:
-    - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
+    - {fileID: 8300000, guid: ce021b29e26b68a47bd521ddd964a98b, type: 3}
     volume: 0.5
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0
     loop: 0
-    randomizeClip: 1
+    randomizeClip: 0
     cooldownTime: 0
   hurt:
     clips:
-    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
-    volume: 0.5
-    pitch: 1
-    pitchVariation: 0.2
+    - {fileID: 8300000, guid: 0f9157d11f0fc8d408c32bb56591106c, type: 3}
+    volume: 0.75
+    pitch: 0.9
+    pitchVariation: 0.1
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
@@ -373,9 +379,9 @@ MonoBehaviour:
     cooldownTime: 0
   attack:
     clips:
-    - {fileID: 0}
+    - {fileID: 8300000, guid: 347b0656243ed834fb48f5a46133f80b, type: 3}
     volume: 1
-    pitch: 1
+    pitch: 0.8
     pitchVariation: 0.1
     loop: 0
     randomizeClip: 1
