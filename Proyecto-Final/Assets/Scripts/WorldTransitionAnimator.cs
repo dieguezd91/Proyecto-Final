@@ -78,6 +78,11 @@ public class WorldTransitionAnimator : MonoBehaviour
         ChangeState(stateBeforeInterior, true);
     }
 
+    public void SetStateBeforeInterior(WorldState state)
+    {
+        stateBeforeInterior = state;
+    }
+
     public void ForceDayMode()
     {
         ChangeState(WorldState.Day, false);
