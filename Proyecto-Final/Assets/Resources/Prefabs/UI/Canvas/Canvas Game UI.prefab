@@ -417,6 +417,10 @@ MonoBehaviour:
   dayControlPanel: {fileID: 0}
   abilityPanel: {fileID: 4712039638697272631}
   _pauseMenuController: {fileID: 1300175472483836207}
+  blurVolume: {fileID: 5043354215121152214}
+  showTransitionDuration: 1
+  hideTransitionDuration: 0.8
+  maxFocalLength: 200
 --- !u!1 &6127287287326918946
 GameObject:
   m_ObjectHideFlags: 0

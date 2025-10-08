@@ -21,6 +21,16 @@ public class GameStateUIController : UIControllerBase
     private PlayerController playerController;
     [SerializeField] private PauseMenuController _pauseMenuController;
 
+    [Header("Blur Settings")]
+    [SerializeField] private UnityEngine.Rendering.Volume blurVolume;
+    [SerializeField] private float showTransitionDuration = 0.5f;
+    [SerializeField] private float hideTransitionDuration = 0.8f;
+    [SerializeField] private float maxFocalLength = 200f;
+
+    private UnityEngine.Rendering.Universal.DepthOfField dof;
+    private Coroutine blurTransition;
+    private bool isHiding = false;
+
     public bool IsInstructionsOpen => isInstructionsOpen;
     public GameState LastState => lastState;
 
@@ -38,6 +48,13 @@ public class GameStateUIController : UIControllerBase
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (instructionsPanel != null) { instructionsPanel.SetActive(false); isInstructionsOpen = false; }
         if (pausePanel != null) pausePanel.SetActive(true);
+
+        if (blurVolume != null && blurVolume.profile.TryGet(out dof))
+        {
+            dof.focalLength.overrideState = true;
+            dof.focalLength.value = 0f;
+        }
+
 
         if (LevelManager.Instance != null)
         {
@@ -144,21 +161,24 @@ public class GameStateUIController : UIControllerBase
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
+        if (blurTransition != null) StopCoroutine(blurTransition);
+        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength, showTransitionDuration));
+
         if (HUD != null) HUD.SetActive(false);
         if (playerController != null) playerController.SetMovementEnabled(false);
     }
 
-    private void CloseInventoryAndResume()
-    {
-        UIManager.Instance?.CloseInventory();
+    //private void CloseInventoryAndResume()
+    //{
+    //    UIManager.Instance?.CloseInventory();
 
-        if (playerController != null) playerController.SetMovementEnabled(true);
-        if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
+    //    if (playerController != null) playerController.SetMovementEnabled(true);
+    //    if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
 
-        GameManager.Instance?.ResumeGame();
-        if (LevelManager.Instance != null && lastState != GameState.None)
-            LevelManager.Instance.SetGameState(lastState);
-    }
+    //    GameManager.Instance?.ResumeGame();
+    //    if (LevelManager.Instance != null && lastState != GameState.None)
+    //        LevelManager.Instance.SetGameState(lastState);
+    //}
 
     private void HandleGameOverState()
     {
@@ -282,32 +302,34 @@ public class GameStateUIController : UIControllerBase
 
     protected override void CleanupEventListeners() { }
 
-    public void PauseGame()
-    {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
-            lastState = LevelManager.Instance.currentGameState;
+    //public void PauseGame()
+    //{
+    //    if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
+    //        lastState = LevelManager.Instance.currentGameState;
 
-        GameManager.Instance?.PauseGame();
+    //    GameManager.Instance?.PauseGame();
 
-        if (pausePanel != null)
-            pausePanel.SetActive(true);
+    //    if (pausePanel != null)
+    //        pausePanel.SetActive(true);
 
-        if (_pauseMenuController != null)
-        {
-            _pauseMenuController.Show();
-        }
+    //    if (_pauseMenuController != null)
+    //    {
+    //        _pauseMenuController.Show();
+    //    }
 
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.PauseAll();
-            UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
-        }
+    //    if (SoundManager.Instance != null)
+    //    {
+    //        SoundManager.Instance.PauseAll();
+    //        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
+    //    }
 
-        if (HUD != null)
-            HUD.SetActive(false);
+    //    if (HUD != null)
+    //        HUD.SetActive(false);
 
-        LevelManager.Instance?.SetGameState(GameState.Paused);
-    }
+        
+
+    //    LevelManager.Instance?.SetGameState(GameState.Paused);
+    //}
 
     public void ResumeGame()
     {
@@ -331,5 +353,48 @@ public class GameStateUIController : UIControllerBase
 
         if (LevelManager.Instance != null && lastState != GameState.None)
             LevelManager.Instance.SetGameState(lastState);
+
+        if (blurTransition != null) StopCoroutine(blurTransition);
+        blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
     }
+
+    private IEnumerator FadeFocalLength(float target, float duration)
+    {
+        if (dof == null) yield break;
+
+        float start = dof.focalLength.value;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
+            yield return null;
+        }
+
+        dof.focalLength.value = target;
+    }
+
+    private IEnumerator FadeFocalLengthAndDeactivate(float target, float duration)
+    {
+        if (dof == null)
+        {
+            isHiding = false;
+            yield break;
+        }
+
+        float start = dof.focalLength.value;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
+            yield return null;
+        }
+
+        dof.focalLength.value = target;
+        isHiding = false;
+    }
+
 }
