@@ -63,6 +63,8 @@ public class Plant : MonoBehaviour
             lifeController = gameObject.AddComponent<LifeController>();
         }
 
+        ConfigureLifeController();
+
         lifeController.onDeath.AddListener(HandlePlantDeath);
     }
 
@@ -195,8 +197,12 @@ public class Plant : MonoBehaviour
         DeactivatePreMatureParticles();
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         RewardsSystem.Instance?.NotifyPlantDestroyed();
+    }
 
-        Destroy(gameObject);
+    private void ConfigureLifeController()
+    {
+        bool hasAnimation = plantData != null && plantData.hasDeathAnimation;
+        lifeController.ConfigureAsPlant(hasAnimation);
     }
 
     protected virtual void HandleGameStateChanged(GameState newState)

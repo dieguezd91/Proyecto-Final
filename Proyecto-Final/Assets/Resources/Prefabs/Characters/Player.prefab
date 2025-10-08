@@ -5467,6 +5467,7 @@ MonoBehaviour:
     m_Bits: 1024
   digDistance: 2
   digDuration: 1.5
+  digManaCost: 10
   interactionDistance: 2
   progressBar: {fileID: 0}
   progressBarTarget: {fileID: 3535706038251047626}
@@ -5526,6 +5527,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 0
   isPlayer: 1
+  isPlant: 0
   hasDeathAnimation: 1
 --- !u!95 &4502512717715921832
 Animator:
@@ -10984,6 +10986,7 @@ MonoBehaviour:
   - {fileID: 621814907584893523, guid: a8c8ac669b52ab244b3451de8bf64907, type: 3}
   - {fileID: 4645859781768802762, guid: ce7de6a9e31558640a964fa9e9d557e9, type: 3}
   - {fileID: 7707641622477484128, guid: 276d1deb5179f2d40893c5c9a000c88d, type: 3}
+  dayWeatherTypes: 
   weatherParent: {fileID: 7658780563616903740}
 --- !u!1 &8991080770379641568
 GameObject:

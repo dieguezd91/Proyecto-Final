@@ -49,6 +49,7 @@ public class LifeController : MonoBehaviour
     public bool isRespawning = false;
     [SerializeField] private bool isEnemy;
     [SerializeField] private bool isPlayer;
+    [SerializeField] private bool isPlant;
     private Animator animator;
     [SerializeField] private bool hasDeathAnimation;
 
@@ -126,7 +127,6 @@ public class LifeController : MonoBehaviour
         }
     }
 
-
     public virtual void Die()
     {
         if (isDead) return;
@@ -195,6 +195,17 @@ public class LifeController : MonoBehaviour
                 }
             }
         }
+        else if (isPlant)
+        {
+            if (hasDeathAnimation && animator != null && animator.runtimeAnimatorController != null)
+            {
+                animator.SetTrigger("Death");
+            }
+            else
+            {
+                PlantDeath();
+            }
+        }
     }
 
     IEnumerator FlashRoutine()
@@ -236,10 +247,27 @@ public class LifeController : MonoBehaviour
         {
             StartCoroutine(DelayedRevive());
         }
+        else if (isPlant)
+        {
+            PlantDeath();
+        }
         else
         {
             Destroy(gameObject, 1f);
         }
+    }
+
+    private void PlantDeath()
+    {
+        Destroy(gameObject);
+    }
+
+    public void ConfigureAsPlant(bool hasAnimation)
+    {
+        isPlant = true;
+        hasDeathAnimation = hasAnimation;
+        isEnemy = false;
+        isPlayer = false;
     }
 
     private void EnemyDeath()
