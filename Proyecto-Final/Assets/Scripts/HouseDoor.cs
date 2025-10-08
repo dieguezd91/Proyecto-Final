@@ -4,7 +4,6 @@ public class HouseDoor : MonoBehaviour
 {
     [Header("Interaction")]
     [SerializeField] private float cooldown = 0.5f;
-
     [SerializeField] private Collider2D outsideCollider;
     [SerializeField] private Collider2D insideCollider;
 
@@ -15,23 +14,48 @@ public class HouseDoor : MonoBehaviour
     private WorldTransitionAnimator worldTransition;
     private float lastUseTime;
     private Transform player;
-    private bool canEnterAtNight = true;
     private LevelManager levelManager;
-
-
+    [SerializeField] private WarningBubble warningBubble;
+    [SerializeField] private float warningCooldown = 2f;
+    private float lastWarningTime;
 
     private void Awake()
     {
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+
+        if (warningBubble == null)
+        {
+            warningBubble = FindObjectOfType<WarningBubble>();
+        }
     }
 
     private void Start()
     {
         levelManager = LevelManager.Instance;
+
         if (insideCollider != null) insideCollider.isTrigger = false;
         if (outsideCollider != null) outsideCollider.isTrigger = false;
 
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged += OnWorldStateChanged;
+        }
+
         UpdateDoorColliders();
+    }
+
+    private void OnDestroy()
+    {
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged -= OnWorldStateChanged;
+        }
+    }
+
+    private void OnWorldStateChanged(WorldState newWorldState)
+    {
+        bool isInInterior = (newWorldState == WorldState.Interior);
+        UpdateDoorColliders(isInInterior);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -41,16 +65,17 @@ public class HouseDoor : MonoBehaviour
         if (Time.time - lastUseTime < cooldown) return;
 
         player = other.transform;
-
         bool goingInside = !worldTransition.IsInInterior;
 
         if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
-            canEnterAtNight = false;
-
-        if (goingInside && levelManager.GetCurrentGameState() == GameState.Night && !canEnterAtNight)
+        {
+            if (Time.time - lastWarningTime >= warningCooldown)
+            {
+                warningBubble.ShowMessage("I can't hide! I must protect the tree house!", 1f);
+                lastWarningTime = Time.time;
+            }
             return;
-
-        
+        }
 
         HandleTransition(goingInside);
         lastUseTime = Time.time;
@@ -69,8 +94,6 @@ public class HouseDoor : MonoBehaviour
             worldTransition.EnterHouse();
         else
             worldTransition.ExitHouse();
-
-        UpdateDoorColliders(goingInside);
     }
 
     private void UpdateDoorColliders()

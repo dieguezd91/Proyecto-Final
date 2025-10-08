@@ -51,7 +51,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private bool initialized = false;
 
-
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()

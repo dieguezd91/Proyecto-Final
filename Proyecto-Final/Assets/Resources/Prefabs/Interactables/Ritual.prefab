@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &236877585525589307
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7922137150472840030}
+  m_Layer: 0
+  m_Name: TeleportDestination
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7922137150472840030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236877585525589307}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -8.602185, z: 0}
+  m_LocalScale: {x: 1.1458428, y: 1.1458428, z: 1.1458428}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1967797365600204590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &911321804086649782
 GameObject:
   m_ObjectHideFlags: 0
@@ -33,6 +64,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7922137150472840030}
   - {fileID: 2661708976545011783}
   - {fileID: 1653289436270728460}
   - {fileID: 6372257809296615446}
@@ -152,6 +184,9 @@ MonoBehaviour:
   ritualDuration: 3
   canTransitionToNight: 1
   canRestoreHealth: 1
+  teleportAfterRitual: 1
+  teleportDestination: {fileID: 7922137150472840030}
+  teleportDelay: 0.5
   candleLights:
   - {fileID: 4922927767286658229}
   - {fileID: 724081456883087910}
@@ -181,6 +216,22 @@ MonoBehaviour:
   interactionPromptCanvas: {fileID: 2397451930450104851}
   interactionKey: 102
   hidePromptDuringInteraction: 1
+  interactSound:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  completeSound:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1 &2197889082941499086
 GameObject:
   m_ObjectHideFlags: 0
