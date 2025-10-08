@@ -78,7 +78,7 @@ public class WorldTransitionAnimator : MonoBehaviour
         ChangeState(stateBeforeInterior, true);
     }
 
-    public void SetStateBeforeInterior(WorldState state)
+    public void SetState(WorldState state)
     {
         stateBeforeInterior = state;
     }

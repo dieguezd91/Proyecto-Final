@@ -16,8 +16,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     [Header("Visual Effects")]
     [SerializeField] private Light2D[] candleLights;
-
-    [Header("Colors & Materials")]
     [SerializeField] private Color candleColor = new Color(0.7f, 0.3f, 1f);
 
     [Header("Candle Settings")]
@@ -26,28 +24,53 @@ public class RitualAltar : MonoBehaviour, IInteractable
     [SerializeField] private float candleIgnitionDelay = 0.3f;
 
     [Header("Post Processing")]
-    [SerializeField] private float ritualVignetteIntensity;
+    [SerializeField] private float ritualVignetteIntensity = 0.6f;
     [SerializeField] private bool centerVignetteOnPlayer = true;
+    [SerializeField] private float vignetteFadeDuration = 1.5f;
 
     [Header("Sprite Change")]
     [SerializeField] private SpriteRenderer altarSpriteRenderer;
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private Sprite nearSprite;
 
-    private bool isPerformingRitual = false;
+    private const float DAY_VIGNETTE_INTENSITY = 0.15f;
+    private const float NIGHT_VIGNETTE_INTENSITY = 0.45f;
+    private const float RITUAL_LIGHT_DIM = 0.05f;
+    private const float RITUAL_PULSE_SPEED = 1.5f;
+
+    [Header ("References")]
     private LevelManager levelManager;
     private LifeController playerLife;
     private DayNightLightController lightController;
     private GameObject player;
     private Camera mainCamera;
-    private Vector2 originalVignetteCenter;
     private WorldTransitionAnimator worldTransition;
+    private Vignette vignetteComponent;
+
+    private bool isPerformingRitual = false;
+    private Coroutine mainRitualCoroutine;
 
     private void Start()
     {
+        CacheReferences();
+        InitializeComponents();
+    }
+
+    private void OnEnable()
+    {
+        SubscribeToEvents();
+    }
+
+    private void OnDisable()
+    {
+        UnsubscribeFromEvents();
+    }
+
+    private void CacheReferences()
+    {
         levelManager = LevelManager.Instance;
 
-        if (levelManager != null && levelManager.playerLife != null)
+        if (levelManager?.playerLife != null)
         {
             playerLife = levelManager.playerLife;
             player = playerLife.gameObject;
@@ -56,19 +79,33 @@ public class RitualAltar : MonoBehaviour, IInteractable
         lightController = FindObjectOfType<DayNightLightController>();
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         mainCamera = Camera.main;
+    }
 
-        VerifyVignetteSetup();
+    private void InitializeComponents()
+    {
+        SetupVignette();
         TurnOffAllCandles();
         UpdateAltarAppearance();
     }
 
-    private void OnEnable()
+    private void SetupVignette()
+    {
+        if (lightController?.globalVolume == null) return;
+
+        if (lightController.globalVolume.profile.TryGet<Vignette>(out vignetteComponent))
+        {
+            vignetteComponent.center.overrideState = true;
+            vignetteComponent.intensity.overrideState = true;
+        }
+    }
+
+    private void SubscribeToEvents()
     {
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
     }
 
-    private void OnDisable()
+    private void UnsubscribeFromEvents()
     {
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
@@ -77,12 +114,16 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void HandleGameStateChanged(GameState newState)
     {
         if (isPerformingRitual && newState != GameState.OnRitual)
+        {
             ForceStopRitual();
+        }
     }
 
     public void Interact()
     {
-        StartCoroutine(PerformRitualCoroutine());
+        if (!CanInteract()) return;
+
+        mainRitualCoroutine = StartCoroutine(PerformRitual());
     }
 
     public bool CanInteract()
@@ -90,75 +131,65 @@ public class RitualAltar : MonoBehaviour, IInteractable
         if (isPerformingRitual || levelManager == null || playerLife == null)
             return false;
 
-        GameState currentState = levelManager.GetCurrentGameState();
-        return currentState == GameState.Digging ||
-               currentState == GameState.Planting ||
-               currentState == GameState.Harvesting ||
-               currentState == GameState.Removing;
+        return IsValidGameStateForRitual(levelManager.GetCurrentGameState());
     }
 
-    private IEnumerator PerformRitualCoroutine()
+    private bool IsValidGameStateForRitual(GameState state)
     {
-        isPerformingRitual = true;
-        GameState previousState = levelManager.GetCurrentGameState();
-        levelManager.SetGameState(GameState.OnRitual);
+        return state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing;
+    }
 
-        StartRitualEffects();
-
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.ShowRitualOverlay();
-        }
+    private IEnumerator PerformRitual()
+    {
+        BeginRitual();
 
         yield return new WaitForSeconds(ritualDuration);
 
-        ApplyRitualEffects();
+        yield return CompleteRitual();
 
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.HideRitualOverlay();
-            yield return new WaitForSeconds(0.1f);
-        }
+        EndRitual();
+    }
 
-        if (teleportAfterRitual && teleportDestination != null && player != null)
+    private void BeginRitual()
+    {
+        isPerformingRitual = true;
+        levelManager.SetGameState(GameState.OnRitual);
+
+        StartRitualEffects();
+        UIManager.Instance?.ShowRitualOverlay();
+    }
+
+    private IEnumerator CompleteRitual()
+    {
+        ApplyRitualBenefits();
+
+        UIManager.Instance?.HideRitualOverlay();
+        yield return new WaitForSeconds(0.1f);
+
+        if (ShouldTeleportPlayer())
         {
-            yield return StartCoroutine(TeleportPlayerOutside());
+            yield return TeleportPlayer();
         }
 
         if (canTransitionToNight)
         {
             levelManager.TransitionToNight();
         }
+    }
 
+    private void EndRitual()
+    {
         EndRitualEffects();
         isPerformingRitual = false;
+        mainRitualCoroutine = null;
     }
 
-    private IEnumerator TeleportPlayerOutside()
+    private bool ShouldTeleportPlayer()
     {
-        yield return new WaitForSeconds(teleportDelay);
-
-        if (worldTransition != null && worldTransition.IsInInterior)
-        {
-            SetStateBeforeInterior(WorldState.Night);
-
-            player.transform.position = teleportDestination.position;
-
-            worldTransition.ExitHouse();
-        }
-        else
-        {
-            player.transform.position = teleportDestination.position;
-        }
-
-        yield return new WaitForSeconds(0.2f);
-    }
-
-    private void SetStateBeforeInterior(WorldState state)
-    {
-        if (worldTransition == null) return;
-
-        worldTransition.SetStateBeforeInterior(state);
+        return teleportAfterRitual && teleportDestination != null && player != null;
     }
 
     private void StartRitualEffects()
@@ -167,17 +198,42 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (centerVignetteOnPlayer)
         {
-            StartCoroutine(UpdateVignetteCenterDuringRitual());
+            StartCoroutine(UpdateVignetteContinuously());
         }
+    }
+
+    private void EndRitualEffects()
+    {
+        SoundManager.Instance?.Play("CandleOff");
+
+        StartCoroutine(ExtinguishCandlesGradually());
+        StartCoroutine(RestoreVignetteCoroutine());
+
+        if (lightController != null)
+        {
+            lightController.RestoreLightAfterRitual(GameState.Night, vignetteFadeDuration);
+        }
+
+        UpdateAltarAppearance();
+    }
+
+    private void ApplyRitualBenefits()
+    {
+        if (!canRestoreHealth || playerLife == null) return;
+
+        playerLife.currentHealth = playerLife.maxHealth;
+        playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
+
+        levelManager.uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
     }
 
     private IEnumerator RitualLightingSequence()
     {
-        Coroutine vignetteCoroutine = StartCoroutine(ApplyRitualVignetteCoroutine());
-        lightController?.DimLightForRitual(0.05f, 1.5f);
+        StartCoroutine(ApplyRitualVignette());
+        lightController?.DimLightForRitual(RITUAL_LIGHT_DIM, vignetteFadeDuration);
 
-        yield return new WaitForSeconds(1.5f);
-        yield return StartCoroutine(LightCandlesSequentially());
+        yield return new WaitForSeconds(vignetteFadeDuration);
+        yield return LightCandlesSequentially();
     }
 
     private IEnumerator LightCandlesSequentially()
@@ -186,15 +242,21 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         for (int i = 0; i < candleLights.Length; i++)
         {
-            if (candleLights[i] != null)
-            {
-                candleLights[i].gameObject.SetActive(true);
-                candleLights[i].color = candleColor;
-                SoundManager.Instance.Play("CandleOn");
-                StartCoroutine(FlickerCandle(candleLights[i], i));
-            }
+            IgniteCandle(i);
             yield return new WaitForSeconds(candleIgnitionDelay);
         }
+    }
+
+    private void IgniteCandle(int index)
+    {
+        if (candleLights[index] == null) return;
+
+        Light2D candle = candleLights[index];
+        candle.gameObject.SetActive(true);
+        candle.color = candleColor;
+
+        SoundManager.Instance?.Play("CandleOn");
+        StartCoroutine(FlickerCandle(candle, index));
     }
 
     private IEnumerator FlickerCandle(Light2D candle, int candleIndex)
@@ -203,107 +265,21 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         float originalIntensity = candle.intensity;
         float randomOffset = candleIndex * 0.5f;
+        float maxDuration = ritualDuration - (candleIndex * candleIgnitionDelay);
         float elapsed = 0f;
 
-        while (elapsed < ritualDuration - (candleIndex * candleIgnitionDelay))
+        while (elapsed < maxDuration && isPerformingRitual)
         {
             elapsed += Time.deltaTime;
 
             float flicker = Mathf.Sin((elapsed + randomOffset) * candleFlickerSpeed) * candleFlickerAmount;
-            float ritualPulse = Mathf.PingPong(elapsed * 1.5f, 1f) * 0.5f;
+            float ritualPulse = Mathf.PingPong(elapsed * RITUAL_PULSE_SPEED, 1f) * 0.5f;
 
             candle.intensity = originalIntensity + flicker + ritualPulse;
             yield return null;
         }
+
         candle.intensity = originalIntensity;
-    }
-
-    private void ApplyRitualEffects()
-    {
-        if (canRestoreHealth && playerLife != null)
-        {
-            playerLife.currentHealth = playerLife.maxHealth;
-            playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
-
-            if (levelManager.uiManager != null)
-            {
-                levelManager.uiManager.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-            }
-        }
-    }
-
-    private IEnumerator ApplyRitualVignetteCoroutine()
-    {
-        if (lightController == null || lightController.globalVolume == null) yield break;
-
-        if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
-        {
-            vignetteComponent.center.overrideState = true;
-            vignetteComponent.intensity.overrideState = true;
-
-            originalVignetteCenter = vignetteComponent.center.value;
-
-            float current = vignetteComponent.intensity.value;
-            float duration = 1.5f;
-
-            if (centerVignetteOnPlayer && player != null && mainCamera != null)
-            {
-                Vector3 playerScreenPos = mainCamera.WorldToViewportPoint(player.transform.position);
-                Vector2 vignetteCenter = new Vector2(
-                    Mathf.Clamp01(playerScreenPos.x),
-                    Mathf.Clamp01(playerScreenPos.y)
-                );
-                vignetteComponent.center.value = vignetteCenter;
-            }
-
-            yield return StartCoroutine(AnimateVignetteIntensity(current, ritualVignetteIntensity, duration));
-        }
-    }
-
-    private IEnumerator AnimateVignetteIntensity(float from, float to, float duration)
-    {
-        if (lightController == null || lightController.globalVolume == null) yield break;
-
-        if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
-        {
-            float elapsed = 0f;
-
-            while (elapsed < duration)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / duration;
-                vignetteComponent.intensity.value = Mathf.Lerp(from, to, t);
-                yield return null;
-            }
-
-            vignetteComponent.intensity.value = to;
-        }
-    }
-
-    private void EndRitualEffects()
-    {
-        RestoreCorrectVignette();
-        SoundManager.Instance.Play("CandleOff");
-
-        StartCoroutine(ExtinguishCandlesGradually());
-
-        if (lightController != null)
-            lightController.RestoreLightAfterRitual(GameState.Night, 1.5f);
-
-        UpdateAltarAppearance();
-    }
-
-    private void TurnOffAllCandles()
-    {
-        if (candleLights == null) return;
-
-        foreach (Light2D candle in candleLights)
-        {
-            if (candle != null)
-            {
-                candle.gameObject.SetActive(false);
-            }
-        }
     }
 
     private IEnumerator ExtinguishCandlesGradually()
@@ -323,65 +299,156 @@ public class RitualAltar : MonoBehaviour, IInteractable
         }
     }
 
-    private IEnumerator UpdateVignetteCenterDuringRitual()
+    private void TurnOffAllCandles()
     {
-        if (lightController == null || lightController.globalVolume == null || player == null || mainCamera == null)
-            yield break;
+        if (candleLights == null) return;
 
-        if (!lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
-            yield break;
+        foreach (Light2D candle in candleLights)
+        {
+            if (candle != null)
+            {
+                candle.gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private IEnumerator ApplyRitualVignette()
+    {
+        if (!IsVignetteAvailable()) yield break;
+
+        float currentIntensity = vignetteComponent.intensity.value;
+
+        if (centerVignetteOnPlayer && player != null && mainCamera != null)
+        {
+            CenterVignetteOnPlayer();
+        }
+
+        yield return AnimateVignetteIntensity(currentIntensity, ritualVignetteIntensity, vignetteFadeDuration);
+    }
+
+    private void CenterVignetteOnPlayer()
+    {
+        Vector3 playerScreenPos = mainCamera.WorldToViewportPoint(player.transform.position);
+        vignetteComponent.center.value = new Vector2(
+            Mathf.Clamp01(playerScreenPos.x),
+            Mathf.Clamp01(playerScreenPos.y)
+        );
+    }
+
+    private IEnumerator UpdateVignetteContinuously()
+    {
+        if (!IsVignetteAvailable() || player == null || mainCamera == null) yield break;
 
         while (isPerformingRitual)
         {
-            Vector3 playerScreenPos = mainCamera.WorldToViewportPoint(player.transform.position);
-
-            Vector2 vignetteCenter = new Vector2(
-                Mathf.Clamp01(playerScreenPos.x),
-                Mathf.Clamp01(playerScreenPos.y)
-            );
-            vignetteComponent.center.value = vignetteCenter;
-
+            CenterVignetteOnPlayer();
             yield return null;
         }
     }
 
-    private void VerifyVignetteSetup()
+    private IEnumerator AnimateVignetteIntensity(float from, float to, float duration)
     {
-        if (lightController == null || lightController.globalVolume == null) return;
+        if (!IsVignetteAvailable()) yield break;
 
-        if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            vignetteComponent.center.overrideState = true;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            vignetteComponent.intensity.value = Mathf.Lerp(from, to, t);
+            yield return null;
         }
+
+        vignetteComponent.intensity.value = to;
     }
 
-    private void RestoreCorrectVignette()
+    private IEnumerator RestoreVignetteCoroutine()
     {
-        if (lightController == null || lightController.globalVolume == null) return;
+        if (!IsVignetteAvailable()) yield break;
 
-        if (lightController.globalVolume.profile.TryGet<Vignette>(out var vignetteComponent))
+        float targetIntensity = GetVignetteIntensityForState(levelManager.GetCurrentGameState());
+
+        vignetteComponent.center.value = new Vector2(0.5f, 0.5f);
+        yield return AnimateVignetteIntensity(vignetteComponent.intensity.value, targetIntensity, 1f);
+    }
+
+    private void RestoreVignetteImmediate()
+    {
+        if (!IsVignetteAvailable()) return;
+
+        GameState currentState = levelManager?.GetCurrentGameState() ?? GameState.Day;
+        float targetIntensity = GetVignetteIntensityForState(currentState);
+
+        vignetteComponent.center.value = new Vector2(0.5f, 0.5f);
+        vignetteComponent.intensity.value = targetIntensity;
+    }
+
+    private float GetVignetteIntensityForState(GameState state)
+    {
+        return state == GameState.Night ? NIGHT_VIGNETTE_INTENSITY : DAY_VIGNETTE_INTENSITY;
+    }
+
+    private bool IsVignetteAvailable()
+    {
+        return lightController != null &&
+               lightController.globalVolume != null &&
+               vignetteComponent != null;
+    }
+
+    private IEnumerator TeleportPlayer()
+    {
+        yield return new WaitForSeconds(teleportDelay);
+
+        if (worldTransition != null && worldTransition.IsInInterior)
         {
-            bool isNight = levelManager.GetCurrentGameState() == GameState.Night;
-            float targetVignette = isNight ? 0.45f : 0.15f;
-
-            vignetteComponent.center.value = new Vector2(0.5f, 0.5f);
-            StartCoroutine(AnimateVignetteIntensity(vignetteComponent.intensity.value, targetVignette, 1f));
+            worldTransition.SetState(WorldState.Night);
+            player.transform.position = teleportDestination.position;
+            worldTransition.ExitHouse();
         }
+        else
+        {
+            player.transform.position = teleportDestination.position;
+        }
+
+        yield return new WaitForSeconds(0.2f);
     }
 
     public void ForceStopRitual()
     {
-        StopAllCoroutines();
-        isPerformingRitual = false;
-        TurnOffAllCandles();
-        RestoreCorrectVignette();
+        StopRitualCoroutine();
+        CleanupRitualState();
+        RestoreEnvironment();
+    }
 
-        if (UIManager.Instance != null)
+    private void StopRitualCoroutine()
+    {
+        if (mainRitualCoroutine != null)
         {
-            UIManager.Instance.HideRitualOverlay();
+            StopCoroutine(mainRitualCoroutine);
+            mainRitualCoroutine = null;
         }
 
+        StopAllCoroutines();
+    }
+
+    private void CleanupRitualState()
+    {
+        isPerformingRitual = false;
+        TurnOffAllCandles();
+        UIManager.Instance?.HideRitualOverlay();
         UpdateAltarAppearance();
+    }
+
+    private void RestoreEnvironment()
+    {
+        RestoreVignetteImmediate();
+
+        if (lightController != null)
+        {
+            GameState currentState = levelManager?.GetCurrentGameState() ?? GameState.Day;
+            lightController.RestoreLightAfterRitual(currentState, 0.5f);
+        }
     }
 
     private void UpdateAltarAppearance()
