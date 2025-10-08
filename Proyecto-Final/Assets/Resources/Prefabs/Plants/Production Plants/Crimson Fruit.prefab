@@ -154,6 +154,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 0
   isPlayer: 0
+  isPlant: 1
   hasDeathAnimation: 1
 --- !u!61 &6625974310736771145
 BoxCollider2D:
@@ -191,7 +192,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.25}
-    oldSize: {x: 1.1, y: 1.6}
+    oldSize: {x: 1.375, y: 2}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -236,7 +237,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.25}
-    oldSize: {x: 1.1, y: 1.6}
+    oldSize: {x: 1.375, y: 2}
     newSize: {x: 1, y: 2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

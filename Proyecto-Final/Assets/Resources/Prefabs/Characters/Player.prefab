@@ -5611,6 +5611,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 0
   isPlayer: 1
+  isPlant: 0
   hasDeathAnimation: 1
 --- !u!95 &4502512717715921832
 Animator:
