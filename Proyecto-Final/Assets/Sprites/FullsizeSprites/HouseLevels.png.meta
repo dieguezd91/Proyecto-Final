@@ -367,90 +367,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HouseRoof5HD
-      rect:
-        serializedVersion: 2
-        x: 686
-        y: 371
-        width: 324
-        height: 301
-      alignment: 9
-      pivot: {x: 0.5, y: 0.461794}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 80f532226ff2efb4ab5c105548984af5
-      internalID: -1709602296
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HouseFront5HD
-      rect:
-        serializedVersion: 2
-        x: 686
-        y: 336
-        width: 324
-        height: 35
-      alignment: 9
-      pivot: {x: 0.5, y: 4.971428}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 578b3b246bb8c36489988abec7347185
-      internalID: -772091685
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HouseDestroyedFront
-      rect:
-        serializedVersion: 2
-        x: 1022
-        y: 336
-        width: 324
-        height: 35
-      alignment: 9
-      pivot: {x: 0.5, y: 4.9714284}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 969d3cf6efd645c40912d2880bc1ccd5
-      internalID: -278929917
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: HouseDestroyedRoof
-      rect:
-        serializedVersion: 2
-        x: 1022
-        y: 371
-        width: 324
-        height: 301
-      alignment: 9
-      pivot: {x: 0.5, y: 0.461794}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 16556d4f207d0cd4a8da552b80188292
-      internalID: 1090224669
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: HouseMaterial
       rect:
         serializedVersion: 2
@@ -642,6 +558,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TreeVisible2
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 10
+        width: 210
+        height: 112
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4642857}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21d216b9fcb18be499bbd321c5baaf4f
+      internalID: -1871740732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeVisible1
+      rect:
+        serializedVersion: 2
+        x: 1103
+        y: 108
+        width: 216
+        height: 404
+      alignment: 9
+      pivot: {x: 0.5, y: -0.11386139}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fb06b03faf3be9478fdd1f5d95a04e7
+      internalID: 590317391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -675,6 +633,8 @@ TextureImporter:
       HouseRoof5HD: -1709602296
       HouseRoof5MD: -587759188
       TreeHouse: 75001168
+      TreeVisible1: 590317391
+      TreeVisible2: -1871740732
       Treehouse2: 168282690
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
