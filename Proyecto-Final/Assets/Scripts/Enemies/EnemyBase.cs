@@ -273,20 +273,20 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected void PlaySpawnSound()
     {
-        soundBase?.PlaySound(EnemySoundType.Spawning, EnemySoundBase.SoundSourceType.Localized, transform);
+        soundBase?.PlaySound(EnemySoundType.Spawning, SoundSourceType.Localized, transform);
     }
 
     protected void PlayFootstepSound()
     {
         if (Time.time - lastFootstepTime < footstepCooldown) return;
 
-        soundBase?.PlaySound(EnemySoundType.Steps, EnemySoundBase.SoundSourceType.Localized, transform);
+        soundBase?.PlaySound(EnemySoundType.Steps, SoundSourceType.Localized, transform);
         lastFootstepTime = Time.time;
     }
 
     protected virtual void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        soundBase?.PlaySound(EnemySoundType.Hurt, EnemySoundBase.SoundSourceType.Localized, transform);
+        soundBase?.PlaySound(EnemySoundType.Hurt, SoundSourceType.Localized, transform);
     }
 
     public virtual void MarkAsDead()
@@ -297,7 +297,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
 
-        soundBase?.PlaySound(EnemySoundType.Die, EnemySoundBase.SoundSourceType.Localized, transform);
+        soundBase?.PlaySound(EnemySoundType.Die, SoundSourceType.Localized, transform);
 
         animator.SetTrigger("Death");
         StateMachine.ChangeState<EnemyDeadState>();
