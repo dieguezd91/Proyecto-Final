@@ -16,7 +16,6 @@ public class Boss : EnemyBase
     private float specialRadius;
     private int meleeDamage;
     private int specialDamage;
-    private float attackCooldown;
     private float meleeDelay;
     private float specialDelay;
     private GameObject minionPrefab;
@@ -44,7 +43,7 @@ public class Boss : EnemyBase
             specialRadius = bossData.SpecialRadius;
             meleeDamage = bossData.MeleeDamage;
             specialDamage = bossData.SpecialDamage;
-            attackCooldown = bossData.AttackCooldown;
+            attackCooldown = bossData.AttackCooldown; // Use inherited field
             meleeDelay = bossData.MeleeDelay;
             specialDelay = bossData.SpecialDelay;
             minionPrefab = bossData.MinionPrefab;
