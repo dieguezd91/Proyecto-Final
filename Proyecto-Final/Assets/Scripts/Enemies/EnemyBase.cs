@@ -4,6 +4,10 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 {
     [Header("Visual")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
+    [SerializeField] protected bool hasDetectedDefaultFacing = false;
+    [SerializeField] protected bool facesRightByDefault = false;
+    [SerializeField] private bool invertSpriteDirectionForBoss = false;
+
 
     protected float playerPriority;
     protected float plantPriority;
@@ -50,16 +54,19 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        InitializeEnemy();
-        PlaySpawnSound();
-
         StateMachine = new StateMachine();
+
         StateMachine.RegisterState(new EnemyIdleState(this));
         StateMachine.RegisterState(new EnemyChaseState(this));
         StateMachine.RegisterState(new EnemyAttackState(this));
         StateMachine.RegisterState(new EnemyDeadState(this));
-
         StateMachine.ChangeState<EnemyIdleState>();
+
+
+        InitializeEnemy();
+        PlaySpawnSound();
+
+        
     }
 
     protected virtual void Update()
@@ -262,8 +269,25 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected void UpdateSpriteDirection(Vector2 direction)
     {
         if (Mathf.Abs(direction.x) < 0.1f) return;
-        spriteRenderer.flipX = direction.x > 0;
+
+        if (!hasDetectedDefaultFacing)
+        {
+            facesRightByDefault = !spriteRenderer.flipX;
+            hasDetectedDefaultFacing = true;
+        }
+
+        bool movingRight = direction.x > 0;
+        bool shouldFlip = false;
+
+        if (facesRightByDefault)
+            shouldFlip = !movingRight;
+        else
+            shouldFlip = movingRight;
+
+        spriteRenderer.flipX = shouldFlip;
     }
+
+
 
     protected virtual void SetMovementAnimation(bool isMoving)
     {

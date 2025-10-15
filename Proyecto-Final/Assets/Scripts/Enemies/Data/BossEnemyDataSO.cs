@@ -8,13 +8,13 @@ public class BossEnemyDataSO : EnemyDataSO
 
     [Header("Combat")]
     [SerializeField] private float minAttackDistance = 1.5f;
-    [SerializeField] private float meleeRadius = 1.2f;
-    [SerializeField] private float specialRadius = 2.5f;
-    [SerializeField] private int meleeDamage = 10;
+    [SerializeField] public float meleeRadius = 1.2f;
+    [SerializeField] public float specialRadius = 2.5f;
+    [SerializeField] public int meleeDamage = 10;
     [SerializeField] private int specialDamage = 20;
-    [SerializeField] private float attackCooldown = 1f;
-    [SerializeField] private float meleeDelay = 0.5f;
-    [SerializeField] private float specialDelay = 0.7f;
+    [SerializeField] public float attackCooldown = 1f;
+    [SerializeField] public float meleeDelay = 0.5f;
+    [SerializeField] public float specialDelay = 0.7f;
 
     [Header("Minions")]
     [SerializeField] private GameObject minionPrefab;

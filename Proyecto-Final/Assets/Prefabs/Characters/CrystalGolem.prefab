@@ -151,7 +151,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_Sprite: {fileID: 556223337, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 1
+  m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 2.5416667, y: 2.0833333}
@@ -266,6 +266,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
+  isPlant: 0
   hasDeathAnimation: 0
 --- !u!114 &2274362802430721429
 MonoBehaviour:
@@ -280,10 +281,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7905766180791579066}
+  invertSpriteDirectionForBoss: 1
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
-  animator: {fileID: 0}
+  animator: {fileID: 8102336949729422656}
   currentTargetType: none
   isDead: 0
   isCurrentlyAttacking: 0

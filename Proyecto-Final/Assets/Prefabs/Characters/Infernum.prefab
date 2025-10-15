@@ -303,12 +303,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
-  overrideDataValues: 1
-  moveSpeedOverride: 1
-  detectionRangeOverride: 20
+  hasDetectedDefaultFacing: 1
+  facesRightByDefault: 0
+  invertSpriteDirectionForBoss: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
+  animator: {fileID: 0}
+  currentTargetType: none
+  isDead: 0
+  isCurrentlyAttacking: 0
+  nextAttackTime: 0
+  attackCooldown: 0
   rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
   firingPoint: {fileID: 1303027347511237169}
 --- !u!114 &935879750160187858
@@ -345,6 +351,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
+  isPlant: 0
   hasDeathAnimation: 0
 --- !u!114 &259869561657676236
 MonoBehaviour:
