@@ -30,7 +30,7 @@ MonoBehaviour:
   meleeDamage: 10
   specialDamage: 30
   attackCooldown: 1
-  meleeDelay: 0.6
+  meleeDelay: 0.1
   specialDelay: 1
   minionPrefab: {fileID: 654258422932643597, guid: 37023b10428f5c54694cf40bfcb73928, type: 3}
   minionCount: 6

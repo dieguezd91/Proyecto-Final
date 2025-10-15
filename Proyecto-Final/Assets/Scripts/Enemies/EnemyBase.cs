@@ -50,16 +50,19 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void Start()
     {
-        InitializeEnemy();
-        PlaySpawnSound();
-
         StateMachine = new StateMachine();
+
         StateMachine.RegisterState(new EnemyIdleState(this));
         StateMachine.RegisterState(new EnemyChaseState(this));
         StateMachine.RegisterState(new EnemyAttackState(this));
         StateMachine.RegisterState(new EnemyDeadState(this));
-
         StateMachine.ChangeState<EnemyIdleState>();
+
+
+        InitializeEnemy();
+        PlaySpawnSound();
+
+        
     }
 
     protected virtual void Update()
