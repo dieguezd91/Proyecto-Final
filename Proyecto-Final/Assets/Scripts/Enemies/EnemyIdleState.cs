@@ -25,6 +25,8 @@ public class EnemyIdleState : IState
     public void OnExit() { }
 }
 
+
+
 public class EnemyChaseState : IState
 {
     private readonly EnemyBase enemy;
@@ -77,6 +79,7 @@ public class EnemyChaseState : IState
 
     public void OnExit() => enemy.StopMovement();
 }
+
 
 
 
@@ -153,14 +156,12 @@ public class EnemyAttackState : IState
 
     public void OnUpdate()
     {
-        // 🔹 Si el objetivo está fuera del rango, volver al estado de persecución
         if (enemy.GetDistanceToTarget() > attackRange + 0.5f)
         {
             enemy.StateMachine.ChangeState<EnemyChaseState>();
             return;
         }
 
-        // 🔹 Lógica de ataque continuo solo para el Boss
         if (boss != null && boss.bossData != null)
         {
             if (Time.time >= nextAttackTime && !enemy.isCurrentlyAttacking)
@@ -169,7 +170,6 @@ public class EnemyAttackState : IState
 
                 float distance = enemy.GetDistanceToTarget();
 
-                // Decide el tipo de ataque según la distancia
                 if (distance <= boss.bossData.meleeRadius)
                 {
                     usingSpecialAttack = false;
@@ -186,7 +186,6 @@ public class EnemyAttackState : IState
         }
         else
         {
-            // 🔹 Enemigos normales
             if (Time.time >= nextAttackTime)
             {
                 var method = enemy.GetType().GetMethod("PerformAttack",
@@ -207,11 +206,9 @@ public class EnemyAttackState : IState
 
     private IEnumerator BossMeleeRoutine()
     {
-        // Pequeño delay antes del impacto (sincroniza con animación)
         yield return new WaitForSeconds(0.2f);
         boss.TryStartMeleeAttack();
 
-        // Esperar un poco antes de permitir otro ataque
         yield return new WaitForSeconds(0.3f);
         enemy.isCurrentlyAttacking = false;
     }
@@ -220,7 +217,6 @@ public class EnemyAttackState : IState
     {
         boss.animator.SetTrigger("attackSpecial");
 
-        // Esperar antes de ejecutar el ataque especial
         yield return new WaitForSeconds(specialDelay);
 
         yield return boss.StartCoroutine(boss.PerformSpecialAttack());

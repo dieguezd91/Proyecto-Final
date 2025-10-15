@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
+  hasDetectedDefaultFacing: 1
+  facesRightByDefault: 0
+  invertSpriteDirectionForBoss: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -158,6 +161,7 @@ MonoBehaviour:
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
+  isPlant: 0
   hasDeathAnimation: 1
 --- !u!50 &7254879103260252798
 Rigidbody2D:

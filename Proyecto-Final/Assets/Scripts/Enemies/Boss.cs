@@ -52,16 +52,14 @@ public class Boss : EnemyBase
 
     protected override void Start()
     {
-        base.Start(); // inicializa lo común del EnemyBase
+        base.Start(); 
 
-        // Asegurar que la FSM ya existe
         if (StateMachine == null)
         {
             Debug.LogError("StateMachine es null en Boss!");
             return;
         }
 
-        // Registrar el nuevo estado exclusivo del Boss
         StateMachine.RegisterState(new EnemySpawnMinionState(this));
     }
 
@@ -193,12 +191,10 @@ public class Boss : EnemyBase
         if (isCurrentlyAttacking) yield break;
         isCurrentlyAttacking = true;
 
-        // Detiene movimiento y ejecuta animación especial
         rb.velocity = Vector2.zero;
         animator.SetTrigger("attackSpecial");
         soundBase?.PlaySound(EnemySoundType.Special);
 
-        // Espera antes de aplicar daño
         yield return new WaitForSeconds(bossData.SpecialDelay);
 
         specialDamagedObjects.Clear();
@@ -215,7 +211,6 @@ public class Boss : EnemyBase
         }
 
         isCurrentlyAttacking = false;
-        // Cooldown entre ataques
         yield return new WaitForSeconds(bossData.attackCooldown);
 
     }
@@ -245,18 +240,7 @@ public class Boss : EnemyBase
         } 
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (attackPoint == null || bossData == null) return;
-
-        // Gizmo del ataque cuerpo a cuerpo
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, bossData.meleeRadius);
-
-        // Gizmo del ataque especial
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(attackPoint.position, bossData.specialRadius);
-    }
+    
 
 
 }

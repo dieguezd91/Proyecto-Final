@@ -281,6 +281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 7905766180791579066}
+  invertSpriteDirectionForBoss: 1
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
