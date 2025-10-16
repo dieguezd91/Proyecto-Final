@@ -11,6 +11,8 @@ public class Plant : MonoBehaviour
     [Header("Plant Data")]
     [SerializeField] protected PlantDataSO plantData;
 
+    [SerializeField] private PlantSoundBase _soundBase;
+
     [Header("State")]
     [SerializeField] public int plantingDay;
     [SerializeField] private bool growthCompleted = false;
@@ -31,6 +33,8 @@ public class Plant : MonoBehaviour
     protected PlayerAbilitySystem abilitySystem;
 
     private Collider2D plantCollider;
+
+    public PlantSoundBase SoundBase => _soundBase;
 
     protected virtual void Start()
     {
@@ -195,6 +199,7 @@ public class Plant : MonoBehaviour
     private void HandlePlantDeath()
     {
         DeactivatePreMatureParticles();
+        SoundBase.PlaySound(PlantSoundType.Die, SoundSourceType.Localized, transform);
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         RewardsSystem.Instance?.NotifyPlantDestroyed();
     }

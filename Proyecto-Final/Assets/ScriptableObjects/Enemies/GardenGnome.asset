@@ -24,7 +24,7 @@ MonoBehaviour:
   footstepCooldown: 0.35
   manaDropChance: 0.5
   acceleration: 2
-  stopDistance: 0.5
+  stopDistance: 0.8
   chaseYOffset: 0.5
   clingDuration: 1
   minExplosionDamage: 25

@@ -126,20 +126,20 @@ public class SoundManager : MonoBehaviour
         audioSource.PlayOneShot(sound.clip, sound.volume);
     }
 
-    public void Play(string name, EnemySoundBase.SoundSourceType sourceType = EnemySoundBase.SoundSourceType.Global, Transform parent = null)
+    public void Play(string name, SoundSourceType sourceType = SoundSourceType.Global, Transform parent = null)
     {
         if (!soundLookup.TryGetValue(name, out Sound sound))
         {
             return;
         }
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == sound.clip).ToList();
-        float spatialBlend = (sourceType == EnemySoundBase.SoundSourceType.Global) ? 0f : 0.75f;
+        float spatialBlend = (sourceType == SoundSourceType.Global) ? 0f : 0.75f;
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
             var sourceToRestart = playingSources[0];
             ConfigureAudioSource(sourceToRestart, sound, spatialBlend);
             sourceToRestart.Stop();
-            if (sourceType == EnemySoundBase.SoundSourceType.Global)
+            if (sourceType == SoundSourceType.Global)
             {
                 sourceToRestart.transform.position = Camera.main.transform.position;
             }
@@ -152,7 +152,7 @@ public class SoundManager : MonoBehaviour
         }
         var audioSource = GetAvailableAudioSource();
         ConfigureAudioSource(audioSource, sound, spatialBlend);
-        if (sourceType == EnemySoundBase.SoundSourceType.Global)
+        if (sourceType == SoundSourceType.Global)
         {
             audioSource.transform.position = Vector3.zero;
         }
@@ -256,13 +256,13 @@ public class SoundManager : MonoBehaviour
     /// <summary>
     /// Plays a SoundClipData using the pooling and limiting system.
     /// </summary>
-    public void PlayClip(SoundClipData data, EnemySoundBase.SoundSourceType sourceType = EnemySoundBase.SoundSourceType.Global, Transform parent = null)
+    public void PlayClip(SoundClipData data, SoundSourceType sourceType = SoundSourceType.Global, Transform parent = null)
     {
         if (data == null) return;
         var clip = data.GetClip();
         if (clip == null) return;
         var playingSources = audioSourcePool.Where(s => s.isPlaying && s.clip == clip).ToList();
-        float spatialBlend = (sourceType == EnemySoundBase.SoundSourceType.Global) ? 0f : 0.75f;
+        float spatialBlend = (sourceType == SoundSourceType.Global) ? 0f : 0.75f;
         if (playingSources.Count >= MaxSimultaneousSameSound)
         {
             var sourceToRestart = playingSources[0];
@@ -273,7 +273,7 @@ public class SoundManager : MonoBehaviour
             sourceToRestart.loop = data.loop;
             sourceToRestart.mute = false;
             sourceToRestart.spatialBlend = spatialBlend;
-            if (sourceType == EnemySoundBase.SoundSourceType.Global)
+            if (sourceType == SoundSourceType.Global)
             {
                 sourceToRestart.transform.position = Vector3.zero;
             }
@@ -294,7 +294,7 @@ public class SoundManager : MonoBehaviour
         audioSource.loop = data.loop;
         audioSource.mute = false;
         audioSource.spatialBlend = spatialBlend;
-        if (sourceType == EnemySoundBase.SoundSourceType.Global)
+        if (sourceType == SoundSourceType.Global)
         {
             audioSource.transform.position = Vector3.zero;
         }

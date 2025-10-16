@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,6 +24,8 @@ public class EnemyIdleState : IState
 
     public void OnExit() { }
 }
+
+
 
 public class EnemyChaseState : IState
 {
@@ -79,14 +81,21 @@ public class EnemyChaseState : IState
 }
 
 
+
+
 public class EnemyAttackState : IState
 {
     private EnemyBase enemy;
     private Skeleton skeleton;
     private Infernum infernum;
     private GardenGnome gnome;
+    private Boss boss;
 
     private float attackRange = 1.5f;
+    private float meleeDelay;
+    private float specialDelay;
+    private float nextAttackTime;
+    private bool usingSpecialAttack;
 
     public EnemyAttackState(EnemyBase enemy)
     {
@@ -97,36 +106,52 @@ public class EnemyAttackState : IState
     private void DetectAttackRange()
     {
         if (enemy is Skeleton skeleton)
+        {
+            this.skeleton = skeleton;
             attackRange = skeleton.attackRange;
+        }
         else if (enemy is Infernum infernum)
-            attackRange = infernum.GetType().GetField("shootingRange", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(infernum) as float? ?? 5f;
+        {
+            this.infernum = infernum;
+            attackRange = infernum.GetType().GetField("shootingRange",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(infernum) as float? ?? 5f;
+        }
         else if (enemy is GardenGnome gnome)
-            attackRange = gnome.GetType().GetField("stopDistance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(gnome) as float? ?? 0.3f;
+        {
+            this.gnome = gnome;
+            attackRange = gnome.GetType().GetField("stopDistance",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+                ?.GetValue(gnome) as float? ?? 0.3f;
+        }
+        else if (enemy is Boss boss)
+        {
+            this.boss = boss;
+
+            if (boss.bossData != null)
+            {
+                attackRange = boss.bossData.meleeRadius;
+                meleeDelay = boss.bossData.meleeDelay;
+                specialDelay = boss.bossData.specialDelay;
+            }
+            else
+            {
+                Debug.LogWarning($"[EnemyAttackState] {boss.name} no tiene BossEnemyDataSO asignado.");
+                attackRange = 3f;
+                meleeDelay = 0.6f;
+                specialDelay = 1f;
+            }
+        }
     }
 
     public void OnEnter()
     {
         enemy.StopMovement();
-        enemy.isCurrentlyAttacking = true;
+        enemy.isCurrentlyAttacking = false;
+        nextAttackTime = Time.time;
 
-        enemy.nextAttackTime = Time.time + enemy.attackCooldown;
-        
         if (enemy.animator != null)
-        {
             enemy.animator.SetBool("isAttacking", true);
-        }
-
-        var method = enemy.GetType().GetMethod("PerformAttack",
-            System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
-
-        if (method != null)
-        {
-            method.Invoke(enemy, null);
-        }
-        else
-        {
-            Debug.LogWarning($"{enemy.name} no tiene m�todo PerformAttack().");
-        }
     }
 
     public void OnUpdate()
@@ -134,24 +159,83 @@ public class EnemyAttackState : IState
         if (enemy.GetDistanceToTarget() > attackRange + 0.5f)
         {
             enemy.StateMachine.ChangeState<EnemyChaseState>();
+            return;
         }
 
-
-        if (enemy is Infernum infernum)
+        if (boss != null && boss.bossData != null)
         {
-            if (infernum.CanShootNow)
+            if (Time.time >= nextAttackTime && !enemy.isCurrentlyAttacking)
             {
-                infernum.PerformAttack();
+                enemy.isCurrentlyAttacking = true;
+
+                float distance = enemy.GetDistanceToTarget();
+
+                if (distance <= boss.bossData.meleeRadius)
+                {
+                    usingSpecialAttack = false;
+                    boss.StartCoroutine(BossMeleeRoutine());
+                    nextAttackTime = Time.time + meleeDelay;
+                }
+                else if (distance <= boss.bossData.specialRadius)
+                {
+                    usingSpecialAttack = true;
+                    boss.StartCoroutine(BossSpecialRoutine());
+                    nextAttackTime = Time.time + specialDelay;
+                }
             }
         }
+        else
+        {
+            if (Time.time >= nextAttackTime)
+            {
+                var method = enemy.GetType().GetMethod("PerformAttack",
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
 
+                if (method != null)
+                    method.Invoke(enemy, null);
+                else
+                    Debug.LogWarning($"{enemy.name} no tiene método PerformAttack().");
 
+                nextAttackTime = Time.time + enemy.attackCooldown;
+            }
+
+            if (infernum != null && infernum.CanShootNow)
+                infernum.PerformAttack();
+        }
+    }
+
+    private IEnumerator BossMeleeRoutine()
+    {
+        yield return new WaitForSeconds(0.2f);
+        boss.TryStartMeleeAttack();
+
+        yield return new WaitForSeconds(0.3f);
+        enemy.isCurrentlyAttacking = false;
+    }
+
+    private IEnumerator BossSpecialRoutine()
+    {
+        boss.animator.SetTrigger("attackSpecial");
+
+        yield return new WaitForSeconds(specialDelay);
+
+        yield return boss.StartCoroutine(boss.PerformSpecialAttack());
+        enemy.isCurrentlyAttacking = false;
     }
 
     public void OnFixedUpdate() { }
 
-    public void OnExit() { }
+    public void OnExit()
+    {
+        enemy.isCurrentlyAttacking = false;
+
+        if (enemy.animator != null)
+            enemy.animator.SetBool("isAttacking", false);
+    }
 }
+
+
+
 
 
 
@@ -209,3 +293,52 @@ public class EnemyDeadState : IState
         
     }
 }
+
+
+public class EnemySpawnMinionState : IState
+{
+    private readonly Boss boss;
+    private Coroutine spawnRoutine;
+
+    public EnemySpawnMinionState(Boss boss)
+    {
+        this.boss = boss;
+    }
+
+    public void OnEnter()
+    {
+        boss.StopMovement();
+        boss.isCurrentlyAttacking = false;
+        spawnRoutine = boss.StartCoroutine(SpawnRoutine());
+        Debug.Log($"{boss.name} is spawning minions.");
+    }
+
+    private IEnumerator SpawnRoutine()
+    {
+        boss.isSpawningMinions = true;
+
+        yield return new WaitForSeconds(0.1f);
+
+        foreach (Transform spawnPoint in boss.MinionSpawnPoints)
+        {
+            GameObject minion = Object.Instantiate(boss.MinionPrefab, spawnPoint.position, Quaternion.identity);
+            boss.CurrentMinions.Add(minion);
+        }
+
+        boss.ResetSpawnCooldown();
+        boss.isSpawningMinions = false;
+
+        boss.StateMachine.ChangeState<EnemyIdleState>();
+    }
+
+    public void OnUpdate() { }
+
+    public void OnFixedUpdate() { }
+
+    public void OnExit()
+    {
+        if (spawnRoutine != null)
+            boss.StopCoroutine(spawnRoutine);
+    }
+}
+

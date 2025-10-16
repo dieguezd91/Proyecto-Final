@@ -73,8 +73,7 @@ public class LifeController : MonoBehaviour
 
     public void TakeDamage(float damage, DamageType damageType = DamageType.SingleTick, DamageElement damageElement = DamageElement.Normal)
     {
-        if (isDead)
-            return;
+        if (isDead) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0f, currentHealth);

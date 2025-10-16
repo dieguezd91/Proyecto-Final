@@ -16,9 +16,9 @@ GameObject:
   - component: {fileID: 2499588623824434881}
   - component: {fileID: 7032376136951143001}
   - component: {fileID: 6764184329166121356}
-  - component: {fileID: 2846551036221261316}
+  - component: {fileID: 3646094729358156513}
   m_Layer: 8
-  m_Name: MinionBossHellShaw
+  m_Name: Skeleton
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,8 +34,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -7.41, y: -6.5, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7171890095304449723}
   - {fileID: 1590559635041208447}
@@ -62,7 +62,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 6d5204eb7bf37224686f402032879c57, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,14 +107,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
+  hasDetectedDefaultFacing: 1
+  facesRightByDefault: 0
+  invertSpriteDirectionForBoss: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
+  animator: {fileID: 0}
+  currentTargetType: none
+  isDead: 0
+  isCurrentlyAttacking: 0
+  nextAttackTime: 0
+  attackCooldown: 0
   meleeData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   attackPoint: {fileID: 7171890095304449723}
   attackableLayers:
     serializedVersion: 2
     m_Bits: 2688
+  minDamage: 0
+  maxDamage: 0
+  attackRange: 0
 --- !u!114 &8855017348105390996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f5acb2897599b45bb29d0c588be189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 40
+  maxHealth: 100
   currentHealth: 0
   flashOnDamage: 1
   flashDuration: 0.1
@@ -142,13 +154,14 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 0}
-  manaPickupPrefab: {fileID: 0}
+  objetDrop: {fileID: 1768544347340343859, guid: fe6532703752be5499a1180381f39d28, type: 3}
+  manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 0.9
   dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 1
   isPlayer: 0
+  isPlant: 0
   hasDeathAnimation: 1
 --- !u!50 &7254879103260252798
 Rigidbody2D:
@@ -222,7 +235,7 @@ Animator:
   m_GameObject: {fileID: 654258422932643597}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: a1218e365bd7961498a93cd50dff69c1, type: 2}
+  m_Controller: {fileID: 9100000, guid: 26dcd47ff80d89740a12925b9132d061, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -248,7 +261,7 @@ MonoBehaviour:
   knockbackResistance: 0.5
   knockbackDuration: 0.2
   knockbackDecay: 8
---- !u!114 &2846551036221261316
+--- !u!114 &3646094729358156513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -261,17 +274,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   steps:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 1e57c2d413761484cac77d58f55dc53d, type: 3}
+    - {fileID: 8300000, guid: 17229c26819573a4391046bc203cad5b, type: 3}
+    - {fileID: 8300000, guid: fbf5e3c8acdc605499a0175430a57662, type: 3}
+    volume: 0.5
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   spawning:
     clips:
     - {fileID: 8300000, guid: a314696bcf22c2147947ab54b0e4f7af, type: 3}
-    volume: 0.5
+    volume: 0.25
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -279,8 +295,8 @@ MonoBehaviour:
     cooldownTime: 0
   die:
     clips:
-    - {fileID: 8300000, guid: bcfc9941ae5cbd847a272b2ffed095bd, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: 06b1748811dfc564ea66655ccfaf13ab, type: 3}
+    volume: 0.75
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -288,10 +304,10 @@ MonoBehaviour:
     cooldownTime: 0
   hurt:
     clips:
-    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
-    volume: 0.5
+    - {fileID: 8300000, guid: c998b6c8980017d409ac810d3d6ab910, type: 3}
+    volume: 0.8
     pitch: 1
-    pitchVariation: 0.2
+    pitchVariation: 0.1
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
@@ -305,10 +321,11 @@ MonoBehaviour:
     cooldownTime: 0
   attack:
     clips:
-    - {fileID: 0}
-    volume: 1
+    - {fileID: 8300000, guid: 59650c1c69a58aa4c85727ab82357635, type: 3}
+    - {fileID: 8300000, guid: 347b0656243ed834fb48f5a46133f80b, type: 3}
+    volume: 0.7
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0

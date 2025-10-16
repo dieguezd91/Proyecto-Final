@@ -43,8 +43,6 @@ public class EnemySoundBase : MonoBehaviour
         return soundData;
     }
     
-    public enum SoundSourceType { Global, Localized }
-    
     /// <summary>
     /// Plays the sound for the given EnemySoundType using SoundManager's pooling system.
     /// </summary>
