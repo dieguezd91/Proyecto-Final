@@ -1,20 +1,18 @@
 // This tool is intended for in-editor use only. Attach to GameObjects in the Editor to preview and trigger animations.
-#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
 
-namespace Debuggers
+namespace Helpers
 {
     public class DebuggerAnimation : MonoBehaviour
     {
-        [HideInInspector]
-        public List<AnimationClip> AnimationClips = new();
+        [HideInInspector] public List<AnimationClip> AnimationClips = new();
 
-        [TableList(ShowIndexLabels = true)]
-        [ShowInInspector] private List<AnimClipInfo> animationList = new();
+        [TableList(ShowIndexLabels = true)] [ShowInInspector] private List<AnimClipInfo> animationList = new();
 
         [ReadOnly, Tooltip("Animator to fetch AnimationClips from. If left empty, will auto-get from this GameObject.")]
         private Animator animator;
@@ -77,12 +75,8 @@ namespace Debuggers
             [TableColumnWidth(120)]
             private void ShowLooping()
             {
-#if UNITY_EDITOR
                 var settings = UnityEditor.AnimationUtility.GetAnimationClipSettings(Clip);
                 Debug.Log($"'{ClipName}' looping: {settings.loopTime}");
-#else
-            Debug.Log($"'{ClipName}' looping: {Clip.isLooping}");
-#endif
             }
 
             [Button("Play", ButtonSizes.Large)]
@@ -99,12 +93,8 @@ namespace Debuggers
             {
                 Clip = clip;
                 ClipName = clip.name;
-#if UNITY_EDITOR
                 var settings = UnityEditor.AnimationUtility.GetAnimationClipSettings(clip);
                 IsLooping = settings.loopTime;
-#else
-            IsLooping = clip.isLooping;
-#endif
                 this.parent = parent;
             }
         }
@@ -171,4 +161,3 @@ namespace Debuggers
         }
     }
 }
-#endif
