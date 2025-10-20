@@ -541,12 +541,12 @@ TextureImporter:
       name: Treehouse2
       rect:
         serializedVersion: 2
-        x: 1359
+        x: 1307
         y: 108
-        width: 216
-        height: 404
+        width: 300
+        height: 450
       alignment: 9
-      pivot: {x: 0.49074075, y: -0.11386138}
+      pivot: {x: 0.5266667, y: -0.10222223}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -562,12 +562,12 @@ TextureImporter:
       name: TreeVisible2
       rect:
         serializedVersion: 2
-        x: 1104
+        x: 1008
         y: 10
         width: 210
         height: 112
       alignment: 9
-      pivot: {x: 0.5, y: 0.4642857}
+      pivot: {x: 0.5, y: 0.46428573}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -583,12 +583,12 @@ TextureImporter:
       name: TreeVisible1
       rect:
         serializedVersion: 2
-        x: 1103
-        y: 108
-        width: 216
-        height: 404
+        x: 955
+        y: 98
+        width: 300
+        height: 450
       alignment: 9
-      pivot: {x: 0.5, y: -0.11386139}
+      pivot: {x: 0.53000003, y: -0.10222223}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

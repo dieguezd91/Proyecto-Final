@@ -110,12 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: InventorySprite_0
+      name: BookFullyOpen
       rect:
         serializedVersion: 2
-        x: 8
-        y: 385
-        width: 337
+        x: 1091
+        y: 128
+        width: 346
         height: 191
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -134,10 +134,10 @@ TextureImporter:
       name: InventorySprite_1
       rect:
         serializedVersion: 2
-        x: 353
-        y: 376
+        x: 835
+        y: 602
         width: 346
-        height: 195
+        height: 191
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -454,7 +454,7 @@ TextureImporter:
         width: 153
         height: 163
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -462,6 +462,195 @@ TextureImporter:
       bones: []
       spriteID: 8ee8456404c49064abee1c6dfc03f413
       internalID: -1746649883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookOpen1
+      rect:
+        serializedVersion: 2
+        x: 1072
+        y: 372
+        width: 173
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3f208295d7429b24f90bb01eb7f59f78
+      internalID: -689041182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookOpen2
+      rect:
+        serializedVersion: 2
+        x: 1280
+        y: 372
+        width: 173
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1e6f7700f8a77342ad869d554d13afa
+      internalID: 1746524040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookOpen3
+      rect:
+        serializedVersion: 2
+        x: 1488
+        y: 372
+        width: 172
+        height: 261
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0ff2eabd2ccac44399a4a9bdae76db6
+      internalID: 289787448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookOpen4
+      rect:
+        serializedVersion: 2
+        x: 1779
+        y: 366
+        width: 282
+        height: 289
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73a59aaeeafb9bb4280362d19717a8d9
+      internalID: -465626434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PageTurn1
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 1088
+        width: 346
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2b6eab8ea1206a459716c463c8bcff7
+      internalID: -1049134443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PageTurn2
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 1088
+        width: 346
+        height: 204
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3afd0416caa62f34ea4c9125e86d8038
+      internalID: -955553725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PageTurn3
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 1088
+        width: 346
+        height: 213
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f250f4dd6da494478d2f9344b28b991
+      internalID: 1689908600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PageTurn4
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 864
+        width: 346
+        height: 206
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85e5709accd00284e91691c4e8400c9c
+      internalID: -941639684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: PageTurn5
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 864
+        width: 346
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a6a16a7d34c1934cabd0513205fa428
+      internalID: -1012008739
       vertices: []
       indices: 
       edges: []
@@ -477,8 +666,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      BookFullyOpen: -1465691889
+      BookOpen1: -689041182
+      BookOpen2: 1746524040
+      BookOpen3: 289787448
+      BookOpen4: -465626434
       Calendar: 190405470
-      InventorySprite_0: -1465691889
       InventorySprite_1: 2038785279
       InventorySprite_10: 1404506585
       InventorySprite_11: -1811661824
@@ -493,6 +686,11 @@ TextureImporter:
       InventorySprite_9: -122298093
       Options: -1480271655
       OptionsPage2: -1746649883
+      PageTurn1: -1049134443
+      PageTurn2: -955553725
+      PageTurn3: 1689908600
+      PageTurn4: -941639684
+      PageTurn5: -1012008739
       Placeholder: -1356487726
       Placeholder2: -530286579
   mipmapLimitGroupName: 
