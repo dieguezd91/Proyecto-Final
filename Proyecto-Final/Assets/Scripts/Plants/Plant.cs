@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TilePlantInfo
@@ -35,6 +36,14 @@ public class Plant : MonoBehaviour
     private Collider2D plantCollider;
 
     public PlantSoundBase SoundBase => _soundBase;
+
+    protected virtual void Awake()
+    {
+        if (_soundBase == null)
+        {
+            _soundBase = GetComponent<PlantSoundBase>();
+        }
+    }
 
     protected virtual void Start()
     {

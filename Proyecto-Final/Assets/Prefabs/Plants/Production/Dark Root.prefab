@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plantData: {fileID: 11400000, guid: 7bf0f3ef8064cf34f964f20572723a42, type: 2}
-  _soundBase: {fileID: 0}
+  _soundBase: {fileID: 6158585953414656856}
   plantingDay: 0
   growthCompleted: 0
   preMatureParticlesPrefab: {fileID: 8921908033265245887, guid: 46c67c9655e1b244c957359dba845f8d, type: 3}
