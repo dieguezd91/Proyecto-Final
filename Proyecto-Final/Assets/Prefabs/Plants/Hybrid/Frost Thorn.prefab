@@ -363,16 +363,18 @@ MonoBehaviour:
     randomizeClip: 1
     cooldownTime: 0
   hurt:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: ad8829dd6d25bd144bc66597635d1f3c, type: 3}
+    volume: 0.4
     pitch: 1
     pitchVariation: 0.1
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   die:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: a7ec90936d27af940a4048bcd8ac2ea0, type: 3}
+    volume: 0.4
     pitch: 1
     pitchVariation: 0.1
     loop: 0
