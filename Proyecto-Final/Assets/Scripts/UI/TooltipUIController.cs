@@ -276,7 +276,7 @@ public class TooltipUIController : UIControllerBase
 
     private string FormatPlantDescription(PlantDataSO data)
     {
-        return $"{data.description}\n<color=#FFD700>DAYS TO GROW: {data.daysToGrow}</color>";
+        return $"{data.description}\n<color=#9B59B6>DAYS TO GROW: {data.daysToGrow}</color>";
     }
 
     private void ConfigureTooltipImage(PlantDataSO data)
@@ -404,10 +404,10 @@ public class TooltipUIController : UIControllerBase
     {
         return ability switch
         {
-            PlayerAbility.Planting => "Plant seeds in prepared soil.\n<color=#FFD700>Select a seed from inventory first</color>",
-            PlayerAbility.Harvesting => "Harvest mature plants to obtain resources.\n<color=#FFD700>Only available during daytime</color>",
-            PlayerAbility.Digging => "Prepare the soil for planting.\n<color=#FFD700>Click and hold to dig</color>",
-            PlayerAbility.Removing => "Remove unwanted plants.\n<color=#FFD700>Recover some seeds when removing</color>",
+            PlayerAbility.Planting => "Plant seeds in prepared soil.\n<color=#9B59B6>Select a seed from inventory first</color>",
+            PlayerAbility.Harvesting => "Harvest mature plants to obtain resources.\n<color=#9B59B6>Only available during daytime</color>",
+            PlayerAbility.Digging => "Prepare the soil for planting.\n<color=#9B59B6>Click and hold to dig</color>",
+            PlayerAbility.Removing => "Remove unwanted plants.\n<color=#9B59B6>Recover some seeds when removing</color>",
             _ => "Unknown ability"
         };
     }
