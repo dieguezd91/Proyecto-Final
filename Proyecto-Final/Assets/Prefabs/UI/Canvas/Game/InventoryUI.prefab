@@ -3287,10 +3287,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 656490147108705051}
-  - component: {fileID: 4855249191798630347}
-  - component: {fileID: 5380035630572278143}
   - component: {fileID: 4947951179074701607}
+  - component: {fileID: 5380035630572278143}
   - component: {fileID: 2799865558235557274}
+  - component: {fileID: 4855249191798630347}
   m_Layer: 5
   m_Name: InventoryAnimator
   m_TagString: Untagged
@@ -3320,58 +3320,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!95 &4855249191798630347
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8277532580212811156}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6a79d4bb939e99d47a811bc7685d4831, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 2
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5380035630572278143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8277532580212811156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7517e9cb415412d4b8624f20bb2e91d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bookButtons:
-  - button: {fileID: 257395689633964841}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 8910979886168138275}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 4224532670055927181}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 2359546743520180940}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 8414518474029589937}
-    pageName: 
-    buttonName: 
-  animationController: {fileID: 2799865558235557274}
-  playClickSound: 1
-  buttonClickSound: 15
 --- !u!212 &4947951179074701607
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3424,6 +3372,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &5380035630572278143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8277532580212811156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7517e9cb415412d4b8624f20bb2e91d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bookButtons:
+  - button: {fileID: 257395689633964841}
+    pageName: 
+    buttonName: 
+  - button: {fileID: 8910979886168138275}
+    pageName: 
+    buttonName: 
+  - button: {fileID: 4224532670055927181}
+    pageName: 
+    buttonName: 
+  - button: {fileID: 2359546743520180940}
+    pageName: 
+    buttonName: 
+  - button: {fileID: 8414518474029589937}
+    pageName: 
+    buttonName: 
+  animationController: {fileID: 2799865558235557274}
+  playClickSound: 1
+  buttonClickSound: 15
 --- !u!114 &2799865558235557274
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3447,6 +3426,31 @@ MonoBehaviour:
   calendarPage: {fileID: 6510424675249707303}
   glosaryPage: {fileID: 1529699083644699095}
   placeholderPage: {fileID: 344212044278291600}
+  bookButtons:
+  - {fileID: 3235623610325332753}
+  - {fileID: 2055863179688449073}
+  - {fileID: 8299335996963740964}
+--- !u!95 &4855249191798630347
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8277532580212811156}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6a79d4bb939e99d47a811bc7685d4831, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8296627129396826294
 GameObject:
   m_ObjectHideFlags: 0

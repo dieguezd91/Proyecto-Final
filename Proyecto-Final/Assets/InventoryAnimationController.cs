@@ -24,6 +24,7 @@ public class InventoryAnimationController : MonoBehaviour
     [SerializeField] private GameObject calendarPage;
     [SerializeField] private GameObject glosaryPage;
     [SerializeField] private GameObject placeholderPage;
+    [SerializeField] private GameObject[] bookButtons;
 
     private bool isAnimating = false;
     private string currentPageName = "";
@@ -101,6 +102,8 @@ public class InventoryAnimationController : MonoBehaviour
     {
         isAnimating = true;
 
+        SetUIElementsVisibility(false);
+
         HideAllPages();
 
         UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
@@ -117,6 +120,8 @@ public class InventoryAnimationController : MonoBehaviour
         float remainingTime = openAnimationLength * (1f - contentRevealTime);
         yield return new WaitForSecondsRealtime(remainingTime);
 
+        SetUIElementsVisibility(true);
+
         isAnimating = false;
         OnOpenAnimationComplete?.Invoke();
     }
@@ -124,6 +129,8 @@ public class InventoryAnimationController : MonoBehaviour
     private IEnumerator CloseAnimationRoutine()
     {
         isAnimating = true;
+
+        SetUIElementsVisibility(false);
 
         HideAllPages();
         currentPageName = "";
@@ -190,6 +197,19 @@ public class InventoryAnimationController : MonoBehaviour
 
             default:
                 break;
+        }
+    }
+
+    private void SetUIElementsVisibility(bool visible)
+    {
+        if (bookButtons == null || bookButtons.Length == 0) return;
+
+        foreach (GameObject element in bookButtons)
+        {
+            if (element != null)
+            {
+                element.SetActive(visible);
+            }
         }
     }
 
