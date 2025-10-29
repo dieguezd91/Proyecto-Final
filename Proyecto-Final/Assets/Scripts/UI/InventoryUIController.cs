@@ -223,5 +223,8 @@ public class InventoryUIController : UIControllerBase
         {
             animationController.OpenWithPage(pageName);
         }
+
+        // Notify listeners that the inventory is open so UI effects (blur, etc.) can run.
+        UIEvents.TriggerInventoryOpened();
     }
 }
