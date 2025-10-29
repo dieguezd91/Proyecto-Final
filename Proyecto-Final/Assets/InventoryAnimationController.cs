@@ -47,12 +47,16 @@ public class InventoryAnimationController : MonoBehaviour
     {
         UIEvents.OnInventoryOpened += HandleInventoryOpened;
         UIEvents.OnInventoryClosed += HandleInventoryClosed;
+        UIEvents.OnPauseMenuRequested += HandlePauseMenuRequested;
+        UIEvents.OnPauseMenuClosed += HandlePauseMenuClosed;
     }
 
     private void OnDisable()
     {
         UIEvents.OnInventoryOpened -= HandleInventoryOpened;
         UIEvents.OnInventoryClosed -= HandleInventoryClosed;
+        UIEvents.OnPauseMenuRequested -= HandlePauseMenuRequested;
+        UIEvents.OnPauseMenuClosed -= HandlePauseMenuClosed;
     }
 
     private void HandleInventoryOpened()
@@ -99,17 +103,19 @@ public class InventoryAnimationController : MonoBehaviour
 
         HideAllPages();
 
+        UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
+
         bookAnimator.Play(bookOpenStateName, 0, 0f);
 
         float delayBeforeReveal = openAnimationLength * contentRevealTime;
 
-        yield return new WaitForSeconds(delayBeforeReveal);
+        yield return new WaitForSecondsRealtime(delayBeforeReveal);
 
         ShowPage(pageName);
         OnPageReadyToShow?.Invoke();
 
         float remainingTime = openAnimationLength * (1f - contentRevealTime);
-        yield return new WaitForSeconds(remainingTime);
+        yield return new WaitForSecondsRealtime(remainingTime);
 
         isAnimating = false;
         OnOpenAnimationComplete?.Invoke();
@@ -122,9 +128,11 @@ public class InventoryAnimationController : MonoBehaviour
         HideAllPages();
         currentPageName = "";
 
+        UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
+
         bookAnimator.Play(bookCloseStateName, 0, 0f);
 
-        yield return new WaitForSeconds(closeAnimationLength);
+        yield return new WaitForSecondsRealtime(closeAnimationLength);
 
         isAnimating = false;
         OnCloseAnimationComplete?.Invoke();
@@ -183,5 +191,15 @@ public class InventoryAnimationController : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    private void HandlePauseMenuRequested()
+    {
+        OpenWithPage("Options");
+    }
+
+    private void HandlePauseMenuClosed()
+    {
+        CloseBook();
     }
 }

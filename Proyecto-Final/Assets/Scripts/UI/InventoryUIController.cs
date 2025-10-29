@@ -77,6 +77,9 @@ public class InventoryUIController : UIControllerBase
 
     private void HandleInventoryInput()
     {
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+            return;
+
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
             ToggleInventory();
 
@@ -111,8 +114,6 @@ public class InventoryUIController : UIControllerBase
             playerController.SetMovementEnabled(false);
 
         LevelManager.Instance?.SetGameState(GameState.OnInventory);
-
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
 
         UIEvents.TriggerInventoryOpened();
     }
@@ -167,8 +168,6 @@ public class InventoryUIController : UIControllerBase
             }
         }
 
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
-
         GameManager.Instance?.ResumeGame();
         UIManager.Instance.HUD.SetActive(true);
     }
@@ -202,6 +201,27 @@ public class InventoryUIController : UIControllerBase
             animationController.OnOpenAnimationComplete -= OnInventoryOpenAnimationComplete;
             animationController.OnCloseAnimationComplete -= OnInventoryCloseAnimationComplete;
             animationController.OnPageReadyToShow -= OnPageReadyToShow;
+        }
+    }
+
+    public void OpenInventoryWithPage(string pageName)
+    {
+        if (inventoryPanel == null) return;
+
+        if (animationController != null && animationController.IsAnimating)
+        {
+            return;
+        }
+
+        inventoryPanel.SetActive(true);
+        isInventoryOpen = true;
+
+        if (disablePlayerMovementWhenOpen && playerController != null)
+            playerController.SetMovementEnabled(false);
+
+        if (animationController != null)
+        {
+            animationController.OpenWithPage(pageName);
         }
     }
 }

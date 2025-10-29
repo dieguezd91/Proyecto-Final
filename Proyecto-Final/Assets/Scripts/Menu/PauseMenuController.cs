@@ -59,19 +59,16 @@ public class PauseMenuController : UIControllerBase
         if (_currentState == PanelState.Shown) return;
         gameObject.SetActive(true);
         _currentState = PanelState.Shown;
-
-        // Show the main pause menu panel by default when controller is shown
         ShowPauseMenu();
-
-        OnShowAnimation();
     }
 
     public override void Hide()
     {
         if (_currentState == PanelState.Hidden || isHiding || !gameObject.activeInHierarchy) return;
         isHiding = true;
-        OnHideAnimation();
         _currentState = PanelState.Hidden;
+        gameObject.SetActive(false);
+        isHiding = false;
     }
 
     protected override void OnShowAnimation()

@@ -115,23 +115,20 @@ public class GameStateUIController : UIControllerBase
             return;
         }
 
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
         {
-            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+            if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
             {
                 ResumeGame();
-                return;
             }
-
-            UIManager.Instance.CloseInventory();
-            if (playerController != null) playerController.SetMovementEnabled(true);
-            if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
             return;
         }
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
-            ResumeGame();
+            UIManager.Instance.CloseInventory();
+            if (playerController != null) playerController.SetMovementEnabled(true);
+            if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
             return;
         }
 
@@ -153,8 +150,8 @@ public class GameStateUIController : UIControllerBase
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
             lastState = LevelManager.Instance.currentGameState;
 
-        //UIManager.Instance?.OpenInventoryOptions();
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
+        UIManager.Instance?.OpenInventoryWithPage("Options");
+
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
@@ -289,7 +286,11 @@ public class GameStateUIController : UIControllerBase
 
     public void ResumeGame()
     {
-        UIManager.Instance?.CloseInventory();
+        // Cerrar inventario con animación
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
+        {
+            UIManager.Instance.CloseInventory();
+        }
 
         if (_pauseMenuController != null)
             _pauseMenuController.Hide();
@@ -299,7 +300,6 @@ public class GameStateUIController : UIControllerBase
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.ResumeAll();
-            UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseClose);
         }
 
         if (HUD != null && !isInstructionsOpen)

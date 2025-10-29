@@ -3332,7 +3332,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 6a79d4bb939e99d47a811bc7685d4831, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -3439,8 +3439,6 @@ MonoBehaviour:
   bookAnimator: {fileID: 4855249191798630347}
   bookOpenStateName: bookOpen
   bookCloseStateName: bookClose
-  bookIdleStateName: bookIdle
-  bookSpritesLayerName: bookSprites
   openAnimationLength: 0.5
   closeAnimationLength: 0.5
   contentRevealTime: 0.7
