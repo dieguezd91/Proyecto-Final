@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,13 +10,7 @@ public class InventoryAnimationController : MonoBehaviour
     [Header("Animation State Names")]
     [SerializeField] private string bookOpenStateName = "bookOpen";
     [SerializeField] private string bookCloseStateName = "bookClose";
-
-    [Header("Animation Settings")]
-    [SerializeField] private float openAnimationLength = 0.333f;
-    [SerializeField] private float closeAnimationLength = 0.333f;
-
-    [Header("Page Activation Timing")]
-    [SerializeField][Range(0f, 1f)] private float contentRevealTime = 0.7f;
+    [SerializeField] private string pageFlipStateName = "pageFlip";
 
     [Header("Page References")]
     [SerializeField] private GameObject inventoryPage;
@@ -24,10 +18,13 @@ public class InventoryAnimationController : MonoBehaviour
     [SerializeField] private GameObject calendarPage;
     [SerializeField] private GameObject glosaryPage;
     [SerializeField] private GameObject placeholderPage;
+
+    [Header("UI Elements")]
     [SerializeField] private GameObject[] bookButtons;
 
     private bool isAnimating = false;
     private string currentPageName = "";
+    private string pendingPageName = "";
 
     public event Action OnOpenAnimationComplete;
     public event Action OnCloseAnimationComplete;
@@ -82,47 +79,40 @@ public class InventoryAnimationController : MonoBehaviour
 
     public void CloseBook()
     {
-        if (bookAnimator == null || isAnimating) return;
+        if (bookAnimator == null || isAnimating)
+            return;
 
         StartCoroutine(CloseAnimationRoutine());
     }
 
     public void ChangePage(string pageName)
     {
-        if (isAnimating)
+        if (isAnimating || currentPageName == pageName)
         {
             return;
         }
 
-        HideAllPages();
-        ShowPage(pageName);
+        StartCoroutine(PageFlipAnimationRoutine(pageName));
     }
 
     private IEnumerator OpenAnimationRoutine(string pageName)
     {
         isAnimating = true;
+        pendingPageName = pageName;
 
         SetUIElementsVisibility(false);
-
         HideAllPages();
 
         UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
 
         bookAnimator.Play(bookOpenStateName, 0, 0f);
 
-        float delayBeforeReveal = openAnimationLength * contentRevealTime;
-
-        yield return new WaitForSecondsRealtime(delayBeforeReveal);
-
-        ShowPage(pageName);
-        OnPageReadyToShow?.Invoke();
-
-        float remainingTime = openAnimationLength * (1f - contentRevealTime);
-        yield return new WaitForSecondsRealtime(remainingTime);
+        yield return WaitForAnimationToComplete(bookOpenStateName);
 
         SetUIElementsVisibility(true);
 
         isAnimating = false;
+        pendingPageName = "";
         OnOpenAnimationComplete?.Invoke();
     }
 
@@ -131,7 +121,6 @@ public class InventoryAnimationController : MonoBehaviour
         isAnimating = true;
 
         SetUIElementsVisibility(false);
-
         HideAllPages();
         currentPageName = "";
 
@@ -139,10 +128,67 @@ public class InventoryAnimationController : MonoBehaviour
 
         bookAnimator.Play(bookCloseStateName, 0, 0f);
 
-        yield return new WaitForSecondsRealtime(closeAnimationLength);
+        yield return WaitForAnimationToComplete(bookCloseStateName);
 
         isAnimating = false;
         OnCloseAnimationComplete?.Invoke();
+    }
+
+    private IEnumerator PageFlipAnimationRoutine(string newPageName)
+    {
+        isAnimating = true;
+        pendingPageName = newPageName;
+
+        UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.MenuButtonClick);
+
+        bookAnimator.Play(pageFlipStateName, 0, 0f);
+
+        yield return WaitForAnimationToComplete(pageFlipStateName);
+
+        isAnimating = false;
+        pendingPageName = "";
+    }
+
+    private IEnumerator WaitForAnimationToComplete(string animationStateName)
+    {
+        yield return null;
+
+        while (true)
+        {
+            AnimatorStateInfo stateInfo = bookAnimator.GetCurrentAnimatorStateInfo(0);
+
+            if (stateInfo.IsName(animationStateName))
+            {
+                if (stateInfo.normalizedTime >= 0.95f)
+                {
+                    break;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    public void OnBookOpenShowContent()
+    {
+        if (!string.IsNullOrEmpty(pendingPageName))
+        {
+            ShowPage(pendingPageName);
+            OnPageReadyToShow?.Invoke();
+        }
+    }
+
+    public void OnPageFlipHideOldPage()
+    {
+        HideAllPages();
+    }
+
+    public void OnPageFlipShowNewPage()
+    {
+        if (!string.IsNullOrEmpty(pendingPageName))
+        {
+            ShowPage(pendingPageName);
+        }
     }
 
     private void HideAllPages()
@@ -157,52 +203,36 @@ public class InventoryAnimationController : MonoBehaviour
     private void ShowPage(string pageName)
     {
         currentPageName = pageName;
+        HideAllPages();
 
         switch (pageName)
         {
             case "Inventory":
-                if (inventoryPage != null)
-                {
-                    inventoryPage.SetActive(true);
-                }
+                if (inventoryPage != null) inventoryPage.SetActive(true);
                 break;
 
             case "Options":
-                if (optionsPage != null)
-                {
-                    optionsPage.SetActive(true);
-                }
+                if (optionsPage != null) optionsPage.SetActive(true);
                 break;
 
             case "Calendar":
-                if (calendarPage != null)
-                {
-                    calendarPage.SetActive(true);
-                }
+                if (calendarPage != null) calendarPage.SetActive(true);
                 break;
 
             case "Glosary":
-                if (glosaryPage != null)
-                {
-                    glosaryPage.SetActive(true);
-                }
+                if (glosaryPage != null) glosaryPage.SetActive(true);
                 break;
 
             case "Placeholder":
-                if (placeholderPage != null)
-                {
-                    placeholderPage.SetActive(true);
-                }
-                break;
-
-            default:
+                if (placeholderPage != null) placeholderPage.SetActive(true);
                 break;
         }
     }
 
     private void SetUIElementsVisibility(bool visible)
     {
-        if (bookButtons == null || bookButtons.Length == 0) return;
+        if (bookButtons == null || bookButtons.Length == 0)
+            return;
 
         foreach (GameObject element in bookButtons)
         {

@@ -746,12 +746,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2987289402762178009}
   - {fileID: 4537023684430512511}
-  - {fileID: 111040836588339594}
-  - {fileID: 8014109572340995769}
   - {fileID: 6682801587494725272}
   - {fileID: 6208585275375466267}
+  - {fileID: 2987289402762178009}
+  - {fileID: 111040836588339594}
+  - {fileID: 8014109572340995769}
   m_Father: {fileID: 656490147108705051}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -983,7 +983,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8183
 --- !u!1 &3301648803160872924
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,20 +3386,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bookButtons:
   - button: {fileID: 257395689633964841}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 8910979886168138275}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 4224532670055927181}
-    pageName: 
-    buttonName: 
-  - button: {fileID: 2359546743520180940}
-    pageName: 
-    buttonName: 
+    pageName: Inventory
+    buttonName: Inventory
   - button: {fileID: 8414518474029589937}
-    pageName: 
-    buttonName: 
+    pageName: Options
+    buttonName: Options
   animationController: {fileID: 2799865558235557274}
   playClickSound: 1
   buttonClickSound: 15
@@ -3418,8 +3409,10 @@ MonoBehaviour:
   bookAnimator: {fileID: 4855249191798630347}
   bookOpenStateName: bookOpen
   bookCloseStateName: bookClose
+  pageFlipStateName: pageFlip
   openAnimationLength: 0.5
   closeAnimationLength: 0.5
+  pageFlipAnimationLength: 0.33
   contentRevealTime: 0.7
   inventoryPage: {fileID: 6749617565522287687}
   optionsPage: {fileID: 2278972391395361356}

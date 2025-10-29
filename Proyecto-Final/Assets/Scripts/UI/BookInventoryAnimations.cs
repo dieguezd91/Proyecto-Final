@@ -24,15 +24,27 @@ public class BookInventoryAnimations : MonoBehaviour
     [SerializeField] private InterfaceSoundType buttonClickSound = InterfaceSoundType.MenuButtonClick;
 
     private string currentPage = "";
+    private bool listenersSetup = false;
 
     private void Awake()
     {
         CacheAnimationController();
     }
 
+    private void OnEnable()
+    {
+        if (!listenersSetup)
+        {
+            SetupButtonListeners();
+        }
+    }
+
     private void Start()
     {
-        SetupButtonListeners();
+        if (!listenersSetup)
+        {
+            SetupButtonListeners();
+        }
     }
 
     private void CacheAnimationController()
@@ -40,36 +52,53 @@ public class BookInventoryAnimations : MonoBehaviour
         if (animationController == null)
         {
             animationController = GetComponent<InventoryAnimationController>();
-
-            if (animationController == null)
-            {
-                Debug.LogError($"[BookInventoryAnimations] No se encontró InventoryAnimationController en {gameObject.name}");
-                return;
-            }
         }
     }
 
     private void SetupButtonListeners()
     {
+        if (bookButtons == null || bookButtons.Count == 0)
+        {
+            return;
+        }
+
+        int validButtons = 0;
         foreach (var bookButton in bookButtons)
         {
-            if (bookButton.button != null)
+            if (bookButton.button == null)
             {
-                if (string.IsNullOrEmpty(bookButton.pageName))
-                {
-                    continue;
-                }
-
-                string page = bookButton.pageName;
-                string name = bookButton.buttonName;
-
-                bookButton.button.onClick.AddListener(() => OnButtonClicked(page, name));
+                continue;
             }
+
+            if (string.IsNullOrEmpty(bookButton.pageName))
+            {
+                continue;
+            }
+
+            bookButton.button.onClick.RemoveAllListeners();
+
+            string page = bookButton.pageName;
+            string name = bookButton.buttonName;
+
+            bookButton.button.onClick.AddListener(() => OnButtonClicked(page, name));
+            validButtons++;
         }
+
+        listenersSetup = true;
     }
 
     private void OnButtonClicked(string pageName, string buttonName)
     {
+        if (animationController == null)
+        {
+            return;
+        }
+
+        if (animationController.IsAnimating)
+        {
+            return;
+        }
+
         if (playClickSound && UIManager.Instance?.InterfaceSounds != null)
         {
             UIManager.Instance.InterfaceSounds.PlaySound(buttonClickSound);
@@ -115,6 +144,7 @@ public class BookInventoryAnimations : MonoBehaviour
 
         bookButtons.Add(bookButton);
 
+        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => OnButtonClicked(pageName, bookButton.buttonName));
     }
 
@@ -129,28 +159,9 @@ public class BookInventoryAnimations : MonoBehaviour
         }
     }
 
-    public void ShowInventory()
-    {
-        ChangePage("Inventory");
-    }
-
-    public void ShowOptions()
-    {
-        ChangePage("Options");
-    }
-
-    public void ShowGlosary()
-    {
-        ChangePage("Glosary");
-    }
-
-    public void ShowCalendar()
-    {
-        ChangePage("Calendar");
-    }
-
-    public void ShowPlaceholder()
-    {
-        ChangePage("Placeholder");
-    }
+    public void ShowInventory() => ChangePage("Inventory");
+    public void ShowOptions() => ChangePage("Options");
+    public void ShowGlosary() => ChangePage("Glosary");
+    public void ShowCalendar() => ChangePage("Calendar");
+    public void ShowPlaceholder() => ChangePage("Placeholder");
 }

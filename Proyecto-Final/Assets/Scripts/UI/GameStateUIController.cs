@@ -39,7 +39,15 @@ public class GameStateUIController : UIControllerBase
             playerController = player.GetComponent<PlayerController>();
     }
 
-    protected override void SetupEventListeners() { }
+    protected override void SetupEventListeners()
+    {
+        UIEvents.OnInventoryClosed += HandleInventoryClosedEvent;
+    }
+
+    protected override void CleanupEventListeners()
+    {
+        UIEvents.OnInventoryClosed -= HandleInventoryClosedEvent;
+    }
 
     protected override void ConfigureInitialState()
     {
@@ -282,11 +290,8 @@ public class GameStateUIController : UIControllerBase
         }
     }
 
-    protected override void CleanupEventListeners() { }
-
     public void ResumeGame()
     {
-        // Cerrar inventario con animación
         if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
             UIManager.Instance.CloseInventory();
@@ -349,5 +354,14 @@ public class GameStateUIController : UIControllerBase
 
         dof.focalLength.value = target;
         isHiding = false;
+    }
+
+    private void HandleInventoryClosedEvent()
+    {
+        if (dof != null && dof.focalLength.value > 0)
+        {
+            if (blurTransition != null) StopCoroutine(blurTransition);
+            blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
+        }
     }
 }
