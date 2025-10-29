@@ -7,13 +7,9 @@ public class InventoryAnimationController : MonoBehaviour
     [Header("Animation References")]
     [SerializeField] private Animator bookAnimator;
 
-    [Header("Animation State Names (Solo bookSprites layer)")]
+    [Header("Animation State Names")]
     [SerializeField] private string bookOpenStateName = "bookOpen";
     [SerializeField] private string bookCloseStateName = "bookClose";
-    [SerializeField] private string bookIdleStateName = "bookIdle";
-
-    [Header("Layer Names")]
-    [SerializeField] private string bookSpritesLayerName = "bookSprites";
 
     [Header("Animation Settings")]
     [SerializeField] private float openAnimationLength = 0.333f;
@@ -29,7 +25,6 @@ public class InventoryAnimationController : MonoBehaviour
     [SerializeField] private GameObject glosaryPage;
     [SerializeField] private GameObject placeholderPage;
 
-    private int bookSpritesLayerIndex;
     private bool isAnimating = false;
     private string currentPageName = "";
 
@@ -42,8 +37,10 @@ public class InventoryAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        CacheAnimatorLayer();
-        ValidateAnimator();
+        if (bookAnimator == null)
+        {
+            bookAnimator = GetComponent<Animator>();
+        }
     }
 
     private void OnEnable()
@@ -56,33 +53,6 @@ public class InventoryAnimationController : MonoBehaviour
     {
         UIEvents.OnInventoryOpened -= HandleInventoryOpened;
         UIEvents.OnInventoryClosed -= HandleInventoryClosed;
-    }
-
-    private void CacheAnimatorLayer()
-    {
-        if (bookAnimator == null)
-        {
-            bookAnimator = GetComponent<Animator>();
-        }
-
-        if (bookAnimator != null)
-        {
-            bookSpritesLayerIndex = bookAnimator.GetLayerIndex(bookSpritesLayerName);
-
-            if (bookSpritesLayerIndex == -1)
-            {
-                Debug.LogWarning($"[InventoryAnimationController] No se encontró layer '{bookSpritesLayerName}', usando layer 0");
-                bookSpritesLayerIndex = 0;
-            }
-        }
-    }
-
-    private void ValidateAnimator()
-    {
-        if (bookAnimator == null)
-        {
-            return;
-        }
     }
 
     private void HandleInventoryOpened()
@@ -129,10 +99,7 @@ public class InventoryAnimationController : MonoBehaviour
 
         HideAllPages();
 
-        if (bookSpritesLayerIndex != -1)
-        {
-            bookAnimator.Play(bookOpenStateName, bookSpritesLayerIndex, 0f);
-        }
+        bookAnimator.Play(bookOpenStateName, 0, 0f);
 
         float delayBeforeReveal = openAnimationLength * contentRevealTime;
 
@@ -155,10 +122,7 @@ public class InventoryAnimationController : MonoBehaviour
         HideAllPages();
         currentPageName = "";
 
-        if (bookSpritesLayerIndex != -1)
-        {
-            bookAnimator.Play(bookIdleStateName, bookSpritesLayerIndex, 0f);
-        }
+        bookAnimator.Play(bookCloseStateName, 0, 0f);
 
         yield return new WaitForSeconds(closeAnimationLength);
 
@@ -217,23 +181,7 @@ public class InventoryAnimationController : MonoBehaviour
                 break;
 
             default:
-                Debug.LogWarning($"[InventoryAnimationController] Página desconocida: {pageName}");
                 break;
         }
-    }
-
-    public void ForceIdleState()
-    {
-        if (bookAnimator == null) return;
-
-        if (bookSpritesLayerIndex != -1)
-        {
-            bookAnimator.Play(bookIdleStateName, bookSpritesLayerIndex, 0f);
-        }
-
-        HideAllPages();
-        StopAllCoroutines();
-        isAnimating = false;
-        currentPageName = "";
     }
 }
