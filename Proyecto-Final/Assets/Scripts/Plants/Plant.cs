@@ -37,6 +37,10 @@ public class Plant : MonoBehaviour
 
     public PlantSoundBase SoundBase => _soundBase;
 
+    private float nextIdleSoundTime = 0f;
+    [SerializeField] private float idleSoundMinTime = 5f;
+    [SerializeField] private float idleSoundMaxTime = 15f;
+
     protected virtual void Awake()
     {
         if (_soundBase == null)
@@ -79,6 +83,8 @@ public class Plant : MonoBehaviour
         ConfigureLifeController();
 
         lifeController.onDeath.AddListener(HandlePlantDeath);
+
+        ScheduleNextIdleSound(); // Schedule first idle sound
     }
 
     protected virtual void OnDestroy()
@@ -225,5 +231,30 @@ public class Plant : MonoBehaviour
         {
             UpdateGrowthStatus(LevelManager.Instance.GetCurrentDay());
         }
+    }
+
+    protected virtual void Update()
+    {
+        UpdateIdleSoundTimer(); // Check idle sound timer
+    }
+
+    private void UpdateIdleSoundTimer()
+    {
+        if (growthCompleted && Time.time >= nextIdleSoundTime)
+        {
+            PlayIdleSound();
+            ScheduleNextIdleSound();
+        }
+    }
+
+    private void ScheduleNextIdleSound()
+    {
+        nextIdleSoundTime = Time.time + UnityEngine.Random.Range(idleSoundMinTime, idleSoundMaxTime);
+    }
+
+    private void PlayIdleSound()
+    {
+        // TODO: Implement idle sound logic here for Plant
+        // Example: _soundBase?.PlaySound(PlantSoundType.Idle, SoundSourceType.Localized, transform);
     }
 }
