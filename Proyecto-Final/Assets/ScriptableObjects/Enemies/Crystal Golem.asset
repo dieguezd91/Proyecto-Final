@@ -16,7 +16,7 @@ MonoBehaviour:
   enemyIcon: {fileID: 556223337, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
   description: 
   maxHealth: 50
-  moveSpeed: 3
+  moveSpeed: 2
   detectionRange: 15
   playerPriority: 1.5
   plantPriority: 1
