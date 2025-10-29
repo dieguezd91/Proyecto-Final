@@ -37,9 +37,11 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1f;
 
-        UIManager.Instance?.inventoryUI?.HideInventory();
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
+        {
+            UIManager.Instance.CloseInventory();
+        }
     }
-
 
     public bool IsGamePaused()
     {
@@ -50,13 +52,13 @@ public class GameManager : MonoBehaviour
     {
         SceneLoaderManager.Instance.LoadSceneByName(name);
     }
-    
+
     public void QuitGame()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
-        #else
+#else
         Application.Quit();
-        #endif
+#endif
     }
 }
