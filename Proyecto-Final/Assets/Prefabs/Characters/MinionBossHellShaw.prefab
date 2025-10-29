@@ -107,6 +107,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
+  hasDetectedDefaultFacing: 0
+  facesRightByDefault: 0
+  invertSpriteDirectionForBoss: 0
   plantLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -472,6 +475,10 @@ PrefabInstance:
     - target: {fileID: 2489268449943722584, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Name
       value: EnemyCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 2796683334332304363, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 8183
       objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
