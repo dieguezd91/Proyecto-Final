@@ -145,11 +145,11 @@ GameObject:
   - component: {fileID: 7827403136463133310}
   - component: {fileID: 8478862263821191060}
   - component: {fileID: 5933285377420938222}
+  - component: {fileID: 5520770406525791052}
   - component: {fileID: 2796683334332304363}
   - component: {fileID: 388449216423433232}
-  - component: {fileID: 8242842676266046227}
   m_Layer: 5
-  m_Name: EnemyCanvas
+  m_Name: PlantCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -223,7 +223,24 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
+--- !u!114 &5520770406525791052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2489268449943722584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e400af25d19a07c4e958e96698123925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeController: {fileID: 0}
+  healthFillImage: {fileID: 8783055113398384073}
+  whiteFillImage: {fileID: 2503668391806603557}
+  healthText: {fileID: 1269140674671454803}
+  whiteBarSpeed: 2
 --- !u!114 &2796683334332304363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,25 +270,6 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 0
   m_IgnoreParentGroups: 0
---- !u!114 &8242842676266046227
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2489268449943722584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95a48dfb050c227429353366a150cd6a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeController: {fileID: 0}
-  healthFillImage: {fileID: 8783055113398384073}
-  whiteFillImage: {fileID: 2503668391806603557}
-  whiteBarSpeed: 2
-  healthText: {fileID: 1269140674671454803}
-  canvasGroup: {fileID: 388449216423433232}
-  fadeOutTime: 1
 --- !u!1 &5816055714959510261
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +297,7 @@ RectTransform:
   m_GameObject: {fileID: 5816055714959510261}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.83, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7827403136463133310}
@@ -374,7 +372,7 @@ RectTransform:
   m_GameObject: {fileID: 6864946037476343448}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.83, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7827403136463133310}
@@ -405,7 +403,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0.08032417, a: 1}
+  m_Color: {r: 0.11587119, g: 0.509434, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -449,7 +447,7 @@ RectTransform:
   m_GameObject: {fileID: 9110244636180725744}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.83, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7827403136463133310}
