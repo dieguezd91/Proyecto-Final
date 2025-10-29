@@ -38,6 +38,10 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     public float nextAttackTime = 0f;
     public float attackCooldown;
 
+    private float nextIdleSoundTime = 0f;
+    [SerializeField] private float idleSoundMinTime = 5f;
+    [SerializeField] private float idleSoundMaxTime = 15f;
+
 
     #region Exposed properties (para estados)
     public float MoveSpeed => moveSpeed;
@@ -62,9 +66,9 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         StateMachine.RegisterState(new EnemyDeadState(this));
         StateMachine.ChangeState<EnemyIdleState>();
 
-
         InitializeEnemy();
         PlaySpawnSound();
+        ScheduleNextIdleSound();
 
         
     }
@@ -75,6 +79,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
         UpdateTargeting();
         StateMachine.Tick();
+        UpdateIdleSoundTimer(); // Check idle sound timer
     }
 
     protected virtual void FixedUpdate()
@@ -340,6 +345,25 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
             : Mathf.Infinity;
     }
     #endregion
+
+    private void UpdateIdleSoundTimer()
+    {
+        if (Time.time >= nextIdleSoundTime && !isDead)
+        {
+            PlayIdleSound();
+            ScheduleNextIdleSound();
+        }
+    }
+
+    private void ScheduleNextIdleSound()
+    {
+        nextIdleSoundTime = Time.time + Random.Range(idleSoundMinTime, idleSoundMaxTime);
+    }
+
+    private void PlayIdleSound()
+    {
+        soundBase?.PlaySound(EnemySoundType.Idle, SoundSourceType.Localized, transform);
+    }
 
     protected virtual void OnDrawGizmosSelected()
     {
