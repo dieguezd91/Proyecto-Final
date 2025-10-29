@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
+using DG.Tweening;
 
 public class GameStateUIController : UIControllerBase
 {
@@ -21,13 +21,14 @@ public class GameStateUIController : UIControllerBase
 
     [Header("Blur Settings")]
     [SerializeField] private UnityEngine.Rendering.Volume blurVolume;
-    [SerializeField] private float showTransitionDuration = 0.5f;
+    [SerializeField] private float showTransitionDuration = 0.08f;
     [SerializeField] private float hideTransitionDuration = 0.8f;
     [SerializeField] private float maxFocalLength = 200f;
 
     private UnityEngine.Rendering.Universal.DepthOfField dof;
-    private Coroutine blurTransition;
+    private Tween blurTween;
     private bool isHiding = false;
+    private bool wasInventoryOpen = false;
 
     public bool IsInstructionsOpen => isInstructionsOpen;
     public GameState LastState => lastState;
@@ -42,11 +43,14 @@ public class GameStateUIController : UIControllerBase
     protected override void SetupEventListeners()
     {
         UIEvents.OnInventoryClosed += HandleInventoryClosedEvent;
+        // Ensure blur also activates when inventory is opened via keys (Tab / I)
+        UIEvents.OnInventoryOpened += HandleInventoryOpenedEvent;
     }
 
     protected override void CleanupEventListeners()
     {
         UIEvents.OnInventoryClosed -= HandleInventoryClosedEvent;
+        UIEvents.OnInventoryOpened -= HandleInventoryOpenedEvent;
     }
 
     protected override void ConfigureInitialState()
@@ -74,6 +78,38 @@ public class GameStateUIController : UIControllerBase
         CheckGameStateChanges();
         HandleGameOverState();
         HandlePauseInput();
+        CheckInventoryOpenState();
+    }
+
+    // Polls the UIManager inventory open state so we reliably trigger blur for all input paths (Tab, I, UI calls).
+    private void CheckInventoryOpenState()
+    {
+        if (UIManager.Instance == null) return;
+
+        bool isOpen = UIManager.Instance.IsInventoryOpen();
+
+        if (isOpen && !wasInventoryOpen)
+        {
+            // Inventory opened — start blur open tween.
+            if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+            if (dof != null)
+            {
+                isHiding = false;
+                blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
+            }
+        }
+        else if (!isOpen && wasInventoryOpen)
+        {
+            // Inventory closed — start blur hide tween.
+            if (dof != null && dof.focalLength.value > 0)
+            {
+                if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+                isHiding = true;
+                blurTween = CreateFocalLengthTween(0f, hideTransitionDuration, true);
+            }
+        }
+
+        wasInventoryOpen = isOpen;
     }
 
     private void CheckGameStateChanges()
@@ -163,8 +199,9 @@ public class GameStateUIController : UIControllerBase
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
-        if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength, showTransitionDuration));
+        if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+        if (dof != null)
+            blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
 
         if (HUD != null) HUD.SetActive(false);
         if (playerController != null) playerController.SetMovementEnabled(false);
@@ -313,55 +350,53 @@ public class GameStateUIController : UIControllerBase
         if (LevelManager.Instance != null && lastState != GameState.None)
             LevelManager.Instance.SetGameState(lastState);
 
-        if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
+        if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+        if (dof != null)
+        {
+            isHiding = true;
+            blurTween = CreateFocalLengthTween(0f, hideTransitionDuration, true);
+        }
     }
 
-    private IEnumerator FadeFocalLength(float target, float duration)
+    // Creates and returns a DOTween Tween that animates the DOF focal length using unscaled time.
+    // If setIsHidingFalseOnComplete is true, isHiding will be set to false when the tween completes.
+    private Tween CreateFocalLengthTween(float target, float duration, bool setIsHidingFalseOnComplete)
     {
-        if (dof == null) yield break;
+        if (dof == null) return null;
 
-        float start = dof.focalLength.value;
-        float elapsed = 0f;
+        // Animate the focalLength.value property directly using DOTween and unscaled time.
+        Tween t = DOTween.To(() => dof.focalLength.value, x => dof.focalLength.value = x, target, duration)
+            .SetUpdate(true)
+            // use an ease that makes the blur ramp up quickly for a snappy response
+            .SetEase(Ease.OutCubic)
+             .OnComplete(() =>
+             {
+                 // Ensure final value is set and update hiding state if requested.
+                 if (dof != null) dof.focalLength.value = target;
+                 if (setIsHidingFalseOnComplete) isHiding = false;
+             });
 
-        while (elapsed < duration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
-            yield return null;
-        }
-
-        dof.focalLength.value = target;
-    }
-
-    private IEnumerator FadeFocalLengthAndDeactivate(float target, float duration)
-    {
-        if (dof == null)
-        {
-            isHiding = false;
-            yield break;
-        }
-
-        float start = dof.focalLength.value;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
-            yield return null;
-        }
-
-        dof.focalLength.value = target;
-        isHiding = false;
-    }
+         return t;
+     }
 
     private void HandleInventoryClosedEvent()
     {
         if (dof != null && dof.focalLength.value > 0)
         {
-            if (blurTransition != null) StopCoroutine(blurTransition);
-            blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
+            if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+            isHiding = true;
+            blurTween = CreateFocalLengthTween(0f, hideTransitionDuration, true);
+        }
+    }
+
+    private void HandleInventoryOpenedEvent()
+    {
+        // Called when inventory opens (including alternate keys like Tab). Start the blur open tween.
+        if (blurTween != null) { blurTween.Kill(); blurTween = null; }
+        if (dof != null)
+        {
+            isHiding = false;
+            blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
         }
     }
 }
