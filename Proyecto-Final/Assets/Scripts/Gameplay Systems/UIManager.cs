@@ -87,15 +87,11 @@ public class UIManager : MonoBehaviour
         tooltipUI?.Initialize();
     }
 
-    public void OpenInventoryOptions()
+    public void OpenInventoryWithPage(string pageName)
     {
-        if (inventoryUI != null)
-        {
-            inventoryUI.OpenOptionsTab();
-        }
-        
+        if (Inventory != null)
+            Inventory.OpenInventoryWithPage(pageName);
     }
-
 
     private void SetupModules()
     {

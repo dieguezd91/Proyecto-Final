@@ -10,6 +10,13 @@ public class InventoryUIController : UIControllerBase
     [SerializeField] private bool disablePlayerMovementWhenOpen = true;
     [SerializeField] private InventoryUI inventoryUI;
 
+    [Header("Animation")]
+    [SerializeField] private InventoryAnimationController animationController;
+    [SerializeField] private bool waitForAnimationToComplete = true;
+
+    [Header("Page Management")]
+    [SerializeField] private bool animationControllerManagesPages = true;
+
     private bool isInventoryOpen = false;
     private PlayerController playerController;
 
@@ -26,6 +33,20 @@ public class InventoryUIController : UIControllerBase
 
         if (inventoryUI == null && inventoryPanel != null)
             inventoryUI = inventoryPanel.GetComponent<InventoryUI>();
+
+        if (animationController == null && inventoryPanel != null)
+        {
+            Transform animatorTransform = inventoryPanel.transform.Find("InventoryAnimator");
+            if (animatorTransform != null)
+            {
+                animationController = animatorTransform.GetComponent<InventoryAnimationController>();
+            }
+
+            if (animationController == null)
+            {
+                animationController = inventoryPanel.GetComponentInChildren<InventoryAnimationController>();
+            }
+        }
     }
 
     protected override void ConfigureInitialState()
@@ -40,6 +61,13 @@ public class InventoryUIController : UIControllerBase
     protected override void SetupEventListeners()
     {
         UIEvents.OnInventoryToggleRequested += ToggleInventory;
+
+        if (animationController != null)
+        {
+            animationController.OnOpenAnimationComplete += OnInventoryOpenAnimationComplete;
+            animationController.OnCloseAnimationComplete += OnInventoryCloseAnimationComplete;
+            animationController.OnPageReadyToShow += OnPageReadyToShow;
+        }
     }
 
     public override void HandleUpdate()
@@ -49,6 +77,9 @@ public class InventoryUIController : UIControllerBase
 
     private void HandleInventoryInput()
     {
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+            return;
+
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
             ToggleInventory();
 
@@ -71,33 +102,59 @@ public class InventoryUIController : UIControllerBase
         if (LevelManager.Instance != null && !CanOpenInventory())
             return;
 
+        if (animationController != null && animationController.IsAnimating)
+        {
+            return;
+        }
+
         inventoryPanel.SetActive(true);
         isInventoryOpen = true;
-
-        if (inventoryUI != null)
-        {
-            inventoryUI.UpdateAllSlots();
-            inventoryUI.ForceRefresh();
-        }
 
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(false);
 
         LevelManager.Instance?.SetGameState(GameState.OnInventory);
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
 
         UIEvents.TriggerInventoryOpened();
+    }
+
+    private void OnPageReadyToShow()
+    {
+        if (inventoryUI != null)
+        {
+            inventoryUI.UpdateAllSlots();
+            inventoryUI.ForceRefresh();
+        }
     }
 
     public void CloseInventory()
     {
         if (inventoryPanel == null) return;
 
-        inventoryPanel.SetActive(false);
-        isInventoryOpen = false;
+        if (animationController != null && animationController.IsAnimating)
+        {
+            return;
+        }
+
+        if (waitForAnimationToComplete && animationController != null)
+        {
+            UIEvents.TriggerInventoryClosed();
+        }
+        else
+        {
+            PerformCloseInventory();
+        }
+    }
+
+    private void PerformCloseInventory()
+    {
+        if (inventoryPanel == null) return;
 
         if (inventoryUI != null)
             inventoryUI.ClearDescriptionPanel();
+
+        inventoryPanel.SetActive(false);
+        isInventoryOpen = false;
 
         if (disablePlayerMovementWhenOpen && playerController != null)
             playerController.SetMovementEnabled(true);
@@ -111,13 +168,9 @@ public class InventoryUIController : UIControllerBase
             }
         }
 
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
         GameManager.Instance?.ResumeGame();
         UIManager.Instance.HUD.SetActive(true);
-        playerController?.SetMovementEnabled(true);
-        UIEvents.TriggerInventoryClosed();
     }
-
 
     private bool CanOpenInventory()
     {
@@ -129,8 +182,46 @@ public class InventoryUIController : UIControllerBase
                state != GameState.OnAltarRestoration;
     }
 
+    private void OnInventoryOpenAnimationComplete()
+    {
+
+    }
+
+    private void OnInventoryCloseAnimationComplete()
+    {
+        PerformCloseInventory();
+    }
+
     protected override void CleanupEventListeners()
     {
         UIEvents.OnInventoryToggleRequested -= ToggleInventory;
+
+        if (animationController != null)
+        {
+            animationController.OnOpenAnimationComplete -= OnInventoryOpenAnimationComplete;
+            animationController.OnCloseAnimationComplete -= OnInventoryCloseAnimationComplete;
+            animationController.OnPageReadyToShow -= OnPageReadyToShow;
+        }
+    }
+
+    public void OpenInventoryWithPage(string pageName)
+    {
+        if (inventoryPanel == null) return;
+
+        if (animationController != null && animationController.IsAnimating)
+        {
+            return;
+        }
+
+        inventoryPanel.SetActive(true);
+        isInventoryOpen = true;
+
+        if (disablePlayerMovementWhenOpen && playerController != null)
+            playerController.SetMovementEnabled(false);
+
+        if (animationController != null)
+        {
+            animationController.OpenWithPage(pageName);
+        }
     }
 }

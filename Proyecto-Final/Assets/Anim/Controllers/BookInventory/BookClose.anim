@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BookIdle
+  m_Name: BookClose
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -22,6 +22,14 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -1465691889, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - time: 0.083333336
+      value: {fileID: -465626434, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - time: 0.16666667
+      value: {fileID: 289787448, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - time: 0.25
+      value: {fileID: 1746524040, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - time: 0.33333334
+      value: {fileID: -689041182, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
     attribute: m_Sprite
     path: FrontBook
     classID: 114
@@ -45,12 +53,16 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
     - {fileID: -1465691889, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - {fileID: -465626434, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - {fileID: 289787448, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - {fileID: 1746524040, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
+    - {fileID: -689041182, guid: e6dab1dbe59aa824f808b3417a167a4e, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.35000002
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameStateUIController : UIControllerBase
 {
@@ -41,7 +39,15 @@ public class GameStateUIController : UIControllerBase
             playerController = player.GetComponent<PlayerController>();
     }
 
-    protected override void SetupEventListeners() { }
+    protected override void SetupEventListeners()
+    {
+        UIEvents.OnInventoryClosed += HandleInventoryClosedEvent;
+    }
+
+    protected override void CleanupEventListeners()
+    {
+        UIEvents.OnInventoryClosed -= HandleInventoryClosedEvent;
+    }
 
     protected override void ConfigureInitialState()
     {
@@ -54,7 +60,6 @@ public class GameStateUIController : UIControllerBase
             dof.focalLength.overrideState = true;
             dof.focalLength.value = 0f;
         }
-
 
         if (LevelManager.Instance != null)
         {
@@ -118,23 +123,20 @@ public class GameStateUIController : UIControllerBase
             return;
         }
 
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
         {
-            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+            if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
             {
                 ResumeGame();
-                return;
             }
-
-            UIManager.Instance.CloseInventory();
-            if (playerController != null) playerController.SetMovementEnabled(true);
-            if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
             return;
         }
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
-            ResumeGame();
+            UIManager.Instance.CloseInventory();
+            if (playerController != null) playerController.SetMovementEnabled(true);
+            if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
             return;
         }
 
@@ -156,8 +158,8 @@ public class GameStateUIController : UIControllerBase
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
             lastState = LevelManager.Instance.currentGameState;
 
-        UIManager.Instance?.OpenInventoryOptions();
-        UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookOpen);
+        UIManager.Instance?.OpenInventoryWithPage("Options");
+
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
@@ -167,18 +169,6 @@ public class GameStateUIController : UIControllerBase
         if (HUD != null) HUD.SetActive(false);
         if (playerController != null) playerController.SetMovementEnabled(false);
     }
-
-    //private void CloseInventoryAndResume()
-    //{
-    //    UIManager.Instance?.CloseInventory();
-
-    //    if (playerController != null) playerController.SetMovementEnabled(true);
-    //    if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
-
-    //    GameManager.Instance?.ResumeGame();
-    //    if (LevelManager.Instance != null && lastState != GameState.None)
-    //        LevelManager.Instance.SetGameState(lastState);
-    //}
 
     private void HandleGameOverState()
     {
@@ -300,52 +290,21 @@ public class GameStateUIController : UIControllerBase
         }
     }
 
-    protected override void CleanupEventListeners() { }
-
-    //public void PauseGame()
-    //{
-    //    if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
-    //        lastState = LevelManager.Instance.currentGameState;
-
-    //    GameManager.Instance?.PauseGame();
-
-    //    if (pausePanel != null)
-    //        pausePanel.SetActive(true);
-
-    //    if (_pauseMenuController != null)
-    //    {
-    //        _pauseMenuController.Show();
-    //    }
-
-    //    if (SoundManager.Instance != null)
-    //    {
-    //        SoundManager.Instance.PauseAll();
-    //        UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseOpen);
-    //    }
-
-    //    if (HUD != null)
-    //        HUD.SetActive(false);
-
-        
-
-    //    LevelManager.Instance?.SetGameState(GameState.Paused);
-    //}
-
     public void ResumeGame()
     {
-        UIManager.Instance?.CloseInventory();
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
+        {
+            UIManager.Instance.CloseInventory();
+        }
 
         if (_pauseMenuController != null)
             _pauseMenuController.Hide();
 
         GameManager.Instance?.ResumeGame();
 
-        UIManager.Instance?.inventoryUI?.HideInventory();
-
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.ResumeAll();
-            UIManager.Instance.InterfaceSounds.PlaySound(InterfaceSoundType.GamePauseClose);
         }
 
         if (HUD != null && !isInstructionsOpen)
@@ -397,4 +356,12 @@ public class GameStateUIController : UIControllerBase
         isHiding = false;
     }
 
+    private void HandleInventoryClosedEvent()
+    {
+        if (dof != null && dof.focalLength.value > 0)
+        {
+            if (blurTransition != null) StopCoroutine(blurTransition);
+            blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
+        }
+    }
 }

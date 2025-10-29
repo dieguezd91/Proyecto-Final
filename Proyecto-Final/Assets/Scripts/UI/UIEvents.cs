@@ -13,6 +13,8 @@ public static class UIEvents
     public static event Action OnInventoryToggleRequested;
     public static event Action OnInventoryOpened;
     public static event Action OnInventoryClosed;
+    public static event Action OnPauseMenuRequested;
+    public static event Action OnPauseMenuClosed;
 
     // Game State Events
     public static event Action<GameState> OnGameStateChanged;
@@ -97,4 +99,10 @@ public static class UIEvents
 
     public static void TriggerRestorationAltarUIClosed()
         => OnRestorationAltarUIClosed?.Invoke();
+
+    public static void TriggerPauseMenuRequested()
+    => OnPauseMenuRequested?.Invoke();
+
+    public static void TriggerPauseMenuClosed()
+        => OnPauseMenuClosed?.Invoke();
 }
