@@ -119,6 +119,8 @@ MonoBehaviour:
   isCurrentlyAttacking: 0
   nextAttackTime: 0
   attackCooldown: 0
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   meleeData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   attackPoint: {fileID: 7171890095304449723}
   attackableLayers:
@@ -479,6 +481,10 @@ PrefabInstance:
     - target: {fileID: 2489268449943722584, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Name
       value: EnemyCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 5933285377420938222, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
