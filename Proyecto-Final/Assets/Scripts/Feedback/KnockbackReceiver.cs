@@ -23,8 +23,9 @@ public class KnockbackReceiver : MonoBehaviour
     {
         if (isKnockedBack) return;
 
-        Vector2 knockback = direction.normalized * force * (1f - knockbackResistance);
+        isKnockedBack = true;
 
+        Vector2 knockback = direction.normalized * force * (1f - knockbackResistance);
         rb.velocity = knockback;
 
         if (playerController != null)
@@ -37,7 +38,6 @@ public class KnockbackReceiver : MonoBehaviour
 
     private IEnumerator RecoverFromKnockback()
     {
-        isKnockedBack = true;
         float elapsedTime = 0f;
         Vector2 initialKnockbackVelocity = rb.velocity;
 

@@ -261,7 +261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   knockbackResistance: 0.5
-  knockbackDuration: 0.2
+  knockbackDuration: 0.3
   knockbackDecay: 8
 --- !u!114 &3646094729358156513
 MonoBehaviour:

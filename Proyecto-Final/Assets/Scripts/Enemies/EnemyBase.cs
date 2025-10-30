@@ -388,4 +388,9 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
             _ => Color.white
         };
     }
+
+    public bool CanMove()
+    {
+        return !isDead && !IsBeingKnockedBack();
+    }
 }

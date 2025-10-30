@@ -71,7 +71,10 @@ public class EnemyChaseState : IState
     public void OnFixedUpdate()
     {
         var target = enemy.GetCurrentTarget();
-        if (target == null) return;
+        if (target == null || !enemy.CanMove()) return;
+
+        var knockback = enemy.GetComponent<KnockbackReceiver>();
+        if (knockback != null && knockback.IsBeingKnockedBack()) return;
 
         Vector2 dir = (target.position - enemy.transform.position).normalized;
         enemy.MoveTowardsTarget(dir, enemy.MoveSpeed);
