@@ -9788,6 +9788,9 @@ MonoBehaviour:
   speed: 10
   fireTrailPrefab: {fileID: 7107417348711863447, guid: d4df0593a01e4b748bb632cec5a50143, type: 3}
   trailSpawnRate: 0.1
+  impactParticlesPrefab: {fileID: 491567316690014037, guid: ee269b145022c494b8a6424f16134fdc, type: 3}
+  cameraShakeIntensity: 0.3
+  cameraShakeDuration: 0.3
 --- !u!198 &8098347604227706814
 ParticleSystem:
   m_ObjectHideFlags: 0

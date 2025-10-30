@@ -8,7 +8,6 @@ public class FireBullet : MonoBehaviour
     public float maxDamage = 30f;
     public float lifeTime = 3f;
     public float speed = 10f;
-
     private Vector2 direction;
     private Rigidbody2D rb;
     private float lifeTimer;
@@ -16,8 +15,12 @@ public class FireBullet : MonoBehaviour
     [Header("FireTrail Settings")]
     public GameObject fireTrailPrefab;
     public float trailSpawnRate = 0.1f;
-
     private float trailTimer;
+
+    [Header("Impact Effects")]
+    [SerializeField] private GameObject impactParticlesPrefab;
+    [SerializeField] private float cameraShakeIntensity = 0.3f;
+    [SerializeField] private float cameraShakeDuration = 0.3f;
 
     void Awake()
     {
@@ -26,21 +29,18 @@ public class FireBullet : MonoBehaviour
 
     void OnEnable()
     {
-        lifeTimer = lifeTime;    
-        trailTimer = 0f;         
+        lifeTimer = lifeTime;
+        trailTimer = 0f;
     }
-
 
     void Update()
     {
-        // Rotaci�n
         if (rb.velocity.magnitude > 0.1f)
         {
             float angle = Mathf.Atan2(rb.velocity.y, rb.velocity.x) * Mathf.Rad2Deg - 90f;
             transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        // Trail
         trailTimer += Time.deltaTime;
         if (trailTimer >= trailSpawnRate)
         {
@@ -48,7 +48,6 @@ public class FireBullet : MonoBehaviour
             trailTimer = 0f;
         }
 
-        // Caducidad
         lifeTimer -= Time.deltaTime;
         if (lifeTimer <= 0f)
         {
@@ -60,26 +59,24 @@ public class FireBullet : MonoBehaviour
     {
         if (collision.CompareTag("Player") || collision.CompareTag("Plant") || collision.CompareTag("Home"))
         {
+            float dmg = Random.Range(minDamage, maxDamage);
+            bool hitPlayer = collision.CompareTag("Player");
 
             var life = collision.GetComponent<LifeController>();
             if (life != null)
             {
-                float dmg = Random.Range(minDamage, maxDamage);
                 life.TakeDamage(dmg, damageElement: LifeController.DamageElement.Fire);
-                if (collision.CompareTag("Player") && LevelManager.Instance.uiManager != null)
-                {
-                    CameraShaker.Instance?.Shake(0.3f, 0.3f);
-                }
             }
             else
             {
                 var houseLife = collision.GetComponent<HouseLifeController>();
                 if (houseLife != null)
                 {
-                    float dmg = Random.Range(minDamage, maxDamage);
                     houseLife.TakeDamage(dmg);
                 }
             }
+
+            SpawnImpactEffects(collision.transform.position, hitPlayer);
 
             BulletPool.Instance.ReturnBullet(this);
         }
@@ -97,5 +94,24 @@ public class FireBullet : MonoBehaviour
     void SpawnTrail()
     {
         Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
+    }
+
+    void SpawnImpactEffects(Vector3 impactPosition, bool isPlayerHit)
+    {
+        if (impactParticlesPrefab != null)
+        {
+            var particles = Instantiate(impactParticlesPrefab, impactPosition, Quaternion.identity);
+            var ps = particles.GetComponent<ParticleSystem>();
+
+            if (ps != null)
+                Destroy(particles, ps.main.duration + 0.2f);
+            else
+                Destroy(particles, 1f);
+        }
+
+        if (isPlayerHit && Time.timeScale > 0f && CameraShaker.Instance != null)
+        {
+            CameraShaker.Instance.Shake(cameraShakeIntensity, cameraShakeDuration);
+        }
     }
 }
