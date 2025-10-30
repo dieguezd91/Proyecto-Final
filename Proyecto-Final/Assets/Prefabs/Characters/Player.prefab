@@ -5551,7 +5551,7 @@ MonoBehaviour:
     m_Bits: 1024
   digDistance: 2
   digDuration: 1.5
-  digManaCost: 10
+  digManaCost: 50
   interactionDistance: 2
   progressBar: {fileID: 0}
   progressBarTarget: {fileID: 3535706038251047626}
