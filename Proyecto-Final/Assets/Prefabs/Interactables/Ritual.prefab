@@ -186,7 +186,7 @@ MonoBehaviour:
   canRestoreHealth: 1
   teleportAfterRitual: 1
   teleportDestination: {fileID: 7922137150472840030}
-  teleportDelay: 0.5
+  teleportDelay: 1
   candleLights:
   - {fileID: 4922927767286658229}
   - {fileID: 724081456883087910}
@@ -198,6 +198,7 @@ MonoBehaviour:
   candleIgnitionDelay: 0.3
   ritualVignetteIntensity: 0.6
   centerVignetteOnPlayer: 1
+  vignetteFadeDuration: 1.5
   altarSpriteRenderer: {fileID: 1682724339635525393}
   defaultSprite: {fileID: 1845753906, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   nearSprite: {fileID: -593795343, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}

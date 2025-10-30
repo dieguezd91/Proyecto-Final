@@ -15,6 +15,10 @@ public class MoveCamera : MonoBehaviour
     [SerializeField] private float softFollowSpeed = 2f;
     [SerializeField] private float hardFollowSpeed = 6f;
 
+    [Header("Ritual Settings")]
+    [SerializeField] private float ritualCameraSpeed = 3f;
+    [SerializeField] private float ritualZoomOut = 2f;
+
     [Header("Gizmos Settings")]
     [SerializeField] private bool showGizmos = true;
     [SerializeField] private Color deadZoneColor = new Color(0f, 1f, 0f, 0.3f);
@@ -25,10 +29,17 @@ public class MoveCamera : MonoBehaviour
     [SerializeField] private float arrowHeadAngle = 20f;
 
     private Camera cam;
+    private Transform ritualTarget;
+    private float originalCameraSize;
 
     private void Start()
     {
         cam = Camera.main;
+
+        if (cam != null)
+        {
+            originalCameraSize = cam.orthographicSize;
+        }
     }
 
     private void LateUpdate()
@@ -37,7 +48,19 @@ public class MoveCamera : MonoBehaviour
             return;
 
         var state = LevelManager.Instance.currentGameState;
-        if (state == GameState.OnInventory || state == GameState.OnCrafting || state == GameState.OnRitual)
+
+        if (state == GameState.OnRitual)
+        {
+            HandleRitualCamera();
+            return;
+        }
+
+        if (cam != null && cam.orthographicSize != originalCameraSize)
+        {
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, originalCameraSize, Time.deltaTime * ritualCameraSpeed);
+        }
+
+        if (state == GameState.OnInventory || state == GameState.OnCrafting)
             return;
 
         if (mainChar == null || cam == null) return;
@@ -62,43 +85,83 @@ public class MoveCamera : MonoBehaviour
         targetPos.z = transform.position.z;
 
         float speed = (dist < softZoneRadius) ? softFollowSpeed : hardFollowSpeed;
+
         transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);
     }
 
+    private void HandleRitualCamera()
+    {
+        if (ritualTarget == null)
+        {
+            RitualAltar altar = FindObjectOfType<RitualAltar>();
+            if (altar != null)
+            {
+                ritualTarget = altar.transform;
+            }
+            else
+            {
+                ritualTarget = mainChar;
+            }
+        }
+
+        if (ritualTarget == null || cam == null) return;
+
+        Vector3 targetPos = ritualTarget.position;
+        targetPos.z = transform.position.z;
+
+        transform.position = Vector3.Lerp(transform.position, targetPos, ritualCameraSpeed * Time.deltaTime);
+
+        if (ritualZoomOut > 0f)
+        {
+            float targetZoom = originalCameraSize + ritualZoomOut;
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoom, ritualCameraSpeed * Time.deltaTime);
+        }
+    }
+
+    public void ResetRitualTarget()
+    {
+        ritualTarget = null;
+    }
 
     private void OnDrawGizmos()
     {
         if (!showGizmos || mainChar == null) return;
 
+        Vector3 playerPos = mainChar.position;
+
+        // Dead zone
         Gizmos.color = deadZoneColor;
-        Gizmos.DrawWireSphere(mainChar.position, deadZoneRadius);
+        Gizmos.DrawWireSphere(playerPos, deadZoneRadius);
 
         Gizmos.color = softZoneColor;
-        Gizmos.DrawWireSphere(mainChar.position, softZoneRadius);
+        Gizmos.DrawWireSphere(playerPos, softZoneRadius);
 
         Gizmos.color = maxOffsetColor;
-        Gizmos.DrawWireSphere(mainChar.position, deadZoneRadius + maxOffsetDistance);
+        Gizmos.DrawWireSphere(playerPos, maxOffsetDistance + deadZoneRadius);
 
-        if (Application.isPlaying && cam != null)
+        if (cam != null)
         {
-            Vector3 playerPos = mainChar.position;
-            playerPos.z = 0;
-
             Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-            mouseWorld.z = 0;
+            mouseWorld.z = playerPos.z;
+            Vector3 toMouse = mouseWorld - playerPos;
 
-            Vector3 direction = (mouseWorld - playerPos).normalized;
-            float distance = Mathf.Min((mouseWorld - playerPos).magnitude, deadZoneRadius + maxOffsetDistance);
-
-            Vector3 endPos = playerPos + direction * distance;
-
-            Gizmos.color = directionArrowColor;
-            Gizmos.DrawLine(playerPos, endPos);
-
-            Vector3 right = Quaternion.LookRotation(Vector3.forward, direction) * Quaternion.Euler(0, 0, arrowHeadAngle) * Vector3.down;
-            Vector3 left = Quaternion.LookRotation(Vector3.forward, direction) * Quaternion.Euler(0, 0, -arrowHeadAngle) * Vector3.down;
-            Gizmos.DrawLine(endPos, endPos + right * arrowHeadLength);
-            Gizmos.DrawLine(endPos, endPos + left * arrowHeadLength);
+            if (toMouse.magnitude > deadZoneRadius)
+            {
+                DrawArrow(playerPos, toMouse.normalized * Mathf.Min(toMouse.magnitude, maxOffsetDistance + deadZoneRadius), directionArrowColor);
+            }
         }
+    }
+
+    private void DrawArrow(Vector3 start, Vector3 direction, Color color)
+    {
+        Gizmos.color = color;
+        Vector3 end = start + direction;
+        Gizmos.DrawLine(start, end);
+
+        Vector3 right = Quaternion.Euler(0, 0, arrowHeadAngle) * -direction.normalized * arrowHeadLength;
+        Vector3 left = Quaternion.Euler(0, 0, -arrowHeadAngle) * -direction.normalized * arrowHeadLength;
+
+        Gizmos.DrawLine(end, end + right);
+        Gizmos.DrawLine(end, end + left);
     }
 }
