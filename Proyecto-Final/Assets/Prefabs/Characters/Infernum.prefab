@@ -315,6 +315,8 @@ MonoBehaviour:
   isCurrentlyAttacking: 0
   nextAttackTime: 0
   attackCooldown: 0
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
   firingPoint: {fileID: 1303027347511237169}
 --- !u!114 &935879750160187858
@@ -352,7 +354,7 @@ MonoBehaviour:
   isEnemy: 1
   isPlayer: 0
   isPlant: 0
-  hasDeathAnimation: 0
+  hasDeathAnimation: 1
 --- !u!114 &259869561657676236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,7 +406,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.9375, y: 1.75}
+    oldSize: {x: 2, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
