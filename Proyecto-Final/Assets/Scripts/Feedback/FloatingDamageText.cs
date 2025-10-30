@@ -21,7 +21,9 @@ public class FloatingDamageText : MonoBehaviour
     private float lastHitTime;
     private float spawnTime;
     private bool isFadingOut = false;
-    
+
+    private Vector3 initialWorldPosition;
+
     void Awake()
     {
         textMesh = GetComponentInChildren<TextMeshProUGUI>();
@@ -32,6 +34,8 @@ public class FloatingDamageText : MonoBehaviour
         this.target = target;
         transform.SetParent(target, worldPositionStays: true);
         transform.localPosition = offset;
+
+        initialWorldPosition = transform.position;
 
         spawnTime = Time.time;
         lastHitTime = Time.time;
@@ -54,15 +58,22 @@ public class FloatingDamageText : MonoBehaviour
         float currentScale = Mathf.Lerp(minScale, maxScale, tDamage);
         transform.localScale = Vector3.one * currentScale;
 
+        float totalFloatDistance = sinceSpawn * floatSpeed;
+
         if (!isFadingOut && target != null)
-            transform.position = target.position + offset;
+        {
+            transform.position = target.position + offset + Vector3.up * totalFloatDistance;
+        }
+        else
+        {
+            transform.position += Vector3.up * floatSpeed * Time.deltaTime;
+        }
 
         if (sinceSpawn <= fadeInDuration)
         {
             float aIn = sinceSpawn / fadeInDuration;
             textMesh.color = new Color(dynamicColor.r, dynamicColor.g, dynamicColor.b, aIn);
         }
-
         else if (!isFadingOut && sinceLastHit < duration)
         {
             textMesh.color = new Color(dynamicColor.r, dynamicColor.g, dynamicColor.b, 1f);
@@ -81,12 +92,12 @@ public class FloatingDamageText : MonoBehaviour
             float aOut = Mathf.Lerp(1f, 0f, tOut);
 
             textMesh.color = new Color(dynamicColor.r, dynamicColor.g, dynamicColor.b, aOut);
-            transform.position += Vector3.up * floatSpeed * Time.deltaTime;
 
             if (fadeElapsed >= fadeOutDuration)
                 Destroy(gameObject);
         }
     }
+
     public void AddDamage(float dmg)
     {
         totalDamage += dmg;
