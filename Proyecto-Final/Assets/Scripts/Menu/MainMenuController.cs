@@ -31,7 +31,7 @@ public class MainMenuController : UIControllerBase
 
         if (_playButton != null)
         {
-            _playButton.OnClick.AddListener(PlayGame);
+            _playButton.OnClick.AddListener(OnPlayButtonClick);
             _playButton.OnHover.AddListener(() => { });
         }
 
@@ -67,8 +67,6 @@ public class MainMenuController : UIControllerBase
         Cursor.lockState = CursorLockMode.None;
     }
 
-    private static void PlayGame() => SceneLoaderManager.Instance.LoadGameScene();
-
     private void ShowOptions()
     {
         if (_optionsPanel != null)
@@ -83,5 +81,10 @@ public class MainMenuController : UIControllerBase
         {
             _optionsPanel.Hide();
         }
+    }
+
+    public void OnPlayButtonClick()
+    {
+        SceneLoaderManager.Instance.LoadGameScene();
     }
 }
