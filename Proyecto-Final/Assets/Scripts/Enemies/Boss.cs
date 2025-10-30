@@ -5,13 +5,11 @@ using System.Collections.Generic;
 public class Boss : EnemyBase
 {
     [SerializeField] public BossEnemyDataSO bossData;
-    //public BossEnemyDataSO Data { get; private set; }
 
     [Header("Combat References")]
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform[] minionSpawnPoints;
     private Coroutine currentAttackCoroutine;
-
 
     public Transform[] MinionSpawnPoints => minionSpawnPoints;
     public GameObject MinionPrefab => minionPrefab;
@@ -28,7 +26,6 @@ public class Boss : EnemyBase
     private List<GameObject> currentMinions = new List<GameObject>();
     private HashSet<GameObject> meleeDamagedObjects = new HashSet<GameObject>(); 
     private HashSet<GameObject> specialDamagedObjects = new HashSet<GameObject>();
-
 
     protected override EnemyDataSO GetEnemyData() => bossData;
 
@@ -63,7 +60,6 @@ public class Boss : EnemyBase
         StateMachine.RegisterState(new EnemySpawnMinionState(this));
     }
 
-
     protected override void InitializeEnemy()
     {
         base.InitializeEnemy();
@@ -86,7 +82,6 @@ public class Boss : EnemyBase
         StateMachine.ChangeState<EnemyIdleState>();
 
     }
-
 
     protected override void Update()
     {
@@ -147,7 +142,6 @@ public class Boss : EnemyBase
         throw new System.NotImplementedException();
     }
 
-
     public void TryStartMeleeAttack()
     {
         if (currentAttackCoroutine == null)
@@ -182,9 +176,6 @@ public class Boss : EnemyBase
             }
         }
     }
-
-
-
 
     public IEnumerator PerformSpecialAttack()
     {
@@ -239,8 +230,4 @@ public class Boss : EnemyBase
             } 
         } 
     }
-
-    
-
-
 }

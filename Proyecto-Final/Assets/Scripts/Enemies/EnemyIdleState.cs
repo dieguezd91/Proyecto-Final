@@ -320,13 +320,23 @@ public class EnemySpawnMinionState : IState
     {
         boss.isSpawningMinions = true;
 
-        yield return new WaitForSeconds(0.1f);
+        if (boss.animator != null)
+        {
+            boss.animator.SetTrigger("SpawnMinions");
+        }
+
+        yield return new WaitForSeconds(0.5f);
 
         foreach (Transform spawnPoint in boss.MinionSpawnPoints)
         {
-            GameObject minion = Object.Instantiate(boss.MinionPrefab, spawnPoint.position, Quaternion.identity);
-            boss.CurrentMinions.Add(minion);
+            if (spawnPoint != null && boss.MinionPrefab != null)
+            {
+                GameObject minion = Object.Instantiate(boss.MinionPrefab, spawnPoint.position, Quaternion.identity);
+                boss.CurrentMinions.Add(minion);
+            }
         }
+
+        yield return new WaitForSeconds(0.3f);
 
         boss.ResetSpawnCooldown();
         boss.isSpawningMinions = false;
