@@ -230,4 +230,24 @@ public class Boss : EnemyBase
             } 
         } 
     }
+
+    public void OnSpawnMinionsAnimationEvent()
+    {
+        if (isSpawningMinions)
+        {
+            SpawnMinions();
+        }
+    }
+
+    private void SpawnMinions()
+    {
+        foreach (Transform spawnPoint in minionSpawnPoints)
+        {
+            if (spawnPoint != null && minionPrefab != null)
+            {
+                GameObject minion = Instantiate(minionPrefab, spawnPoint.position, Quaternion.identity);
+                currentMinions.Add(minion);
+            }
+        }
+    }
 }

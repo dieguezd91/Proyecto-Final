@@ -25,8 +25,6 @@ public class EnemyIdleState : IState
     public void OnExit() { }
 }
 
-
-
 public class EnemyChaseState : IState
 {
     private readonly EnemyBase enemy;
@@ -82,9 +80,6 @@ public class EnemyChaseState : IState
 
     public void OnExit() => enemy.StopMovement();
 }
-
-
-
 
 public class EnemyAttackState : IState
 {
@@ -237,12 +232,6 @@ public class EnemyAttackState : IState
     }
 }
 
-
-
-
-
-
-
 public class EnemyDeadState : IState
 {
     private readonly EnemyBase enemy;
@@ -297,7 +286,6 @@ public class EnemyDeadState : IState
     }
 }
 
-
 public class EnemySpawnMinionState : IState
 {
     private readonly Boss boss;
@@ -312,31 +300,18 @@ public class EnemySpawnMinionState : IState
     {
         boss.StopMovement();
         boss.isCurrentlyAttacking = false;
+        boss.isSpawningMinions = true;
         spawnRoutine = boss.StartCoroutine(SpawnRoutine());
-        Debug.Log($"{boss.name} is spawning minions.");
     }
 
     private IEnumerator SpawnRoutine()
     {
-        boss.isSpawningMinions = true;
-
         if (boss.animator != null)
         {
             boss.animator.SetTrigger("SpawnMinions");
         }
 
-        yield return new WaitForSeconds(0.5f);
-
-        foreach (Transform spawnPoint in boss.MinionSpawnPoints)
-        {
-            if (spawnPoint != null && boss.MinionPrefab != null)
-            {
-                GameObject minion = Object.Instantiate(boss.MinionPrefab, spawnPoint.position, Quaternion.identity);
-                boss.CurrentMinions.Add(minion);
-            }
-        }
-
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(1.5f);
 
         boss.ResetSpawnCooldown();
         boss.isSpawningMinions = false;
@@ -350,6 +325,8 @@ public class EnemySpawnMinionState : IState
 
     public void OnExit()
     {
+        boss.isSpawningMinions = false;
+
         if (spawnRoutine != null)
             boss.StopCoroutine(spawnRoutine);
     }
