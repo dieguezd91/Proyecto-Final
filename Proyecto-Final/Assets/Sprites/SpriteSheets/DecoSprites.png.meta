@@ -139,7 +139,7 @@ TextureImporter:
         width: 78
         height: 80
       alignment: 9
-      pivot: {x: 0.5, y: 0.29500002}
+      pivot: {x: 0.5, y: 0.3}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -1740,8 +1740,8 @@ TextureImporter:
         y: 400
         width: 45
         height: 41
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.4634146}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -1849,6 +1849,253 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TreeSway1
+      rect:
+        serializedVersion: 2
+        x: 273
+        y: 0
+        width: 78
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -10, y: -24}
+        - {x: -10, y: -37}
+        - {x: 9, y: -37}
+        - {x: 9, y: -24}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25efcb449fdd6f8468a0955e4c61da90
+      internalID: 550385081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeSway2
+      rect:
+        serializedVersion: 2
+        x: 353
+        y: 0
+        width: 78
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -10, y: -24}
+        - {x: -10, y: -37}
+        - {x: 9, y: -37}
+        - {x: 9, y: -24}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b0fd7a35c608b949acbcc65c793c15f
+      internalID: -2094919188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeSway3
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 0
+        width: 78
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -10, y: -24}
+        - {x: -10, y: -37}
+        - {x: 9, y: -37}
+        - {x: 9, y: -24}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c7f696ec41ba69408264b2447f86ae6
+      internalID: 1815119512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_24
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 352
+        width: 45
+        height: 39
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.4871795}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -2.5, y: -7.5}
+        - {x: 0.5, y: -19.5}
+        - {x: 10.5, y: -19.5}
+        - {x: 10.5, y: -5.5}
+        - {x: 3.5, y: -3.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75d27b352c307124e93cdfc54b0edb42
+      internalID: -284563013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_48
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 352
+        width: 45
+        height: 42
+      alignment: 9
+      pivot: {x: 0.4888889, y: 0.45238096}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -2.5, y: -7.5}
+        - {x: 0.5, y: -20.5}
+        - {x: 10.5, y: -20.5}
+        - {x: 10.5, y: -5.5}
+        - {x: 3.5, y: -3.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1c753ff88e536d44aac2117305123be
+      internalID: -34839
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_49
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 448
+        width: 11
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -5, y: -12}
+        - {x: -2, y: -23}
+        - {x: 2, y: -23}
+        - {x: 2, y: -19}
+        - {x: -1, y: -12}
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd9df4848c7170a449da41dda06d9bb3
+      internalID: 1851499039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_50
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 448
+        width: 10
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 2.5, y: -2.5}
+        - {x: -1.5, y: 0.5}
+        - {x: -5, y: -3.5}
+        - {x: -5, y: -13.5}
+        - {x: 1.5, y: -13.5}
+        - {x: -0.5, y: -6.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70d3c2a2d854cce45a0448d7ef68e35f
+      internalID: -1326425407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_51
+      rect:
+        serializedVersion: 2
+        x: 109
+        y: 400
+        width: 51
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -6.5, y: -9.5}
+        - {x: -6.5, y: -21.5}
+        - {x: 3.5, y: -21.5}
+        - {x: 3.5, y: -9.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78641e9494e0b0349b128ab9e6e1466b
+      internalID: -1567368231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeSway4
+      rect:
+        serializedVersion: 2
+        x: 513
+        y: 0
+        width: 78
+        height: 79
+      alignment: 9
+      pivot: {x: 0.5, y: 0.30379748}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00d4db50c143e3344bd09d823efa3588
+      internalID: 1266977819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TreeSway5
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 0
+        width: 78
+        height: 80
+      alignment: 9
+      pivot: {x: 0.5, y: 0.3}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 545785f0ba01bd04c8fe393da2e9d967
+      internalID: 92077436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1905,6 +2152,7 @@ TextureImporter:
       DecoSprites_21: 1436717902
       DecoSprites_22: -1002052012
       DecoSprites_23: -1343609156
+      DecoSprites_24: -284563013
       DecoSprites_25: 854374387
       DecoSprites_26: 750479643
       DecoSprites_27: -1215726064
@@ -1930,7 +2178,11 @@ TextureImporter:
       DecoSprites_45: 1048496175
       DecoSprites_46: -1530541222
       DecoSprites_47: -593795343
+      DecoSprites_48: -34839
+      DecoSprites_49: 1851499039
       DecoSprites_5: -1056085900
+      DecoSprites_50: -1326425407
+      DecoSprites_51: -1567368231
       DecoSprites_6: -28200335
       DecoSprites_7: -6405655
       DecoSprites_8: 521314461
@@ -1943,6 +2195,11 @@ TextureImporter:
       PotDeco: 1046542882
       PotHighlight: -320180591
       RitualRug: -1140822945
+      TreeSway1: 550385081
+      TreeSway2: -2094919188
+      TreeSway3: 1815119512
+      TreeSway4: 1266977819
+      TreeSway5: 92077436
       Tronco: -898352627
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
