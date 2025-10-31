@@ -1201,6 +1201,468 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_35
+      rect:
+        serializedVersion: 2
+        x: 18
+        y: 688
+        width: 55
+        height: 63
+      alignment: 9
+      pivot: {x: 0.5090909, y: 0.4761905}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd574223dbceeae4ca154e7a1aef45ee
+      internalID: -1044409847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_37
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 688
+        width: 68
+        height: 64
+      alignment: 9
+      pivot: {x: 0.45588234, y: 0.4375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 899cc41c3ae6a724fa272a689a227739
+      internalID: 1185644089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_39
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 688
+        width: 58
+        height: 62
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.43548387}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 021fd12748737a6409bd1a6d58e1ffde
+      internalID: -1599908638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_40
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 688
+        width: 54
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.4516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7d889b6a2f778a43ab7f8756b3ba91b
+      internalID: 1750147244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_41
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 688
+        width: 61
+        height: 62
+      alignment: 9
+      pivot: {x: 0.54098356, y: 0.43548387}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b03ae31f587fc440970df9780b6969d
+      internalID: -766494603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_42
+      rect:
+        serializedVersion: 2
+        x: 478
+        y: 688
+        width: 56
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5714286, y: 0.4516129}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a52265facb96e3d47ad0c4216e5a820c
+      internalID: -1817571580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_43
+      rect:
+        serializedVersion: 2
+        x: 557
+        y: 688
+        width: 57
+        height: 62
+      alignment: 9
+      pivot: {x: 0.57894737, y: 0.43548387}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13184fba54adb014d815b23c991ed6f0
+      internalID: 1196790928
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_44
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 688
+        width: 54
+        height: 62
+      alignment: 9
+      pivot: {x: 0.5555556, y: 0.43548387}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d141cfa7af3ad2b4f8a92e84a6c4929e
+      internalID: 580609965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_45
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 688
+        width: 54
+        height: 61
+      alignment: 9
+      pivot: {x: 0.6111111, y: 0.4754098}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 296ed0bc7781e7948926afe33b5d240c
+      internalID: 406474580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_46
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 689
+        width: 64
+        height: 59
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.47457626}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad17a803a47967e469d0aceab6a32058
+      internalID: 1725827458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_47
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 688
+        width: 64
+        height: 60
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.46666667}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95ac0e0f90a7dfa4b90cafb0163ba8a1
+      internalID: -1845172795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_48
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 768
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.4375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38c2ac520cd48304684dbb123adc2830
+      internalID: 404166038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_49
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 768
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.40625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7dbc1445e32355468dfea6a944bed88
+      internalID: 812082305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_50
+      rect:
+        serializedVersion: 2
+        x: 641
+        y: 769
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.40625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f77ccee747944684796de1e8a70d9754
+      internalID: -2000785860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_51
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 769
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.515625, y: 0.40625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d7ac40ed2a8d16479de2a38a0fbbbdd
+      internalID: 539898609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_52
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 769
+        width: 64
+        height: 64
+      alignment: 9
+      pivot: {x: 0.375, y: 0.40625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 779f98a0cf8f2934c89fff76bfddc1ed
+      internalID: -1262688537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_53
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 224
+        width: 30
+        height: 11
+      alignment: 9
+      pivot: {x: 0.53333336, y: 0.45454547}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b12347fe158fa34a99fc79278a11ab4
+      internalID: 1373320432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_54
+      rect:
+        serializedVersion: 2
+        x: 524
+        y: 225
+        width: 29
+        height: 11
+      alignment: 9
+      pivot: {x: 0.51724136, y: 0.36363637}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33f1f322d6918df40aae95566970a486
+      internalID: -2002224678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_66
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 225
+        width: 30
+        height: 14
+      alignment: 9
+      pivot: {x: 0.6333334, y: 0.2857143}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c13707eef3d7e8e4188e3ff6f9504e81
+      internalID: 585774881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_67
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 223
+        width: 36
+        height: 26
+      alignment: 9
+      pivot: {x: 0.6388889, y: 0.1923077}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b08bf7a56625b6409c9d2fa89ac8b5b
+      internalID: -741862378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_68
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 223
+        width: 34
+        height: 32
+      alignment: 9
+      pivot: {x: 0.6764706, y: 0.15625}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4d8d00c370728eb48946fc10f0e12397
+      internalID: -2129319300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CrystalGolem_69
+      rect:
+        serializedVersion: 2
+        x: 753
+        y: 225
+        width: 33
+        height: 28
+      alignment: 9
+      pivot: {x: 0.33333334, y: 0.14285715}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1324dccd0e6c314986f45597a051d20
+      internalID: -482965276
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1279,6 +1741,10 @@ TextureImporter:
       CrystalGolem_63: 520998225
       CrystalGolem_64: 183857901
       CrystalGolem_65: -687699989
+      CrystalGolem_66: 585774881
+      CrystalGolem_67: -741862378
+      CrystalGolem_68: -2129319300
+      CrystalGolem_69: -482965276
       CrystalGolem_7: 1863789528
       CrystalGolem_8: 1964452864
       CrystalGolem_9: 561658897

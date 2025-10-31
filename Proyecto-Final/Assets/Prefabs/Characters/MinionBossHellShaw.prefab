@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
   m_SortingOrder: 5
-  m_Sprite: {fileID: -1222204734, guid: 494fce19c09feb14ebcd3992662734f6, type: 3}
+  m_Sprite: {fileID: 842540238, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -119,6 +119,8 @@ MonoBehaviour:
   isCurrentlyAttacking: 0
   nextAttackTime: 0
   attackCooldown: 0
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   meleeData: {fileID: 11400000, guid: d09ac99a40d52ea46b46251e2c57c520, type: 2}
   attackPoint: {fileID: 7171890095304449723}
   attackableLayers:
