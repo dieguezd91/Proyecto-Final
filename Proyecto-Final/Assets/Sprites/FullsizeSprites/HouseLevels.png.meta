@@ -584,11 +584,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 955
-        y: 98
+        y: 108
         width: 300
         height: 450
       alignment: 9
-      pivot: {x: 0.53000003, y: -0.10222223}
+      pivot: {x: 0.52666664, y: -0.10222223}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -596,6 +596,90 @@ TextureImporter:
       bones: []
       spriteID: 6fb06b03faf3be9478fdd1f5d95a04e7
       internalID: 590317391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DoorLock1
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 32
+        width: 21
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca9bfa76db408fd408aef8e77e8ad0f3
+      internalID: 1514557134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DoorLock2
+      rect:
+        serializedVersion: 2
+        x: 758
+        y: 32
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c13bd6ff92cdc547ab7035884d112ca
+      internalID: 623107849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DoorLock3
+      rect:
+        serializedVersion: 2
+        x: 788
+        y: 32
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 395bbdb1eb7bbdf4986381d38c5b8d3e
+      internalID: 459729988
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Doorlock4
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 32
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 572bf85f0093afe4b830e16b63ccb2a4
+      internalID: -1187755000
       vertices: []
       indices: 
       edges: []
@@ -611,6 +695,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      DoorLock1: 1514557134
+      DoorLock2: 623107849
+      DoorLock3: 459729988
+      Doorlock4: -1187755000
       Doors: 970242705
       HouseDestroyedFront: -278929917
       HouseDestroyedRoof: 1090224669

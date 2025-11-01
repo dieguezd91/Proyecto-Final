@@ -1584,6 +1584,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TryingS
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 16
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea376307ff14b444d9d79558eca607bf
+      internalID: 1045475238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1657,6 +1678,7 @@ TextureImporter:
       ThoughtCloud3: 1171033025
       ThoughtCloud4: 1304090407
       ThoughtCloud5: 326547604
+      TryingS: 1045475238
       VoltaicCore: -37685797
       Wind: 876738399
       Wind10: 2032421392

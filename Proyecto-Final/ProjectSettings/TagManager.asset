@@ -61,6 +61,9 @@ TagManager:
   - name: Roof
     uniqueID: 930632891
     locked: 0
+  - name: Weather
+    uniqueID: 3235076419
+    locked: 0
   - name: WorldUI
     uniqueID: 2997059139
     locked: 0
