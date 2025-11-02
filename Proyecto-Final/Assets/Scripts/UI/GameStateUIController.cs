@@ -7,7 +7,6 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject seedSlots;
     [SerializeField] private GameObject dayControlPanel;
     [SerializeField] private GameObject abilityPanel;
 
@@ -220,12 +219,9 @@ public class GameStateUIController : UIControllerBase
         if (HUD != null)
             HUD.SetActive(showHUD);
 
-        bool showGameplayUI = IsActiveGameplayState(currentState);
-
-        if (seedSlots != null)
-            seedSlots.SetActive(showGameplayUI);
+        bool showDayControls = IsActiveGameplayState(currentState);
         if (dayControlPanel != null)
-            dayControlPanel.SetActive(showGameplayUI);
+            dayControlPanel.SetActive(showDayControls);
     }
 
     private bool IsGameplayState(GameState state)
@@ -264,7 +260,7 @@ public class GameStateUIController : UIControllerBase
     public void SetUIElementsVisibility(bool visible)
     {
         if (HUD != null) HUD.SetActive(visible);
-        if (seedSlots != null) seedSlots.SetActive(visible);
+
         if (dayControlPanel != null) dayControlPanel.SetActive(visible);
 
         if (!visible && UIManager.Instance.IsInventoryOpen())
