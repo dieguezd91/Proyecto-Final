@@ -11,7 +11,6 @@ public class EnemyIdleState : IState
     public void OnEnter()
     {
         enemy.StopMovement();
-        Debug.Log($"{enemy.name} entra en Idle");
     }
 
     public void OnUpdate()
@@ -46,10 +45,7 @@ public class EnemyChaseState : IState
             attackRange = gnome.GetType().GetField("stopDistance", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(gnome) as float? ?? 0.3f;
     }
 
-    public void OnEnter()
-    {
-        Debug.Log($"{enemy.name} empieza a perseguir (rango de ataque = {attackRange})");
-    }
+    public void OnEnter() { }
 
     public void OnUpdate()
     {
@@ -134,7 +130,6 @@ public class EnemyAttackState : IState
             }
             else
             {
-                Debug.LogWarning($"[EnemyAttackState] {boss.name} no tiene BossEnemyDataSO asignado.");
                 attackRange = 3f;
                 meleeDelay = 0.6f;
                 specialDelay = 1f;
@@ -191,8 +186,6 @@ public class EnemyAttackState : IState
 
                 if (method != null)
                     method.Invoke(enemy, null);
-                else
-                    Debug.LogWarning($"{enemy.name} no tiene método PerformAttack().");
 
                 nextAttackTime = Time.time + enemy.attackCooldown;
             }

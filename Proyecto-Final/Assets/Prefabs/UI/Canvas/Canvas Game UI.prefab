@@ -254,9 +254,10 @@ MonoBehaviour:
   manaUI: {fileID: 4856288266536921601}
   inventoryUIController: {fileID: 7278896005136402551}
   seedSlotsUI: {fileID: 6844681393686103495}
-  gameStateUI: {fileID: 0}
+  gameStateUI: {fileID: 8395775131526354139}
   feedbackUI: {fileID: 8175147833415863430}
   tooltipUI: {fileID: 6998435666628285364}
+  spellSlotsUI: {fileID: 6281770049668125291}
   interfaceSounds: {fileID: 6375595165552625574}
   gameOverPanel: {fileID: 2740163807364435899}
   HUD: {fileID: 1087430937299666142}
@@ -412,8 +413,8 @@ MonoBehaviour:
   HUD: {fileID: 1087430937299666142}
   gameOverPanel: {fileID: 2740163807364435899}
   pausePanel: {fileID: 797963119955334537}
-  instructionsPanel: {fileID: 3286097922074778876}
   seedSlots: {fileID: 5302073364865431188}
+  spellSlots: {fileID: 5356779870975782436}
   dayControlPanel: {fileID: 0}
   abilityPanel: {fileID: 4712039638697272631}
   _pauseMenuController: {fileID: 1300175472483836207}
@@ -1386,11 +1387,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f39d20afbd567664186121d3c6742759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &3286097922074778876 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 517674190758370445, guid: 2663980d92084004c97afc0674369113, type: 3}
-  m_PrefabInstance: {fileID: 3077565246720753777}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6554024949820113098 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8088790106237010107, guid: 2663980d92084004c97afc0674369113, type: 3}
@@ -2119,6 +2115,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3675243649708622919, guid: a5fa038344b370749b2e0583e0750862, type: 3}
   m_PrefabInstance: {fileID: 8833152073269359315}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &5356779870975782436 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3513568485282209015, guid: a5fa038344b370749b2e0583e0750862, type: 3}
+  m_PrefabInstance: {fileID: 8833152073269359315}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6281770049668125291 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3294661927792386232, guid: a5fa038344b370749b2e0583e0750862, type: 3}
+  m_PrefabInstance: {fileID: 8833152073269359315}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5356779870975782436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29839c071da47ba429444c8b0f64069d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6844681393686103495 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2623514410305156884, guid: a5fa038344b370749b2e0583e0750862, type: 3}

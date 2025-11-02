@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7321864396629076536}
+  - component: {fileID: 6875122128112198367}
   - component: {fileID: 7879801212011269799}
   - component: {fileID: 2098131842868486719}
-  - component: {fileID: 6875122128112198367}
   m_Layer: 5
   m_Name: HUD Seed Slots
   m_TagString: Untagged
@@ -45,6 +45,30 @@ RectTransform:
   m_AnchoredPosition: {x: -300, y: 71.8}
   m_SizeDelta: {x: 725, y: 100}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &6875122128112198367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5188386404323938700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8fd0b6989339e4296c5c28ecf71587, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _defaultState: 0
+  _currentState: 0
+  seedSlots:
+  - {fileID: 1354065978625296269}
+  - {fileID: 3432383506665694498}
+  - {fileID: 6409295198010271398}
+  - {fileID: 7978251953858259645}
+  - {fileID: 7838406381144955558}
+  - {fileID: 6719703947968894760}
+  - {fileID: 2714298403536559698}
+  seedSlotsCanvasGroup: {fileID: 2098131842868486719}
+  doublePressThreshold: 0.3
 --- !u!114 &7879801212011269799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,30 +107,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &6875122128112198367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5188386404323938700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6c8fd0b6989339e4296c5c28ecf71587, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultState: 0
-  _currentState: 0
-  seedSlots:
-  - {fileID: 1354065978625296269}
-  - {fileID: 3432383506665694498}
-  - {fileID: 6409295198010271398}
-  - {fileID: 7978251953858259645}
-  - {fileID: 7838406381144955558}
-  - {fileID: 6719703947968894760}
-  - {fileID: 2714298403536559698}
-  seedSlotsCanvasGroup: {fileID: 2098131842868486719}
-  doublePressThreshold: 0.3
 --- !u!1001 &659095491111535957
 PrefabInstance:
   m_ObjectHideFlags: 0

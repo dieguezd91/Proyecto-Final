@@ -38,11 +38,9 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private float activeMoveSpeed;
 
-
     private float dashCounter;
     private float dashCoolCounter;
     private bool isDashing = false;
-
 
     private float lastFootstepTime = 0f;
     private float footstepCooldown = 0.2f;
@@ -261,7 +259,25 @@ public class PlayerController : MonoBehaviour
 
     void CastSpell()
     {
-        if (!manaSystem.UseMana(spellManaCost))
+        if (SpellInventory.Instance == null)
+        {
+            return;
+        }
+
+        int selectedSlotIndex = SpellInventory.Instance.GetSelectedSlotIndex();
+        SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
+
+        if (selectedSpell == null || !selectedSpell.isUnlocked)
+        {
+            return;
+        }
+
+        if (selectedSpell.currentCooldown > 0f)
+        {
+            return;
+        }
+
+        if (!manaSystem.UseMana(selectedSpell.manaCost))
         {
             return;
         }
@@ -270,7 +286,9 @@ public class PlayerController : MonoBehaviour
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
 
-        GameObject spell = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        GameObject spellPrefab = selectedSpell.spellPrefab != null ? selectedSpell.spellPrefab : bulletPrefab;
+
+        GameObject spell = Instantiate(spellPrefab, firePoint.position, Quaternion.identity);
         Spell spellComponent = spell.GetComponent<Spell>();
         SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
 
@@ -288,6 +306,8 @@ public class PlayerController : MonoBehaviour
         }
 
         attackSlowEndTime = Time.time + attackSlowDuration;
+
+        SpellInventory.Instance.StartCooldown(selectedSlotIndex);
     }
 
     public void ShootFromHand()
@@ -295,8 +315,15 @@ public class PlayerController : MonoBehaviour
         if (!canAct || Time.time < nextFireTime)
             return;
 
+        if (SpellInventory.Instance != null)
+        {
+            SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
+            if (selectedSpell != null && selectedSpell.currentCooldown > 0f)
+                return;
+        }
+
         CastSpell();
-        nextFireTime = Time.time + spellCooldown;
+        nextFireTime = Time.time + 0.1f;
     }
 
     public void SetMovementEnabled(bool enabled)

@@ -1,0 +1,103 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1737513209319803462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 841542558028809137}
+  - component: {fileID: 996943108394057215}
+  m_Layer: 0
+  m_Name: SpellInventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &841542558028809137
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737513209319803462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &996943108394057215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737513209319803462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a94b030b5e465e4491c8ba5902e7f29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spellSlots:
+  - spellType: 1
+    spellName: Range
+    spellIcon: {fileID: 1957688738, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
+    manaCost: 15
+    cooldown: 0.5
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 4
+    spellName: Teleport
+    spellIcon: {fileID: 872140717, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 1
+    currentCooldown: 0
+    isUnlocked: 1
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0

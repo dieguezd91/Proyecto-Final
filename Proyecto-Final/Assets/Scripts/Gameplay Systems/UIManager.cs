@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameStateUIController gameStateUI;
     [SerializeField] private FeedbackUIController feedbackUI;
     [SerializeField] private TooltipUIController tooltipUI;
+    [SerializeField] private SpellSlotsUIController spellSlotsUI;
 
     [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
@@ -31,6 +32,7 @@ public class UIManager : MonoBehaviour
     public ManaUIController Mana => manaUI;
     public InventoryUIController Inventory => inventoryUIController;
     public SeedSlotsUIController SeedSlots => seedSlotsUI;
+    public SpellSlotsUIController SpellSlots => spellSlotsUI;
     public GameStateUIController GameState => gameStateUI;
     public FeedbackUIController Feedback => feedbackUI;
     public TooltipUIController Tooltip => tooltipUI;
@@ -62,6 +64,7 @@ public class UIManager : MonoBehaviour
         feedbackUI?.HandleUpdate();
         inventoryUIController?.HandleUpdate();
         seedSlotsUI?.HandleUpdate();
+        spellSlotsUI?.HandleUpdate();
     }
 
 
@@ -76,6 +79,7 @@ public class UIManager : MonoBehaviour
         if (gameStateUI == null) gameStateUI = GetComponentInChildren<GameStateUIController>();
         if (feedbackUI == null) feedbackUI = GetComponentInChildren<FeedbackUIController>();
         if (tooltipUI == null) tooltipUI = GetComponentInChildren<TooltipUIController>();
+        if (spellSlotsUI == null) spellSlotsUI = GetComponentInChildren<SpellSlotsUIController>();
 
         pauseMenuController?.Initialize();
         healthUI?.Initialize();
@@ -85,6 +89,7 @@ public class UIManager : MonoBehaviour
         gameStateUI?.Initialize();
         feedbackUI?.Initialize();
         tooltipUI?.Initialize();
+        spellSlotsUI?.Initialize();
     }
 
     public void OpenInventoryWithPage(string pageName)
@@ -103,6 +108,7 @@ public class UIManager : MonoBehaviour
         gameStateUI?.Setup();
         feedbackUI?.Setup();
         tooltipUI?.Setup();
+        spellSlotsUI?.Setup();
     }
 
     private void RegisterGlobalEvents()
@@ -181,6 +187,23 @@ public class UIManager : MonoBehaviour
         if (SeedSlots != null)
             SeedSlots.UpdateSeedCounts();
     }
+
+    public void InitializeSpellSlotsUI()
+    {
+        if (SpellSlots != null)
+            SpellSlots.RefreshAllSlots();
+    }
+
+    public void UpdateSpellSlotsUI()
+    {
+        if (SpellSlots != null)
+            SpellSlots.RefreshAllSlots();
+    }
+
+    //public void ShowSpellTooltip(int slotIndex)
+    //{
+
+    //}
 
     public void ShowTooltipForSlot(int slotIndex)
     {
