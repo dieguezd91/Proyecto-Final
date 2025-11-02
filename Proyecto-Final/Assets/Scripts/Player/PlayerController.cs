@@ -31,6 +31,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private ManaSystem manaSystem;
     [SerializeField] private float spellManaCost = 15f;
 
+    [Header("Dash Settings")]
+    [SerializeField] private float dashSpeed = 12f;
+    [SerializeField] private float dashLength = 0.25f;
+    [SerializeField] private float dashCooldown = 1f;
+    private float moveSpeed;
+    private float activeMoveSpeed;
+
+
+    private float dashCounter;
+    private float dashCoolCounter;
+    private bool isDashing = false;
+
+
     private float lastFootstepTime = 0f;
     private float footstepCooldown = 0.2f;
     [SerializeField] private SurfaceDetector surfaceDetector;
@@ -59,6 +72,9 @@ public class PlayerController : MonoBehaviour
         LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
 
         HandleGameStateChanged(LevelManager.Instance.currentGameState);
+
+        moveSpeed = maxSpeed;
+        activeMoveSpeed = moveSpeed;
 
         if (gameStateController == null)
         {
@@ -114,6 +130,8 @@ public class PlayerController : MonoBehaviour
         {
             HandleAttack();
         }
+
+        HandleDash();
     }
 
     void FixedUpdate()
@@ -157,7 +175,7 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
-        Vector2 targetVelocity = moveInput * maxSpeed;
+        Vector2 targetVelocity = moveInput * activeMoveSpeed;
 
         if (Time.time < attackSlowEndTime)
         {
@@ -369,5 +387,32 @@ public class PlayerController : MonoBehaviour
         if (handObject != null)
             handObject.SetActive(isNight);
     }
+
+
+    private void HandleDash()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && dashCoolCounter <= 0 && dashCounter <= 0)
+        {
+            activeMoveSpeed = dashSpeed;
+            dashCounter = dashLength;
+            isDashing = true;
+        }
+
+        if (dashCounter > 0)
+        {
+            dashCounter -= Time.deltaTime;
+            if (dashCounter <= 0)
+            {
+                activeMoveSpeed = moveSpeed;
+                dashCoolCounter = dashCooldown;
+                isDashing = false;
+                rb.velocity = Vector2.zero;
+            }
+        }
+
+        if (dashCoolCounter > 0)
+            dashCoolCounter -= Time.deltaTime;
+    }
+
 
 }

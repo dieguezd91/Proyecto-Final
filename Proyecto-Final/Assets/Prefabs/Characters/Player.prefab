@@ -5533,6 +5533,9 @@ MonoBehaviour:
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
   spellManaCost: 10
+  dashSpeed: 30
+  dashLength: 0.15
+  dashCooldown: 1
   surfaceDetector: {fileID: 4856583932368232146}
   handAnimator: {fileID: 1463363302880399508}
   handRenderer: {fileID: 7503550939136486912}
