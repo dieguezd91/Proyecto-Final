@@ -177,8 +177,6 @@ public class EnemiesSpawner : MonoBehaviour
         isSpawning = false;
         continuousSpawnCoroutine = null;
 
-        Debug.Log($"Total de enemigos generados: {totalEnemiesSpawned}");
-
         if (GetTrulyAliveEnemiesCount() <= 0 && !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;

@@ -22,6 +22,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private GameObject dragIcon;
     private int dragSourceIndex = -1;
+    private GameState lastGameState;
 
     protected override void SetupEventListeners()
     {
@@ -30,6 +31,9 @@ public class SeedSlotsUIController : UIControllerBase
 
         if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
 
         UIEvents.OnSlotSelected += UpdateSelectedSlotUI;
         UIEvents.OnSeedCountsUpdated += UpdateSeedCounts;
@@ -41,16 +45,75 @@ public class SeedSlotsUIController : UIControllerBase
     {
         InitializeSlots();
 
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
-        if (abilitySystem?.CurrentAbility != PlayerAbility.Planting && seedSlotsCanvasGroup != null)
+        if (LevelManager.Instance != null)
         {
-            seedSlotsCanvasGroup.alpha = 0.1f;
+            lastGameState = LevelManager.Instance.currentGameState;
+            UpdateVisibilityBasedOnGameState(lastGameState);
+        }
+        else
+        {
+            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+            if (abilitySystem?.CurrentAbility != PlayerAbility.Planting && seedSlotsCanvasGroup != null)
+            {
+                seedSlotsCanvasGroup.alpha = 0.1f;
+            }
         }
     }
 
     public override void HandleUpdate()
     {
         HandleSeedSlotInput();
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        if (lastGameState == newState) return;
+
+        UpdateVisibilityBasedOnGameState(newState);
+        lastGameState = newState;
+    }
+
+    private void UpdateVisibilityBasedOnGameState(GameState state)
+    {
+        if (seedSlotsCanvasGroup == null) return;
+
+        if (state == GameState.Night)
+        {
+            if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+
+            seedSlotsCanvasGroup.alpha = 0f;
+            seedSlotsCanvasGroup.interactable = false;
+            seedSlotsCanvasGroup.blocksRaycasts = false;
+        }
+        else if (IsDayState(state))
+        {
+            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+            bool shouldShow = abilitySystem?.CurrentAbility == PlayerAbility.Planting;
+
+            if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+
+            float targetAlpha = shouldShow ? 1f : 0.1f;
+
+            if (gameObject.activeInHierarchy)
+            {
+                fadeCoroutine = StartCoroutine(FadeToAlpha(targetAlpha, 0.35f, shouldShow));
+            }
+            else
+            {
+                seedSlotsCanvasGroup.alpha = targetAlpha;
+                seedSlotsCanvasGroup.interactable = shouldShow;
+                seedSlotsCanvasGroup.blocksRaycasts = shouldShow;
+            }
+        }
+    }
+
+    private bool IsDayState(GameState state)
+    {
+        return state == GameState.Day ||
+               state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing;
     }
 
     private void SetupSlotEventListeners()
@@ -114,16 +177,23 @@ public class SeedSlotsUIController : UIControllerBase
     {
         if (seedSlotsCanvasGroup == null || !isActiveAndEnabled) return;
 
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+        {
+            return;
+        }
+
         bool shouldShow = newAbility == PlayerAbility.Planting;
         if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
-        fadeCoroutine = StartCoroutine(FadePlantSlots(shouldShow));
+
+        float targetAlpha = shouldShow ? 1f : 0.1f;
+        fadeCoroutine = StartCoroutine(FadeToAlpha(targetAlpha, 0.35f, shouldShow));
     }
 
-    private IEnumerator FadePlantSlots(bool fadeIn)
+    private IEnumerator FadeToAlpha(float targetAlpha, float duration, bool makeInteractable)
     {
-        float duration = 0.35f;
+        if (seedSlotsCanvasGroup == null) yield break;
+
         float startAlpha = seedSlotsCanvasGroup.alpha;
-        float targetAlpha = fadeIn ? 1f : 0.1f;
         float time = 0f;
 
         while (time < duration)
@@ -135,6 +205,9 @@ public class SeedSlotsUIController : UIControllerBase
         }
 
         seedSlotsCanvasGroup.alpha = targetAlpha;
+
+        seedSlotsCanvasGroup.interactable = makeInteractable;
+        seedSlotsCanvasGroup.blocksRaycasts = makeInteractable;
     }
 
     private void OnSlotClicked(int slotIndex)
@@ -197,80 +270,42 @@ public class SeedSlotsUIController : UIControllerBase
         var img = dragIcon.AddComponent<Image>();
         img.raycastTarget = false;
         img.sprite = seedSlots[slotIndex].GetSlotIcon();
-        img.color = new Color(1f, 1f, 1f, 0.8f);
+        img.color = new Color(1f, 1f, 1f, 0.6f);
     }
 
     private void OnDragIcon(int slotIndex, PointerEventData data)
     {
         if (dragIcon == null) return;
 
-        UpdateDragIconPosition(data);
-        UpdateSlotHighlight(data);
-    }
+        var rt = dragIcon.GetComponent<RectTransform>();
+        rt.position = data.position;
 
-    private void UpdateDragIconPosition(PointerEventData data)
-    {
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            transform.root as RectTransform,
-            data.position,
-            data.pressEventCamera,
-            out Vector2 localPos))
-        {
-            (dragIcon.transform as RectTransform).anchoredPosition = localPos;
-        }
-    }
-
-    private void UpdateSlotHighlight(PointerEventData data)
-    {
         var results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(data, results);
+        int newHoverIndex = GetHoveredSlotIndex(results);
 
-        int newHover = GetHoveredSlotIndex(results);
-        UpdateHighlightState(newHover);
+        if (newHoverIndex != hoveredSlotIndex)
+        {
+            ClearSlotHighlight();
+            if (newHoverIndex >= 0 && newHoverIndex != dragSourceIndex)
+            {
+                hoveredSlotIndex = newHoverIndex;
+                HighlightSlot(newHoverIndex, true);
+            }
+        }
     }
 
     private int GetHoveredSlotIndex(List<RaycastResult> results)
     {
         foreach (var result in results)
         {
-            for (int i = 0; i < seedSlots.Length; i++)
-            {
-                if (IsHoveringSlot(result.gameObject, i))
-                    return i;
-            }
+            var slot = result.gameObject.GetComponent<SeedSlot>();
+            if (slot != null) return slot.SlotIndex;
+
+            slot = result.gameObject.GetComponentInParent<SeedSlot>();
+            if (slot != null) return slot.SlotIndex;
         }
         return -1;
-    }
-
-    private bool IsHoveringSlot(GameObject hoveredObject, int slotIndex)
-    {
-        if (seedSlots[slotIndex] == null) return false;
-        
-        return hoveredObject == seedSlots[slotIndex].gameObject ||
-               hoveredObject.transform.IsChildOf(seedSlots[slotIndex].transform);
-    }
-
-    private void UpdateHighlightState(int newHoverIndex)
-    {
-        if (newHoverIndex == hoveredSlotIndex) return;
-
-        ClearSlotHighlight();
-
-        if (ShouldHighlightSlot(newHoverIndex))
-        {
-            HighlightHoveredSlot(newHoverIndex);
-        }
-    }
-
-    private bool ShouldHighlightSlot(int slotIndex)
-    {
-        return slotIndex >= 0 && slotIndex != dragSourceIndex;
-    }
-
-    private void HighlightHoveredSlot(int slotIndex)
-    {
-        seedSlots[slotIndex].SetHighlighted(true);
-        hoveredSlotIndex = slotIndex;
     }
 
     private void EndDragIcon(int slotIndex, PointerEventData data)
@@ -534,10 +569,12 @@ public class SeedSlotsUIController : UIControllerBase
         if (abilitySystem != null)
             abilitySystem.OnAbilityChanged -= OnAbilityChanged;
 
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+
         UIEvents.OnSlotSelected -= UpdateSelectedSlotUI;
         UIEvents.OnSeedCountsUpdated -= UpdateSeedCounts;
 
-        // Cleanup slot event listeners
         for (int i = 0; i < seedSlots.Length; i++)
         {
             if (seedSlots[i] == null) continue;

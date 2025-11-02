@@ -155,7 +155,6 @@ public class MusicManager : MonoBehaviour
     {
         if (clip == null)
         {
-            Debug.LogWarning("[MusicManager] GetAudioClip es null. Revisa la asignación en el Inspector.");
             return;
         }
 
@@ -166,6 +165,5 @@ public class MusicManager : MonoBehaviour
 
         audioSource.clip = clip;
         audioSource.Play();
-        Debug.Log($"[MusicManager] Reproduciendo: {clip.name}");
     }
 }
