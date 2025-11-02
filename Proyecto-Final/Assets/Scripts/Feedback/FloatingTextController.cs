@@ -10,10 +10,14 @@ public class FloatingTextController : MonoBehaviour
     [Header("Shared UI Panel")]
     [SerializeField] private Transform pickupPanel;
     [SerializeField] private GameObject pickupEntryPrefab;
+    [SerializeField] private TMP_SpriteAsset itemSpriteAsset;
     [SerializeField] private float pickupDisplayTime = 1.5f;
     [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private Color warningColor;
     [SerializeField] private Color defaultColor = Color.white;
+
+    [Header("Sprite Name Mapping")]
+    [SerializeField] private List<SpriteMapping> spriteMappings = new List<SpriteMapping>();
 
     [Header("Gold Feedback")]
     [SerializeField] private Transform goldRewardPanel;
@@ -28,9 +32,17 @@ public class FloatingTextController : MonoBehaviour
     private Dictionary<string, (int amount, GameObject entry)> pickups = new();
     private Dictionary<Transform, FloatingDamageText> damageTexts = new();
     private CanvasGroup pickupPanelCanvasGroup;
+    private Dictionary<string, string> spriteNameMap;
 
     private List<GameObject> goldFeedbackEntries = new List<GameObject>();
     private bool isShowingGoldFeedback = false;
+
+    [Serializable]
+    public class SpriteMapping
+    {
+        public string originalSpriteName;
+        public string tmpSpriteName;
+    }
 
     void Awake()
     {
@@ -45,6 +57,22 @@ public class FloatingTextController : MonoBehaviour
             pickupPanelCanvasGroup = pickupPanel.GetComponent<CanvasGroup>();
 
         SetPanelAlpha(pickupPanelCanvasGroup, 0f);
+
+        InitializeSpriteMapping();
+    }
+
+    private void InitializeSpriteMapping()
+    {
+        spriteNameMap = new Dictionary<string, string>();
+
+        foreach (var mapping in spriteMappings)
+        {
+            if (!string.IsNullOrEmpty(mapping.originalSpriteName) &&
+                !string.IsNullOrEmpty(mapping.tmpSpriteName))
+            {
+                spriteNameMap[mapping.originalSpriteName] = mapping.tmpSpriteName;
+            }
+        }
     }
 
     void Update()
@@ -69,27 +97,64 @@ public class FloatingTextController : MonoBehaviour
     public void ShowPickup(string materialName, int amount, Sprite icon)
     {
         if (isShowingGoldFeedback) return;
-
         if (pickupPanel == null || pickupEntryPrefab == null) return;
+
         StartCoroutine(FadeInPanel(pickupPanelCanvasGroup));
         panelTimer = pickupDisplayTime;
+
+        string tmpSpriteName = GetTMPSpriteName(icon);
+        string spriteTag = !string.IsNullOrEmpty(tmpSpriteName) ? $"<sprite name=\"{tmpSpriteName}\"> " : "";
 
         if (pickups.TryGetValue(materialName, out var data))
         {
             int newAmt = data.amount + amount;
             pickups[materialName] = (newAmt, data.entry);
-            var txt = data.entry.GetComponentInChildren<TextMeshProUGUI>();
-            if (txt != null) txt.text = $"+{newAmt} {materialName}";
+
+            var txt = data.entry.GetComponent<TextMeshProUGUI>();
+            if (txt != null)
+            {
+                txt.text = $"{spriteTag}+{newAmt} {materialName}";
+            }
         }
         else
         {
             var entry = Instantiate(pickupEntryPrefab, pickupPanel);
-            var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
-            var img = entry.GetComponentInChildren<Image>();
-            if (txt != null) { txt.text = $"+{amount} {materialName}"; txt.color = warningColor; }
-            if (img != null) img.sprite = icon;
+            var txt = entry.GetComponent<TextMeshProUGUI>();
+
+            if (txt != null)
+            {
+                txt.color = warningColor;
+                txt.text = $"{spriteTag}+{amount} {materialName}";
+
+                if (txt.spriteAsset == null && itemSpriteAsset != null)
+                {
+                    txt.spriteAsset = itemSpriteAsset;
+                }
+            }
+
             pickups.Add(materialName, (amount, entry));
         }
+    }
+
+    private string GetTMPSpriteName(Sprite originalSprite)
+    {
+        if (originalSprite == null || itemSpriteAsset == null)
+            return null;
+
+        if (spriteNameMap.TryGetValue(originalSprite.name, out string tmpName))
+        {
+            return tmpName;
+        }
+
+        for (int i = 0; i < itemSpriteAsset.spriteInfoList.Count; i++)
+        {
+            if (itemSpriteAsset.spriteInfoList[i].name == originalSprite.name)
+            {
+                return originalSprite.name;
+            }
+        }
+
+        return null;
     }
 
     [Serializable]
@@ -134,7 +199,9 @@ public class FloatingTextController : MonoBehaviour
 
         if (txt != null)
         {
-            string displayText = goldAmount > 0 ? $"{message}\n+{goldAmount} gold" : message;
+            string displayText = goldAmount > 0
+                ? $"{message}\n+{goldAmount} gold"
+                : message;
             txt.text = displayText;
             txt.color = textColor;
 
@@ -158,7 +225,6 @@ public class FloatingTextController : MonoBehaviour
 
         goldFeedbackEntries.Add(entry);
     }
-
 
     private void ClearGoldFeedback()
     {
@@ -217,17 +283,5 @@ public class FloatingTextController : MonoBehaviour
         }
         cg.alpha = 0f;
         onComplete?.Invoke();
-    }
-
-    [ContextMenu("Test Gold Feedback")]
-    public void TestGoldFeedback()
-    {
-        List<GoldReward> testRewards = new List<GoldReward>
-    {
-        new GoldReward { goldAmount = 30, message = "Defenses Intact", textColor = new Color(0.3f, 0.9f, 0.4f) },
-        new GoldReward { goldAmount = 50, message = "Home Protected", textColor = new Color(1f, 0.8f, 0.2f) }
-    };
-
-        ShowGoldFeedbackSequence(testRewards, 80);
     }
 }

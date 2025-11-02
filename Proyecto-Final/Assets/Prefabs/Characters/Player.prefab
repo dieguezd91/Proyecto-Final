@@ -11090,7 +11090,6 @@ GameObject:
   - component: {fileID: 7413163310296031128}
   - component: {fileID: 5028926915964139977}
   - component: {fileID: 6608918887475632071}
-  - component: {fileID: 8841944069228426470}
   - component: {fileID: 1989075938908877139}
   - component: {fileID: 2585424018082720245}
   m_Layer: 7
@@ -11153,36 +11152,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!114 &8841944069228426470
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8991080770379641568}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.81886786, g: 0.81886786, b: 0.81886786, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 0
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &1989075938908877139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11197,10 +11166,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickupPanel: {fileID: 7413163310296031128}
   pickupEntryPrefab: {fileID: 4269542569326092464, guid: 93771d607cf171b40b89acb7c59c0c19, type: 3}
+  itemSpriteAsset: {fileID: 11400000, guid: b13d0d2bf97af974a8f505cdaf269ccc, type: 2}
   pickupDisplayTime: 1.5
   fadeDuration: 0.25
   warningColor: {r: 1, g: 1, b: 1, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  spriteMappings:
+  - originalSpriteName: GoldIcon
+    tmpSpriteName: GoldIcon
+  - originalSpriteName: GlowdustResource
+    tmpSpriteName: GlowdustResource
+  - originalSpriteName: BoneResource
+    tmpSpriteName: BoneResource
+  - originalSpriteName: InventorySpriteSheet_5
+    tmpSpriteName: InventorySpriteSheet_5
+  - originalSpriteName: SpectralCrystal
+    tmpSpriteName: SpectralCrystal
+  - originalSpriteName: EternalEmberEternalEmber
+    tmpSpriteName: EternalEmber
+  - originalSpriteName: WindwalkerEssence
+    tmpSpriteName: WindwalkerEssence
+  - originalSpriteName: VoltaicCore
+    tmpSpriteName: VoltaicCore
+  - originalSpriteName: InventorySpriteSheet_2
+    tmpSpriteName: InventorySpriteSheet_2
   goldRewardPanel: {fileID: 2701448926382823892}
   goldEntryPrefab: {fileID: 4269542569326092464, guid: 56ff82d2913054246a52cb2ca23ffbb4, type: 3}
   goldFeedbackDisplayTime: 3
