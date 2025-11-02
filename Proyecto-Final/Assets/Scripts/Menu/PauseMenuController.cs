@@ -124,16 +124,6 @@ public class PauseMenuController : UIControllerBase
         isHiding = false;
     }
 
-    private bool IsInstructionsPanelActive()
-    {
-        bool result = false;
-        if (uiManager != null)
-        {
-            result = uiManager.IsInstructionsOpen();
-        }
-        return result;
-    }
-
     protected override void SetupEventListeners()
     {
         // Subscribe to PauseMenuPanel events
@@ -141,7 +131,6 @@ public class PauseMenuController : UIControllerBase
         {
             _pauseMenuPanel.OnContinueClicked.AddListener(Continue);
             _pauseMenuPanel.OnOptionsClicked.AddListener(ShowOptions);
-            _pauseMenuPanel.OnInstructionsClicked.AddListener(ShowInstructions);
             _pauseMenuPanel.OnMainMenuClicked.AddListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.AddListener(() => GameManager.Instance?.QuitGame());
         }
@@ -160,7 +149,6 @@ public class PauseMenuController : UIControllerBase
         {
             _pauseMenuPanel.OnContinueClicked.RemoveListener(Continue);
             _pauseMenuPanel.OnOptionsClicked.RemoveListener(ShowOptions);
-            _pauseMenuPanel.OnInstructionsClicked.RemoveListener(ShowInstructions);
             _pauseMenuPanel.OnMainMenuClicked.RemoveListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.RemoveListener(() => GameManager.Instance?.QuitGame());
         }
@@ -218,32 +206,6 @@ public class PauseMenuController : UIControllerBase
             _optionsMenuPanel.Hide();
         ShowPauseMenu();
         SoundManager.Instance.PlayOneShot("ButtonClick");
-    }
-
-    public void ShowInstructions()
-    {
-        if (uiManager != null)
-        {
-            uiManager.OpenInstructions();
-        }
-        else if (_instructionsPanel != null)
-        {
-            _instructionsPanel.Show();
-            SoundManager.Instance.PlayOneShot("ButtonClick");
-        }
-    }
-
-    public void CloseInstructions()
-    {
-        if (uiManager != null)
-        {
-            uiManager.CloseInstructions();
-        }
-        else if (_instructionsPanel != null)
-        {
-            SoundManager.Instance.PlayOneShot("ButtonClick");
-            _instructionsPanel.Hide();
-        }
     }
 
     public void GoToMainMenu()

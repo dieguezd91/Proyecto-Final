@@ -16,24 +16,4 @@ public class InstructionsPanel : UIControllerBase
     {
         // Cache any references needed
     }
-
-    protected override void SetupEventListeners()
-    {
-        if (_goBackButton != null)
-        {
-            _goBackButton.OnClick.AddListener(CloseInstructions);
-        }
-    }
-
-    private void CloseInstructions()
-    {
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.CloseInstructions();
-        }
-        else
-        {
-            Hide();
-        }
-    }
 }

@@ -84,7 +84,14 @@ public class InventoryUIController : UIControllerBase
             ToggleInventory();
 
         if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
+        {
+            if (animationController != null && animationController.IsAnimating)
+            {
+                return;
+            }
+
             CloseInventory();
+        }
     }
 
     public void ToggleInventory()
@@ -97,7 +104,7 @@ public class InventoryUIController : UIControllerBase
 
     public void OpenInventory()
     {
-        if (inventoryPanel == null || UIManager.Instance.GameState.IsInstructionsOpen) return;
+        if (inventoryPanel == null) return;
 
         if (LevelManager.Instance != null && !CanOpenInventory())
             return;
@@ -224,7 +231,8 @@ public class InventoryUIController : UIControllerBase
             animationController.OpenWithPage(pageName);
         }
 
-        // Notify listeners that the inventory is open so UI effects (blur, etc.) can run.
         UIEvents.TriggerInventoryOpened();
     }
+
+    public bool IsAnimating => animationController != null && animationController.IsAnimating;
 }

@@ -170,23 +170,6 @@ public class UIManager : MonoBehaviour
         return Inventory != null ? Inventory.IsInventoryOpen : false;
     }
 
-    public void OpenInstructions()
-    {
-        if (GameState != null)
-            GameState.OpenInstructions();
-    }
-
-    public void CloseInstructions()
-    {
-        if (GameState != null)
-            GameState.CloseInstructions();
-    }
-
-    public bool IsInstructionsOpen()
-    {
-        return GameState != null ? GameState.IsInstructionsOpen : false;
-    }
-
     public void InitializeSeedSlotsUI()
     {
         if (SeedSlots != null)

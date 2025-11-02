@@ -7,12 +7,10 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject pausePanel;
-    [SerializeField] private GameObject instructionsPanel;
     [SerializeField] private GameObject seedSlots;
     [SerializeField] private GameObject dayControlPanel;
     [SerializeField] private GameObject abilityPanel;
 
-    private bool isInstructionsOpen = false;
     private bool openedFromPauseMenu = false;
     private GameState lastGameState = GameState.None;
     private GameState lastState = GameState.None;
@@ -30,7 +28,6 @@ public class GameStateUIController : UIControllerBase
     private bool isHiding = false;
     private bool wasInventoryOpen = false;
 
-    public bool IsInstructionsOpen => isInstructionsOpen;
     public GameState LastState => lastState;
 
     protected override void CacheReferences()
@@ -56,7 +53,6 @@ public class GameStateUIController : UIControllerBase
     protected override void ConfigureInitialState()
     {
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (instructionsPanel != null) { instructionsPanel.SetActive(false); isInstructionsOpen = false; }
         if (pausePanel != null) pausePanel.SetActive(true);
 
         if (blurVolume != null && blurVolume.profile.TryGet(out dof))
@@ -146,17 +142,19 @@ public class GameStateUIController : UIControllerBase
                              state != GameState.OnAltarRestoration &&
                              state != GameState.GameOver;
 
-        abilityPanel.SetActive(showAbilities && !isInstructionsOpen);
+        abilityPanel.SetActive(showAbilities);
     }
 
     private void HandlePauseInput()
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
 
-        if (isInstructionsOpen)
+        if (UIManager.Instance != null && UIManager.Instance.Inventory != null)
         {
-            CloseInstructions();
-            return;
+            if (UIManager.Instance.Inventory.IsAnimating)
+            {
+                return;
+            }
         }
 
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
@@ -172,7 +170,7 @@ public class GameStateUIController : UIControllerBase
         {
             UIManager.Instance.CloseInventory();
             if (playerController != null) playerController.SetMovementEnabled(true);
-            if (HUD != null && !isInstructionsOpen) HUD.SetActive(true);
+            if (HUD != null) HUD.SetActive(true);
             return;
         }
 
@@ -181,8 +179,7 @@ public class GameStateUIController : UIControllerBase
 
     private void OpenInventoryOptions()
     {
-        bool canOpen = !isInstructionsOpen &&
-                       !CraftingUIManager.isCraftingUIOpen &&
+        bool canOpen = !CraftingUIManager.isCraftingUIOpen &&
                        !RestorationAltarUIManager.isUIOpen &&
                        LevelManager.Instance != null &&
                        LevelManager.Instance.currentGameState != GameState.GameOver &&
@@ -220,15 +217,15 @@ public class GameStateUIController : UIControllerBase
         GameState currentState = LevelManager.Instance.currentGameState;
 
         bool showHUD = IsGameplayState(currentState);
-        if (HUD != null && !isInstructionsOpen)
+        if (HUD != null)
             HUD.SetActive(showHUD);
 
         bool showGameplayUI = IsActiveGameplayState(currentState);
 
         if (seedSlots != null)
-            seedSlots.SetActive(showGameplayUI && !isInstructionsOpen);
+            seedSlots.SetActive(showGameplayUI);
         if (dayControlPanel != null)
-            dayControlPanel.SetActive(showGameplayUI && !isInstructionsOpen);
+            dayControlPanel.SetActive(showGameplayUI);
     }
 
     private bool IsGameplayState(GameState state)
@@ -248,57 +245,6 @@ public class GameStateUIController : UIControllerBase
                state == GameState.Planting ||
                state == GameState.Harvesting ||
                state == GameState.Removing;
-    }
-
-    public void OpenInstructions()
-    {
-        if (instructionsPanel == null) return;
-
-        openedFromPauseMenu = pausePanel != null && pausePanel.activeSelf;
-
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
-            lastState = LevelManager.Instance.currentGameState;
-
-        SetUIElementsVisibility(false);
-        if (pausePanel != null) pausePanel.SetActive(false);
-
-        instructionsPanel.SetActive(true);
-        isInstructionsOpen = true;
-
-        SoundManager.Instance?.PlayOneShot("ButtonClick");
-
-        if (LevelManager.Instance != null)
-            LevelManager.Instance.SetGameState(GameState.Paused);
-
-        if (playerController != null)
-            playerController.SetMovementEnabled(false);
-    }
-
-    public void CloseInstructions()
-    {
-        if (instructionsPanel == null) return;
-
-        instructionsPanel.SetActive(false);
-        isInstructionsOpen = false;
-
-        SoundManager.Instance?.PlayOneShot("ButtonClick");
-
-        if (openedFromPauseMenu && pausePanel != null)
-        {
-            RestoreFromPauseMenu();
-        }
-        else
-        {
-            RestoreFromNormalGameplay();
-        }
-    }
-
-    private void RestoreFromPauseMenu()
-    {
-        pausePanel.SetActive(true);
-        GameManager.Instance?.PauseGame();
-        if (HUD != null)
-            HUD.SetActive(false);
     }
 
     public void RestoreFromNormalGameplay()
@@ -344,7 +290,7 @@ public class GameStateUIController : UIControllerBase
             SoundManager.Instance.ResumeAll();
         }
 
-        if (HUD != null && !isInstructionsOpen)
+        if (HUD != null)
             HUD.SetActive(true);
 
         if (LevelManager.Instance != null && lastState != GameState.None)
