@@ -193,34 +193,30 @@ public class FloatingTextController : MonoBehaviour
 
     private void ShowGoldFeedbackEntry(string message, int goldAmount, Color textColor)
     {
-        var entry = Instantiate(goldEntryPrefab, goldRewardPanel);
-        var txt = entry.GetComponentInChildren<TextMeshProUGUI>();
-        var img = entry.GetComponentInChildren<Image>();
+        var entry = Instantiate(pickupEntryPrefab, goldRewardPanel);
+        var txt = entry.GetComponent<TextMeshProUGUI>();
 
         if (txt != null)
         {
-            string displayText = goldAmount > 0
-                ? $"{message}\n+{goldAmount} gold"
-                : message;
-            txt.text = displayText;
-            txt.color = textColor;
-
-            if (goldAmount > 0)
+            if (txt.spriteAsset == null && itemSpriteAsset != null)
             {
-                txt.fontSize *= 1.1f;
+                txt.spriteAsset = itemSpriteAsset;
             }
-        }
 
-        if (img != null)
-        {
+            string displayText;
+
             if (goldAmount > 0)
             {
-                img.color = Color.white;
+                displayText = $"<sprite name=\"GoldIcon\"> {message}\n+{goldAmount} gold";
+                txt.fontSize *= 1.1f;
             }
             else
             {
-                img.color = new Color(0.5f, 0.1f, 0.1f);
+                displayText = message;
             }
+
+            txt.text = displayText;
+            txt.color = textColor;
         }
 
         goldFeedbackEntries.Add(entry);
