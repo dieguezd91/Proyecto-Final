@@ -83,7 +83,6 @@ public class InventoryUI : MonoBehaviour
 
         descriptionName.text = data.materialName;
         descriptionDetails.text = data.materialDescription;
-        descriptionPanel.SetActive(true);
     }
 
     private void OnMaterialChanged(MaterialType materialType, int amount)
@@ -190,9 +189,6 @@ public class InventoryUI : MonoBehaviour
 
     public void ClearDescriptionPanel()
     {
-        if (descriptionPanel != null)
-            descriptionPanel.SetActive(false);
-
         if (descriptionIcon != null)
         {
             descriptionIcon.sprite = null;

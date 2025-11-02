@@ -413,8 +413,6 @@ MonoBehaviour:
   HUD: {fileID: 1087430937299666142}
   gameOverPanel: {fileID: 2740163807364435899}
   pausePanel: {fileID: 797963119955334537}
-  seedSlots: {fileID: 5302073364865431188}
-  spellSlots: {fileID: 5356779870975782436}
   dayControlPanel: {fileID: 0}
   abilityPanel: {fileID: 4712039638697272631}
   _pauseMenuController: {fileID: 1300175472483836207}
@@ -2110,22 +2108,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8fce14b6c0a6824ca7ca59be4cf2620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &5302073364865431188 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3675243649708622919, guid: a5fa038344b370749b2e0583e0750862, type: 3}
-  m_PrefabInstance: {fileID: 8833152073269359315}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5356779870975782436 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3513568485282209015, guid: a5fa038344b370749b2e0583e0750862, type: 3}
-  m_PrefabInstance: {fileID: 8833152073269359315}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6281770049668125291 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3294661927792386232, guid: a5fa038344b370749b2e0583e0750862, type: 3}
   m_PrefabInstance: {fileID: 8833152073269359315}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5356779870975782436}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 29839c071da47ba429444c8b0f64069d, type: 3}
@@ -2136,7 +2124,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2623514410305156884, guid: a5fa038344b370749b2e0583e0750862, type: 3}
   m_PrefabInstance: {fileID: 8833152073269359315}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5302073364865431188}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6c8fd0b6989339e4296c5c28ecf71587, type: 3}
@@ -2305,6 +2293,18 @@ PrefabInstance:
     - target: {fileID: 1790242010253313821, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793814952488430876, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793814952488430876, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
+      propertyPath: m_isRightToLeft
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2793814952488430876, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 4096
       objectReference: {fileID: 0}
     - target: {fileID: 2832900668710180607, guid: e6a43e2f86dd3a543b4b4c6370701d3c, type: 3}
       propertyPath: m_AnchorMax.y
