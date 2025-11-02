@@ -9,23 +9,47 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 3db91574c40fb3a449e39828cde43ca2, type: 2}
-    m_Threshold: 0
+    m_Motion: {fileID: 7400000, guid: 1650ca909d85d48499457eb01316a355, type: 2}
+    m_Threshold: 0.05
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Health
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f0d146684d1f46b4ba713e5f6ef0eba5, type: 2}
-    m_Threshold: 0.01
+    m_Motion: {fileID: 7400000, guid: dff44049543a82b47ac34f195e5583a2, type: 2}
+    m_Threshold: 0.1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Health
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 024266a022f10984db0e3068a75e686c, type: 2}
+    m_Motion: {fileID: 7400000, guid: d37af7e5f1535fd4eb8aa6001d16917e, type: 2}
+    m_Threshold: 0.2
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 03d541a1786418841b555104da8c7733, type: 2}
+    m_Threshold: 0.3
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: ccd026dd43795f9479409a15e467a3d8, type: 2}
+    m_Threshold: 0.4
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: b0bdeaf3b63b3574eb757fbde9f813f6, type: 2}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -33,8 +57,32 @@ BlendTree:
     m_DirectBlendParameter: Health
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 429e76133e89d6043a6539b72418a375, type: 2}
-    m_Threshold: 0.75
+    m_Motion: {fileID: 7400000, guid: e2e439183d795a140b94a05bd40162b4, type: 2}
+    m_Threshold: 0.6
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 344671824ee56964ebf23783149e885e, type: 2}
+    m_Threshold: 0.7
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 9a64880ae84c8e1458f11fd1acab8e8c, type: 2}
+    m_Threshold: 0.8
+    m_Position: {x: 0, y: 0}
+    m_TimeScale: 1
+    m_CycleOffset: 0
+    m_DirectBlendParameter: Health
+    m_Mirror: 0
+  - serializedVersion: 2
+    m_Motion: {fileID: 7400000, guid: 3db91574c40fb3a449e39828cde43ca2, type: 2}
+    m_Threshold: 0.9
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
@@ -48,9 +96,9 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Health
     m_Mirror: 0
-  m_BlendParameter: Health
+  m_BlendParameter: BaseHealth
   m_BlendParameterY: Blend
-  m_MinThreshold: 0
+  m_MinThreshold: 0.05
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
@@ -61,7 +109,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HouseController
+  m_Name: HeartLife
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Health
@@ -94,7 +142,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 6855200007948212333}
-    m_Position: {x: 270, y: 140, z: 0}
+    m_Position: {x: 270, y: 60, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -127,7 +175,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: HouseLevel5
+  m_Name: HeartLife
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

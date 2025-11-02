@@ -1222,6 +1222,258 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: LowHealth
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 147
+        width: 11
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50b4c2c625775d34da433608d2f6c838
+      internalID: -2097532737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: LowHealth2
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 147
+        width: 14
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee9e9daae516f9d4da7117d932595b00
+      internalID: -500271646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI90
+      rect:
+        serializedVersion: 2
+        x: 117
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57cd05af953a92f4c96c008eb84f5129
+      internalID: -1627824369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI80
+      rect:
+        serializedVersion: 2
+        x: 213
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a4bdfd0343c95048b584ab1cdebde0b
+      internalID: 271717345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI70
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de81ce9a9c7286b4f9b10b4341322654
+      internalID: -29633849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI60
+      rect:
+        serializedVersion: 2
+        x: 405
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5db4342352b0be0479d047a81fc2ef82
+      internalID: 651538086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI50
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 685b9cfecc5f13b4fa82ceac70e7d147
+      internalID: 983481014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI40
+      rect:
+        serializedVersion: 2
+        x: 597
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ae19e88adeda8845b365fef9919e8ea
+      internalID: 1652834239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI30
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 479ec8727f6c23242b730085eae44689
+      internalID: 1642253103
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI20
+      rect:
+        serializedVersion: 2
+        x: 789
+        y: 513
+        width: 86
+        height: 86
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06cf98a557d287643b75cf0e2466cd39
+      internalID: 122138744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI10
+      rect:
+        serializedVersion: 2
+        x: 885
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1002c07f68f519f4094c243c72880789
+      internalID: -978614860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RestorationHeartUI5
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 512
+        width: 86
+        height: 87
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79ca4f92395302142898f226a1a4f61b
+      internalID: 274759944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1268,6 +1520,8 @@ TextureImporter:
       InventoryPlaceholder: 450073570
       LifeTrim: -498583606
       ListUI: 336679578
+      LowHealth: -2097532737
+      LowHealth2: -500271646
       ManaEmpty: 1545796611
       ManaFull: -1571704729
       ManaTrim: 981019556
@@ -1284,6 +1538,16 @@ TextureImporter:
       RestorationExitUIHover: 726165551
       RestorationExitUIPress: -1595310454
       RestorationHeartUI: -1738444724
+      RestorationHeartUI10: -978614860
+      RestorationHeartUI20: 122138744
+      RestorationHeartUI30: 1642253103
+      RestorationHeartUI40: 1652834239
+      RestorationHeartUI5: 274759944
+      RestorationHeartUI50: 983481014
+      RestorationHeartUI60: 651538086
+      RestorationHeartUI70: -29633849
+      RestorationHeartUI80: 271717345
+      RestorationHeartUI90: -1627824369
       RestorationScreen: -1775831014
       RitualUI: -972838167
       ScrollBar: -1066148658
