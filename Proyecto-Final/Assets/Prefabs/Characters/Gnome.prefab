@@ -5009,6 +5009,8 @@ MonoBehaviour:
   isCurrentlyAttacking: 0
   nextAttackTime: 0
   attackCooldown: 0
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   gnomeData: {fileID: 11400000, guid: 271b7f031505943428b1975ff9d24b31, type: 2}
   playerLayerMask:
     serializedVersion: 2
@@ -5026,7 +5028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  currentHealth: 0.03
+  currentHealth: 100
   flashOnDamage: 1
   flashDuration: 0.1
   numberOfFlashes: 3

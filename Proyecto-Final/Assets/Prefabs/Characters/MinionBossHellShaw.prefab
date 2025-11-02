@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 40
-  currentHealth: 0
+  currentHealth: 40
   flashOnDamage: 1
   flashDuration: 0.1
   numberOfFlashes: 3
