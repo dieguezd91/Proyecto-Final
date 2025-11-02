@@ -10,7 +10,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
 
     [Header("UI Components")]
     [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI materialNameText;
     [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Image backgroundImage;
 
@@ -41,8 +40,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
         iconImage.enabled = icon != null;
         amountText.text = amount.ToString();
         amountText.enabled = true;
-        materialNameText.text = resourceName;
-        materialNameText.enabled = true;
 
         isOccupied = true;
         UpdateVisualState();
@@ -68,7 +65,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
 
         iconImage.enabled = false;
         amountText.enabled = false;
-        materialNameText.enabled = false;
 
         isOccupied = false;
         UpdateVisualState();

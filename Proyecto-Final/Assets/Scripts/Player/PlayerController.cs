@@ -312,19 +312,18 @@ public class PlayerController : MonoBehaviour
 
     public void ShootFromHand()
     {
-        if (!canAct)
+        if (!canAct || Time.time < nextFireTime)
             return;
 
         if (SpellInventory.Instance != null)
         {
             SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
             if (selectedSpell != null && selectedSpell.currentCooldown > 0f)
-            {
                 return;
-            }
         }
 
         CastSpell();
+        nextFireTime = Time.time + 0.1f;
     }
 
     public void SetMovementEnabled(bool enabled)
