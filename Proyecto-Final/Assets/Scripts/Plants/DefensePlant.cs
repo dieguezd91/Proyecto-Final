@@ -38,8 +38,10 @@ public class DefensePlant : Plant
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         canReflect = IsFullyGrown();
 
         if (canReflect)
