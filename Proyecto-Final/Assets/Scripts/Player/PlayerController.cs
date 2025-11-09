@@ -4,13 +4,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Camera cam;
-    [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform firePoint;
-    [SerializeField] private float bulletSpeed = 10f;
-
-    [Header("SPELL SETTINGS")]
-    [SerializeField] private float spellCooldown = 0.5f;
-    private float nextFireTime = 0f;
 
     [Header("MOVEMENT ACCELERATION")]
     [SerializeField] private float accelerationRate = 8f;
@@ -29,7 +23,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
-    [SerializeField] private float spellManaCost = 15f;
 
     [Header("Dash Settings")]
     [SerializeField] private float dashSpeed = 12f;
@@ -115,7 +108,6 @@ public class PlayerController : MonoBehaviour
                  newState != GameState.OnRitual &&
                  newState != GameState.OnAltarRestoration;
 
-
         bool isNight = newState == GameState.Night;
         handAnimator.SetBool("IsNight", isNight);
         if (!isNight)
@@ -141,6 +133,7 @@ public class PlayerController : MonoBehaviour
                state == GameState.Removing ||
                state == GameState.Night;
     }
+
     void Update()
     {
         var lifeController = GetComponent<LifeController>();
@@ -283,8 +276,7 @@ public class PlayerController : MonoBehaviour
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
 
-        GameObject spellPrefab = selectedSpell.spellPrefab != null ? selectedSpell.spellPrefab : bulletPrefab;
-        GameObject spellObject = Instantiate(spellPrefab, firePoint.position, Quaternion.identity);
+        GameObject spellObject = Instantiate(selectedSpell.spellPrefab, firePoint.position, Quaternion.identity);
 
         Spell spellComponent = spellObject.GetComponent<Spell>();
 
@@ -294,33 +286,26 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Rigidbody2D rb = spellObject.GetComponent<Rigidbody2D>();
-            if (rb != null)
-            {
-                rb.velocity = direction * bulletSpeed;
-            }
+            Debug.LogWarning($"El prefab {selectedSpell.spellName} no tiene un componente Spell");
+            Destroy(spellObject);
         }
 
         SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
         attackSlowEndTime = Time.time + attackSlowDuration;
+
         SpellInventory.Instance.StartCooldown(selectedSlotIndex);
     }
 
     public void ShootFromHand()
     {
         if (!canAct) return;
-
         if (!CanCastSpell()) return;
 
         CastSpell();
-
-        nextFireTime = Time.time + 0.1f;
     }
 
     private bool CanCastSpell()
     {
-        if (Time.time < nextFireTime) return false;
-
         if (SpellInventory.Instance == null) return false;
 
         SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();

@@ -111,6 +111,7 @@ MonoBehaviour:
   knockbackForce: 12
   explosionEffectPrefab: {fileID: 410531898165536235, guid: f978f6cbd9ae54147a800bc801c0370c, type: 3}
   explosionEffectDuration: 2
+  armingTime: 0.1
 --- !u!61 &5014852601970736367
 BoxCollider2D:
   m_ObjectHideFlags: 0

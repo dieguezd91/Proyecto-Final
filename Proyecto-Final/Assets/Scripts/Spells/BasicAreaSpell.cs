@@ -16,7 +16,7 @@ public class BasicAreaSpell : Spell
     private bool hasExploded = false;
     private bool isInitialized = false;
 
-    private float armingTime;
+    [SerializeField] private float armingTime;
     private float spawnTime;
 
     public override void Cast(Vector2 castDirection, Vector3 spawnPosition)
