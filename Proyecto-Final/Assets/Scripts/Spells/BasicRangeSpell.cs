@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class ProjectileSpell : Spell
+public class BasicRangeSpell : Spell
 {
-    [Header("Projectile Settings")]
+    [Header("SETTINGS")]
     [SerializeField] private float speed = 10f;
 
     private Vector2 direction;

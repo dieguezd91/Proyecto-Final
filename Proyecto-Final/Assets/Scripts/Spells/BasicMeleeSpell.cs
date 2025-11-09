@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class MeleeSpell : Spell
+public class BasicMeleeSpell : Spell
 {
-    [Header("Melee Settings")]
+    [Header("SETTINGS")]
     [SerializeField] private float attackRadius = 2f;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float knockbackForce = 10f;
 
-    [Header("Visual Feedback")]
+    [Header("VFX")]
     [SerializeField] private GameObject slashEffectPrefab;
     [SerializeField] private float effectDuration = 0.5f;
 
