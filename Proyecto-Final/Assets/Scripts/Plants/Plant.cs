@@ -23,6 +23,15 @@ public class Plant : MonoBehaviour
     private GameObject activeParticlesInstance;
     private bool particlesActivated = false;
 
+    [SerializeField] private GameObject lowHealthParticlesPrefab;
+    [SerializeField][Range(0f, 1f)] private float lowHealthThreshold = 0.5f;
+    private GameObject lowHealthParticlesInstance;
+    private bool lowHealthParticlesActive = false;
+
+    [Header("UI")]
+    [SerializeField] private PlantHealthBar healthBar;
+    [SerializeField] private float healthBarVisibilityDistance = 7f;
+
     protected int daysToGrow;
     protected Sprite plantSprite;
 
@@ -32,6 +41,7 @@ public class Plant : MonoBehaviour
     protected Animator animator;
 
     protected PlayerAbilitySystem abilitySystem;
+    private Transform playerTransform;
 
     private Collider2D plantCollider;
 
@@ -64,14 +74,22 @@ public class Plant : MonoBehaviour
 
         abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
 
+        playerTransform = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (healthBar == null)
+        {
+            healthBar = GetComponentInChildren<PlantHealthBar>();
+        }
+        if (healthBar != null)
+        {
+            healthBar.gameObject.SetActive(false);
+        }
+
+
         if (plantData != null)
         {
             daysToGrow = plantData.daysToGrow;
             plantSprite = plantData.plantIcon;
-        }
-        else
-        {
-            Debug.LogWarning($"[Plant] No PlantDataSO assigned on {gameObject.name}");
         }
 
         lifeController = GetComponent<LifeController>();
@@ -83,8 +101,9 @@ public class Plant : MonoBehaviour
         ConfigureLifeController();
 
         lifeController.onDeath.AddListener(HandlePlantDeath);
+        lifeController.onHealthChanged.AddListener(HandleHealthChanged);
 
-        ScheduleNextIdleSound(); // Schedule first idle sound
+        ScheduleNextIdleSound();
     }
 
     protected virtual void OnDestroy()
@@ -97,7 +116,14 @@ public class Plant : MonoBehaviour
         if (lifeController != null)
         {
             lifeController.onDeath.RemoveListener(HandlePlantDeath);
+            lifeController.onHealthChanged.RemoveListener(HandleHealthChanged);
         }
+    }
+
+    protected virtual void Update()
+    {
+        UpdateIdleSoundTimer();
+        UpdateHealthBarVisibility();
     }
 
     private void UpdateGrowthStatus(int currentDay)
@@ -152,6 +178,64 @@ public class Plant : MonoBehaviour
                 activeParticlesInstance = null;
             }
             particlesActivated = false;
+        }
+    }
+
+    private void HandleHealthChanged(float currentHealth, float maxHealth)
+    {
+        if (maxHealth <= 0) return;
+
+        float healthPercent = currentHealth / maxHealth;
+
+        if (healthPercent <= lowHealthThreshold)
+        {
+            ActivateLowHealthParticles();
+        }
+        else
+        {
+            DeactivateLowHealthParticles();
+        }
+    }
+
+    private void ActivateLowHealthParticles()
+    {
+        if (!lowHealthParticlesActive && lowHealthParticlesPrefab != null)
+        {
+            lowHealthParticlesInstance = Instantiate(lowHealthParticlesPrefab, transform);
+            lowHealthParticlesInstance.transform.localPosition = Vector3.zero;
+            lowHealthParticlesActive = true;
+        }
+    }
+
+    private void DeactivateLowHealthParticles()
+    {
+        if (lowHealthParticlesActive)
+        {
+            if (lowHealthParticlesInstance != null)
+            {
+                Destroy(lowHealthParticlesInstance);
+                lowHealthParticlesInstance = null;
+            }
+            lowHealthParticlesActive = false;
+        }
+    }
+
+    private void UpdateHealthBarVisibility()
+    {
+        if (healthBar == null) return;
+
+        if (playerTransform == null)
+        {
+            healthBar.gameObject.SetActive(false);
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, playerTransform.position);
+        bool shouldBeVisible = distance <= healthBarVisibilityDistance;
+
+        if (healthBar.gameObject.activeSelf != shouldBeVisible)
+        {
+            healthBar.gameObject.SetActive(shouldBeVisible);
         }
     }
 
@@ -214,6 +298,13 @@ public class Plant : MonoBehaviour
     private void HandlePlantDeath()
     {
         DeactivatePreMatureParticles();
+        DeactivateLowHealthParticles();
+
+        if (healthBar != null)
+        {
+            healthBar.gameObject.SetActive(false);
+        }
+
         SoundBase.PlaySound(PlantSoundType.Die, SoundSourceType.Localized, transform);
         TilePlantingSystem.Instance.UnregisterPlantAt(tilePosition);
         RewardsSystem.Instance?.NotifyPlantDestroyed();
@@ -231,11 +322,6 @@ public class Plant : MonoBehaviour
         {
             UpdateGrowthStatus(LevelManager.Instance.GetCurrentDay());
         }
-    }
-
-    protected virtual void Update()
-    {
-        UpdateIdleSoundTimer(); // Check idle sound timer
     }
 
     private void UpdateIdleSoundTimer()

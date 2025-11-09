@@ -38,8 +38,9 @@ public class AttackPlant : Plant
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         canShoot = IsFullyGrown();
 
         if (canShoot && !isPerformingAttack)

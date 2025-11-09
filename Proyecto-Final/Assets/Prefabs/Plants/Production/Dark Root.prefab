@@ -111,7 +111,13 @@ MonoBehaviour:
   plantingDay: 0
   growthCompleted: 0
   preMatureParticlesPrefab: {fileID: 8921908033265245887, guid: 46c67c9655e1b244c957359dba845f8d, type: 3}
+  lowHealthParticlesPrefab: {fileID: 4174595437753816468, guid: c9d67f64ef09f284b9a02a2cb21a9592, type: 3}
+  lowHealthThreshold: 0.5
+  healthBar: {fileID: 6083269754216482957}
+  healthBarVisibilityDistance: 7
   tilePosition: {x: 0, y: 0, z: 0}
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   daysToProduceResources: 2
   minimumResourceAmount: 1
   maximumResourceAmount: 5
@@ -450,6 +456,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
+--- !u!114 &6083269754216482957 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5520770406525791052, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
+  m_PrefabInstance: {fileID: 1797405688352662465}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e400af25d19a07c4e958e96698123925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8381532458883955135 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7827403136463133310, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
