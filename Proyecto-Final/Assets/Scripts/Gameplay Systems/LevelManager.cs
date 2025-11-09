@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -136,6 +135,8 @@ public class LevelManager : MonoBehaviour
             InventoryManager.Instance.AddGold(100);
             Debug.Log("+100 oro agregado");
         }
+
+        Debug.Log("CURRENT GAME STATE: " + currentGameState);
     }
 
     public void TransitionToNight()

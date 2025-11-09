@@ -13,12 +13,17 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     [Header("Close Button")]
     [SerializeField] private CloseButton closeButton;
+
+    [Header("Heart Animation")]
+    [SerializeField] private HouseHealthHeartAnimator heartAnimator;
+    [SerializeField] private float healingAnimationDuration = 1.5f;
+
     private HouseRestorationSystem restorationSystem;
-    private const int GOLD_STEP = 10;
+    private HouseLifeController houseLife;
+    private GameState previousGameState;
 
     public static bool isUIOpen = false;
 
-    #region Unity Lifecycle
     private void Start()
     {
         InitializeReferences();
@@ -30,12 +35,13 @@ public class RestorationAltarUIManager : MonoBehaviour
     {
         UnsubscribeFromEvents();
     }
-    #endregion
 
-    #region Initialization
     private void InitializeReferences()
     {
         restorationSystem = FindObjectOfType<HouseRestorationSystem>();
+
+        if (LevelManager.Instance?.home != null)
+            houseLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
     }
 
     private void SubscribeToEvents()
@@ -87,12 +93,10 @@ public class RestorationAltarUIManager : MonoBehaviour
         altarUIPanel.SetActive(false);
         UpdateAllOptionButtons();
     }
-    #endregion
 
-    #region UI Toggle
     private void ToggleUI()
     {
-        if (isUIOpen)
+        if (altarUIPanel.activeSelf)
             CloseUI();
         else
             OpenUI();
@@ -100,11 +104,18 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     private void OpenUI()
     {
+        if (LevelManager.Instance != null)
+        {
+            previousGameState = LevelManager.Instance.GetCurrentGameState();
+        }
+
         altarUIPanel.SetActive(true);
         isUIOpen = true;
 
-        LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
         UpdateAllOptionButtons();
+        UpdateHeartVisual();
+
+        LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
     }
 
     public void CloseUI()
@@ -117,12 +128,27 @@ public class RestorationAltarUIManager : MonoBehaviour
 
         UIEvents.TriggerRestorationAltarUIClosed();
     }
-    #endregion
 
-    #region Restoration Logic
+    private void UpdateHeartVisual()
+    {
+        if (heartAnimator == null || houseLife == null) return;
+
+        float healthPercent = houseLife.GetHealthPercent();
+        heartAnimator.UpdateHeartVisual(healthPercent);
+    }
+
+    private void AnimateHouseHealing(float fromPercent, float toPercent)
+    {
+        if (heartAnimator == null) return;
+
+        heartAnimator.AnimateHealing(fromPercent, toPercent, healingAnimationDuration);
+    }
+
     private void HandleRestorationAttempt(int optionIndex)
     {
-        bool canRestore = restorationSystem != null && !restorationSystem.HasRestoredToday();
+        if (restorationSystem == null || houseLife == null) return;
+
+        bool canRestore = !restorationSystem.HasRestoredToday();
 
         if (!canRestore)
         {
@@ -130,11 +156,16 @@ public class RestorationAltarUIManager : MonoBehaviour
             return;
         }
 
+        float healthBeforeHealing = houseLife.GetHealthPercent();
+
         bool success = restorationSystem.TryRestore(optionIndex);
 
         if (success)
         {
-            CloseUI();
+            float healthAfterHealing = houseLife.GetHealthPercent();
+            AnimateHouseHealing(healthBeforeHealing, healthAfterHealing);
+            UpdateAllOptionButtons();
+            SoundManager.Instance?.Play("Restore");
         }
         else
         {
@@ -144,11 +175,9 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     private void HandleRestorationFailure()
     {
-        Debug.Log("No se pudo restaurar (recursos insuficientes o ya usado).");
+        SoundManager.Instance?.Play("CantBuy");
     }
-    #endregion
 
-    #region Option Buttons Update
     private void UpdateAllOptionButtons()
     {
         if (restorationSystem == null) return;
@@ -172,18 +201,43 @@ public class RestorationAltarUIManager : MonoBehaviour
             }
         }
     }
-    #endregion
 
-    #region Helper Methods
     private void ClearEventSystemSelection()
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        if (EventSystem.current != null)
+            EventSystem.current.SetSelectedGameObject(null);
     }
 
     private void RestoreGameState()
     {
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnAltarRestoration)
-            LevelManager.Instance.SetGameState(GameState.Digging);
+        if (LevelManager.Instance == null) return;
+
+        GameState currentState = LevelManager.Instance.GetCurrentGameState();
+
+        if (currentState != GameState.OnAltarRestoration)
+        {
+            return;
+        }
+
+        GameState stateToRestore = GetStateToRestore();
+
+        LevelManager.Instance.SetGameState(stateToRestore);
     }
-    #endregion
+
+    private GameState GetStateToRestore()
+    {
+        if (IsValidPreviousState(previousGameState))
+            return previousGameState;
+
+        return GameState.Digging;
+    }
+
+    private bool IsValidPreviousState(GameState state)
+    {
+        return state == GameState.Day ||
+               state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing;
+    }
 }

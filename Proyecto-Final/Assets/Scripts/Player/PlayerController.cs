@@ -67,9 +67,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         knockbackReceiver = GetComponent<KnockbackReceiver>();
 
-        LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
-
-        HandleGameStateChanged(LevelManager.Instance.currentGameState);
+        LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
 
         moveSpeed = maxSpeed;
         activeMoveSpeed = moveSpeed;
@@ -89,42 +87,69 @@ public class PlayerController : MonoBehaviour
             manaSystem = GetComponent<ManaSystem>();
         }
 
+        OnGameStateChanged(LevelManager.Instance.currentGameState);
+
         lastGameState = LevelManager.Instance.currentGameState;
     }
 
+    private void OnDestroy()
+    {
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        var lifeController = GetComponent<LifeController>();
+        bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !lifeController.isRespawning);
+        bool gameIsPaused = (GameManager.Instance != null && GameManager.Instance.IsGamePaused());
+
+        movementEnabled = ShouldAllowMovementForState(newState) &&
+                          playerIsAliveAndNotRespawning &&
+                          !gameIsPaused;
+
+        canAct = playerIsAliveAndNotRespawning &&
+                 !gameIsPaused &&
+                 newState != GameState.OnInventory &&
+                 newState != GameState.OnCrafting &&
+                 newState != GameState.OnRitual &&
+                 newState != GameState.OnAltarRestoration;
+
+
+        bool isNight = newState == GameState.Night;
+        handAnimator.SetBool("IsNight", isNight);
+        if (!isNight)
+            handAnimator.SetBool("IsAttacking", false);
+
+        if (handObject != null)
+            handObject.SetActive(isNight);
+
+        if (!movementEnabled)
+        {
+            currentVelocity = Vector2.zero;
+            rb.velocity = Vector2.zero;
+            animator.SetBool("IsMoving", false);
+        }
+    }
+
+    private bool ShouldAllowMovementForState(GameState state)
+    {
+        return state == GameState.Day ||
+               state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing ||
+               state == GameState.Night;
+    }
     void Update()
     {
-        GameState state = LevelManager.Instance.currentGameState;
-
         var lifeController = GetComponent<LifeController>();
         if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
         {
-            movementEnabled = false;
-            canAct = false;
             return;
         }
 
-        bool inInventory = state == GameState.OnInventory;
-        bool inCrafting = state == GameState.OnCrafting;
-
-        if (inInventory || inCrafting)
-        {
-            movementEnabled = false;
-            return;
-        }
-
-        movementEnabled = true;
-
-        bool isPaused = state == GameState.Paused || GameManager.Instance.IsGamePaused();
-        if (isPaused)
-        {
-            movementEnabled = false;
-            return;
-        }
-
-        lastGameState = state;
-
-        if (gameStateController != null && state == GameState.Night && canAct)
+        if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
         {
             HandleAttack();
         }
@@ -138,16 +163,6 @@ public class PlayerController : MonoBehaviour
 
         var lifeController = GetComponent<LifeController>();
         if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
-        {
-            currentVelocity = Vector2.zero;
-            rb.velocity = Vector2.zero;
-            animator.SetBool("IsMoving", false);
-            return;
-        }
-
-        if (state == GameState.OnInventory || state == GameState.OnCrafting
-            || abilitySystem.IsHarvesting() || abilitySystem.IsDigging() ||
-            state == GameState.OnRitual || state == GameState.OnAltarRestoration)
         {
             currentVelocity = Vector2.zero;
             rb.velocity = Vector2.zero;
@@ -328,13 +343,18 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
-
         if (enabled && LevelManager.Instance != null && (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()))
         {
             return;
         }
 
         movementEnabled = enabled;
+
+        if (!enabled && rb != null)
+        {
+            rb.velocity = Vector2.zero;
+            currentVelocity = Vector2.zero;
+        }
     }
 
     public bool IsMovementEnabled()
@@ -392,18 +412,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void HandleGameStateChanged(GameState newState)
-    {
-        bool isNight = newState == GameState.Night;
-
-        handAnimator.SetBool("IsNight", isNight);
-        if (!isNight)
-            handAnimator.SetBool("IsAttacking", false);
-
-        if (handObject != null)
-            handObject.SetActive(isNight);
-    }
-
     public void RefreshHandNightness()
     {
         bool isNight = LevelManager.Instance.currentGameState == GameState.Night;
@@ -414,7 +422,6 @@ public class PlayerController : MonoBehaviour
         if (handObject != null)
             handObject.SetActive(isNight);
     }
-
 
     private void HandleDash()
     {
@@ -440,6 +447,4 @@ public class PlayerController : MonoBehaviour
         if (dashCoolCounter > 0)
             dashCoolCounter -= Time.deltaTime;
     }
-
-
 }

@@ -13,7 +13,6 @@ public class GameStateUIController : UIControllerBase
     private bool openedFromPauseMenu = false;
     private GameState lastGameState = GameState.None;
     private GameState lastState = GameState.None;
-    private PlayerController playerController;
     [SerializeField] private PauseMenuController _pauseMenuController;
 
     [Header("Blur Settings")]
@@ -29,12 +28,7 @@ public class GameStateUIController : UIControllerBase
 
     public GameState LastState => lastState;
 
-    protected override void CacheReferences()
-    {
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-            playerController = player.GetComponent<PlayerController>();
-    }
+    protected override void CacheReferences() { }
 
     protected override void SetupEventListeners()
     {
@@ -156,6 +150,11 @@ public class GameStateUIController : UIControllerBase
             }
         }
 
+        if (IsAnyGameplayUIOpen())
+        {
+            return;
+        }
+
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
         {
             if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
@@ -168,12 +167,22 @@ public class GameStateUIController : UIControllerBase
         if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
             UIManager.Instance.CloseInventory();
-            if (playerController != null) playerController.SetMovementEnabled(true);
             if (HUD != null) HUD.SetActive(true);
             return;
         }
 
         OpenInventoryOptions();
+    }
+
+    private bool IsAnyGameplayUIOpen()
+    {
+        if (LevelManager.Instance == null) return false;
+
+        GameState currentState = LevelManager.Instance.currentGameState;
+
+        return currentState == GameState.OnCrafting ||
+               currentState == GameState.OnAltarRestoration ||
+               currentState == GameState.OnRitual;
     }
 
     private void OpenInventoryOptions()
@@ -200,7 +209,6 @@ public class GameStateUIController : UIControllerBase
             blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
 
         if (HUD != null) HUD.SetActive(false);
-        if (playerController != null) playerController.SetMovementEnabled(false);
     }
 
     private void HandleGameOverState()
@@ -247,9 +255,6 @@ public class GameStateUIController : UIControllerBase
     {
         SetUIElementsVisibility(true);
         UpdateUIElementsVisibility();
-
-        if (playerController != null)
-            playerController.SetMovementEnabled(true);
 
         if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
             LevelManager.Instance.SetGameState(lastState);

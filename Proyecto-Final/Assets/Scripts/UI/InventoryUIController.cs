@@ -18,16 +18,11 @@ public class InventoryUIController : UIControllerBase
     [SerializeField] private bool animationControllerManagesPages = true;
 
     private bool isInventoryOpen = false;
-    private PlayerController playerController;
 
     public bool IsInventoryOpen => isInventoryOpen;
 
     protected override void CacheReferences()
     {
-        var player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-            playerController = player.GetComponent<PlayerController>();
-
         if (inventoryPanel == null)
             inventoryPanel = GameObject.FindGameObjectWithTag("InventoryPanel");
 
@@ -117,9 +112,6 @@ public class InventoryUIController : UIControllerBase
         inventoryPanel.SetActive(true);
         isInventoryOpen = true;
 
-        if (disablePlayerMovementWhenOpen && playerController != null)
-            playerController.SetMovementEnabled(false);
-
         LevelManager.Instance?.SetGameState(GameState.OnInventory);
 
         UIEvents.TriggerInventoryOpened();
@@ -162,9 +154,6 @@ public class InventoryUIController : UIControllerBase
 
         inventoryPanel.SetActive(false);
         isInventoryOpen = false;
-
-        if (disablePlayerMovementWhenOpen && playerController != null)
-            playerController.SetMovementEnabled(true);
 
         if (LevelManager.Instance != null)
         {
@@ -222,9 +211,6 @@ public class InventoryUIController : UIControllerBase
 
         inventoryPanel.SetActive(true);
         isInventoryOpen = true;
-
-        if (disablePlayerMovementWhenOpen && playerController != null)
-            playerController.SetMovementEnabled(false);
 
         if (animationController != null)
         {

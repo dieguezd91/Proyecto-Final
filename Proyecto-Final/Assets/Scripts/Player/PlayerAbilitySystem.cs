@@ -339,7 +339,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         currentHarvestPlant = plant;
         isHarvesting = true;
-        playerController.SetMovementEnabled(false);
         currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
         SoundManager.Instance.Play("Harvest");
         progressBar?.SetImmediateProgress(0f);
@@ -389,7 +388,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         currentHarvestPlant.CancelHarvest();
         isHarvesting = false;
-        playerController.SetMovementEnabled(true);
         progressBar?.Hide();
         currentHarvestPlant = null;
     }
@@ -397,7 +395,6 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void CompleteHarvest()
     {
         isHarvesting = false;
-        playerController.SetMovementEnabled(true);
         progressBar?.Hide();
         var reward = currentHarvestPlant.GetHarvestReward();
         if (reward != null)
@@ -418,7 +415,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            playerController.SetMovementEnabled(false);
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             TryDig(mousePos);
         }
@@ -475,7 +471,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
-        playerController.SetMovementEnabled(false);
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(false);
 
@@ -524,14 +519,12 @@ public class PlayerAbilitySystem : MonoBehaviour
         TilePlantingSystem.Instance.PlantingTilemap.SetTile(cell, tilledSoilTile);
 
         isDigging = false;
-        playerController.SetMovementEnabled(true);
         progressBar?.Hide();
     }
 
     private void CancelDigging()
     {
         isDigging = false;
-        playerController.SetMovementEnabled(true);
         progressBar?.Hide();
     }
 
