@@ -104,7 +104,7 @@ public class AttackPlant : Plant
             if (queuedTarget.gameObject.activeInHierarchy)
             {
                 GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
-                Spell projectileComponent = projectileObj.GetComponent<Spell>();
+                ProjectileSpell projectileComponent = projectileObj.GetComponent<ProjectileSpell>();
 
                 if (projectileComponent != null)
                 {

@@ -5416,13 +5416,13 @@ GameObject:
   - component: {fileID: 1099973671300293658}
   - component: {fileID: 477447474750530567}
   - component: {fileID: 94765001059883094}
+  - component: {fileID: 4856583932368232146}
+  - component: {fileID: 1928622631053985834}
   - component: {fileID: 4502512717715921832}
   - component: {fileID: 9064956187856915231}
   - component: {fileID: 1774628585642013327}
   - component: {fileID: 5323037432474920394}
   - component: {fileID: 1333776624667747220}
-  - component: {fileID: 4856583932368232146}
-  - component: {fileID: 1928622631053985834}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -5620,6 +5620,35 @@ MonoBehaviour:
   isPlayer: 1
   isPlant: 0
   hasDeathAnimation: 1
+--- !u!114 &4856583932368232146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a428d40e3ac39ed438a2d826278c5691, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkPoint: {fileID: 599287380551035941}
+  checkRadius: 0.1
+--- !u!114 &1928622631053985834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  knockbackResistance: 0.5
+  knockbackDuration: 0.2
+  knockbackDecay: 8
 --- !u!95 &4502512717715921832
 Animator:
   serializedVersion: 5
@@ -5854,35 +5883,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4856583932368232146
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429872126492704177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a428d40e3ac39ed438a2d826278c5691, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkPoint: {fileID: 599287380551035941}
-  checkRadius: 0.1
---- !u!114 &1928622631053985834
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429872126492704177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1656530fa0b666b4f83ddd34ef950c51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  knockbackResistance: 0.5
-  knockbackDuration: 0.2
-  knockbackDecay: 8
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0

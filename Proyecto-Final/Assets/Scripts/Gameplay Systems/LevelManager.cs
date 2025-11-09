@@ -384,8 +384,8 @@ public class LevelManager : MonoBehaviour
             if (enemy != null) Destroy(enemy);
         }
 
-        Spell[] activeSpells = FindObjectsOfType<Spell>();
-        foreach (Spell spell in activeSpells)
+        ProjectileSpell[] activeSpells = FindObjectsOfType<ProjectileSpell>();
+        foreach (ProjectileSpell spell in activeSpells)
         {
             if (spell != null) Destroy(spell.gameObject);
         }

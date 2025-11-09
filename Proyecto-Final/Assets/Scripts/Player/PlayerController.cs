@@ -261,7 +261,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!canAct) return;
 
-        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        if (Input.GetMouseButton(0) && CanCastSpell())
         {
             handAnimator.SetBool("IsAttacking", true);
         }
@@ -274,71 +274,65 @@ public class PlayerController : MonoBehaviour
 
     void CastSpell()
     {
-        if (SpellInventory.Instance == null)
-        {
-            return;
-        }
-
         int selectedSlotIndex = SpellInventory.Instance.GetSelectedSlotIndex();
         SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
 
-        if (selectedSpell == null || !selectedSpell.isUnlocked)
-        {
-            return;
-        }
-
-        if (selectedSpell.currentCooldown > 0f)
-        {
-            return;
-        }
-
-        if (!manaSystem.UseMana(selectedSpell.manaCost))
-        {
-            return;
-        }
+        manaSystem.UseMana(selectedSpell.manaCost);
 
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
 
         GameObject spellPrefab = selectedSpell.spellPrefab != null ? selectedSpell.spellPrefab : bulletPrefab;
+        GameObject spellObject = Instantiate(spellPrefab, firePoint.position, Quaternion.identity);
 
-        GameObject spell = Instantiate(spellPrefab, firePoint.position, Quaternion.identity);
-        Spell spellComponent = spell.GetComponent<Spell>();
-        SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
+        Spell spellComponent = spellObject.GetComponent<Spell>();
 
         if (spellComponent != null)
         {
-            spellComponent.SetDirection(direction);
+            spellComponent.Cast(direction, firePoint.position);
         }
         else
         {
-            Rigidbody2D rb = spell.GetComponent<Rigidbody2D>();
+            Rigidbody2D rb = spellObject.GetComponent<Rigidbody2D>();
             if (rb != null)
             {
                 rb.velocity = direction * bulletSpeed;
             }
         }
 
+        SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
         attackSlowEndTime = Time.time + attackSlowDuration;
-
         SpellInventory.Instance.StartCooldown(selectedSlotIndex);
     }
 
     public void ShootFromHand()
     {
-        if (!canAct || Time.time < nextFireTime)
-            return;
+        if (!canAct) return;
 
-        if (SpellInventory.Instance != null)
-        {
-            SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
-            if (selectedSpell != null && selectedSpell.currentCooldown > 0f)
-                return;
-        }
+        if (!CanCastSpell()) return;
 
         CastSpell();
+
         nextFireTime = Time.time + 0.1f;
+    }
+
+    private bool CanCastSpell()
+    {
+        if (Time.time < nextFireTime) return false;
+
+        if (SpellInventory.Instance == null) return false;
+
+        SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
+
+        if (selectedSpell == null || !selectedSpell.isUnlocked) return false;
+
+        if (selectedSpell.currentCooldown > 0f) return false;
+
+        if (manaSystem != null && manaSystem.GetCurrentMana() < selectedSpell.manaCost)
+            return false;
+
+        return true;
     }
 
     public void SetMovementEnabled(bool enabled)
