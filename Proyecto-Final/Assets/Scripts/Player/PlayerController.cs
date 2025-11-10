@@ -56,6 +56,8 @@ public class PlayerController : MonoBehaviour
 
     private bool hasMovedForTutorial = false;
 
+    private SpellType currentSpellType = SpellType.Range;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -112,8 +114,16 @@ public class PlayerController : MonoBehaviour
 
         bool isNight = newState == GameState.Night;
         handAnimator.SetBool("IsNight", isNight);
+
         if (!isNight)
+        {
             handAnimator.SetBool("IsAttacking", false);
+            ResetHandSpellAnimations();
+        }
+        else
+        {
+            UpdateHandAnimationForSpell();
+        }
 
         if (handObject != null)
             handObject.SetActive(isNight);
@@ -146,6 +156,7 @@ public class PlayerController : MonoBehaviour
 
         if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
         {
+            CheckForSpellTypeChange();
             HandleAttack();
         }
 
@@ -258,11 +269,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void CheckForSpellTypeChange()
+    {
+        if (SpellInventory.Instance == null || handAnimator == null) return;
+
+        SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
+        if (selectedSpell == null) return;
+
+        if (selectedSpell.spellType != currentSpellType)
+        {
+            currentSpellType = selectedSpell.spellType;
+            UpdateHandAnimationForSpell();
+        }
+    }
+
     void HandleAttack()
     {
         if (!canAct) return;
 
-        if (Input.GetMouseButton(0) && CanCastSpell())
+        if (Input.GetMouseButtonDown(0) && CanCastSpell())
         {
             handAnimator.SetBool("IsAttacking", true);
         }
@@ -328,6 +353,50 @@ public class PlayerController : MonoBehaviour
             return false;
 
         return true;
+    }
+
+    private void UpdateHandAnimationForSpell()
+    {
+        if (SpellInventory.Instance == null || handAnimator == null) return;
+
+        SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
+        if (selectedSpell == null) return;
+
+        ResetHandSpellAnimations();
+
+        currentSpellType = selectedSpell.spellType;
+
+        switch (selectedSpell.spellType)
+        {
+            case SpellType.Range:
+                handAnimator.SetBool("BaseSpell", true);
+                break;
+
+            case SpellType.Melee:
+                handAnimator.SetBool("MeleeSpell", true);
+                break;
+
+            case SpellType.Area:
+                handAnimator.SetBool("AreaSpell", true);
+                break;
+
+            case SpellType.Teleport:
+                handAnimator.SetBool("BaseSpell", true);
+                break;
+
+            default:
+                handAnimator.SetBool("BaseSpell", true);
+                break;
+        }
+    }
+
+    private void ResetHandSpellAnimations()
+    {
+        if (handAnimator == null) return;
+
+        handAnimator.SetBool("BaseSpell", false);
+        handAnimator.SetBool("MeleeSpell", false);
+        handAnimator.SetBool("AreaSpell", false);
     }
 
     public void SetMovementEnabled(bool enabled)
@@ -405,8 +474,16 @@ public class PlayerController : MonoBehaviour
     {
         bool isNight = LevelManager.Instance.currentGameState == GameState.Night;
         handAnimator.SetBool("IsNight", isNight);
+
         if (!isNight)
+        {
             handAnimator.SetBool("IsAttacking", false);
+            ResetHandSpellAnimations();
+        }
+        else
+        {
+            UpdateHandAnimationForSpell();
+        }
 
         if (handObject != null)
             handObject.SetActive(isNight);
