@@ -5076,7 +5076,7 @@ SpriteRenderer:
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
   m_SortingOrder: 6
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 1948612629, guid: 4475a5d971e73d04cb06cd9ee9b45a86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5084,7 +5084,7 @@ SpriteRenderer:
   m_Size: {x: 1.5, y: 1.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &1463363302880399508
@@ -5562,7 +5562,7 @@ MonoBehaviour:
   progressBar: {fileID: 0}
   progressBarTarget: {fileID: 3535706038251047626}
   progressBarOffset: {x: 0, y: 1.5, z: 0}
-  plantInventory: {fileID: 0}
+  seedInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
   digAnimationPrefab: {fileID: 1522577013364806030, guid: 330e16aa371d76f47b21ff7817d79261, type: 3}
 --- !u!114 &477447474750530567
