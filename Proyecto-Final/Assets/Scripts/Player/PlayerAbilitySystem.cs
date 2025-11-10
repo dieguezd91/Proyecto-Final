@@ -434,6 +434,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (reward != null)
         {
             floatingTextController?.ShowPickup(reward.materialName, reward.amount, reward.icon);
+            TutorialEvents.InvokePlantHarvested();
         }
         currentHarvestPlant = null;
     }
@@ -552,6 +553,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         isDigging = false;
         progressBar?.Hide();
+
+        TutorialEvents.InvokeGroundDug();
     }
 
     private void CancelDigging()

@@ -118,7 +118,7 @@ MonoBehaviour:
   tilePosition: {x: 0, y: 0, z: 0}
   idleSoundMinTime: 5
   idleSoundMaxTime: 15
-  daysToProduceResources: 2
+  daysToProduceResources: 0
   minimumResourceAmount: 1
   maximumResourceAmount: 5
   materialType: 9
@@ -128,7 +128,7 @@ MonoBehaviour:
   harvestReadyParticles: {fileID: 3190134809603557918}
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   clickColor: {r: 1, g: 0, b: 0, a: 1}
-  rewardType: 0
+  rewardType: 9
   rewardAmount: 1
 --- !u!114 &5857128013590860986
 MonoBehaviour:

@@ -80,7 +80,6 @@ public class Skeleton : EnemyBase
         nextAttackTime = Time.time + attackCooldown;
 
         animator?.SetBool("isAttacking", true);
-        soundBase?.PlaySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
     }
 
     public void PerformSwordHit()
@@ -95,6 +94,8 @@ public class Skeleton : EnemyBase
 
             damagedTargets.Add(obj);
             DealDamageTo(obj);
+
+            soundBase?.PlaySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
         }
     }
 

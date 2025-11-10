@@ -54,6 +54,7 @@ public class TilePlantingSystem : MonoBehaviour
 
         plantedTiles[cellPos] = plant;
         PlantManager.Instance.RegisterPlant(plant);
+        TutorialEvents.InvokeSeedPlanted();
         return true;
     }
 

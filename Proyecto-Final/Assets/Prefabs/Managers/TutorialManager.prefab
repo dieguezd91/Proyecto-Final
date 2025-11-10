@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7181902806214255563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 386297258002139435}
+  - component: {fileID: 146868286885820956}
+  m_Layer: 0
+  m_Name: TutorialManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &386297258002139435
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7181902806214255563}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &146868286885820956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7181902806214255563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86f34651ecb05c4b9b0fb2befc579e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tutorialSteps:
+  - {fileID: 11400000, guid: d4710db85cc460f4599be7dbc410419f, type: 2}
+  - {fileID: 11400000, guid: 16ffda535a901394d8ffed95633194d3, type: 2}
+  - {fileID: 11400000, guid: 0075009ef63e47240850f98867a28648, type: 2}
+  - {fileID: 11400000, guid: a546d1b43bc895247b7588f27571b808, type: 2}
+  - {fileID: 11400000, guid: ef553f94880ac5045877bec9009af927, type: 2}
+  - {fileID: 11400000, guid: 2e8b3aab2ba8ab346aa27ec42ff94f86, type: 2}
+  - {fileID: 11400000, guid: f97ff75d134e45b4493aa0b0db1a75ee, type: 2}
+  - {fileID: 11400000, guid: 2fb5c407efd677244b021bb8ebf88593, type: 2}
+  tutorialUI: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
+  enableTutorial: 1

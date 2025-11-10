@@ -18,24 +18,24 @@ public class EnemiesSpawner : MonoBehaviour
     [SerializeField] private int enemiesPerNightIncrement;
     [SerializeField] private float difficultyScalingFactor = 1.2f;
 
-    [Header("Configuración de Spawn Individual")]
+    [Header("SETTINGS")]
     [SerializeField] private float baseSpawnInterval;
     [SerializeField] private float minSpawnInterval = 0.3f;
     [SerializeField] private float spawnIntervalDecreasePerDay = 0.1f;
 
-    [Header("Spawn Points")]
+    [Header("SPAWN")]
     public List<Transform> spawnPoints;
     public bool useRandomSpawnPoint = true;
     public bool dontSpawnWhenPlayerNearby = true;
     public float playerCheckRadius = 5f;
 
-    [Header("Enemy Types")]
+    [Header("ENEMIES")]
     [SerializeField] private List<EnemyWeight> enemyWeights;
 
-    [Header("Boss System")]
+    [Header("BOSS")]
     [SerializeField] private BossNightManager bossNightManager;
 
-    [Header("Events")]
+    [Header("EVENTS")]
     public UnityEvent onHordeStart;
     public UnityEvent onHordeEnd;
     public UnityEvent onEnemySpawned;
@@ -278,6 +278,8 @@ public class EnemiesSpawner : MonoBehaviour
     {
         totalEnemiesKilled++;
 
+        TutorialEvents.InvokeEnemyDefeated();
+
         if (activeEnemies.Contains(enemy))
         {
             activeEnemies.Remove(enemy);
@@ -305,6 +307,8 @@ public class EnemiesSpawner : MonoBehaviour
         }
 
         isSpawning = false;
+
+        TutorialEvents.InvokeNightSurvived();
 
         if (completed)
         {

@@ -110,6 +110,7 @@ public class InventoryUIController : UIControllerBase
         }
 
         inventoryPanel.SetActive(true);
+        TutorialEvents.InvokeInventoryOpened();
         isInventoryOpen = true;
 
         LevelManager.Instance?.SetGameState(GameState.OnInventory);

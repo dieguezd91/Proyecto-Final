@@ -90,6 +90,7 @@ public class CraftingUIManager : MonoBehaviour
     private void OpenCraftingUI()
     {
         craftingUIPanel.SetActive(true);
+        TutorialEvents.InvokeCraftingOpened();
         isCraftingUIOpen = true;
 
         ResetRecipeDisplay();

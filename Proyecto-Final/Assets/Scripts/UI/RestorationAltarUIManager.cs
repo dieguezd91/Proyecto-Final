@@ -110,6 +110,7 @@ public class RestorationAltarUIManager : MonoBehaviour
         }
 
         altarUIPanel.SetActive(true);
+        TutorialEvents.InvokeRestorationOpened();
         isUIOpen = true;
 
         UpdateAllOptionButtons();

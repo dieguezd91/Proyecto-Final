@@ -133,7 +133,6 @@ public class LevelManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
             InventoryManager.Instance.AddGold(100);
-            Debug.Log("+100 oro agregado");
         }
 
         Debug.Log("CURRENT GAME STATE: " + currentGameState);
@@ -143,7 +142,6 @@ public class LevelManager : MonoBehaviour
     {
         dayCount++;
         SetGameState(GameState.Night);
-
         RewardsSystem.Instance?.StartNightEvaluation();
     }
 
@@ -402,6 +400,7 @@ public class LevelManager : MonoBehaviour
 
         Debug.Log("Reset completado.");
     }
+
     public void ForceEndNight()
     {
         foreach (var altar in FindObjectsOfType<RitualAltar>())

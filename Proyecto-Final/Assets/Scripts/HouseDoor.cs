@@ -109,7 +109,10 @@ public class HouseDoor : MonoBehaviour
             player.position = outsideSpawn.position;
 
         if (goingInside)
+        {
             worldTransition.EnterHouse();
+            TutorialEvents.InvokeHouseEntered();
+        }
         else
             worldTransition.ExitHouse();
     }

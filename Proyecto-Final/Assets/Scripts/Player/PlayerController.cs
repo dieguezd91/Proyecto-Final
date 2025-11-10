@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject handObject;
     private KnockbackReceiver knockbackReceiver;
 
+    private bool hasMovedForTutorial = false;
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -181,6 +183,12 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
+        if (!hasMovedForTutorial && moveInput.sqrMagnitude > 0.01f)
+        {
+            hasMovedForTutorial = true;
+            TutorialEvents.InvokePlayerMoved();
+        }
+
         Vector2 targetVelocity = moveInput * activeMoveSpeed;
 
         if (Time.time < attackSlowEndTime)
@@ -294,6 +302,8 @@ public class PlayerController : MonoBehaviour
         attackSlowEndTime = Time.time + attackSlowDuration;
 
         SpellInventory.Instance.StartCooldown(selectedSlotIndex);
+
+        TutorialEvents.InvokeSpellCasted();
     }
 
     public void ShootFromHand()

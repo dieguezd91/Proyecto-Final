@@ -176,6 +176,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (canTransitionToNight)
         {
+            TutorialEvents.InvokeNightStarted();
             levelManager.TransitionToNight();
         }
     }
