@@ -30,7 +30,7 @@ public class Plant : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private PlantHealthBar healthBar;
-    [SerializeField] private float healthBarVisibilityDistance = 7f;
+    [SerializeField] private float healthBarVisibilityDistance = 2f;
 
     protected int daysToGrow;
     protected Sprite plantSprite;
@@ -231,7 +231,8 @@ public class Plant : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, playerTransform.position);
-        bool shouldBeVisible = distance <= healthBarVisibilityDistance;
+
+        bool shouldBeVisible = growthCompleted && (distance <= healthBarVisibilityDistance);
 
         if (healthBar.gameObject.activeSelf != shouldBeVisible)
         {
