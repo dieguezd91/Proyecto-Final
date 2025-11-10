@@ -53,14 +53,6 @@ MonoBehaviour:
     cooldown: 0.5
     currentCooldown: 0
     isUnlocked: 1
-  - spellType: 4
-    spellName: Teleport
-    spellIcon: {fileID: 872140717, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-    spellPrefab: {fileID: 0}
-    manaCost: 0
-    cooldown: 1
-    currentCooldown: 0
-    isUnlocked: 1
   - spellType: 2
     spellName: Melee
     spellIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -75,6 +67,14 @@ MonoBehaviour:
     spellPrefab: {fileID: 2376951640795662106, guid: 06700ad62ffa5c84c97e0cfe70009e4a, type: 3}
     manaCost: 50
     cooldown: 10
+    currentCooldown: 0
+    isUnlocked: 1
+  - spellType: 4
+    spellName: Teleport
+    spellIcon: {fileID: 872140717, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
   - spellType: 0
