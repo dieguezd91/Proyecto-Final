@@ -14,22 +14,29 @@ public enum PlayerAbility
 
 public class PlayerAbilitySystem : MonoBehaviour
 {
-    [Header("Dig System")]
+    [Header("DIG ABILITY")]
     [SerializeField] public LayerMask diggableLayer;
     [SerializeField] public float digDistance = 2f;
     [SerializeField] private float digDuration = 1.5f;
-    [SerializeField] private float digManaCost = 10f;
+    [SerializeField] private float digManaCost;
 
-    [Header("Harvest System")]
+    [Header("HARVEST ABILITY")]
     [SerializeField] public float interactionDistance = 2f;
+    [SerializeField] private float harvestManaCost;
 
-    [Header("Progress Visualization")]
+    [Header("PLANTING ABILITY")]
+    [SerializeField] private float plantManaCost;
+
+    [Header("REMOVING ABILITY")]
+    [SerializeField] private float removeManaCost;
+
+    [Header("PROGRESS FEEDBACK")]
     [SerializeField] private ProgressBar progressBar;
     [SerializeField] private Transform progressBarTarget;
     [SerializeField] private Vector3 progressBarOffset = new Vector3(0, 1.5f, 0);
 
-    [Header("References")]
-    [SerializeField] private SeedInventory plantInventory;
+    [Header("REFERENCES")]
+    [SerializeField] private SeedInventory seedInventory;
     [SerializeField] public TileBase tilledSoilTile;
     private ManaSystem manaSystem;
 
@@ -51,7 +58,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private bool initialized = false;
 
-
     public PlayerAbility CurrentAbility => currentAbility;
 
     private void Awake()
@@ -60,11 +66,11 @@ public class PlayerAbilitySystem : MonoBehaviour
         manaSystem = GetComponent<ManaSystem>();
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
-        plantInventory ??= FindObjectOfType<SeedInventory>();
+        seedInventory ??= FindObjectOfType<SeedInventory>();
 
-        if (plantInventory != null)
+        if (seedInventory != null)
         {
-            plantInventory.onSlotSelected += OnSeedSlotSelected;
+            seedInventory.onSlotSelected += OnSeedSlotSelected;
         }
 
         warningBubble = GetComponentInChildren<WarningBubble>();
@@ -73,9 +79,9 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (plantInventory != null)
+        if (seedInventory != null)
         {
-            plantInventory.onSlotSelected -= OnSeedSlotSelected;
+            seedInventory.onSlotSelected -= OnSeedSlotSelected;
         }
     }
 
@@ -95,7 +101,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             return;
 
-        // Si está cavando, mostrar feedback de distancia (mantener lógica original)
         if (currentAbility == PlayerAbility.Digging && !isDigging)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -156,11 +161,11 @@ public class PlayerAbilitySystem : MonoBehaviour
             return;
 
         PlayerAbility[] validAbilities = {
-        PlayerAbility.Digging,
-        PlayerAbility.Planting,
-        PlayerAbility.Harvesting,
-        PlayerAbility.Removing
-    };
+            PlayerAbility.Digging,
+            PlayerAbility.Planting,
+            PlayerAbility.Harvesting,
+            PlayerAbility.Removing
+        };
 
         int currentIndex = System.Array.IndexOf(validAbilities, currentAbility);
         if (currentIndex == -1) currentIndex = 0;
@@ -186,7 +191,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void OnSeedSlotSelected(int slotIndex)
     {
-        
         if (!initialized)
         {
             initialized = true;
@@ -234,10 +238,10 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
-            GameObject selectedPlant = plantInventory.GetSelectedPlantPrefab();
+            GameObject selectedPlant = seedInventory.GetSelectedPlantPrefab();
             if (selectedPlant == null) return;
 
-            if (!plantInventory.HasSeedsInSelectedSlot())
+            if (!seedInventory.HasSeedsInSelectedSlot())
             {
                 warningBubble?.ShowMessage("No seeds left.");
                 return;
@@ -251,16 +255,27 @@ public class PlayerAbilitySystem : MonoBehaviour
                 return;
             }
 
+            if (manaSystem != null && !manaSystem.UseMana(plantManaCost))
+            {
+                warningBubble?.ShowMessage("Not enough mana to plant!");
+
+                if (floatingTextController != null)
+                {
+                    warningBubble.ShowMessage("Insufficient Mana");
+                }
+
+                SoundManager.Instance?.PlayOneShot("Error");
+                return;
+            }
+
             bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant, out string reason);
 
             if (planted)
             {
+                seedInventory.ConsumeSeedInSelectedSlot();
                 SoundManager.Instance.Play("Plant");
-                plantInventory.ConsumeSeedInSelectedSlot();
-                LevelManager.Instance.uiManager.UpdateSeedCountsUI();
-                LevelManager.Instance.uiManager.InitializeSeedSlotsUI();
             }
-            else if (!string.IsNullOrEmpty(reason))
+            else
             {
                 warningBubble?.ShowMessage(reason);
             }
@@ -269,39 +284,44 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleHarvesting()
     {
-        if (isHarvesting)
-            return;
-
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-            Plant possiblePlant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
-            if (possiblePlant is ResourcePlant harvestablePlant)
+            if (hit.collider == null)
+                return;
+
+            ResourcePlant plant = hit.collider.GetComponent<ResourcePlant>();
+            if (plant == null || plant.IsBeingHarvested())
+                return;
+
+            if (Vector2.Distance(transform.position, hit.collider.transform.position) > interactionDistance)
             {
-                if (!harvestablePlant.IsReadyToHarvest())
+                warningBubble?.ShowMessage("Too far to harvest.");
+                return;
+            }
+
+            if (!plant.IsReadyToHarvest())
+            {
+                warningBubble?.ShowMessage("Not ready to harvest yet!");
+                return;
+            }
+
+            if (manaSystem != null && !manaSystem.UseMana(harvestManaCost))
+            {
+                warningBubble?.ShowMessage("Not enough mana to harvest!");
+
+                if (floatingTextController != null)
                 {
-                    warningBubble?.ShowMessage("Plant not ready to harvest.");
-                    return;
-                }
-                if (harvestablePlant.IsBeingHarvested())
-                {
-                    warningBubble?.ShowMessage("This plant is already being harvested.");
-                    return;
-                }
-                if (Vector2.Distance(transform.position, harvestablePlant.transform.position) > interactionDistance)
-                {
-                    warningBubble?.ShowMessage("Too far to harvest.");
-                    return;
+                    warningBubble.ShowMessage("Insufficient Mana");
                 }
 
-                StartHarvesting(harvestablePlant);
+                SoundManager.Instance?.PlayOneShot("Error");
+                return;
             }
-            else
-            {
-                warningBubble?.ShowMessage("No harvestable plant here.");
-            }
+
+            StartHarvesting(plant);
         }
     }
 
@@ -324,8 +344,21 @@ public class PlayerAbilitySystem : MonoBehaviour
                 warningBubble?.ShowMessage("Too far to remove plant.");
                 return;
             }
-            SoundManager.Instance.Play("Remove");
 
+            if (manaSystem != null && !manaSystem.UseMana(removeManaCost))
+            {
+                warningBubble?.ShowMessage("Not enough mana to remove!");
+
+                if (floatingTextController != null)
+                {
+                    warningBubble.ShowMessage("Insufficient Mana");
+                }
+
+                SoundManager.Instance?.PlayOneShot("Error");
+                return;
+            }
+
+            SoundManager.Instance.Play("Remove");
             TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
             Destroy(plant.gameObject);
             warningBubble?.ShowMessage("Plant removed.");
@@ -389,6 +422,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         currentHarvestPlant.CancelHarvest();
         isHarvesting = false;
         progressBar?.Hide();
+
         currentHarvestPlant = null;
     }
 
@@ -456,7 +490,6 @@ public class PlayerAbilitySystem : MonoBehaviour
             }
 
             SoundManager.Instance?.PlayOneShot("Error");
-
             return false;
         }
 
@@ -480,7 +513,6 @@ public class PlayerAbilitySystem : MonoBehaviour
             Vector3 spawnPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
             Instantiate(digAnimationPrefab, spawnPos, Quaternion.identity);
             SoundManager.Instance.Play("Dig");
-
         }
 
         StartCoroutine(DiggingProcess());

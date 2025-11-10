@@ -5520,10 +5520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1774628585642013327}
   cam: {fileID: 0}
-  bulletPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
   firePoint: {fileID: 7145714007259786806}
-  bulletSpeed: 10
-  spellCooldown: 0.5
   accelerationRate: 6
   decelerationRate: 8
   maxSpeed: 5
@@ -5532,7 +5529,6 @@ MonoBehaviour:
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
-  spellManaCost: 10
   dashSpeed: 30
   dashLength: 0.15
   dashCooldown: 1
@@ -5560,6 +5556,9 @@ MonoBehaviour:
   digDuration: 1.5
   digManaCost: 50
   interactionDistance: 2
+  harvestManaCost: 75
+  plantManaCost: 35
+  removeManaCost: 100
   progressBar: {fileID: 0}
   progressBarTarget: {fileID: 3535706038251047626}
   progressBarOffset: {x: 0, y: 1.5, z: 0}
