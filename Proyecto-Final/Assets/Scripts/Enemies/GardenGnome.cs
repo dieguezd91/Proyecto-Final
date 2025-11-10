@@ -53,9 +53,7 @@ public class GardenGnome : EnemyBase
     protected override void Start()
     {
         base.Start();
-        CachePlayerReference();
-
-       
+        CachePlayerReference();       
     }
 
     protected override void Update()
@@ -70,6 +68,38 @@ public class GardenGnome : EnemyBase
         {
             player = null;
             playerLife = null;
+        }
+    }
+
+    protected override void UpdateTargeting()
+    {
+        if (hasOverrideTarget && overrideTarget != null)
+        {
+            currentTarget = overrideTarget;
+            currentTargetType = "override";
+            return;
+        }
+
+        if (player != null && playerLife != null && playerLife.IsTargetable())
+        {
+            float distance = Vector2.Distance(transform.position, player.position);
+
+            if (distance <= detectionRange)
+            {
+                currentTarget = player;
+                currentTargetType = "player";
+            }
+            else
+            {
+                currentTarget = null;
+                currentTargetType = "none";
+            }
+        }
+        else
+        {
+            CachePlayerReference();
+            currentTarget = null;
+            currentTargetType = "none";
         }
     }
 

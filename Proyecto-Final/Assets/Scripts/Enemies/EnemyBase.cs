@@ -29,8 +29,8 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     public bool isDead = false;
     protected float lastFootstepTime = 0f;
 
-    private Transform overrideTarget = null;
-    private bool hasOverrideTarget = false;
+    protected Transform overrideTarget = null;
+    protected bool hasOverrideTarget = false;
 
     public StateMachine StateMachine { get; protected set; }
 
