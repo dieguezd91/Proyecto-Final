@@ -155,6 +155,8 @@ public class InventoryUIController : UIControllerBase
         inventoryPanel.SetActive(false);
         isInventoryOpen = false;
 
+        GameManager.Instance?.ResumeGame();
+
         if (LevelManager.Instance != null)
         {
             var uiController = UIManager.Instance?.GameState;
@@ -164,7 +166,6 @@ public class InventoryUIController : UIControllerBase
             }
         }
 
-        GameManager.Instance?.ResumeGame();
         UIManager.Instance.HUD.SetActive(true);
     }
 
