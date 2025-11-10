@@ -67,7 +67,8 @@ MonoBehaviour:
   _optionsMenuPanel: {fileID: 5546816687010688779}
   _instructionsPanel: {fileID: 7142959132510743012}
   blurVolume: {fileID: 5345246763945271042}
-  transitionDuration: 1.5
+  showTransitionDuration: 0.5
+  hideTransitionDuration: 0.8
   maxFocalLength: 200
 --- !u!1001 &1952250833446150861
 PrefabInstance:
@@ -190,6 +191,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8088790106237010107}
     m_Modifications:
+    - target: {fileID: 972217018157553663, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 972217018157553663, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 972217018157553663, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987698500290897325, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987698500290897325, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1987698500290897325, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3368772548655829219, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3368772548655829219, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708662754477326496, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4708662754477326496, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4807649685377728529, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -270,9 +311,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6319461398444208882, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319461398444208882, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126609002377693116, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126609002377693116, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7126609002377693116, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8255177620891932821, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
       propertyPath: m_Name
       value: Pause Options Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255177620891932821, guid: 7e9f7f9945a87774f93fb56c52ab754d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

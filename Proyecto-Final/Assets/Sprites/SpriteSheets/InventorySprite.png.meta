@@ -706,6 +706,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SliderFull
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 208
+        width: 110
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87b8974494340644ebdb9820a01c2765
+      internalID: 1761694029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SliderEmty
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 192
+        width: 110
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07c5411eaf41faa468d3a5ed3771d186
+      internalID: -352911353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SliderBar
+      rect:
+        serializedVersion: 2
+        x: 661
+        y: 206
+        width: 7
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0389046c898a31041a01b1e70eb2094a
+      internalID: -911061963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -723,7 +786,6 @@ TextureImporter:
       BookOpen3: 289787448
       BookOpen4: -465626434
       Calendar: 190405470
-      InventorySprite_1: 2038785279
       InventorySprite_10: 1404506585
       InventorySprite_11: -1811661824
       InventorySprite_12: -1003076781
@@ -744,6 +806,9 @@ TextureImporter:
       PageTurn5: -1012008739
       Placeholder: -1356487726
       Placeholder2: -530286579
+      SliderBar: -911061963
+      SliderEmty: 2038785279
+      SliderFull: 1761694029
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

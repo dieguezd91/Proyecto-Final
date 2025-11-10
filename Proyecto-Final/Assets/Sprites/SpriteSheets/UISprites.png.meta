@@ -262,7 +262,7 @@ TextureImporter:
         serializedVersion: 2
         x: 208
         y: 32
-        width: 48
+        width: 32
         height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -1462,7 +1462,7 @@ TextureImporter:
         width: 86
         height: 87
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1470,6 +1470,48 @@ TextureImporter:
       bones: []
       spriteID: 79ca4f92395302142898f226a1a4f61b
       internalID: 274759944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyBar
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 53
+        width: 48
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc912161bb958b243b7b96c9127f8bd0
+      internalID: -12234551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EnemyBarEmpty
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 37
+        width: 48
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a3dffedc11eaeb4085a34fb3419041d
+      internalID: -2130378795
       vertices: []
       indices: 
       edges: []
@@ -1503,6 +1545,8 @@ TextureImporter:
       EmptyMana: 1316128634
       EmpyLife: 1339065725
       EndingTImer: -437305898
+      EnemyBar: -12234551
+      EnemyBarEmpty: -2130378795
       FillHouse: -1423815668
       FillLife: 1365419780
       FillMana: -359895768
