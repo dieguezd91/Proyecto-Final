@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8219409823279171313}
   - component: {fileID: 6097756103860014218}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10200,10 +10200,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5933285377420938222, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10283,14 +10279,6 @@ PrefabInstance:
     - target: {fileID: 7827403136463133310, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8478862263821191060, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: m_SortingOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8783055113398384073, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
-      propertyPath: m_FillAmount
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
