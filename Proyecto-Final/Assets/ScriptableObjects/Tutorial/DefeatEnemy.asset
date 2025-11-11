@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: DefeatEnemy
   m_EditorClassIdentifier: 
   stepID: DefeatEnemy
-  stepOrder: 6
+  stepOrder: 7
   instructionText: Defiende tu granja
-  objectiveType: 6
+  objectiveType: 8
   requiredCount: 1
+  waitDuration: 3

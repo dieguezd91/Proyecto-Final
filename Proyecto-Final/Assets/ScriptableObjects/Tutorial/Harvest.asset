@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: Harvest
   m_EditorClassIdentifier: 
   stepID: Harvest
-  stepOrder: 8
-  instructionText: Espera a que crezcan y cosecha
+  stepOrder: 9
+  instructionText: With the new day comes growth. Harvest your mature plants by left-clicking
+    on them to gather resources.
   objectiveType: 3
   requiredCount: 1
-  pauseGameTime: 0
-  highlightTarget: 0
-  targetToHighlight: {fileID: 0}
-  goldReward: 0
-  unlockFeature: 0
+  waitDuration: 3

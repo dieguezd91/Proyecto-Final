@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class HouseDoor : MonoBehaviour
@@ -17,6 +18,9 @@ public class HouseDoor : MonoBehaviour
     private Transform player;
     private bool canEnterAtNight = true;
     private LevelManager levelManager;
+
+    private bool hasEnteredOnce = false;
+    private Coroutine tutorialCoroutine;
 
     private void Awake()
     {
@@ -54,6 +58,12 @@ public class HouseDoor : MonoBehaviour
         {
             worldTransition.OnStateChanged -= OnWorldStateChanged;
         }
+
+        if (tutorialCoroutine != null)
+        {
+            StopCoroutine(tutorialCoroutine);
+            tutorialCoroutine = null;
+        }
     }
 
     private void OnGameStateChanged(GameState newState)
@@ -68,11 +78,16 @@ public class HouseDoor : MonoBehaviour
         }
     }
 
-
     private void OnWorldStateChanged(WorldState newWorldState)
     {
         bool isInInterior = (newWorldState == WorldState.Interior);
         UpdateDoorColliders(isInInterior);
+
+        if (!isInInterior && tutorialCoroutine != null)
+        {
+            StopCoroutine(tutorialCoroutine);
+            tutorialCoroutine = null;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -88,7 +103,6 @@ public class HouseDoor : MonoBehaviour
         {
             return;
         }
-
 
         if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
         {
@@ -111,10 +125,34 @@ public class HouseDoor : MonoBehaviour
         if (goingInside)
         {
             worldTransition.EnterHouse();
-            TutorialEvents.InvokeHouseEntered();
+
+            if (!hasEnteredOnce)
+            {
+                if (tutorialCoroutine != null)
+                {
+                    StopCoroutine(tutorialCoroutine);
+                }
+
+                tutorialCoroutine = StartCoroutine(InvokeHouseEnteredDelayed());
+            }
         }
         else
+        {
             worldTransition.ExitHouse();
+        }
+    }
+
+    private IEnumerator InvokeHouseEnteredDelayed()
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        if (worldTransition != null && worldTransition.IsInInterior)
+        {
+            hasEnteredOnce = true;
+            TutorialEvents.InvokeHouseEntered();
+        }
+
+        tutorialCoroutine = null;
     }
 
     private void UpdateDoorColliders()

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: SurviveNight
   m_EditorClassIdentifier: 
   stepID: SurviveNight
-  stepOrder: 7
-  instructionText: Sobrevive hasta el amanecer!
-  objectiveType: 7
+  stepOrder: 8
+  instructionText: Hold the line until dawn breaks! Protect the Sacred Tree from
+    all threats until morning light returns.
+  objectiveType: 9
   requiredCount: 1
+  waitDuration: 3

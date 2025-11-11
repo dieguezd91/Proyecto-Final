@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -57,6 +58,11 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnNightStarted += CheckObjective_NightStarted;
         TutorialEvents.OnEnemyDefeated += CheckObjective_EnemyDefeated;
         TutorialEvents.OnNightSurvived += CheckObjective_NightSurvived;
+
+        TutorialEvents.OnHouseEntered += CheckObjective_HouseEntered;
+        TutorialEvents.OnCraftingOpened += CheckObjective_CraftingOpened;
+        TutorialEvents.OnRestorationOpened += CheckObjective_RestorationOpened;
+        TutorialEvents.OnRitualAltarUsed += CheckObjective_RitualAltarUsed;
     }
 
     private void UnsubscribeFromEvents()
@@ -69,13 +75,18 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnNightStarted -= CheckObjective_NightStarted;
         TutorialEvents.OnEnemyDefeated -= CheckObjective_EnemyDefeated;
         TutorialEvents.OnNightSurvived -= CheckObjective_NightSurvived;
+
+        TutorialEvents.OnHouseEntered -= CheckObjective_HouseEntered;
+        TutorialEvents.OnCraftingOpened -= CheckObjective_CraftingOpened;
+        TutorialEvents.OnRestorationOpened -= CheckObjective_RestorationOpened;
+        TutorialEvents.OnRitualAltarUsed -= CheckObjective_RitualAltarUsed;
     }
+
 
     public void StartTutorial()
     {
         if (tutorialSteps == null || tutorialSteps.Count == 0)
         {
-            Debug.LogError("No hay pasos de tutorial configurados");
             return;
         }
 
@@ -103,8 +114,23 @@ public class TutorialManager : MonoBehaviour
             tutorialUI.ShowStep(currentStep);
         }
 
-        Debug.Log($"Tutorial Paso {index + 1}/{tutorialSteps.Count}: {currentStep.instructionText}");
+        if (currentStep.objectiveType == TutorialObjectiveType.Wait)
+        {
+            float duration = currentStep.waitDuration > 0 ? currentStep.waitDuration : 3f;
+            StartCoroutine(AutoCompleteWaitStep(duration));
+        }
     }
+
+    private IEnumerator AutoCompleteWaitStep(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
+        {
+            CompleteCurrentStep();
+        }
+    }
+
 
     private void CheckObjective(TutorialObjectiveType type)
     {
@@ -135,7 +161,7 @@ public class TutorialManager : MonoBehaviour
     {
         TutorialEvents.InvokeStepCompleted(currentStep);
 
-        Invoke(nameof(ShowNextStep), 1f);
+        Invoke(nameof(ShowNextStep), 1.5f);
     }
 
     private void ShowNextStep()
@@ -143,8 +169,16 @@ public class TutorialManager : MonoBehaviour
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
+            Invoke(nameof(ShowNextStepDelayed), 0.6f);
         }
+        else
+        {
+            ShowStep(currentStepIndex + 1);
+        }
+    }
 
+    private void ShowNextStepDelayed()
+    {
         ShowStep(currentStepIndex + 1);
     }
 
@@ -170,6 +204,10 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_NightStarted() => CheckObjective(TutorialObjectiveType.StartNight);
     private void CheckObjective_EnemyDefeated() => CheckObjective(TutorialObjectiveType.DefeatEnemy);
     private void CheckObjective_NightSurvived() => CheckObjective(TutorialObjectiveType.SurviveNight);
+    private void CheckObjective_HouseEntered() => CheckObjective(TutorialObjectiveType.EnterHouse);
+    private void CheckObjective_CraftingOpened() => CheckObjective(TutorialObjectiveType.OpenCrafting);
+    private void CheckObjective_RestorationOpened() => CheckObjective(TutorialObjectiveType.OpenRestoration);
+    private void CheckObjective_RitualAltarUsed() => CheckObjective(TutorialObjectiveType.UseRitualAltar);
 
     public bool IsTutorialActive() => tutorialActive;
 

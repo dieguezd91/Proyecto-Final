@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: CastSpell
   m_EditorClassIdentifier: 
   stepID: CastSpell
-  stepOrder: 5
-  instructionText: Prueba tu primer hechizo
+  stepOrder: 6
+  instructionText: Channel your magic! Left-click to cast spells and defend the Sacred
+    Tree from corrupted creatures.
   objectiveType: 4
   requiredCount: 1
+  waitDuration: 3

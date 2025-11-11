@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Move
   stepOrder: 0
-  instructionText: Usa WASD o las flechas para moverte
+  instructionText: Welcome, young druid. Use WASD or Arrow Keys to explore your sacred
+    garden.
   objectiveType: 0
   requiredCount: 1
+  waitDuration: 3

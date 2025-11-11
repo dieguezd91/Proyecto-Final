@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Dig
   stepOrder: 1
-  instructionText: Cava la tierra para crear una parcela
+  instructionText: The earth responds to your touch. Left-click to dig and prepare
+    the soil for planting.
   objectiveType: 1
   requiredCount: 1
+  waitDuration: 3

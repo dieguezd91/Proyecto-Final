@@ -48,10 +48,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4710db85cc460f4599be7dbc410419f, type: 2}
   - {fileID: 11400000, guid: 16ffda535a901394d8ffed95633194d3, type: 2}
   - {fileID: 11400000, guid: 0075009ef63e47240850f98867a28648, type: 2}
+  - {fileID: 11400000, guid: cb7dacc489cc747499b90491e8aeff6e, type: 2}
+  - {fileID: 11400000, guid: 4366e5b49ad409743acdbf28bc153488, type: 2}
   - {fileID: 11400000, guid: a546d1b43bc895247b7588f27571b808, type: 2}
   - {fileID: 11400000, guid: ef553f94880ac5045877bec9009af927, type: 2}
   - {fileID: 11400000, guid: 2e8b3aab2ba8ab346aa27ec42ff94f86, type: 2}
   - {fileID: 11400000, guid: f97ff75d134e45b4493aa0b0db1a75ee, type: 2}
   - {fileID: 11400000, guid: 2fb5c407efd677244b021bb8ebf88593, type: 2}
-  tutorialUI: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
+  tutorialUI: {fileID: 0}
   enableTutorial: 1

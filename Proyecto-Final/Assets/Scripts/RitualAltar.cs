@@ -122,6 +122,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (!CanInteract()) return;
+        
+        TutorialEvents.InvokeRitualAltarUsed();
 
         mainRitualCoroutine = StartCoroutine(PerformRitual());
     }

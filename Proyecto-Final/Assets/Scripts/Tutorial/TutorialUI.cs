@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
+using System.Collections;
 
 public class TutorialUI : MonoBehaviour
 {
@@ -8,44 +10,105 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private GameObject tutorialPanel;
     [SerializeField] private TextMeshProUGUI instructionText;
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private float fadeSpeed = 2f;
+    [SerializeField] private RectTransform panelTransform;
+
+    [Header("ANIMATION SETTINGS")]
+    [SerializeField] private float fadeSpeed = 0.5f;
+    [SerializeField] private float scaleAnimDuration = 0.3f;
+    [SerializeField] private float typewriterSpeed = 0.015f;
+    [SerializeField] private Ease showEase = Ease.OutBack;
+    [SerializeField] private Ease hideEase = Ease.InBack;
 
     private bool isVisible = false;
+    private Coroutine typewriterCoroutine;
+    private Sequence currentSequence;
+
+    private void Awake()
+    {
+        if (canvasGroup != null)
+            canvasGroup.alpha = 0f;
+
+        if (panelTransform != null)
+            panelTransform.localScale = Vector3.zero;
+
+        tutorialPanel.SetActive(false);
+    }
 
     public void ShowStep(TutorialStep step)
     {
-        instructionText.text = step.instructionText;
+        KillAllAnimations();
 
-        tutorialPanel.SetActive(true);
         isVisible = true;
-        StopAllCoroutines();
-        StartCoroutine(FadeIn());
+        tutorialPanel.SetActive(true);
+
+        if (typewriterCoroutine != null)
+            StopCoroutine(typewriterCoroutine);
+        typewriterCoroutine = StartCoroutine(TypewriterEffect(step.instructionText));
+
+        currentSequence = DOTween.Sequence();
+
+        currentSequence.Append(canvasGroup.DOFade(1f, fadeSpeed).SetEase(Ease.OutQuad));
+        currentSequence.Join(panelTransform.DOScale(Vector3.one, scaleAnimDuration).SetEase(showEase));
+
+        currentSequence.SetUpdate(true);
     }
 
     public void HideStep()
     {
+        if (!isVisible) return;
+
+        KillAllAnimations();
         isVisible = false;
-        StopAllCoroutines();
-        StartCoroutine(FadeOut());
+
+        currentSequence = DOTween.Sequence();
+
+        currentSequence.Append(panelTransform.DOScale(Vector3.zero, scaleAnimDuration).SetEase(hideEase));
+        currentSequence.Join(canvasGroup.DOFade(0f, fadeSpeed).SetEase(Ease.InQuad));
+        currentSequence.OnComplete(() => tutorialPanel.SetActive(false));
+
+        currentSequence.SetUpdate(true);
     }
 
-    private System.Collections.IEnumerator FadeIn()
+    private IEnumerator TypewriterEffect(string text)
     {
-        while (canvasGroup.alpha < 1f)
+        instructionText.text = "";
+        instructionText.maxVisibleCharacters = 0;
+        instructionText.text = text;
+
+        int totalCharacters = text.Length;
+
+        for (int i = 0; i <= totalCharacters; i++)
         {
-            canvasGroup.alpha += Time.unscaledDeltaTime * fadeSpeed;
-            yield return null;
+            instructionText.maxVisibleCharacters = i;
+
+            yield return new WaitForSecondsRealtime(typewriterSpeed);
+        }
+
+        typewriterCoroutine = null;
+    }
+
+    private void KillAllAnimations()
+    {
+        if (currentSequence != null && currentSequence.IsActive())
+        {
+            currentSequence.Kill();
+            currentSequence = null;
+        }
+
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
         }
     }
 
-    private System.Collections.IEnumerator FadeOut()
+    private void OnDisable()
     {
-        while (canvasGroup.alpha > 0f)
-        {
-            canvasGroup.alpha -= Time.unscaledDeltaTime * fadeSpeed;
-            yield return null;
-        }
+        KillAllAnimations();
+    }
 
-        tutorialPanel.SetActive(false);
+    private void OnDestroy()
+    {
+        KillAllAnimations();
     }
 }

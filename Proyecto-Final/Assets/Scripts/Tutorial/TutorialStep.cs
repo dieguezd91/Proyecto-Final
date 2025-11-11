@@ -11,6 +11,8 @@ public class TutorialStep : ScriptableObject
 
     public TutorialObjectiveType objectiveType;
     public int requiredCount = 1;
+
+    public float waitDuration = 3f;
 }
 
 public enum TutorialObjectiveType
@@ -27,5 +29,7 @@ public enum TutorialObjectiveType
     SurviveNight,
     OpenInventory,
     OpenCrafting,
-    OpenRestoration
+    OpenRestoration,
+    ExploreHouse,
+    Wait
 }
