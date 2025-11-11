@@ -40,7 +40,7 @@ public class SpellInventory : MonoBehaviour
     public static SpellInventory Instance { get; private set; }
 
     [Header("Spell Slots Configuration")]
-    [SerializeField] private SpellSlot[] spellSlots = new SpellSlot[7];
+    [SerializeField] public SpellSlot[] spellSlots = new SpellSlot[7];
 
     private int selectedSlotIndex = 0;
 

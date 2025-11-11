@@ -24,17 +24,6 @@ public class PlayerController : MonoBehaviour
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
 
-    [Header("Dash Settings")]
-    [SerializeField] private float dashSpeed = 12f;
-    [SerializeField] private float dashLength = 0.25f;
-    [SerializeField] private float dashCooldown = 1f;
-    private float moveSpeed;
-    private float activeMoveSpeed;
-
-    private float dashCounter;
-    private float dashCoolCounter;
-    private bool isDashing = false;
-
     private float lastFootstepTime = 0f;
     private float footstepCooldown = 0.2f;
     [SerializeField] private SurfaceDetector surfaceDetector;
@@ -65,9 +54,6 @@ public class PlayerController : MonoBehaviour
         knockbackReceiver = GetComponent<KnockbackReceiver>();
 
         LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
-
-        moveSpeed = maxSpeed;
-        activeMoveSpeed = moveSpeed;
 
         if (gameStateController == null)
         {
@@ -160,7 +146,7 @@ public class PlayerController : MonoBehaviour
             HandleAttack();
         }
 
-        HandleDash();
+        HandleTeleport();
     }
 
     void FixedUpdate()
@@ -200,7 +186,7 @@ public class PlayerController : MonoBehaviour
             TutorialEvents.InvokePlayerMoved();
         }
 
-        Vector2 targetVelocity = moveInput * activeMoveSpeed;
+        Vector2 targetVelocity = moveInput * maxSpeed;
 
         if (Time.time < attackSlowEndTime)
         {
@@ -489,28 +475,64 @@ public class PlayerController : MonoBehaviour
             handObject.SetActive(isNight);
     }
 
-    private void HandleDash()
+    private void HandleTeleport()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && dashCoolCounter <= 0 && dashCounter <= 0)
-        {
-            activeMoveSpeed = dashSpeed;
-            dashCounter = dashLength;
-            isDashing = true;
-        }
+        if (!canAct) return;
 
-        if (dashCounter > 0)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            dashCounter -= Time.deltaTime;
-            if (dashCounter <= 0)
+            CastTeleportSpell();
+        }
+    }
+
+    private void CastTeleportSpell()
+    {
+        if (SpellInventory.Instance == null) return;
+
+        SpellSlot teleportSlot = null;
+        int teleportSlotIndex = -1;
+
+        for (int i = 0; i < SpellInventory.Instance.spellSlots.Length; i++)
+        {
+            if (SpellInventory.Instance.spellSlots[i].spellType == SpellType.Teleport)
             {
-                activeMoveSpeed = moveSpeed;
-                dashCoolCounter = dashCooldown;
-                isDashing = false;
-                rb.velocity = Vector2.zero;
+                teleportSlot = SpellInventory.Instance.spellSlots[i];
+                teleportSlotIndex = i;
+                break;
             }
         }
 
-        if (dashCoolCounter > 0)
-            dashCoolCounter -= Time.deltaTime;
+        if (teleportSlot == null || !teleportSlot.isUnlocked) return;
+        if (teleportSlot.currentCooldown > 0f) return;
+        if (manaSystem != null && manaSystem.GetCurrentMana() < teleportSlot.manaCost) return;
+        if (teleportSlot.spellPrefab == null) return;
+
+        manaSystem.UseMana(teleportSlot.manaCost);
+
+        Vector2 castDirection;
+        if (moveInput.sqrMagnitude > 0.01f)
+        {
+            castDirection = moveInput.normalized;
+        }
+        else
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mousePos.z = 0f;
+            castDirection = (mousePos - transform.position).normalized;
+        }
+
+        GameObject spellObject = Instantiate(teleportSlot.spellPrefab, transform.position, Quaternion.identity);
+        Spell spellComponent = spellObject.GetComponent<Spell>();
+
+        if (spellComponent != null)
+        {
+            spellComponent.Cast(castDirection, transform.position);
+        }
+        else
+        {
+            Destroy(spellObject);
+        }
+
+        SpellInventory.Instance.StartCooldown(teleportSlotIndex);
     }
 }

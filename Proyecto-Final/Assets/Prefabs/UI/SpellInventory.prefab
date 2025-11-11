@@ -49,16 +49,16 @@ MonoBehaviour:
     spellName: Range
     spellIcon: {fileID: 1957688738, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
-    manaCost: 15
-    cooldown: 0.5
+    manaCost: 25
+    cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
   - spellType: 2
     spellName: Melee
     spellIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 2902349897744729807, guid: b8606dfc9b6d8b04a9e71e284b373b0a, type: 3}
-    manaCost: 25
-    cooldown: 5
+    manaCost: 0
+    cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
   - spellType: 3
@@ -72,7 +72,7 @@ MonoBehaviour:
   - spellType: 4
     spellName: Teleport
     spellIcon: {fileID: 872140717, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-    spellPrefab: {fileID: 0}
+    spellPrefab: {fileID: 5912720115365117075, guid: 70508e1f9da1bc3429c418f3d13312a9, type: 3}
     manaCost: 0
     cooldown: 1
     currentCooldown: 0
