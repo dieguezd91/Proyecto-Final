@@ -11,6 +11,7 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI instructionText;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panelTransform;
+    [SerializeField] private Button skipButton;
 
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
@@ -31,7 +32,20 @@ public class TutorialUI : MonoBehaviour
         if (panelTransform != null)
             panelTransform.localScale = Vector3.zero;
 
+        if (skipButton != null)
+        {
+            skipButton.onClick.AddListener(OnSkipButtonPressed);
+        }
+
         tutorialPanel.SetActive(false);
+    }
+
+    private void OnSkipButtonPressed()
+    {
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.SkipTutorial();
+        }
     }
 
     public void ShowStep(TutorialStep step)
@@ -110,5 +124,10 @@ public class TutorialUI : MonoBehaviour
     private void OnDestroy()
     {
         KillAllAnimations();
+
+        if (skipButton != null)
+        {
+            skipButton.onClick.RemoveListener(OnSkipButtonPressed);
+        }
     }
 }
