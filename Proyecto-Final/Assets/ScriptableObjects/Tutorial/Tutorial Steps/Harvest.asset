@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
+  m_Name: Harvest
+  m_EditorClassIdentifier: 
+  stepID: Harvest
+  stepOrder: 11
+  instructionText: With the new day comes growth. Harvest your mature plants by left-clicking
+    on them to gather resources.
+  objectiveType: 3
+  requiredCount: 1
+  waitDuration: 3

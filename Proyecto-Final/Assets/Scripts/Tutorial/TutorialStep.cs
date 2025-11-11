@@ -31,5 +31,8 @@ public enum TutorialObjectiveType
     OpenCrafting,
     OpenRestoration,
     ExploreHouse,
-    Wait
+    Wait,
+    PlantProduction,
+    PlantDefensive,
+    PlantHybrid
 }

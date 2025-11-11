@@ -54,8 +54,47 @@ public class TilePlantingSystem : MonoBehaviour
 
         plantedTiles[cellPos] = plant;
         PlantManager.Instance.RegisterPlant(plant);
+
+        InvokePlantEventByType(plant);
+
         TutorialEvents.InvokeSeedPlanted();
+
         return true;
+    }
+
+    private void InvokePlantEventByType(Plant plant)
+    {
+        if (plant == null) return;
+
+        PlantType plantType = DeterminePlantType(plant);
+
+        switch (plantType)
+        {
+            case PlantType.Production:
+                TutorialEvents.InvokeProductionPlantPlanted();
+                Debug.Log($"[Tutorial] Planta de Producción plantada: {plant.GetType().Name}");
+                break;
+
+            case PlantType.Defensive:
+                TutorialEvents.InvokeDefensivePlantPlanted();
+                Debug.Log($"[Tutorial] Planta Defensiva plantada: {plant.GetType().Name}");
+                break;
+        }
+    }
+
+    private PlantType DeterminePlantType(Plant plant)
+    {
+        if (plant is ResourcePlant)
+        {
+            return PlantType.Production;
+        }
+
+        if (plant is AttackPlant || plant is DefensePlant)
+        {
+            return PlantType.Defensive;
+        }
+
+        return PlantType.Production;
     }
 
     public void UnregisterPlantAt(Vector3Int cellPos)
@@ -74,4 +113,10 @@ public class TilePlantingSystem : MonoBehaviour
     }
 
     public IEnumerable<Vector3Int> GetAllPlantedTiles() => plantedTiles.Keys;
+}
+
+public enum PlantType
+{
+    Production,
+    Defensive,
 }

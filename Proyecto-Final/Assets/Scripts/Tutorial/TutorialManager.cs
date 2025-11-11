@@ -63,6 +63,10 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnCraftingOpened += CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationOpened += CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed += CheckObjective_RitualAltarUsed;
+
+        TutorialEvents.OnProductionPlantPlanted += CheckObjective_ProductionPlantPlanted;
+        TutorialEvents.OnDefensivePlantPlanted += CheckObjective_DefensivePlantPlanted;
+        TutorialEvents.OnHybridPlantPlanted += CheckObjective_HybridPlantPlanted;
     }
 
     private void UnsubscribeFromEvents()
@@ -80,6 +84,10 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnCraftingOpened -= CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationOpened -= CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed -= CheckObjective_RitualAltarUsed;
+
+        TutorialEvents.OnProductionPlantPlanted -= CheckObjective_ProductionPlantPlanted;
+        TutorialEvents.OnDefensivePlantPlanted -= CheckObjective_DefensivePlantPlanted;
+        TutorialEvents.OnHybridPlantPlanted -= CheckObjective_HybridPlantPlanted;
     }
 
 
@@ -208,6 +216,9 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_CraftingOpened() => CheckObjective(TutorialObjectiveType.OpenCrafting);
     private void CheckObjective_RestorationOpened() => CheckObjective(TutorialObjectiveType.OpenRestoration);
     private void CheckObjective_RitualAltarUsed() => CheckObjective(TutorialObjectiveType.UseRitualAltar);
+    private void CheckObjective_ProductionPlantPlanted() => CheckObjective(TutorialObjectiveType.PlantProduction);
+    private void CheckObjective_DefensivePlantPlanted() => CheckObjective(TutorialObjectiveType.PlantDefensive);
+    private void CheckObjective_HybridPlantPlanted() => CheckObjective(TutorialObjectiveType.PlantHybrid);
 
     public bool IsTutorialActive() => tutorialActive;
 

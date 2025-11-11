@@ -10,7 +10,7 @@ public class TilePlantInfo
 public class Plant : MonoBehaviour
 {
     [Header("Plant Data")]
-    [SerializeField] protected PlantDataSO plantData;
+    [SerializeField] public PlantDataSO plantData;
 
     [SerializeField] private PlantSoundBase _soundBase;
 
@@ -343,5 +343,10 @@ public class Plant : MonoBehaviour
     {
         // TODO: Implement idle sound logic here for Plant
         // Example: _soundBase?.PlaySound(PlantSoundType.Idle, SoundSourceType.Localized, transform);
+    }
+
+    public PlantDataSO GetPlantData()
+    {
+        return plantData;
     }
 }

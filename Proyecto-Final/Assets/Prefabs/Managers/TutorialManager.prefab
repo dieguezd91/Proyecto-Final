@@ -47,7 +47,9 @@ MonoBehaviour:
   tutorialSteps:
   - {fileID: 11400000, guid: d4710db85cc460f4599be7dbc410419f, type: 2}
   - {fileID: 11400000, guid: 16ffda535a901394d8ffed95633194d3, type: 2}
-  - {fileID: 11400000, guid: 0075009ef63e47240850f98867a28648, type: 2}
+  - {fileID: 11400000, guid: 35354b9ca811854458056aa6d7ad6a5d, type: 2}
+  - {fileID: 11400000, guid: 0c6374a7260a60d45b6fce7b1ec3939f, type: 2}
+  - {fileID: 11400000, guid: 536a720b13d02e44b96a2eda612c0db1, type: 2}
   - {fileID: 11400000, guid: cb7dacc489cc747499b90491e8aeff6e, type: 2}
   - {fileID: 11400000, guid: 4366e5b49ad409743acdbf28bc153488, type: 2}
   - {fileID: 11400000, guid: a546d1b43bc895247b7588f27571b808, type: 2}

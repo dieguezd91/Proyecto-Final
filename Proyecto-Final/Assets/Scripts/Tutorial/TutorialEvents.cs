@@ -25,6 +25,10 @@ public static class TutorialEvents
     public static void InvokeStepCompleted(TutorialStep step) => OnStepCompleted?.Invoke(step);
     public static void InvokeTutorialCompleted() => OnTutorialCompleted?.Invoke();
 
+    public static void InvokeProductionPlantPlanted() => OnProductionPlantPlanted?.Invoke();
+    public static void InvokeDefensivePlantPlanted() => OnDefensivePlantPlanted?.Invoke();
+    public static void InvokeHybridPlantPlanted() => OnHybridPlantPlanted?.Invoke();
+
     public static void InvokePlayerMoved() => OnPlayerMoved?.Invoke();
     public static void InvokeGroundDug() => OnGroundDug?.Invoke();
     public static void InvokeSeedPlanted() => OnSeedPlanted?.Invoke();
@@ -39,4 +43,8 @@ public static class TutorialEvents
     public static void InvokeRestorationOpened() => OnRestorationOpened?.Invoke();
     public static void InvokeHouseEntered() => OnHouseEntered?.Invoke();
     public static void InvokeRitualAltarUsed() => OnRitualAltarUsed?.Invoke();
+
+    public static event Action OnProductionPlantPlanted;
+    public static event Action OnDefensivePlantPlanted;
+    public static event Action OnHybridPlantPlanted;
 }
