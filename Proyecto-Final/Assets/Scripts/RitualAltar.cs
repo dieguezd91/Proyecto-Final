@@ -17,6 +17,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     [Header("Visual Effects")]
     [SerializeField] private Light2D[] candleLights;
     [SerializeField] private Color candleColor = new Color(0.7f, 0.3f, 1f);
+    [SerializeField] private UnityEngine.Rendering.Universal.Light2D DoorLight;
+    [SerializeField] private float ritualLightFadeDuration = 2f;
+
+
 
     [Header("Candle Settings")]
     [SerializeField] private float candleFlickerSpeed = 2f;
@@ -186,6 +190,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void EndRitual()
     {
         EndRitualEffects();
+        StartCoroutine(FadeInRitualLight());
         isPerformingRitual = false;
         mainRitualCoroutine = null;
     }
@@ -461,6 +466,31 @@ public class RitualAltar : MonoBehaviour, IInteractable
             altarSpriteRenderer.sprite = defaultSprite;
         }
     }
+
+    private IEnumerator FadeInRitualLight()
+    {
+        if (DoorLight == null)
+            yield break;
+
+        DoorLight.gameObject.SetActive(true);
+        float startIntensity = 0f;
+        float endIntensity = DoorLight.intensity;
+        DoorLight.intensity = 1.5f;
+
+        float elapsed = 0f;
+
+        while (elapsed < ritualLightFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / ritualLightFadeDuration;
+            DoorLight.intensity = Mathf.Lerp(startIntensity, endIntensity, t);
+            yield return null;
+        }
+
+        DoorLight.intensity = endIntensity;
+    }
+
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
