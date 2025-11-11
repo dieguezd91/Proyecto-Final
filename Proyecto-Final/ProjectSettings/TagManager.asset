@@ -12,6 +12,7 @@ TagManager:
   - Grass
   - Wood
   - AttackPoint
+  - InteriorLight
   layers:
   - Default
   - TransparentFX

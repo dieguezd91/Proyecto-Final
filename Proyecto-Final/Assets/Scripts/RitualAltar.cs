@@ -9,14 +9,11 @@ public class RitualAltar : MonoBehaviour, IInteractable
     [SerializeField] private bool canTransitionToNight = true;
     [SerializeField] private bool canRestoreHealth = true;
 
-    [Header("Teleport Configuration")]
-    [SerializeField] private bool teleportAfterRitual = true;
-    [SerializeField] private Transform teleportDestination;
-    [SerializeField] private float teleportDelay = 0.5f;
-
     [Header("Visual Effects")]
     [SerializeField] private Light2D[] candleLights;
     [SerializeField] private Color candleColor = new Color(0.7f, 0.3f, 1f);
+    [SerializeField] private Light2D DoorLight;
+    [SerializeField] private float ritualLightFadeDuration = 2f;
 
     [Header("Candle Settings")]
     [SerializeField] private float candleFlickerSpeed = 2f;
@@ -38,7 +35,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private const float RITUAL_LIGHT_DIM = 0.05f;
     private const float RITUAL_PULSE_SPEED = 1.5f;
 
-    [Header ("References")]
+    [Header("References")]
     private LevelManager levelManager;
     private LifeController playerLife;
     private DayNightLightController lightController;
@@ -49,6 +46,9 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private bool isPerformingRitual = false;
     private Coroutine mainRitualCoroutine;
+    private bool candlesLitAfterRitual = false;
+    private bool interiorLightsDimmed = false;
+    private float doorLightOriginalIntensity;
 
     private void Start()
     {
@@ -79,6 +79,11 @@ public class RitualAltar : MonoBehaviour, IInteractable
         lightController = FindObjectOfType<DayNightLightController>();
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         mainCamera = Camera.main;
+
+        if (DoorLight != null)
+        {
+            doorLightOriginalIntensity = DoorLight.intensity;
+        }
     }
 
     private void InitializeComponents()
@@ -103,12 +108,18 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+
+        if (worldTransition != null)
+            worldTransition.OnStateChanged += HandleWorldStateChanged;
     }
 
     private void UnsubscribeFromEvents()
     {
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+
+        if (worldTransition != null)
+            worldTransition.OnStateChanged -= HandleWorldStateChanged;
     }
 
     private void HandleGameStateChanged(GameState newState)
@@ -119,10 +130,29 @@ public class RitualAltar : MonoBehaviour, IInteractable
         }
     }
 
+    private void HandleWorldStateChanged(WorldState newWorldState)
+    {
+        // Al salir de la casa, apagar velas y restaurar luces
+        if (newWorldState != WorldState.Interior)
+        {
+            if (candlesLitAfterRitual)
+            {
+                StartCoroutine(ExtinguishCandlesGradually());
+                candlesLitAfterRitual = false;
+            }
+
+            if (interiorLightsDimmed && worldTransition != null)
+            {
+                worldTransition.RestoreInteriorLightIntensity(vignetteFadeDuration);
+                interiorLightsDimmed = false;
+            }
+        }
+    }
+
     public void Interact()
     {
         if (!CanInteract()) return;
-        
+
         TutorialEvents.InvokeRitualAltarUsed();
 
         mainRitualCoroutine = StartCoroutine(PerformRitual());
@@ -171,11 +201,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
         UIManager.Instance?.HideRitualOverlay();
         yield return new WaitForSeconds(0.1f);
 
-        if (ShouldTeleportPlayer())
-        {
-            yield return TeleportPlayer();
-        }
-
         if (canTransitionToNight)
         {
             TutorialEvents.InvokeNightStarted();
@@ -186,13 +211,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void EndRitual()
     {
         EndRitualEffects();
+        StartCoroutine(FadeInRitualLight());
         isPerformingRitual = false;
+        candlesLitAfterRitual = true;
         mainRitualCoroutine = null;
-    }
-
-    private bool ShouldTeleportPlayer()
-    {
-        return teleportAfterRitual && teleportDestination != null && player != null;
     }
 
     private void StartRitualEffects()
@@ -203,19 +225,32 @@ public class RitualAltar : MonoBehaviour, IInteractable
         {
             StartCoroutine(UpdateVignetteContinuously());
         }
+
+        if (worldTransition != null && worldTransition.IsInInterior)
+        {
+            worldTransition.SetInteriorLightIntensity(0.1f, vignetteFadeDuration);
+            interiorLightsDimmed = true;
+        }
+
+        if (DoorLight != null && DoorLight.gameObject.activeInHierarchy)
+        {
+            StartCoroutine(FadeOutDoorLight());
+        }
     }
 
     private void EndRitualEffects()
     {
         SoundManager.Instance?.Play("CandleOff");
 
-        StartCoroutine(ExtinguishCandlesGradually());
         StartCoroutine(RestoreVignetteCoroutine());
 
         if (lightController != null)
         {
             lightController.RestoreLightAfterRitual(GameState.Night, vignetteFadeDuration);
         }
+
+        // YA NO restauramos las luces del interior aquí
+        // Se restaurarán cuando el jugador salga de la casa
 
         UpdateAltarAppearance();
     }
@@ -282,6 +317,34 @@ public class RitualAltar : MonoBehaviour, IInteractable
             yield return null;
         }
 
+        if (candlesLitAfterRitual || isPerformingRitual)
+        {
+            StartCoroutine(FlickerCandlePostRitual(candle, candleIndex));
+        }
+        else
+        {
+            candle.intensity = originalIntensity;
+        }
+    }
+
+    private IEnumerator FlickerCandlePostRitual(Light2D candle, int candleIndex)
+    {
+        if (candle == null) yield break;
+
+        float originalIntensity = candle.intensity;
+        float randomOffset = candleIndex * 0.5f;
+        float elapsed = 0f;
+
+        while (candlesLitAfterRitual && candle.gameObject.activeInHierarchy)
+        {
+            elapsed += Time.deltaTime;
+
+            float flicker = Mathf.Sin((elapsed + randomOffset) * candleFlickerSpeed) * candleFlickerAmount;
+            candle.intensity = originalIntensity + flicker;
+
+            yield return null;
+        }
+
         candle.intensity = originalIntensity;
     }
 
@@ -313,6 +376,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
                 candle.gameObject.SetActive(false);
             }
         }
+
+        candlesLitAfterRitual = false;
     }
 
     private IEnumerator ApplyRitualVignette()
@@ -399,24 +464,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
                vignetteComponent != null;
     }
 
-    private IEnumerator TeleportPlayer()
-    {
-        yield return new WaitForSeconds(teleportDelay);
-
-        if (worldTransition != null && worldTransition.IsInInterior)
-        {
-            worldTransition.SetState(WorldState.Night);
-            player.transform.position = teleportDestination.position;
-            worldTransition.ExitHouse();
-        }
-        else
-        {
-            player.transform.position = teleportDestination.position;
-        }
-
-        yield return new WaitForSeconds(0.2f);
-    }
-
     public void ForceStopRitual()
     {
         StopRitualCoroutine();
@@ -452,6 +499,19 @@ public class RitualAltar : MonoBehaviour, IInteractable
             GameState currentState = levelManager?.GetCurrentGameState() ?? GameState.Day;
             lightController.RestoreLightAfterRitual(currentState, 0.5f);
         }
+
+        // Solo restaurar si estamos dentro de la casa y las luces están bajadas
+        if (worldTransition != null && worldTransition.IsInInterior && interiorLightsDimmed)
+        {
+            worldTransition.RestoreInteriorLightIntensity(0.5f);
+            interiorLightsDimmed = false;
+        }
+
+        // Restaurar DoorLight si fue apagada
+        if (DoorLight != null)
+        {
+            StartCoroutine(FadeInRitualLight(0.5f));
+        }
     }
 
     private void UpdateAltarAppearance()
@@ -460,6 +520,49 @@ public class RitualAltar : MonoBehaviour, IInteractable
         {
             altarSpriteRenderer.sprite = defaultSprite;
         }
+    }
+
+    private IEnumerator FadeOutDoorLight()
+    {
+        if (DoorLight == null) yield break;
+
+        float startIntensity = DoorLight.intensity;
+        float elapsed = 0f;
+
+        while (elapsed < vignetteFadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / vignetteFadeDuration;
+            DoorLight.intensity = Mathf.Lerp(startIntensity, 0.1f, t);
+            yield return null;
+        }
+
+        DoorLight.intensity = 0.1f;
+    }
+
+    private IEnumerator FadeInRitualLight(float duration = -1f)
+    {
+        if (DoorLight == null) yield break;
+
+        float fadeDuration = duration > 0f ? duration : ritualLightFadeDuration;
+
+        if (!DoorLight.gameObject.activeInHierarchy)
+        {
+            DoorLight.gameObject.SetActive(true);
+        }
+
+        float startIntensity = DoorLight.intensity;
+        float elapsed = 0f;
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeDuration;
+            DoorLight.intensity = Mathf.Lerp(startIntensity, doorLightOriginalIntensity, t);
+            yield return null;
+        }
+
+        DoorLight.intensity = doorLightOriginalIntensity;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
