@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
 
 public class WorldTransitionAnimator : MonoBehaviour
 {
@@ -21,6 +22,12 @@ public class WorldTransitionAnimator : MonoBehaviour
     [SerializeField] private bool autoFindHouse = true;
     [SerializeField] private string houseTag = "Home";
 
+    [Header("Interior Lighting")]
+    [SerializeField] private Light2D[] interiorLights;
+    [SerializeField] private float interiorLightIntensity = 1f;
+    [SerializeField] private bool autoFindInteriorLights = true;
+    [SerializeField] private string interiorLightTag = "InteriorLight";
+
     private WorldState currentState = WorldState.Day;
     private WorldState stateBeforeInterior = WorldState.Day;
     private bool isTransitioning = false;
@@ -39,6 +46,7 @@ public class WorldTransitionAnimator : MonoBehaviour
         SetupAnimator();
         SetupFadeSystem();
         SetupHouseObjects();
+        SetupInteriorLights();
 
         ChangeState(WorldState.Day, false);
     }
@@ -115,6 +123,7 @@ public class WorldTransitionAnimator : MonoBehaviour
     private void ApplyState(WorldState state)
     {
         SetHouseVisibility(state != WorldState.Interior);
+        UpdateInteriorLights(state == WorldState.Interior);
 
         if (worldAnimator == null) return;
 
@@ -222,6 +231,24 @@ public class WorldTransitionAnimator : MonoBehaviour
         }
     }
 
+    private void SetupInteriorLights()
+    {
+        if (!autoFindInteriorLights) return;
+
+        GameObject[] lightObjects = GameObject.FindGameObjectsWithTag(interiorLightTag);
+
+        if (lightObjects.Length == 0) return;
+
+        interiorLights = new Light2D[lightObjects.Length];
+
+        for (int i = 0; i < lightObjects.Length; i++)
+        {
+            interiorLights[i] = lightObjects[i].GetComponent<Light2D>();
+        }
+
+        UpdateInteriorLights(false);
+    }
+
     private void SetHouseVisibility(bool visible)
     {
         if (houseObjects == null) return;
@@ -230,6 +257,95 @@ public class WorldTransitionAnimator : MonoBehaviour
         {
             if (house != null)
                 house.SetActive(visible);
+        }
+    }
+
+    private void UpdateInteriorLights(bool turnOn)
+    {
+        if (interiorLights == null || interiorLights.Length == 0) return;
+
+        float targetIntensity = turnOn ? interiorLightIntensity : 0f;
+
+        foreach (var light in interiorLights)
+        {
+            if (light != null)
+            {
+                light.intensity = targetIntensity;
+            }
+        }
+    }
+
+    public void SetInteriorLightIntensity(float intensity, float duration = 0f)
+    {
+        if (interiorLights == null || interiorLights.Length == 0) return;
+
+        if (duration > 0f)
+        {
+            StartCoroutine(TransitionInteriorLights(intensity, duration));
+        }
+        else
+        {
+            foreach (var light in interiorLights)
+            {
+                if (light != null)
+                {
+                    light.intensity = intensity;
+                }
+            }
+        }
+    }
+
+    public void RestoreInteriorLightIntensity(float duration = 0f)
+    {
+        if (!IsInInterior) return;
+
+        if (duration > 0f)
+        {
+            StartCoroutine(TransitionInteriorLights(interiorLightIntensity, duration));
+        }
+        else
+        {
+            UpdateInteriorLights(true);
+        }
+    }
+
+    private IEnumerator TransitionInteriorLights(float targetIntensity, float duration)
+    {
+        if (interiorLights == null || interiorLights.Length == 0) yield break;
+
+        float[] startIntensities = new float[interiorLights.Length];
+        for (int i = 0; i < interiorLights.Length; i++)
+        {
+            if (interiorLights[i] != null)
+            {
+                startIntensities[i] = interiorLights[i].intensity;
+            }
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+
+            for (int i = 0; i < interiorLights.Length; i++)
+            {
+                if (interiorLights[i] != null)
+                {
+                    interiorLights[i].intensity = Mathf.Lerp(startIntensities[i], targetIntensity, t);
+                }
+            }
+
+            yield return null;
+        }
+
+        foreach (var light in interiorLights)
+        {
+            if (light != null)
+            {
+                light.intensity = targetIntensity;
+            }
         }
     }
 }
