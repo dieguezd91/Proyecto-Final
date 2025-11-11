@@ -1542,6 +1542,174 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: WASDKeys
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 13
+        width: 56
+        height: 41
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37804413245238743a5bb3e6d3290564
+      internalID: 1871636919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SpaceKey
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 13
+        width: 96
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1508af4e2fcd034e8e622962fb71503
+      internalID: 204002358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FKey
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 45
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25117448cc365ad4da7d16346a9ccfac
+      internalID: -1352168191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EmptyKey
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 41
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ed924d4d0b7272478c718f96aa2bd02
+      internalID: -91101795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MouseClick
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 64
+        width: 20
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7434a58a69f30745b46c4b59563401e
+      internalID: -140001844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TutorialBox
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 62
+        width: 98
+        height: 35
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bcb471a0edba2234895daaeff07134e0
+      internalID: 2111154574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CooldownEmpty
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 69
+        width: 48
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76266767b0230ac48a597fcb21a88c7d
+      internalID: 879992938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: CooldownFull
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 85
+        width: 48
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 221b984f054c8644ba23a78806161990
+      internalID: 572630869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1557,6 +1725,8 @@ TextureImporter:
       BackgroundSolid: 138599093
       BackgroundTransparent: -1199162342
       Close: -382949612
+      CooldownEmpty: 879992938
+      CooldownFull: 572630869
       CraftButton: 2122693667
       CraftLeftButton: -854867658
       CraftRightButton: 165050881
@@ -1568,11 +1738,13 @@ TextureImporter:
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
       EmptyHouse: -1902738031
+      EmptyKey: -91101795
       EmptyMana: 1316128634
       EmpyLife: 1339065725
       EndingTImer: -437305898
       EnemyBar: -12234551
       EnemyBarEmpty: -2130378795
+      FKey: -1352168191
       FillHouse: -1423815668
       FillLife: 1365419780
       FillMana: -359895768
@@ -1600,6 +1772,7 @@ TextureImporter:
       MoonStage2: -956797572
       MoonStage3: -1032481509
       MoonStage4: -1529809225
+      MouseClick: -140001844
       RestorationButtonHeart: -678659094
       RestorationButtonUI: 924556296
       RestorationButtonUIHover: -236189874
@@ -1628,8 +1801,10 @@ TextureImporter:
       ShadowBig: 1234631462
       ShadowSmall2: 1868388143
       ShadowXS: 1967343564
+      SpaceKey: 204002358
       TimerFill: 1418655247
       TimerSprite: 1953002121
+      TutorialBox: 2111154574
       UIInventorySlot: -1001860351
       UISprites_0: -957589451
       UISprites_1: -1753449837
@@ -1647,6 +1822,7 @@ TextureImporter:
       UISprites_7: -761621440
       UISprites_8: -996710981
       UISprites_9: -2055132647
+      WASDKeys: 1871636919
       Warning: -1111590628
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
