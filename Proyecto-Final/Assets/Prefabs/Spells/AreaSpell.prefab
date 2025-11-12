@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 1972390401
   m_SortingLayer: 3
   m_SortingOrder: 6
-  m_Sprite: {fileID: 1957688738, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  m_Sprite: {fileID: -742805743, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -105,13 +105,13 @@ MonoBehaviour:
   floatingDamagePrefab: {fileID: 8011744024934345175, guid: b18d5e020de9918429f62b516be2ef30, type: 3}
   impactParticlesPrefab: {fileID: 491567316690014037, guid: ee269b145022c494b8a6424f16134fdc, type: 3}
   speed: 8
-  explosionRadius: 5
+  explosionRadius: 1
   enemyLayer:
     serializedVersion: 2
     m_Bits: 256
   knockbackForce: 12
   explosionEffectPrefab: {fileID: 410531898165536235, guid: f978f6cbd9ae54147a800bc801c0370c, type: 3}
-  explosionEffectDuration: 2
+  explosionEffectDuration: 0.6
   armingTime: 0.1
 --- !u!61 &5014852601970736367
 BoxCollider2D:
@@ -149,7 +149,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.4375, y: 0.4375}
+    oldSize: {x: 2, y: 1}
     newSize: {x: 0.4375, y: 0.4375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

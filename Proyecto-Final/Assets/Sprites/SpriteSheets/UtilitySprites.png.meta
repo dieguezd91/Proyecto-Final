@@ -1610,11 +1610,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 80
-        width: 32
-        height: 16
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1630,12 +1630,12 @@ TextureImporter:
       name: BlastSpell1
       rect:
         serializedVersion: 2
-        x: 32
-        y: 80
-        width: 32
-        height: 16
+        x: 16
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1651,12 +1651,12 @@ TextureImporter:
       name: BlastSpell2
       rect:
         serializedVersion: 2
-        x: 64
-        y: 80
-        width: 32
-        height: 16
+        x: 32
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1672,12 +1672,12 @@ TextureImporter:
       name: BlastSpell3
       rect:
         serializedVersion: 2
-        x: 96
-        y: 80
-        width: 32
-        height: 16
+        x: 48
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1693,12 +1693,12 @@ TextureImporter:
       name: BlastSpell4
       rect:
         serializedVersion: 2
-        x: 128
-        y: 80
-        width: 32
-        height: 16
+        x: 64
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1714,12 +1714,12 @@ TextureImporter:
       name: BlastSpell5
       rect:
         serializedVersion: 2
-        x: 160
-        y: 80
-        width: 32
-        height: 16
+        x: 80
+        y: 64
+        width: 16
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1727,6 +1727,132 @@ TextureImporter:
       bones: []
       spriteID: 465c0ec722de742428e771636dbf9db4
       internalID: 1776486618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_0
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 64
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3da2b289b94c9c5469ec53e30a0c1280
+      internalID: 1872919170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_1
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 47
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51792d26b4d82e746818c596d990c4b1
+      internalID: 1186978585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_2
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 47
+        width: 80
+        height: 64
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ef8043d7a6c5974f977b2c6c061905a
+      internalID: 2112938897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_3
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 47
+        width: 80
+        height: 64
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db40e1c0a67381342a8b27482a58f74e
+      internalID: -594268589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_4
+      rect:
+        serializedVersion: 2
+        x: 624
+        y: 47
+        width: 80
+        height: 64
+      alignment: 9
+      pivot: {x: 0.4, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac9ac92ede95e0b459f799419cd9855b
+      internalID: -1197579337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UtilitySprites_5
+      rect:
+        serializedVersion: 2
+        x: 209
+        y: 99
+        width: 62
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3c9cec7529539943b0cfbf4b8ef0fc8
+      internalID: 1868219237
       vertices: []
       indices: 
       edges: []
@@ -1811,6 +1937,12 @@ TextureImporter:
       ThoughtCloud4: 1304090407
       ThoughtCloud5: 326547604
       TryingS: 1045475238
+      UtilitySprites_0: 1872919170
+      UtilitySprites_1: 1186978585
+      UtilitySprites_2: 2112938897
+      UtilitySprites_3: -594268589
+      UtilitySprites_4: -1197579337
+      UtilitySprites_5: 1868219237
       VoltaicCore: -37685797
       Wind: 876738399
       Wind10: 2032421392
