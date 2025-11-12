@@ -95,9 +95,9 @@ AnimatorState:
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
+  - {fileID: -1237814824556550372}
   - {fileID: 3430618975097971732}
   - {fileID: -2601360385079206409}
-  - {fileID: -4316676738247366121}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -206,8 +206,6 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6659981269587388850}
-  - {fileID: 3565060309508068188}
-  - {fileID: 8784037647194876745}
   m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
@@ -500,6 +498,34 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &-1237814824556550372
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: MeleeSpell
+    m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: IsAttacking
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 1903844566680957298}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0
+  m_TransitionOffset: 0
+  m_ExitTime: 0
+  m_HasExitTime: 0
+  m_HasFixedDuration: 0
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!91 &9100000
 AnimatorController:
   m_ObjectHideFlags: 0
@@ -648,10 +674,7 @@ AnimatorStateMachine:
     m_Position: {x: -310, y: 680, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4991314839514390715}
-    m_Position: {x: -310, y: 560, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: -2030844879957450139}
-    m_Position: {x: 400, y: 570, z: 0}
+    m_Position: {x: -420, y: 570, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -838,7 +861,7 @@ AnimatorStateTransition:
     m_ConditionEvent: AreaSpell
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: MeleeSpell
+    m_ConditionEvent: BaseSpell
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6578571149547956652}

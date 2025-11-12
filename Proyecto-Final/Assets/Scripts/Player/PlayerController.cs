@@ -43,6 +43,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject handObject;
     private KnockbackReceiver knockbackReceiver;
 
+    private PlayerAbilitySystem playerAbilitySystem;
     private bool hasMovedForTutorial = false;
 
     private SpellType currentSpellType = SpellType.Range;
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         knockbackReceiver = GetComponent<KnockbackReceiver>();
+        playerAbilitySystem = GetComponent<PlayerAbilitySystem>();
 
         LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
 
@@ -140,6 +142,17 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
+        {
+            rb.velocity = Vector2.zero;
+
+            currentVelocity = Vector2.zero;
+
+            animator.SetBool("IsMoving", false);
+
+            return;
+        }
+
         if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
         {
             CheckForSpellTypeChange();
@@ -152,6 +165,11 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         GameState state = LevelManager.Instance.currentGameState;
+
+        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
+        {
+            return;
+        }
 
         var lifeController = GetComponent<LifeController>();
         if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
