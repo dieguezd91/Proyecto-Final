@@ -8,7 +8,6 @@ public static class TutorialEvents
 
     public static event Action OnPlayerMoved;
     public static event Action OnGroundDug;
-    public static event Action OnSeedPlanted;
     public static event Action OnPlantHarvested;
     public static event Action OnSpellCasted;
     public static event Action OnNightStarted;
@@ -20,6 +19,19 @@ public static class TutorialEvents
     public static event Action OnRestorationOpened;
     public static event Action OnHouseEntered;
     public static event Action OnRitualAltarUsed;
+    public static event Action OnCraftingClosed;
+    public static event Action OnRestorationClosed;
+
+    public static event Action OnProductionPlantPlanted;
+    public static event Action OnDefensivePlantPlanted;
+
+    public static event Action OnCraftingProximity;
+    public static event Action OnRestorationProximity;
+    public static event Action OnRitualAltarProximity;
+
+    public static event Action OnFirstPlantReadyToHarvest;
+
+    private static bool hasFiredFirstPlantReady = false;
 
     public static void InvokeTutorialStarted() => OnTutorialStarted?.Invoke();
     public static void InvokeStepCompleted(TutorialStep step) => OnStepCompleted?.Invoke(step);
@@ -39,9 +51,25 @@ public static class TutorialEvents
     public static void InvokeInventoryOpened() => OnInventoryOpened?.Invoke();
     public static void InvokeCraftingOpened() => OnCraftingOpened?.Invoke();
     public static void InvokeRestorationOpened() => OnRestorationOpened?.Invoke();
+    public static void InvokeCraftingClosed() => OnCraftingClosed?.Invoke();
+    public static void InvokeRestorationClosed() => OnRestorationClosed?.Invoke();
     public static void InvokeHouseEntered() => OnHouseEntered?.Invoke();
     public static void InvokeRitualAltarUsed() => OnRitualAltarUsed?.Invoke();
 
-    public static event Action OnProductionPlantPlanted;
-    public static event Action OnDefensivePlantPlanted;
+    public static void InvokeCraftingProximity() => OnCraftingProximity?.Invoke();
+    public static void InvokeRestorationProximity() => OnRestorationProximity?.Invoke();
+    public static void InvokeRitualAltarProximity() => OnRitualAltarProximity?.Invoke();
+
+    public static void InvokeFirstPlantReadyToHarvest()
+    {
+        if (hasFiredFirstPlantReady) return;
+
+        OnFirstPlantReadyToHarvest?.Invoke();
+        hasFiredFirstPlantReady = true;
+    }
+
+    public static void ResetTutorialEventFlags()
+    {
+        hasFiredFirstPlantReady = false;
+    }
 }

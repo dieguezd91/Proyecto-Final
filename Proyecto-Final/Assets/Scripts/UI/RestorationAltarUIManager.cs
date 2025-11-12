@@ -99,10 +99,10 @@ public class RestorationAltarUIManager : MonoBehaviour
         if (altarUIPanel.activeSelf)
             CloseUI();
         else
-            OpenUI();
+            OpenRestoratioUI();
     }
 
-    private void OpenUI()
+    private void OpenRestoratioUI()
     {
         if (LevelManager.Instance != null)
         {
@@ -128,6 +128,7 @@ public class RestorationAltarUIManager : MonoBehaviour
         RestoreGameState();
 
         UIEvents.TriggerRestorationAltarUIClosed();
+        TutorialEvents.InvokeRestorationClosed();
     }
 
     private void UpdateHeartVisual()

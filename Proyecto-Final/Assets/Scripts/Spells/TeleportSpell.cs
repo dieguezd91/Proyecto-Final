@@ -29,20 +29,16 @@ public class TeleportSpell : Spell
         playerTransform = player.transform;
         Vector3 startPosition = playerTransform.position;
 
-        // Calcular posici�n de destino
         Vector2 teleportDirection = direction.normalized;
         Vector3 targetPosition = startPosition + (Vector3)(teleportDirection * teleportDistance);
 
-        // Verificar si hay colisi�n en el camino
         RaycastHit2D hit = Physics2D.Raycast(startPosition, teleportDirection, teleportDistance, collisionMask);
 
         if (hit.collider != null)
         {
-            // Si hay colisi�n, teleportar justo antes del obst�culo
             targetPosition = hit.point - teleportDirection * 0.5f;
         }
 
-        // Ejecutar teleport
         ExecuteTeleport(startPosition, targetPosition);
 
         Destroy(gameObject, effectDuration);
@@ -50,25 +46,20 @@ public class TeleportSpell : Spell
 
     private void ExecuteTeleport(Vector3 startPos, Vector3 endPos)
     {
-        // Efecto visual en posici�n inicial
         ShowTeleportEffect(startPos, teleportStartEffectPrefab);
 
-        // Mover al jugador
         if (playerTransform != null)
         {
             playerTransform.position = endPos;
         }
 
-        // Efecto visual en posici�n final
         ShowTeleportEffect(endPos, teleportEndEffectPrefab);
 
-        // Sonido
         if (SoundManager.Instance != null)
         {
             SoundManager.Instance.Play("PlayerTeleport", SoundSourceType.Global, playerTransform);
         }
 
-        // Peque�o screen shake
         if (Time.timeScale > 0f && CameraShaker.Instance != null)
         {
             CameraShaker.Instance.Shake(0.2f, 0.15f);
