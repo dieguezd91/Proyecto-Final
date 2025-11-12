@@ -76,7 +76,10 @@ public class InventoryUIController : UIControllerBase
             return;
 
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
+        {
+            UIManager.Instance?.Tooltip?.ForceHide();
             ToggleInventory();
+        }
 
         if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
         {
@@ -84,7 +87,7 @@ public class InventoryUIController : UIControllerBase
             {
                 return;
             }
-
+            UIManager.Instance?.Tooltip?.ForceHide();
             CloseInventory();
         }
     }
