@@ -840,6 +840,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panel Tutorial
       objectReference: {fileID: 0}
+    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
+      propertyPath: fadeSpeed
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
