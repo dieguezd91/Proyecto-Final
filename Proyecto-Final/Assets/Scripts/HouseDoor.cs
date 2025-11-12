@@ -55,7 +55,6 @@ public class HouseDoor : MonoBehaviour
         {
             bool shouldBeLocked = levelManager.GetCurrentGameState() == GameState.Night;
             doorLockAnimator.SetVisualState(shouldBeLocked);
-            Debug.Log($"HouseDoor: Estado inicial del cerrojo - {(shouldBeLocked ? "CERRADO" : "ABIERTO")}");
         }
     }
 
@@ -123,14 +122,17 @@ public class HouseDoor : MonoBehaviour
         bool isInInterior = (newWorldState == WorldState.Interior);
         UpdateDoorColliders(isInInterior);
 
-        if (!isInInterior && pendingLockUpdate)
+        if (!isInInterior)
         {
-            pendingLockUpdate = false;
-
-            if (levelManager != null)
+            if (pendingLockUpdate)
             {
-                bool shouldBeLocked = levelManager.GetCurrentGameState() == GameState.Night;
-                StartCoroutine(UpdateLockAfterExitDelay(shouldBeLocked));
+                pendingLockUpdate = false;
+
+                if (levelManager != null)
+                {
+                    bool shouldBeLocked = levelManager.GetCurrentGameState() == GameState.Night;
+                    StartCoroutine(UpdateLockAfterExitDelay(shouldBeLocked));
+                }
             }
         }
 
@@ -159,7 +161,6 @@ public class HouseDoor : MonoBehaviour
 
         if (goingInside && !canEnterAtNight)
         {
-            Debug.Log("HouseDoor: Entrada bloqueada durante la noche");
             return;
         }
 

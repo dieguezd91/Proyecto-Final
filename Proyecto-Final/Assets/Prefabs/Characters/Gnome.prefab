@@ -5255,7 +5255,9 @@ MonoBehaviour:
     randomizeClip: 1
     cooldownTime: 0
   idle:
-    clips: []
+    clips:
+    - {fileID: 8300000, guid: 0dec4933c411b084abd6810f4cf04950, type: 3}
+    - {fileID: 8300000, guid: a88f938c56e1b5f4280108cd32e63eda, type: 3}
     volume: 1
     pitch: 1
     pitchVariation: 0.1

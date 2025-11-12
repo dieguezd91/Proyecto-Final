@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -50,19 +50,18 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private bool interiorLightsDimmed = false;
     private float doorLightOriginalIntensity;
 
+    private Coroutine activeDoorLightCoroutine;
+
     private void Start()
     {
         CacheReferences();
         InitializeComponents();
-    }
-
-    private void OnEnable()
-    {
         SubscribeToEvents();
     }
 
     private void OnDisable()
     {
+        Debug.Log("[RitualAltar] ===== OnDisable - Desuscribiendo eventos =====");
         UnsubscribeFromEvents();
     }
 
@@ -82,7 +81,9 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (DoorLight != null)
         {
-            doorLightOriginalIntensity = DoorLight.intensity;
+            doorLightOriginalIntensity = DoorLight.intensity > 0.1f ? DoorLight.intensity : 1.5f;
+
+            DoorLight.intensity = 0f;
         }
     }
 
@@ -106,11 +107,20 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void SubscribeToEvents()
     {
+        Debug.Log($"[RitualAltar] SubscribeToEvents - LevelManager.Instance: {(LevelManager.Instance != null ? "OK" : "NULL")}");
+
         if (LevelManager.Instance != null)
+        {
             LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+            LevelManager.Instance.OnGameStateChanged += OnGameStateChangedHandler;
+            Debug.Log("[RitualAltar] âœ… Eventos suscritos a LevelManager.OnGameStateChanged");
+        }
 
         if (worldTransition != null)
+        {
             worldTransition.OnStateChanged += HandleWorldStateChanged;
+            Debug.Log("[RitualAltar] âœ… Evento suscrito a WorldTransition.OnStateChanged");
+        }
     }
 
     private void UnsubscribeFromEvents()
@@ -120,6 +130,26 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (worldTransition != null)
             worldTransition.OnStateChanged -= HandleWorldStateChanged;
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnGameStateChanged -= OnGameStateChangedHandler;
+    }
+
+    private void OnGameStateChangedHandler(GameState newState)
+    {
+        Debug.Log($"[RitualAltar] ====== OnGameStateChangedHandler LLAMADO ====== Estado: {newState}, GameObject activo: {(DoorLight != null ? DoorLight.gameObject.activeInHierarchy.ToString() : "NULL")}, Intensity: {(DoorLight != null ? DoorLight.intensity.ToString() : "NULL")}");
+
+        if (newState == GameState.Day || newState == GameState.Digging ||
+            newState == GameState.Planting || newState == GameState.Harvesting ||
+            newState == GameState.Removing)
+        {
+            Debug.Log($"[RitualAltar] ====== ES ESTADO DE DIA - Llamando SetDoorLightIntensity(0) ======");
+            SetDoorLightIntensity(0f, 0.5f);
+        }
+        else
+        {
+            Debug.Log($"[RitualAltar] NO es estado de dÃ­a - Estado actual: {newState}");
+        }
     }
 
     private void HandleGameStateChanged(GameState newState)
@@ -132,7 +162,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void HandleWorldStateChanged(WorldState newWorldState)
     {
-        // Al salir de la casa, apagar velas y restaurar luces
         if (newWorldState != WorldState.Interior)
         {
             if (candlesLitAfterRitual)
@@ -146,7 +175,88 @@ public class RitualAltar : MonoBehaviour, IInteractable
                 worldTransition.RestoreInteriorLightIntensity(vignetteFadeDuration);
                 interiorLightsDimmed = false;
             }
+
+            SetDoorLightIntensity(0f, 0.5f);
         }
+    }
+
+    private void SetDoorLightIntensity(float targetIntensity, float duration)
+    {
+        if (DoorLight == null)
+        {
+            Debug.LogError("[RitualAltar] SetDoorLightIntensity - DoorLight es NULL!");
+            return;
+        }
+
+        if (!DoorLight.gameObject.activeInHierarchy)
+        {
+            Debug.Log("[RitualAltar] Activando DoorLight GameObject");
+            DoorLight.gameObject.SetActive(true);
+        }
+
+        Debug.Log($"[RitualAltar] SetDoorLightIntensity - De {DoorLight.intensity} a {targetIntensity} en {duration}s");
+
+        if (activeDoorLightCoroutine != null)
+        {
+            Debug.Log("[RitualAltar] Deteniendo coroutine anterior");
+            StopCoroutine(activeDoorLightCoroutine);
+        }
+
+        activeDoorLightCoroutine = StartCoroutine(AnimateDoorLight(targetIntensity, duration));
+    }
+
+    private IEnumerator AnimateDoorLight(float targetIntensity, float duration)
+    {
+        if (DoorLight == null)
+        {
+            Debug.LogError("[RitualAltar] AnimateDoorLight - DoorLight es NULL!");
+            yield break;
+        }
+
+        float startIntensity = DoorLight.intensity;
+        Debug.Log($"[RitualAltar] AnimateDoorLight START - Desde {startIntensity} hasta {targetIntensity}");
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            DoorLight.intensity = Mathf.Lerp(startIntensity, targetIntensity, t);
+            yield return null;
+        }
+
+        DoorLight.intensity = targetIntensity;
+
+        if (Mathf.Approximately(targetIntensity, 0f))
+        {
+            Debug.Log("[RitualAltar] Desactivando DoorLight GameObject (intensity = 0)");
+            DoorLight.gameObject.SetActive(false);
+        }
+
+        Debug.Log($"[RitualAltar] AnimateDoorLight END - Intensity final: {DoorLight.intensity}");
+        activeDoorLightCoroutine = null;
+    }
+
+    private IEnumerator FadeOutDoorLight()
+    {
+        SetDoorLightIntensity(0.1f, vignetteFadeDuration);
+        yield return new WaitForSeconds(vignetteFadeDuration);
+    }
+
+    private IEnumerator FadeInRitualLight(float duration = -1f)
+    {
+        if (DoorLight == null) yield break;
+
+        float fadeDuration = duration > 0f ? duration : ritualLightFadeDuration;
+
+        if (!DoorLight.gameObject.activeInHierarchy)
+        {
+            DoorLight.gameObject.SetActive(true);
+        }
+
+        SetDoorLightIntensity(doorLightOriginalIntensity, fadeDuration);
+        yield return new WaitForSeconds(fadeDuration);
     }
 
     public void Interact()
@@ -248,9 +358,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
         {
             lightController.RestoreLightAfterRitual(GameState.Night, vignetteFadeDuration);
         }
-
-        // YA NO restauramos las luces del interior aquí
-        // Se restaurarán cuando el jugador salga de la casa
 
         UpdateAltarAppearance();
     }
@@ -500,17 +607,24 @@ public class RitualAltar : MonoBehaviour, IInteractable
             lightController.RestoreLightAfterRitual(currentState, 0.5f);
         }
 
-        // Solo restaurar si estamos dentro de la casa y las luces están bajadas
         if (worldTransition != null && worldTransition.IsInInterior && interiorLightsDimmed)
         {
             worldTransition.RestoreInteriorLightIntensity(0.5f);
             interiorLightsDimmed = false;
         }
 
-        // Restaurar DoorLight si fue apagada
-        if (DoorLight != null)
+        if (DoorLight != null && levelManager != null)
         {
-            StartCoroutine(FadeInRitualLight(0.5f));
+            GameState currentState = levelManager.GetCurrentGameState();
+
+            if (currentState == GameState.Night)
+            {
+                StartCoroutine(FadeInRitualLight(0.5f));
+            }
+            else
+            {
+                SetDoorLightIntensity(0f, 0.5f);
+            }
         }
     }
 
@@ -520,49 +634,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
         {
             altarSpriteRenderer.sprite = defaultSprite;
         }
-    }
-
-    private IEnumerator FadeOutDoorLight()
-    {
-        if (DoorLight == null) yield break;
-
-        float startIntensity = DoorLight.intensity;
-        float elapsed = 0f;
-
-        while (elapsed < vignetteFadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / vignetteFadeDuration;
-            DoorLight.intensity = Mathf.Lerp(startIntensity, 0.1f, t);
-            yield return null;
-        }
-
-        DoorLight.intensity = 0.1f;
-    }
-
-    private IEnumerator FadeInRitualLight(float duration = -1f)
-    {
-        if (DoorLight == null) yield break;
-
-        float fadeDuration = duration > 0f ? duration : ritualLightFadeDuration;
-
-        if (!DoorLight.gameObject.activeInHierarchy)
-        {
-            DoorLight.gameObject.SetActive(true);
-        }
-
-        float startIntensity = DoorLight.intensity;
-        float elapsed = 0f;
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / fadeDuration;
-            DoorLight.intensity = Mathf.Lerp(startIntensity, doorLightOriginalIntensity, t);
-            yield return null;
-        }
-
-        DoorLight.intensity = doorLightOriginalIntensity;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

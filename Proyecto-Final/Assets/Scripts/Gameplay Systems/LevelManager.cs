@@ -38,7 +38,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] public GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
-    [SerializeField] private List<HouseController> houseControllers = new List<HouseController>();
     [SerializeField] private List<SpawnPointAnimator> spawnpoints = new List<SpawnPointAnimator>();
     [SerializeField] private AmbienceSoundManager ambienceSoundManager;
     
@@ -201,12 +200,6 @@ public class LevelManager : MonoBehaviour
         foreach (var spawnpoint in spawnpoints)
         {
             spawnpoint.SetNightMode(isNight);
-        }
-
-        foreach (var house in houseControllers)
-        {
-            if (house != null)
-                house.SetNightMode(isNight);
         }
     }
 
