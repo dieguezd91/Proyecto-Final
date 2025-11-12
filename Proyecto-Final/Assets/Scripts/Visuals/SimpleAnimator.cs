@@ -26,11 +26,19 @@ public class SimpleAnimator : MonoBehaviour
             spriteRenderer.sprite = sprites[0];
     }
 
-    private void Update()
+    public void SetVisualState(bool showClosedState)
     {
-        if (Input.GetKeyDown(KeyCode.P))
+        if (sprites.Count == 0 || spriteRenderer == null) return;
+
+        if (showClosedState)
         {
-            TriggerAnimation();
+            spriteRenderer.sprite = sprites[sprites.Count - 1];
+            isForward = false;
+        }
+        else
+        {
+            spriteRenderer.sprite = sprites[0];
+            isForward = true;
         }
     }
 
@@ -62,5 +70,10 @@ public class SimpleAnimator : MonoBehaviour
         isForward = !isForward;
         isAnimating = false;
     }
-}
 
+    public bool IsShowingClosedState()
+    {
+        if (sprites.Count == 0 || spriteRenderer == null) return false;
+        return spriteRenderer.sprite == sprites[sprites.Count - 1];
+    }
+}
