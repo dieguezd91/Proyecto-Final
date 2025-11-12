@@ -33,7 +33,6 @@ public class GameStateUIController : UIControllerBase
     protected override void SetupEventListeners()
     {
         UIEvents.OnInventoryClosed += HandleInventoryClosedEvent;
-        // Ensure blur also activates when inventory is opened via keys (Tab / I)
         UIEvents.OnInventoryOpened += HandleInventoryOpenedEvent;
     }
 
@@ -70,7 +69,6 @@ public class GameStateUIController : UIControllerBase
         CheckInventoryOpenState();
     }
 
-    // Polls the UIManager inventory open state so we reliably trigger blur for all input paths (Tab, I, UI calls).
     private void CheckInventoryOpenState()
     {
         if (UIManager.Instance == null) return;
@@ -79,7 +77,6 @@ public class GameStateUIController : UIControllerBase
 
         if (isOpen && !wasInventoryOpen)
         {
-            // Inventory opened — start blur open tween.
             if (blurTween != null) { blurTween.Kill(); blurTween = null; }
             if (dof != null)
             {
@@ -89,7 +86,6 @@ public class GameStateUIController : UIControllerBase
         }
         else if (!isOpen && wasInventoryOpen)
         {
-            // Inventory closed — start blur hide tween.
             if (dof != null && dof.focalLength.value > 0)
             {
                 if (blurTween != null) { blurTween.Kill(); blurTween = null; }
@@ -141,6 +137,9 @@ public class GameStateUIController : UIControllerBase
     private void HandlePauseInput()
     {
         if (!Input.GetKeyDown(KeyCode.Escape)) return;
+
+        UIManager.Instance?.Tooltip?.ForceHide();
+
 
         if (UIManager.Instance != null && UIManager.Instance.Inventory != null)
         {
