@@ -29,16 +29,16 @@ public class TeleportSpell : Spell
         playerTransform = player.transform;
         Vector3 startPosition = playerTransform.position;
 
-        // Calcular posición de destino
+        // Calcular posiciï¿½n de destino
         Vector2 teleportDirection = direction.normalized;
         Vector3 targetPosition = startPosition + (Vector3)(teleportDirection * teleportDistance);
 
-        // Verificar si hay colisión en el camino
+        // Verificar si hay colisiï¿½n en el camino
         RaycastHit2D hit = Physics2D.Raycast(startPosition, teleportDirection, teleportDistance, collisionMask);
 
         if (hit.collider != null)
         {
-            // Si hay colisión, teleportar justo antes del obstáculo
+            // Si hay colisiï¿½n, teleportar justo antes del obstï¿½culo
             targetPosition = hit.point - teleportDirection * 0.5f;
         }
 
@@ -50,7 +50,7 @@ public class TeleportSpell : Spell
 
     private void ExecuteTeleport(Vector3 startPos, Vector3 endPos)
     {
-        // Efecto visual en posición inicial
+        // Efecto visual en posiciï¿½n inicial
         ShowTeleportEffect(startPos, teleportStartEffectPrefab);
 
         // Mover al jugador
@@ -59,16 +59,16 @@ public class TeleportSpell : Spell
             playerTransform.position = endPos;
         }
 
-        // Efecto visual en posición final
+        // Efecto visual en posiciï¿½n final
         ShowTeleportEffect(endPos, teleportEndEffectPrefab);
 
         // Sonido
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.Play("Teleport", SoundSourceType.Localized, playerTransform);
+            SoundManager.Instance.Play("PlayerTeleport", SoundSourceType.Global, playerTransform);
         }
 
-        // Pequeño screen shake
+        // Pequeï¿½o screen shake
         if (Time.timeScale > 0f && CameraShaker.Instance != null)
         {
             CameraShaker.Instance.Shake(0.2f, 0.15f);

@@ -425,14 +425,6 @@ MonoBehaviour:
     loop: 0
     mute: 0
     audioSource: {fileID: 0}
-  - name: PlayerHit
-    clip: {fileID: 8300000, guid: cb67cfd8ae8f00e4cb9e7dd88e8494dc, type: 3}
-    volume: 0.7
-    pitch: 1
-    playOnAwake: 0
-    loop: 0
-    mute: 0
-    audioSource: {fileID: 0}
   - name: EnemyHit
     clip: {fileID: 8300000, guid: b2d3fe090d4f9dd46ac24c275ddb8730, type: 3}
     volume: 0.7
@@ -441,8 +433,48 @@ MonoBehaviour:
     loop: 0
     mute: 0
     audioSource: {fileID: 0}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: cb67cfd8ae8f00e4cb9e7dd88e8494dc, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
+  - name: PlayerHitBurn
+    clip: {fileID: 8300000, guid: 93d2af38cfa5cf14c8cc67cac495d05f, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
   - name: PlayerBurn
     clip: {fileID: 8300000, guid: 5457f92d674877e44bcdb3c5dfc15456, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
+  - name: PlayerShootArea
+    clip: {fileID: 8300000, guid: 8e50f6220fb662f4f95d3fe65edd4994, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
+  - name: PlayerSwordSwing
+    clip: {fileID: 8300000, guid: 4bb14c3aa47476143a69082dd41549e0, type: 3}
+    volume: 0.7
+    pitch: 1
+    playOnAwake: 0
+    loop: 0
+    mute: 0
+    audioSource: {fileID: 0}
+  - name: PlayerTeleport
+    clip: {fileID: 8300000, guid: 589a9d55f4926994c961ff78e880d1d9, type: 3}
     volume: 0.7
     pitch: 1
     playOnAwake: 0

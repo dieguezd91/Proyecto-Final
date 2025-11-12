@@ -52,7 +52,7 @@ public class BasicMeleeSpell : Spell
 
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.Play("MeleeSpell", SoundSourceType.Localized, transform);
+            SoundManager.Instance.Play("PlayerSwordSwing", SoundSourceType.Global, transform);
         }
     }
 

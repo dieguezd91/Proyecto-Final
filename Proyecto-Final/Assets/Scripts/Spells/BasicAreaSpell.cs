@@ -71,7 +71,7 @@ public class BasicAreaSpell : Spell
 
         if (SoundManager.Instance != null)
         {
-            SoundManager.Instance.Play("AreaSpellExplosion", SoundSourceType.Localized, transform);
+            SoundManager.Instance.Play("PlayerShootArea", SoundSourceType.Localized, transform);
         }
 
         if (Time.timeScale > 0f && CameraShaker.Instance != null)
