@@ -57,8 +57,6 @@ public class TilePlantingSystem : MonoBehaviour
 
         InvokePlantEventByType(plant);
 
-        TutorialEvents.InvokeSeedPlanted();
-
         return true;
     }
 
@@ -72,12 +70,10 @@ public class TilePlantingSystem : MonoBehaviour
         {
             case PlantType.Production:
                 TutorialEvents.InvokeProductionPlantPlanted();
-                Debug.Log($"[Tutorial] Planta de Producción plantada: {plant.GetType().Name}");
                 break;
 
             case PlantType.Defensive:
                 TutorialEvents.InvokeDefensivePlantPlanted();
-                Debug.Log($"[Tutorial] Planta Defensiva plantada: {plant.GetType().Name}");
                 break;
         }
     }

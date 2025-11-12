@@ -27,11 +27,9 @@ public static class TutorialEvents
 
     public static void InvokeProductionPlantPlanted() => OnProductionPlantPlanted?.Invoke();
     public static void InvokeDefensivePlantPlanted() => OnDefensivePlantPlanted?.Invoke();
-    public static void InvokeHybridPlantPlanted() => OnHybridPlantPlanted?.Invoke();
 
     public static void InvokePlayerMoved() => OnPlayerMoved?.Invoke();
     public static void InvokeGroundDug() => OnGroundDug?.Invoke();
-    public static void InvokeSeedPlanted() => OnSeedPlanted?.Invoke();
     public static void InvokePlantHarvested() => OnPlantHarvested?.Invoke();
     public static void InvokeSpellCasted() => OnSpellCasted?.Invoke();
     public static void InvokeNightStarted() => OnNightStarted?.Invoke();
@@ -46,5 +44,4 @@ public static class TutorialEvents
 
     public static event Action OnProductionPlantPlanted;
     public static event Action OnDefensivePlantPlanted;
-    public static event Action OnHybridPlantPlanted;
 }
