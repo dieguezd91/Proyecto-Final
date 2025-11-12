@@ -31,6 +31,8 @@ public static class TutorialEvents
 
     public static event Action OnFirstPlantReadyToHarvest;
 
+    public static event Action OnTeleportCasted;
+
     private static bool hasFiredFirstPlantReady = false;
 
     public static void InvokeTutorialStarted() => OnTutorialStarted?.Invoke();
@@ -59,6 +61,8 @@ public static class TutorialEvents
     public static void InvokeCraftingProximity() => OnCraftingProximity?.Invoke();
     public static void InvokeRestorationProximity() => OnRestorationProximity?.Invoke();
     public static void InvokeRitualAltarProximity() => OnRitualAltarProximity?.Invoke();
+
+    public static void InvokeTeleportCasted() => OnTeleportCasted?.Invoke();
 
     public static void InvokeFirstPlantReadyToHarvest()
     {

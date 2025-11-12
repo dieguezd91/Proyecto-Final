@@ -39,5 +39,7 @@ public enum TutorialObjectiveType
     CraftingProximity,
     RestorationProximity,
     RitualAltarProximity,
-    FirstPlantReady
+    FirstPlantReady,
+    Welcome,
+    TeleportSpell
 }

@@ -539,6 +539,8 @@ public class PlayerController : MonoBehaviour
             Destroy(spellObject);
         }
 
+        TutorialEvents.InvokeTeleportCasted();
+
         SpellInventory.Instance.StartCooldown(teleportSlotIndex);
     }
 }

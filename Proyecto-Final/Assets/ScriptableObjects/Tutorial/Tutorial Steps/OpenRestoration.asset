@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpenRestoration
   m_EditorClassIdentifier: 
   stepID: OpenRestoration
-  stepOrder: 9
+  stepOrder: 10
   instructionText: This is the Restoration Altar. You can restore the Sacred Tree's
     health here.
   objectiveType: 13

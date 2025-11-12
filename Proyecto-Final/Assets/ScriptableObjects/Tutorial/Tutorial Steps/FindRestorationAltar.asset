@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FindRestorationAltar
   m_EditorClassIdentifier: 
   stepID: FindRestorationAltar
-  stepOrder: 8
+  stepOrder: 9
   instructionText: 
   objectiveType: 20
   requiredCount: 1

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FindCraftingCauldron
   m_EditorClassIdentifier: 
   stepID: FindCraftingCauldron
-  stepOrder: 6
+  stepOrder: 7
   instructionText: 
   objectiveType: 19
   requiredCount: 1

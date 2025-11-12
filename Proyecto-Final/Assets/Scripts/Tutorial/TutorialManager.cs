@@ -19,6 +19,7 @@ public class TutorialManager : MonoBehaviour
     private bool isTransitioning = false;
 
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
+    private PlayerController playerController;
 
     public bool IsTutorialActive() => tutorialActive;
 
@@ -41,6 +42,8 @@ public class TutorialManager : MonoBehaviour
         {
             Invoke(nameof(StartTutorial), 0.5f);
         }
+
+        playerController = FindObjectOfType<PlayerController>();
     }
 
     private void OnEnable()
@@ -79,6 +82,8 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarProximity += CheckObjective_RitualAltarProximity;
 
         TutorialEvents.OnFirstPlantReadyToHarvest += CheckObjective_FirstPlantReady;
+
+        TutorialEvents.OnTeleportCasted += CheckObjective_TeleportCasted;
     }
 
     private void UnsubscribeFromEvents()
@@ -107,6 +112,8 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarProximity -= CheckObjective_RitualAltarProximity;
 
         TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
+
+        TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
     }
 
 
@@ -138,6 +145,11 @@ public class TutorialManager : MonoBehaviour
         currentStep = tutorialSteps[index];
         currentProgress = 0;
         isTransitioning = false;
+
+        if (playerController != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
+        {
+            playerController.SetMovementEnabled(false);
+        }
 
         int bufferSize = eventBuffer.Count;
         if (bufferSize > 0)
@@ -224,6 +236,11 @@ public class TutorialManager : MonoBehaviour
         if (isTransitioning) return;
         isTransitioning = true;
 
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+        }
+
         TutorialEvents.InvokeStepCompleted(currentStep);
 
         if (tutorialUI != null)
@@ -275,6 +292,7 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_RestorationProximity() => CheckObjective(TutorialObjectiveType.RestorationProximity);
     private void CheckObjective_RitualAltarProximity() => CheckObjective(TutorialObjectiveType.RitualAltarProximity);
     private void CheckObjective_FirstPlantReady() => CheckObjective(TutorialObjectiveType.FirstPlantReady);
+    private void CheckObjective_TeleportCasted() => CheckObjective(TutorialObjectiveType.TeleportSpell);
 
     public void SkipTutorial()
     {

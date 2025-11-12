@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WaitForHarvest
   m_EditorClassIdentifier: 
   stepID: WaitForHarvest
-  stepOrder: 15
+  stepOrder: 16
   instructionText: 
   objectiveType: 22
   requiredCount: 1

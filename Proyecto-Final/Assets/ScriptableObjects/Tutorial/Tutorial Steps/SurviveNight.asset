@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SurviveNight
   m_EditorClassIdentifier: 
   stepID: SurviveNight
-  stepOrder: 14
+  stepOrder: 15
   instructionText: Hold the line until dawn breaks! Protect the Sacred Tree from
     all threats until morning light returns.
   objectiveType: 10

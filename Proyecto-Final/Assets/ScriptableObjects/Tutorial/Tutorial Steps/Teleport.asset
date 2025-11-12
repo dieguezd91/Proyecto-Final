@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: DefeatEnemy
+  m_Name: Teleport
   m_EditorClassIdentifier: 
-  stepID: DefeatEnemy
-  stepOrder: 14
-  instructionText: The first corrupted creature approaches! Strike down the threat
-    to defend the Sacred Tree.
-  objectiveType: 9
+  stepID: Teleport
+  stepOrder: 5
+  instructionText: You can also teleport! Press [Space] to move quickly in your direction
+    or toward the mouse. It's the only spell you can use during the day.
+  objectiveType: 24
   requiredCount: 1
   waitDuration: 3
