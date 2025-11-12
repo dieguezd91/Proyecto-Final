@@ -16,6 +16,9 @@ public class TutorialManager : MonoBehaviour
     private int currentStepIndex = 0;
     private int currentProgress = 0;
     private bool tutorialActive = false;
+    private bool isTransitioning = false;
+
+    private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
 
     private void Awake()
     {
@@ -52,7 +55,6 @@ public class TutorialManager : MonoBehaviour
     {
         TutorialEvents.OnPlayerMoved += CheckObjective_PlayerMoved;
         TutorialEvents.OnGroundDug += CheckObjective_GroundDug;
-        TutorialEvents.OnSeedPlanted += CheckObjective_SeedPlanted;
         TutorialEvents.OnPlantHarvested += CheckObjective_PlantHarvested;
         TutorialEvents.OnSpellCasted += CheckObjective_SpellCasted;
         TutorialEvents.OnNightStarted += CheckObjective_NightStarted;
@@ -65,15 +67,16 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarUsed += CheckObjective_RitualAltarUsed;
 
         TutorialEvents.OnProductionPlantPlanted += CheckObjective_ProductionPlantPlanted;
+        TutorialEvents.OnProductionPlantPlanted += CheckObjective_SeedPlanted;
+
         TutorialEvents.OnDefensivePlantPlanted += CheckObjective_DefensivePlantPlanted;
-        TutorialEvents.OnHybridPlantPlanted += CheckObjective_HybridPlantPlanted;
+        TutorialEvents.OnDefensivePlantPlanted += CheckObjective_SeedPlanted;
     }
 
     private void UnsubscribeFromEvents()
     {
         TutorialEvents.OnPlayerMoved -= CheckObjective_PlayerMoved;
         TutorialEvents.OnGroundDug -= CheckObjective_GroundDug;
-        TutorialEvents.OnSeedPlanted -= CheckObjective_SeedPlanted;
         TutorialEvents.OnPlantHarvested -= CheckObjective_PlantHarvested;
         TutorialEvents.OnSpellCasted -= CheckObjective_SpellCasted;
         TutorialEvents.OnNightStarted -= CheckObjective_NightStarted;
@@ -86,8 +89,10 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarUsed -= CheckObjective_RitualAltarUsed;
 
         TutorialEvents.OnProductionPlantPlanted -= CheckObjective_ProductionPlantPlanted;
+        TutorialEvents.OnProductionPlantPlanted -= CheckObjective_SeedPlanted;
+
         TutorialEvents.OnDefensivePlantPlanted -= CheckObjective_DefensivePlantPlanted;
-        TutorialEvents.OnHybridPlantPlanted -= CheckObjective_HybridPlantPlanted;
+        TutorialEvents.OnDefensivePlantPlanted -= CheckObjective_SeedPlanted;
     }
 
 
@@ -116,13 +121,36 @@ public class TutorialManager : MonoBehaviour
         currentStepIndex = index;
         currentStep = tutorialSteps[index];
         currentProgress = 0;
+        isTransitioning = false;
+
+        int bufferSize = eventBuffer.Count;
+        if (bufferSize > 0)
+        {
+            Debug.Log($"[Tutorial] Procesando {bufferSize} eventos en cola...");
+            for (int i = 0; i < bufferSize; i++)
+            {
+                TutorialObjectiveType bufferedEvent = eventBuffer.Dequeue();
+
+                if (bufferedEvent == currentStep.objectiveType)
+                {
+                    Debug.Log($"[Tutorial] Evento {bufferedEvent} COINCIDE y es procesado.");
+                    CheckObjective(bufferedEvent);
+                    if (isTransitioning) return;
+                }
+                else
+                {
+                    Debug.Log($"[Tutorial] Evento {bufferedEvent} NO COINCIDE. Devuelto a la cola.");
+                    eventBuffer.Enqueue(bufferedEvent);
+                }
+            }
+        }
 
         if (tutorialUI != null)
         {
             tutorialUI.ShowStep(currentStep);
         }
 
-        if (currentStep.objectiveType == TutorialObjectiveType.Wait)
+        if (currentStep.objectiveType == TutorialObjectiveType.Wait && !isTransitioning)
         {
             float duration = currentStep.waitDuration > 0 ? currentStep.waitDuration : 3f;
             StartCoroutine(AutoCompleteWaitStep(duration));
@@ -139,9 +167,20 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-
     private void CheckObjective(TutorialObjectiveType type)
     {
+        if (isTransitioning || (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait))
+        {
+            if (type == TutorialObjectiveType.Move) return;
+
+            if (!eventBuffer.Contains(type))
+            {
+                eventBuffer.Enqueue(type);
+                Debug.Log($"[Tutorial] Evento {type} ENCOLADO (Transición o Wait).");
+            }
+            return;
+        }
+
         if (!tutorialActive || currentStep == null)
         {
             Debug.Log($"[Tutorial] Evento {type} ignorado - Tutorial no activo o sin step");
@@ -150,12 +189,16 @@ public class TutorialManager : MonoBehaviour
 
         if (currentStep.objectiveType != type)
         {
-            Debug.Log($"[Tutorial] Evento {type} ignorado - Step actual requiere {currentStep.objectiveType}");
+            if (type == TutorialObjectiveType.Move) return;
+            if (!eventBuffer.Contains(type))
+            {
+                eventBuffer.Enqueue(type);
+                Debug.Log($"[Tutorial] Evento {type} NO COINCIDE. Encolado por si acaso.");
+            }
             return;
         }
 
         currentProgress++;
-
         Debug.Log($"[Tutorial] ✓ Progreso {type}: {currentProgress}/{currentStep.requiredCount}");
 
         if (currentProgress >= currentStep.requiredCount)
@@ -167,13 +210,11 @@ public class TutorialManager : MonoBehaviour
 
     private void CompleteCurrentStep()
     {
+        if (isTransitioning) return;
+        isTransitioning = true;
+
         TutorialEvents.InvokeStepCompleted(currentStep);
 
-        Invoke(nameof(ShowNextStep), 1.5f);
-    }
-
-    private void ShowNextStep()
-    {
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
