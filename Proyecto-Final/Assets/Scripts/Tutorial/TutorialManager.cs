@@ -198,6 +198,11 @@ public class TutorialManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
+        if (!tutorialActive)
+        {
+            yield break;
+        }
+
         if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
         {
             CompleteCurrentStep();
@@ -314,10 +319,23 @@ public class TutorialManager : MonoBehaviour
 
     public void SkipTutorial()
     {
-        if (tutorialActive)
+        if (!tutorialActive) return;
+
+        Debug.Log("Saltando tutorial...");
+
+        StopAllCoroutines();
+
+        isTransitioning = false;
+        eventBuffer.Clear();
+        currentStep = null;
+
+        if (playerController != null)
         {
-            CompleteTutorial();
+            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
         }
+
+        CompleteTutorial();
     }
 
     public TutorialObjectiveType GetCurrentObjectiveType()
