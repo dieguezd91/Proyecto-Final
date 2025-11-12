@@ -393,8 +393,9 @@ MonoBehaviour:
     randomizeClip: 1
     cooldownTime: 0
   special:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: e9758970408b29241ad79e9c76f521aa, type: 3}
+    volume: 0.7
     pitch: 1
     pitchVariation: 0.1
     loop: 0
