@@ -61,7 +61,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void OnDisable()
     {
-        Debug.Log("[RitualAltar] ===== OnDisable - Desuscribiendo eventos =====");
         UnsubscribeFromEvents();
     }
 
@@ -107,19 +106,15 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void SubscribeToEvents()
     {
-        Debug.Log($"[RitualAltar] SubscribeToEvents - LevelManager.Instance: {(LevelManager.Instance != null ? "OK" : "NULL")}");
-
         if (LevelManager.Instance != null)
         {
             LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
             LevelManager.Instance.OnGameStateChanged += OnGameStateChangedHandler;
-            Debug.Log("[RitualAltar] ✅ Eventos suscritos a LevelManager.OnGameStateChanged");
         }
 
         if (worldTransition != null)
         {
             worldTransition.OnStateChanged += HandleWorldStateChanged;
-            Debug.Log("[RitualAltar] ✅ Evento suscrito a WorldTransition.OnStateChanged");
         }
     }
 
@@ -137,18 +132,11 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void OnGameStateChangedHandler(GameState newState)
     {
-        Debug.Log($"[RitualAltar] ====== OnGameStateChangedHandler LLAMADO ====== Estado: {newState}, GameObject activo: {(DoorLight != null ? DoorLight.gameObject.activeInHierarchy.ToString() : "NULL")}, Intensity: {(DoorLight != null ? DoorLight.intensity.ToString() : "NULL")}");
-
         if (newState == GameState.Day || newState == GameState.Digging ||
             newState == GameState.Planting || newState == GameState.Harvesting ||
             newState == GameState.Removing)
         {
-            Debug.Log($"[RitualAltar] ====== ES ESTADO DE DIA - Llamando SetDoorLightIntensity(0) ======");
             SetDoorLightIntensity(0f, 0.5f);
-        }
-        else
-        {
-            Debug.Log($"[RitualAltar] NO es estado de día - Estado actual: {newState}");
         }
     }
 
@@ -184,21 +172,16 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (DoorLight == null)
         {
-            Debug.LogError("[RitualAltar] SetDoorLightIntensity - DoorLight es NULL!");
             return;
         }
 
         if (!DoorLight.gameObject.activeInHierarchy)
         {
-            Debug.Log("[RitualAltar] Activando DoorLight GameObject");
             DoorLight.gameObject.SetActive(true);
         }
 
-        Debug.Log($"[RitualAltar] SetDoorLightIntensity - De {DoorLight.intensity} a {targetIntensity} en {duration}s");
-
         if (activeDoorLightCoroutine != null)
         {
-            Debug.Log("[RitualAltar] Deteniendo coroutine anterior");
             StopCoroutine(activeDoorLightCoroutine);
         }
 
@@ -209,13 +192,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (DoorLight == null)
         {
-            Debug.LogError("[RitualAltar] AnimateDoorLight - DoorLight es NULL!");
             yield break;
         }
 
         float startIntensity = DoorLight.intensity;
-        Debug.Log($"[RitualAltar] AnimateDoorLight START - Desde {startIntensity} hasta {targetIntensity}");
-
         float elapsed = 0f;
 
         while (elapsed < duration)
@@ -230,11 +210,9 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (Mathf.Approximately(targetIntensity, 0f))
         {
-            Debug.Log("[RitualAltar] Desactivando DoorLight GameObject (intensity = 0)");
             DoorLight.gameObject.SetActive(false);
         }
 
-        Debug.Log($"[RitualAltar] AnimateDoorLight END - Intensity final: {DoorLight.intensity}");
         activeDoorLightCoroutine = null;
     }
 

@@ -40,6 +40,11 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] public TileBase tilledSoilTile;
     private ManaSystem manaSystem;
 
+    [Header("ANIMATION")]
+    [SerializeField] private Animator handAnimator;
+    [SerializeField] private float interactionAnimationDuration = 0.5f;
+    private bool isPlayingInteractionAnimation = false;
+
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
     private bool isDigging = false;
@@ -67,6 +72,15 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         seedInventory ??= FindObjectOfType<SeedInventory>();
+
+        if (handAnimator == null)
+        {
+            Transform handTransform = transform.Find("PlayerHand");
+            if (handTransform != null)
+            {
+                handAnimator = handTransform.GetComponent<Animator>();
+            }
+        }
 
         if (seedInventory != null)
         {
@@ -152,6 +166,23 @@ public class PlayerAbilitySystem : MonoBehaviour
         }
     }
 
+    private void PlayInteractionAnimation()
+    {
+        if (handAnimator != null && LevelManager.Instance.currentGameState != GameState.Night)
+        {
+            handAnimator.SetBool("IsDay", true);
+            handAnimator.SetTrigger("IsInteracting");
+        }
+    }
+
+    private void StopInteractionAnimation()
+    {
+        if (handAnimator != null)
+        {
+            handAnimator.ResetTrigger("IsInteracting");
+        }
+    }
+
     private void CycleAbility(int direction)
     {
         if (isDigging || isHarvesting)
@@ -234,7 +265,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandlePlanting()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isPlayingInteractionAnimation)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
@@ -258,28 +289,41 @@ public class PlayerAbilitySystem : MonoBehaviour
             if (manaSystem != null && !manaSystem.UseMana(plantManaCost))
             {
                 warningBubble?.ShowMessage("Not enough mana to plant!");
-
                 if (floatingTextController != null)
                 {
                     warningBubble.ShowMessage("Insufficient Mana");
                 }
-
                 SoundManager.Instance?.PlayOneShot("Error");
                 return;
             }
 
-            bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant, out string reason);
-
-            if (planted)
-            {
-                seedInventory.ConsumeSeedInSelectedSlot();
-                SoundManager.Instance.Play("Plant");
-            }
-            else
-            {
-                warningBubble?.ShowMessage(reason);
-            }
+            StartCoroutine(PlantWithAnimation(cellPos, selectedPlant));
         }
+    }
+
+    private IEnumerator PlantWithAnimation(Vector3Int cellPos, GameObject selectedPlant)
+    {
+        isPlayingInteractionAnimation = true;
+        PlayInteractionAnimation();
+
+        yield return new WaitForSeconds(interactionAnimationDuration * 0.4f);
+
+        bool planted = TilePlantingSystem.Instance.TryPlant(cellPos, selectedPlant, out string reason);
+
+        if (planted)
+        {
+            seedInventory.ConsumeSeedInSelectedSlot();
+            SoundManager.Instance.Play("Plant");
+        }
+        else
+        {
+            warningBubble?.ShowMessage(reason);
+        }
+
+        yield return new WaitForSeconds(interactionAnimationDuration * 0.6f);
+
+        isPlayingInteractionAnimation = false;
+        StopInteractionAnimation();
     }
 
     private void HandleHarvesting()
@@ -327,7 +371,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleRemoving()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !isPlayingInteractionAnimation)
         {
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
@@ -348,31 +392,51 @@ public class PlayerAbilitySystem : MonoBehaviour
             if (manaSystem != null && !manaSystem.UseMana(removeManaCost))
             {
                 warningBubble?.ShowMessage("Not enough mana to remove!");
-
                 if (floatingTextController != null)
                 {
                     warningBubble.ShowMessage("Insufficient Mana");
                 }
-
                 SoundManager.Instance?.PlayOneShot("Error");
                 return;
             }
 
-            SoundManager.Instance.Play("Remove");
-            TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
-            Destroy(plant.gameObject);
-            warningBubble?.ShowMessage("Plant removed.");
+            StartCoroutine(RemoveWithAnimation(cellPos, plant));
         }
+    }
+
+    private IEnumerator RemoveWithAnimation(Vector3Int cellPos, Plant plant)
+    {
+        isPlayingInteractionAnimation = true;
+        PlayInteractionAnimation();
+
+        yield return new WaitForSeconds(interactionAnimationDuration * 0.4f);
+
+        SoundManager.Instance.Play("Remove");
+        TilePlantingSystem.Instance.UnregisterPlantAt(cellPos);
+        Destroy(plant.gameObject);
+        warningBubble?.ShowMessage("Plant removed.");
+
+        yield return new WaitForSeconds(interactionAnimationDuration * 0.6f);
+
+        isPlayingInteractionAnimation = false;
+        StopInteractionAnimation();
     }
 
     public void StartHarvesting(ResourcePlant plant)
     {
-        if (currentAbility != PlayerAbility.Harvesting || plant == null || !plant.IsReadyToHarvest() || plant.IsBeingHarvested())
+        if (currentAbility != PlayerAbility.Harvesting ||
+            plant == null ||
+            !plant.IsReadyToHarvest() ||
+            plant.IsBeingHarvested() ||
+            isPlayingInteractionAnimation)
             return;
 
         currentHarvestPlant = plant;
         isHarvesting = true;
         currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
+
+        PlayInteractionAnimation();
+
         SoundManager.Instance.Play("Harvest");
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(true);
@@ -381,6 +445,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         plant.StartHarvest();
         StartCoroutine(MonitorHarvest());
     }
+
 
     private IEnumerator MonitorHarvest()
     {
@@ -500,11 +565,16 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void StartDigging(Vector2 position)
     {
-        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
+        if (LevelManager.Instance.currentGameState == GameState.Paused ||
+            GameManager.Instance.IsGamePaused() ||
+            isPlayingInteractionAnimation)
             return;
 
         isDigging = true;
         digPosition = new Vector3(position.x, position.y, 0);
+
+        PlayInteractionAnimation();
+
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(false);
 
@@ -554,6 +624,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         isDigging = false;
         progressBar?.Hide();
 
+        StopInteractionAnimation();
+
         TutorialEvents.InvokeGroundDug();
     }
 
@@ -561,6 +633,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         isDigging = false;
         progressBar?.Hide();
+
+        StopInteractionAnimation();
     }
 
     private void CancelCurrentAction()
@@ -569,6 +643,13 @@ public class PlayerAbilitySystem : MonoBehaviour
             CancelHarvest();
         if (isDigging)
             CancelDigging();
+
+        if (isPlayingInteractionAnimation)
+        {
+            StopAllCoroutines();
+            isPlayingInteractionAnimation = false;
+            StopInteractionAnimation();
+        }
     }
 
     public bool IsDigging() => isDigging;
@@ -586,7 +667,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public bool IsBusy()
     {
-        return isDigging || isHarvesting;
+        return isDigging || isHarvesting || isPlayingInteractionAnimation;
     }
 
     private void OnDrawGizmosSelected()
