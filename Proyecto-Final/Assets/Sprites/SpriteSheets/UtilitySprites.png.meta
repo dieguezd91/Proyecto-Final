@@ -1857,6 +1857,69 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: AbilityBaseSpell
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 259
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f822bae5a0732814dbf50bdfcf219cb4
+      internalID: 444491412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilityMeleeSpell
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 256
+        width: 14
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d42fbd59893b1f47971058fb8850218
+      internalID: -876388959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AbilityAreaSpell
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 257
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b518630adcaf4541906ba46a81b20af
+      internalID: -64543203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1870,6 +1933,9 @@ TextureImporter:
     - texture: {fileID: 2800000, guid: 6bc9e7b6d81972b428a75255770e14ee, type: 3}
       name: _Glow
     nameFileIdTable:
+      AbilityAreaSpell: -64543203
+      AbilityBaseSpell: 444491412
+      AbilityMeleeSpell: -876388959
       BasicMagicAttack: 1957688738
       BlastSpell: -742805743
       BlastSpell1: -742805743
