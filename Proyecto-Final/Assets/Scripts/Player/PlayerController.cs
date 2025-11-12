@@ -489,6 +489,12 @@ public class PlayerController : MonoBehaviour
     {
         if (SpellInventory.Instance == null) return;
 
+        WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+        if (worldTransition != null && worldTransition.IsInInterior)
+        {
+            return;
+        }
+
         SpellSlot teleportSlot = null;
         int teleportSlotIndex = -1;
 
