@@ -205,6 +205,8 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     private void EvaluatePlantsAsTargets(ref float closestScore, ref Transform bestTarget, ref string bestTargetType)
     {
+        if (plantPriority <= 0f) return;
+
         Collider2D[] plants = Physics2D.OverlapCircleAll(transform.position, detectionRange, plantLayer);
 
         foreach (Collider2D plantCollider in plants)

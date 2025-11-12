@@ -64,6 +64,9 @@ public class DefensePlant : Plant
         {
             EnemyBase enemy = enemyCollider.GetComponent<EnemyBase>();
 
+            if (enemy != null && enemy is GardenGnome)
+                continue;
+
             if (enemy != null && !attractedEnemies.ContainsKey(enemy))
             {
                 if (enemy.GetCurrentTarget() != transform)

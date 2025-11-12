@@ -88,19 +88,12 @@ public class GardenGnome : EnemyBase
             {
                 currentTarget = player;
                 currentTargetType = "player";
-            }
-            else
-            {
-                currentTarget = null;
-                currentTargetType = "none";
+                return;
             }
         }
-        else
-        {
-            CachePlayerReference();
-            currentTarget = null;
-            currentTargetType = "none";
-        }
+
+        currentTarget = null;
+        currentTargetType = "none";
     }
 
     public void PerformAttack()
