@@ -1658,8 +1658,8 @@ TextureImporter:
         y: 448
         width: 10
         height: 50
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.02}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -1684,8 +1684,8 @@ TextureImporter:
         y: 448
         width: 11
         height: 29
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.36363637, y: 0.03448276}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -1710,9 +1710,9 @@ TextureImporter:
         x: 117
         y: 448
         width: 37
-        height: 43
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+        height: 42
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -1984,8 +1984,8 @@ TextureImporter:
         y: 448
         width: 11
         height: 46
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.54545456, y: 0.02173913}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -2010,8 +2010,8 @@ TextureImporter:
         y: 448
         width: 10
         height: 27
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.037037037}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape:
@@ -2104,6 +2104,151 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: DecoSprites_52
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 448
+        width: 37
+        height: 42
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9.5, y: 2.5}
+        - {x: -18.5, y: -3.5}
+        - {x: -18.5, y: -14.5}
+        - {x: -7.5, y: -21}
+        - {x: 7.5, y: -21}
+        - {x: 18.5, y: -13.5}
+        - {x: 18.5, y: -3.5}
+        - {x: 8.5, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35fd71b379707124592bbcde33bc02af
+      internalID: -2062604798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_53
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 448
+        width: 37
+        height: 43
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.4883721}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9.5, y: 2.5}
+        - {x: -18.5, y: -3.5}
+        - {x: -18.5, y: -14.5}
+        - {x: -7.5, y: -21}
+        - {x: 7.5, y: -21}
+        - {x: 18.5, y: -13.5}
+        - {x: 18.5, y: -3.5}
+        - {x: 8.5, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d02bb393578b2b44b33fecc0173f52b
+      internalID: -1757808698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_54
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 448
+        width: 37
+        height: 41
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.5121951}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9.5, y: 2.5}
+        - {x: -18.5, y: -3.5}
+        - {x: -18.5, y: -14.5}
+        - {x: -7.5, y: -20.5}
+        - {x: 7.5, y: -20.5}
+        - {x: 18.5, y: -13.5}
+        - {x: 18.5, y: -3.5}
+        - {x: 8.5, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09d6b005b72e5f34c8f12ceb517bf203
+      internalID: 350904914
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_55
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 448
+        width: 37
+        height: 42
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9.5, y: 2.5}
+        - {x: -18.5, y: -3.5}
+        - {x: -18.5, y: -14.5}
+        - {x: -7.5, y: -21}
+        - {x: 7.5, y: -21}
+        - {x: 18.5, y: -13.5}
+        - {x: 18.5, y: -3.5}
+        - {x: 8.5, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a1a2cddc967213448c4973a4b78c76f
+      internalID: -1361138709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DecoSprites_56
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 448
+        width: 37
+        height: 46
+      alignment: 9
+      pivot: {x: 0.4864865, y: 0.45652175}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9.5, y: 2.5}
+        - {x: -18.5, y: -3.5}
+        - {x: -18.5, y: -14.5}
+        - {x: -7.5, y: -21}
+        - {x: 7.5, y: -21}
+        - {x: 18.5, y: -13.5}
+        - {x: 18.5, y: -3.5}
+        - {x: 8.5, y: 2.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5edb777a8be75504181512bab419f0b5
+      internalID: -295428929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2191,6 +2336,11 @@ TextureImporter:
       DecoSprites_5: -1056085900
       DecoSprites_50: -1326425407
       DecoSprites_51: -1567368231
+      DecoSprites_52: -2062604798
+      DecoSprites_53: -1757808698
+      DecoSprites_54: 350904914
+      DecoSprites_55: -1361138709
+      DecoSprites_56: -295428929
       DecoSprites_6: -28200335
       DecoSprites_7: -6405655
       DecoSprites_8: 521314461
