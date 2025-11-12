@@ -16,6 +16,6 @@ MonoBehaviour:
   stepOrder: 2
   instructionText: The earth responds to your touch. Left-click to dig and prepare
     the soil for planting.
-  objectiveType: 1
+  objectiveType: 2
   requiredCount: 1
   waitDuration: 3

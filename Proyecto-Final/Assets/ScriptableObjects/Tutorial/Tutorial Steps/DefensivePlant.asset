@@ -16,6 +16,6 @@ MonoBehaviour:
   stepOrder: 3
   instructionText: Now plant a Defensive seed. These plants will help protect your
     garden during the night.
-  objectiveType: 16
+  objectiveType: 17
   requiredCount: 1
   waitDuration: 2

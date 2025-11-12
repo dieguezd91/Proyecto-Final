@@ -20,6 +20,8 @@ public class TutorialManager : MonoBehaviour
 
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
 
+    public bool IsTutorialActive() => tutorialActive;
+
     private void Awake()
     {
         if (Instance == null)
@@ -62,8 +64,8 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnNightSurvived += CheckObjective_NightSurvived;
 
         TutorialEvents.OnHouseEntered += CheckObjective_HouseEntered;
-        TutorialEvents.OnCraftingOpened += CheckObjective_CraftingOpened;
-        TutorialEvents.OnRestorationOpened += CheckObjective_RestorationOpened;
+        TutorialEvents.OnCraftingClosed += CheckObjective_CraftingOpened;
+        TutorialEvents.OnRestorationClosed += CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed += CheckObjective_RitualAltarUsed;
 
         TutorialEvents.OnProductionPlantPlanted += CheckObjective_ProductionPlantPlanted;
@@ -71,6 +73,12 @@ public class TutorialManager : MonoBehaviour
 
         TutorialEvents.OnDefensivePlantPlanted += CheckObjective_DefensivePlantPlanted;
         TutorialEvents.OnDefensivePlantPlanted += CheckObjective_SeedPlanted;
+
+        TutorialEvents.OnCraftingProximity += CheckObjective_CraftingProximity;
+        TutorialEvents.OnRestorationProximity += CheckObjective_RestorationProximity;
+        TutorialEvents.OnRitualAltarProximity += CheckObjective_RitualAltarProximity;
+
+        TutorialEvents.OnFirstPlantReadyToHarvest += CheckObjective_FirstPlantReady;
     }
 
     private void UnsubscribeFromEvents()
@@ -84,8 +92,8 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnNightSurvived -= CheckObjective_NightSurvived;
 
         TutorialEvents.OnHouseEntered -= CheckObjective_HouseEntered;
-        TutorialEvents.OnCraftingOpened -= CheckObjective_CraftingOpened;
-        TutorialEvents.OnRestorationOpened -= CheckObjective_RestorationOpened;
+        TutorialEvents.OnCraftingClosed -= CheckObjective_CraftingOpened;
+        TutorialEvents.OnRestorationClosed -= CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed -= CheckObjective_RitualAltarUsed;
 
         TutorialEvents.OnProductionPlantPlanted -= CheckObjective_ProductionPlantPlanted;
@@ -93,6 +101,12 @@ public class TutorialManager : MonoBehaviour
 
         TutorialEvents.OnDefensivePlantPlanted -= CheckObjective_DefensivePlantPlanted;
         TutorialEvents.OnDefensivePlantPlanted -= CheckObjective_SeedPlanted;
+
+        TutorialEvents.OnCraftingProximity -= CheckObjective_CraftingProximity;
+        TutorialEvents.OnRestorationProximity -= CheckObjective_RestorationProximity;
+        TutorialEvents.OnRitualAltarProximity -= CheckObjective_RitualAltarProximity;
+
+        TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
     }
 
 
@@ -102,6 +116,8 @@ public class TutorialManager : MonoBehaviour
         {
             return;
         }
+
+        TutorialEvents.ResetTutorialEventFlags();
 
         tutorialActive = true;
         tutorialSteps = tutorialSteps.OrderBy(s => s.stepOrder).ToList();
@@ -126,20 +142,17 @@ public class TutorialManager : MonoBehaviour
         int bufferSize = eventBuffer.Count;
         if (bufferSize > 0)
         {
-            Debug.Log($"[Tutorial] Procesando {bufferSize} eventos en cola...");
             for (int i = 0; i < bufferSize; i++)
             {
                 TutorialObjectiveType bufferedEvent = eventBuffer.Dequeue();
 
                 if (bufferedEvent == currentStep.objectiveType)
                 {
-                    Debug.Log($"[Tutorial] Evento {bufferedEvent} COINCIDE y es procesado.");
                     CheckObjective(bufferedEvent);
                     if (isTransitioning) return;
                 }
                 else
                 {
-                    Debug.Log($"[Tutorial] Evento {bufferedEvent} NO COINCIDE. Devuelto a la cola.");
                     eventBuffer.Enqueue(bufferedEvent);
                 }
             }
@@ -147,7 +160,10 @@ public class TutorialManager : MonoBehaviour
 
         if (tutorialUI != null)
         {
-            tutorialUI.ShowStep(currentStep);
+            if (!string.IsNullOrEmpty(currentStep.instructionText))
+            {
+                tutorialUI.ShowStep(currentStep);
+            }
         }
 
         if (currentStep.objectiveType == TutorialObjectiveType.Wait && !isTransitioning)
@@ -176,14 +192,12 @@ public class TutorialManager : MonoBehaviour
             if (!eventBuffer.Contains(type))
             {
                 eventBuffer.Enqueue(type);
-                Debug.Log($"[Tutorial] Evento {type} ENCOLADO (Transición o Wait).");
             }
             return;
         }
 
         if (!tutorialActive || currentStep == null)
         {
-            Debug.Log($"[Tutorial] Evento {type} ignorado - Tutorial no activo o sin step");
             return;
         }
 
@@ -193,17 +207,14 @@ public class TutorialManager : MonoBehaviour
             if (!eventBuffer.Contains(type))
             {
                 eventBuffer.Enqueue(type);
-                Debug.Log($"[Tutorial] Evento {type} NO COINCIDE. Encolado por si acaso.");
             }
             return;
         }
 
         currentProgress++;
-        Debug.Log($"[Tutorial] ✓ Progreso {type}: {currentProgress}/{currentStep.requiredCount}");
 
         if (currentProgress >= currentStep.requiredCount)
         {
-            Debug.Log($"[Tutorial] ¡Step completado! Avanzando...");
             CompleteCurrentStep();
         }
     }
@@ -260,8 +271,10 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_ProductionPlantPlanted() => CheckObjective(TutorialObjectiveType.PlantProduction);
     private void CheckObjective_DefensivePlantPlanted() => CheckObjective(TutorialObjectiveType.PlantDefensive);
     private void CheckObjective_HybridPlantPlanted() => CheckObjective(TutorialObjectiveType.PlantHybrid);
-
-    public bool IsTutorialActive() => tutorialActive;
+    private void CheckObjective_CraftingProximity() => CheckObjective(TutorialObjectiveType.CraftingProximity);
+    private void CheckObjective_RestorationProximity() => CheckObjective(TutorialObjectiveType.RestorationProximity);
+    private void CheckObjective_RitualAltarProximity() => CheckObjective(TutorialObjectiveType.RitualAltarProximity);
+    private void CheckObjective_FirstPlantReady() => CheckObjective(TutorialObjectiveType.FirstPlantReady);
 
     public void SkipTutorial()
     {
@@ -269,5 +282,24 @@ public class TutorialManager : MonoBehaviour
         {
             CompleteTutorial();
         }
+    }
+
+    public TutorialObjectiveType GetCurrentObjectiveType()
+    {
+        if (!tutorialActive || currentStep == null)
+        {
+            return TutorialObjectiveType.None;
+        }
+
+        return currentStep.objectiveType;
+    }
+
+    public int GetCurrentStepOrder()
+    {
+        if (!tutorialActive || currentStep == null)
+        {
+            return 9999;
+        }
+        return currentStep.stepOrder;
     }
 }

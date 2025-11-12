@@ -52,6 +52,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private Coroutine activeDoorLightCoroutine;
 
+    [SerializeField] private int tutorialStepOrderToUnlock = 11;
+
     private void Start()
     {
         CacheReferences();
@@ -250,6 +252,16 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (isPerformingRitual || levelManager == null || playerLife == null)
             return false;
+
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+        {
+            int currentStepOrder = TutorialManager.Instance.GetCurrentStepOrder();
+
+            if (currentStepOrder < tutorialStepOrderToUnlock)
+            {
+                return false;
+            }
+        }
 
         return IsValidGameStateForRitual(levelManager.GetCurrentGameState());
     }

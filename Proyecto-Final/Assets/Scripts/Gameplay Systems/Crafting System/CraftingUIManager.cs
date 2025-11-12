@@ -90,7 +90,6 @@ public class CraftingUIManager : MonoBehaviour
     private void OpenCraftingUI()
     {
         craftingUIPanel.SetActive(true);
-        TutorialEvents.InvokeCraftingOpened();
         isCraftingUIOpen = true;
 
         ResetRecipeDisplay();
@@ -110,6 +109,7 @@ public class CraftingUIManager : MonoBehaviour
             LevelManager.Instance.SetGameState(GameState.Digging);
 
         UIEvents.TriggerCraftingUIClosed();
+        TutorialEvents.InvokeCraftingClosed();
     }
     #endregion
 

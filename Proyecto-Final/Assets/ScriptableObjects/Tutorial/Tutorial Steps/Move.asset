@@ -16,6 +16,6 @@ MonoBehaviour:
   stepOrder: 1
   instructionText: Welcome, young druid. Use WASD or Arrow Keys to explore your sacred
     garden.
-  objectiveType: 0
+  objectiveType: 1
   requiredCount: 1
   waitDuration: 3

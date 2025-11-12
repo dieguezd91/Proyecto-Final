@@ -84,9 +84,12 @@ public class ResourcePlant : Plant
         isProducing = false;
         isReadyToHarvest = true;
 
-        ActivateHarvestReadyParticles();
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+        {
+            TutorialEvents.InvokeFirstPlantReadyToHarvest();
+        }
 
-        Debug.Log($"Resources ready to harvest");
+        ActivateHarvestReadyParticles();
     }
 
     private void ActivateHarvestReadyParticles()

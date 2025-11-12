@@ -17,6 +17,7 @@ public class TutorialStep : ScriptableObject
 
 public enum TutorialObjectiveType
 {
+    None,
     Move,
     Dig,
     Plant,
@@ -34,5 +35,9 @@ public enum TutorialObjectiveType
     Wait,
     PlantProduction,
     PlantDefensive,
-    PlantHybrid
+    PlantHybrid,
+    CraftingProximity,
+    RestorationProximity,
+    RitualAltarProximity,
+    FirstPlantReady
 }

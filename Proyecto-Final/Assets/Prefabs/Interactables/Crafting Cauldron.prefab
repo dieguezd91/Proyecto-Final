@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7580847324679401973}
   - component: {fileID: 8647160673624715951}
   - component: {fileID: 3861239586405840910}
+  - component: {fileID: 1075974225096834456}
   m_Layer: 0
   m_Name: Crafting Cauldron
   m_TagString: Untagged
@@ -120,7 +121,7 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.2}
@@ -250,6 +251,20 @@ MonoBehaviour:
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
+--- !u!114 &1075974225096834456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4018760531033073672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 587c19e305e42874b98e60d6b2568965, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventToFire: 1
+  fireOnce: 1
 --- !u!1 &8542196716748449406
 GameObject:
   m_ObjectHideFlags: 0

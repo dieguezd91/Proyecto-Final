@@ -16,6 +16,6 @@ MonoBehaviour:
   stepOrder: 5
   instructionText: Your work is done for now. Approach and enter the Sacred Tree
     to prepare for nightfall.
-  objectiveType: 5
+  objectiveType: 6
   requiredCount: 1
   waitDuration: 1
