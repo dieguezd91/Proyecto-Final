@@ -51,7 +51,7 @@ MonoBehaviour:
   teleportDistance: 5
   collisionMask:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 2064
   teleportStartEffectPrefab: {fileID: 0}
   teleportEndEffectPrefab: {fileID: 0}
   effectDuration: 0.5
