@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5014852601970736367}
   - component: {fileID: 5165160404069443077}
   - component: {fileID: 296513865353425854}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AreaSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 1}
+    oldSize: {x: 1, y: 2}
     newSize: {x: 0.4375, y: 0.4375}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8468532562971646671}
   - component: {fileID: 3693454707790371594}
   - component: {fileID: 3223687494807349064}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: TrailEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4858,7 +4858,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6246991053694462709}
   - component: {fileID: 711435750920038733}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4941,7 +4941,7 @@ GameObject:
   - component: {fileID: 4953143558213906142}
   - component: {fileID: 547091565564728763}
   - component: {fileID: 8450693278671247595}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: AuraEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9788,7 +9788,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6131626567795171912}
   - component: {fileID: 3035596073375896010}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9955,7 +9955,7 @@ GameObject:
   - component: {fileID: 2630281534700287372}
   - component: {fileID: 4330913303722794977}
   - component: {fileID: 8037028010950612328}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RangeSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10132,7 +10132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2877531287148865979}
   - component: {fileID: 5420918527096070271}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}

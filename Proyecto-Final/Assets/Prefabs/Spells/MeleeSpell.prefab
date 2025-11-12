@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3215262974426546881}
   - component: {fileID: 5485593592241934130}
   - component: {fileID: 2737272999311433384}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MeleeSpell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
