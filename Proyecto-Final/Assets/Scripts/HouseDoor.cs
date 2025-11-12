@@ -185,6 +185,8 @@ public class HouseDoor : MonoBehaviour
         if (goingInside)
         {
             worldTransition.EnterHouse();
+            if (UIManager.Instance != null)
+                UIManager.Instance.ShowInteriorHUD();
 
             if (!hasEnteredOnce)
             {
@@ -199,6 +201,8 @@ public class HouseDoor : MonoBehaviour
         else
         {
             worldTransition.ExitHouse();
+            if (UIManager.Instance != null)
+                UIManager.Instance.ShowExteriorHUD();
         }
     }
 

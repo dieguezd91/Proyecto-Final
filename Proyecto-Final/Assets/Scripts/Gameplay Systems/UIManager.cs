@@ -13,6 +13,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private FeedbackUIController feedbackUI;
     [SerializeField] private TooltipUIController tooltipUI;
     [SerializeField] private SpellSlotsUIController spellSlotsUI;
+    [SerializeField] private GameObject hudAbilities;
+
 
     [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
@@ -245,4 +247,41 @@ public class UIManager : MonoBehaviour
         if (Mana != null)
             yield return Mana.AnimateRespawnRecovery(duration);
     }
+
+    public void ShowInteriorHUD()
+    {
+        //if (HUD != null)
+
+        if (Health != null)
+            Health.gameObject.SetActive(true);
+
+        if (Mana != null)
+            Mana.gameObject.SetActive(true);
+
+        if (SeedSlots != null)
+            SeedSlots.gameObject.SetActive(false);
+
+        if (hudAbilities != null)
+            hudAbilities.SetActive(false);
+
+    }
+
+    public void ShowExteriorHUD()
+    {
+        if (HUD != null)
+            HUD.SetActive(true);
+
+        if (Health != null)
+            Health.gameObject.SetActive(true);
+
+        if (Mana != null)
+            Mana.gameObject.SetActive(true);
+
+        if (SeedSlots != null)
+            SeedSlots.gameObject.SetActive(true);
+
+        if (hudAbilities != null)
+            hudAbilities.SetActive(true);
+    }
+
 }
