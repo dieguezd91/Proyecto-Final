@@ -394,10 +394,18 @@ public class PlayerController : MonoBehaviour
 
         movementEnabled = enabled;
 
-        if (!enabled && rb != null)
+        if (!enabled)
         {
-            rb.velocity = Vector2.zero;
-            currentVelocity = Vector2.zero;
+            canAct = false;
+            if (rb != null)
+            {
+                rb.velocity = Vector2.zero;
+                currentVelocity = Vector2.zero;
+            }
+        }
+        else
+        {
+            canAct = true;
         }
     }
 
@@ -478,6 +486,7 @@ public class PlayerController : MonoBehaviour
     private void HandleTeleport()
     {
         if (!canAct) return;
+        if (!movementEnabled) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

@@ -146,9 +146,18 @@ public class TutorialManager : MonoBehaviour
         currentProgress = 0;
         isTransitioning = false;
 
-        if (playerController != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
+        if (playerController != null)
         {
-            playerController.SetMovementEnabled(false);
+            if (currentStep.objectiveType == TutorialObjectiveType.Wait)
+            {
+                playerController.SetMovementEnabled(false);
+                playerController.SetCanAct(false);
+            }
+            else
+            {
+                playerController.SetMovementEnabled(true);
+                playerController.SetCanAct(true);
+            }
         }
 
         int bufferSize = eventBuffer.Count;
@@ -197,10 +206,19 @@ public class TutorialManager : MonoBehaviour
 
     private void CheckObjective(TutorialObjectiveType type)
     {
-        if (isTransitioning || (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait))
+        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
         {
             if (type == TutorialObjectiveType.Move) return;
 
+            if (!eventBuffer.Contains(type))
+            {
+                eventBuffer.Enqueue(type);
+            }
+            return;
+        }
+
+        if (isTransitioning)
+        {
             if (!eventBuffer.Contains(type))
             {
                 eventBuffer.Enqueue(type);
@@ -215,7 +233,6 @@ public class TutorialManager : MonoBehaviour
 
         if (currentStep.objectiveType != type)
         {
-            if (type == TutorialObjectiveType.Move) return;
             if (!eventBuffer.Contains(type))
             {
                 eventBuffer.Enqueue(type);
@@ -239,6 +256,7 @@ public class TutorialManager : MonoBehaviour
         if (playerController != null)
         {
             playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
         }
 
         TutorialEvents.InvokeStepCompleted(currentStep);

@@ -19,4 +19,4 @@ MonoBehaviour:
     the corrupt creatures that emerge from the shadows. Let's begin.
   objectiveType: 15
   requiredCount: 1
-  waitDuration: 5
+  waitDuration: 3

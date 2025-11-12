@@ -110,7 +110,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
             LevelManager.Instance.OnGameStateChanged += OnGameStateChangedHandler;
         }
 
@@ -122,9 +121,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void UnsubscribeFromEvents()
     {
-        if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
-
         if (worldTransition != null)
             worldTransition.OnStateChanged -= HandleWorldStateChanged;
 
@@ -142,17 +138,35 @@ public class RitualAltar : MonoBehaviour, IInteractable
         }
     }
 
-    private void HandleGameStateChanged(GameState newState)
-    {
-        if (isPerformingRitual && newState != GameState.OnRitual)
-        {
-            ForceStopRitual();
-        }
-    }
-
     private void HandleWorldStateChanged(WorldState newWorldState)
     {
-        if (newWorldState != WorldState.Interior)
+        if (newWorldState == WorldState.Interior)
+        {
+            if (activeDoorLightCoroutine != null)
+            {
+                StopCoroutine(activeDoorLightCoroutine);
+                activeDoorLightCoroutine = null;
+            }
+
+            if (DoorLight != null)
+            {
+                DoorLight.intensity = 0f;
+                DoorLight.gameObject.SetActive(false);
+            }
+
+            if (candlesLitAfterRitual)
+            {
+                StartCoroutine(ExtinguishCandlesGradually());
+                candlesLitAfterRitual = false;
+            }
+
+            if (interiorLightsDimmed && worldTransition != null)
+            {
+                worldTransition.RestoreInteriorLightIntensity(vignetteFadeDuration);
+                interiorLightsDimmed = false;
+            }
+        }
+        else
         {
             if (candlesLitAfterRitual)
             {
@@ -166,7 +180,22 @@ public class RitualAltar : MonoBehaviour, IInteractable
                 interiorLightsDimmed = false;
             }
 
-            SetDoorLightIntensity(0f, 0.5f);
+            if (levelManager != null)
+            {
+                GameState currentState = levelManager.GetCurrentGameState();
+                if (currentState == GameState.Night)
+                {
+                    StartCoroutine(FadeInRitualLight(0.5f));
+                }
+                else
+                {
+                    SetDoorLightIntensity(0f, 0.5f);
+                }
+            }
+            else
+            {
+                SetDoorLightIntensity(0f, 0.5f);
+            }
         }
     }
 
@@ -177,9 +206,14 @@ public class RitualAltar : MonoBehaviour, IInteractable
             return;
         }
 
-        if (!DoorLight.gameObject.activeInHierarchy)
+        if (targetIntensity > 0f && !DoorLight.gameObject.activeInHierarchy)
         {
             DoorLight.gameObject.SetActive(true);
+        }
+        else if (targetIntensity <= 0f && !DoorLight.gameObject.activeInHierarchy)
+        {
+            DoorLight.intensity = 0f;
+            return;
         }
 
         if (activeDoorLightCoroutine != null)
