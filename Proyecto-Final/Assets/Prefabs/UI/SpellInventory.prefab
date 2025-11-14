@@ -49,7 +49,7 @@ MonoBehaviour:
     spellName: Range
     spellIcon: {fileID: 1957688738, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
-    manaCost: 25
+    manaCost: 30
     cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
@@ -57,8 +57,8 @@ MonoBehaviour:
     spellName: Melee
     spellIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 2902349897744729807, guid: b8606dfc9b6d8b04a9e71e284b373b0a, type: 3}
-    manaCost: 0
-    cooldown: 1
+    manaCost: 15
+    cooldown: 0.5
     currentCooldown: 0
     isUnlocked: 1
   - spellType: 3
@@ -66,38 +66,38 @@ MonoBehaviour:
     spellIcon: {fileID: 1703350427, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
     spellPrefab: {fileID: 2376951640795662106, guid: 06700ad62ffa5c84c97e0cfe70009e4a, type: 3}
     manaCost: 50
-    cooldown: 10
+    cooldown: 5
     currentCooldown: 0
     isUnlocked: 1
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
+  - spellType: 0
+    spellName: Empty
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
+    currentCooldown: 0
+    isUnlocked: 0
   - spellType: 4
     spellName: Teleport
-    spellIcon: {fileID: 872140717, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellIcon: {fileID: 1650154930, guid: 116026ca4534e7748b9da61862444167, type: 3}
     spellPrefab: {fileID: 5912720115365117075, guid: 70508e1f9da1bc3429c418f3d13312a9, type: 3}
-    manaCost: 0
+    manaCost: 25
     cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
-  - spellType: 0
-    spellName: Empty
-    spellIcon: {fileID: 0}
-    spellPrefab: {fileID: 0}
-    manaCost: 0
-    cooldown: 0
-    currentCooldown: 0
-    isUnlocked: 0
-  - spellType: 0
-    spellName: Empty
-    spellIcon: {fileID: 0}
-    spellPrefab: {fileID: 0}
-    manaCost: 0
-    cooldown: 0
-    currentCooldown: 0
-    isUnlocked: 0
-  - spellType: 0
-    spellName: Empty
-    spellIcon: {fileID: 0}
-    spellPrefab: {fileID: 0}
-    manaCost: 0
-    cooldown: 0
-    currentCooldown: 0
-    isUnlocked: 0

@@ -10,7 +10,6 @@ public class PlantHealthBar : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private Image healthFillImage;
     [SerializeField] private Image whiteFillImage;
-    [SerializeField] private TextMeshProUGUI healthText;
 
     [Header("Settings")]
     [SerializeField] private float whiteBarSpeed = 2f;
@@ -40,9 +39,6 @@ public class PlantHealthBar : MonoBehaviour
 
         if (healthFillImage != null)
             healthFillImage.fillAmount = percent;
-
-        if (healthText != null)
-            healthText.text = $"{Mathf.CeilToInt(current)} / {Mathf.CeilToInt(max)}";
     }
 
     private void Update()
