@@ -323,6 +323,7 @@ public class TutorialManager : MonoBehaviour
         Debug.Log("Saltando tutorial...");
 
         StopAllCoroutines();
+        CancelInvoke();
 
         isTransitioning = false;
         eventBuffer.Clear();
