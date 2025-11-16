@@ -66,6 +66,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnEnemyDefeated += CheckObjective_EnemyDefeated;
         TutorialEvents.OnNightSurvived += CheckObjective_NightSurvived;
 
+        TutorialEvents.OnInventoryOpened += CheckObjective_InventoryOpened;
         TutorialEvents.OnHouseEntered += CheckObjective_HouseEntered;
         TutorialEvents.OnCraftingClosed += CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationClosed += CheckObjective_RestorationOpened;
@@ -96,6 +97,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnEnemyDefeated -= CheckObjective_EnemyDefeated;
         TutorialEvents.OnNightSurvived -= CheckObjective_NightSurvived;
 
+        TutorialEvents.OnInventoryOpened -= CheckObjective_InventoryOpened;
         TutorialEvents.OnHouseEntered -= CheckObjective_HouseEntered;
         TutorialEvents.OnCraftingClosed -= CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationClosed -= CheckObjective_RestorationOpened;
@@ -315,6 +317,8 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_RitualAltarProximity() => CheckObjective(TutorialObjectiveType.RitualAltarProximity);
     private void CheckObjective_FirstPlantReady() => CheckObjective(TutorialObjectiveType.FirstPlantReady);
     private void CheckObjective_TeleportCasted() => CheckObjective(TutorialObjectiveType.TeleportSpell);
+    private void CheckObjective_InventoryOpened() => CheckObjective(TutorialObjectiveType.OpenInventory);
+
 
     public void SkipTutorial()
     {
