@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FindRitualAltar
   m_EditorClassIdentifier: 
   stepID: FindRitualAltar
-  stepOrder: 11
+  stepOrder: 12
   instructionText: 
   objectiveType: 21
   requiredCount: 1

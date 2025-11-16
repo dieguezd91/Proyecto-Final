@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefeatEnemy
   m_EditorClassIdentifier: 
   stepID: DefeatEnemy
-  stepOrder: 14
+  stepOrder: 15
   instructionText: The first corrupted creature approaches! Strike down the threat
     to defend the Sacred Tree.
   objectiveType: 9

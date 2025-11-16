@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: OpenInventory
   m_EditorClassIdentifier: 
   stepID: OpenInventory
-  stepOrder: 0
-  instructionText: Presiona TAB o I para abrir tu inventario y ver tus items.
+  stepOrder: 7
+  instructionText: Your journal keeps track of all resources you've gathered. Press
+    TAB or I to check your inventory.
   objectiveType: 11
   requiredCount: 1
   waitDuration: 3

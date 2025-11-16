@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CastSpell
   m_EditorClassIdentifier: 
   stepID: CastSpell
-  stepOrder: 13
+  stepOrder: 14
   instructionText: Channel your magic! Left-click to cast spells and defend the Sacred
     Tree from corrupted creatures.
   objectiveType: 5
