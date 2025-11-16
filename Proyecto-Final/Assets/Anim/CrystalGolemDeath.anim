@@ -22,35 +22,35 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: -1044409847, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.125
+    - time: 0.083333336
       value: {fileID: -1599908638, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.25
+    - time: 0.16666667
       value: {fileID: 1750147244, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.375
+    - time: 0.25
       value: {fileID: -766494603, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.5
+    - time: 0.33333334
       value: {fileID: 404166038, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.625
+    - time: 0.5
       value: {fileID: -1817571580, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.75
+    - time: 0.5833333
       value: {fileID: 1196790928, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 0.875
+    - time: 0.6666667
       value: {fileID: 580609965, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1
+    - time: 0.75
       value: {fileID: 406474580, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.125
+    - time: 0.8333333
       value: {fileID: 1725827458, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.25
+    - time: 0.9166667
       value: {fileID: -1845172795, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.375
+    - time: 1
       value: {fileID: 812082305, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.5
+    - time: 1.0833334
       value: {fileID: -2000785860, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.625
+    - time: 1.1666666
       value: {fileID: 539898609, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.75
+    - time: 1.25
       value: {fileID: -1262688537, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
-    - time: 1.8333334
+    - time: 1.3333334
       value: {fileID: -1262688537, guid: 02e9e136476970f47a8a74f769b492de, type: 3}
     attribute: m_Sprite
     path: 
@@ -95,7 +95,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1.875
+    m_StopTime: 1.375
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
