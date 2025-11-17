@@ -1677,7 +1677,7 @@ TextureImporter:
         width: 48
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1698,7 +1698,7 @@ TextureImporter:
         width: 48
         height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1706,6 +1706,369 @@ TextureImporter:
       bones: []
       spriteID: 221b984f054c8644ba23a78806161990
       internalID: 572630869
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonBookS2
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 96
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 688cf0dd4df410b4ba96c6623e2d3bb0
+      internalID: -1310980666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonBookS
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 128
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5fe6b8c9b88a6254ca0cf767e20c9bfd
+      internalID: -689295576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonBook
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 160
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b511e3d884eb06f4da5ebd4716f989c6
+      internalID: -889794321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonMMenu
+      rect:
+        serializedVersion: 2
+        x: 312
+        y: 193
+        width: 54
+        height: 14
+      alignment: 9
+      pivot: {x: 0.022727273, y: 0.42857146}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37f2ad6dc74dae048a0cc9416a1bbc7b
+      internalID: 359447677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonMMenuS
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 193
+        width: 54
+        height: 14
+      alignment: 9
+      pivot: {x: 0.17307693, y: 0.42857146}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db7e2bf13e1a72440945c2722b632575
+      internalID: 879287816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonMMenuS2
+      rect:
+        serializedVersion: 2
+        x: 376
+        y: 177
+        width: 54
+        height: 14
+      alignment: 9
+      pivot: {x: 0.2037037, y: 0.42857146}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4aae37f9d44e7f479ab66fc06d74f09
+      internalID: -1755714616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ButtonMMenuC
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 177
+        width: 54
+        height: 14
+      alignment: 9
+      pivot: {x: 0.022727273, y: 0.3846154}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline:
+      - - {x: -18, y: 6.5}
+        - {x: -19, y: 3.5}
+        - {x: -19, y: -3.5}
+        - {x: -16, y: -7}
+        - {x: 27, y: -7}
+        - {x: 27, y: 6.5}
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85bd107049f408349bc52dd22ae6823c
+      internalID: -1962234205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 225
+        width: 56
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5e5286a93d7962148b698daa732637a8
+      internalID: 1520938365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim2
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 208
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8661afd416ca4b94ea2c150378c0b933
+      internalID: 1072378872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim3
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 192
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 854cfdf4b1bb376418ad692df5432994
+      internalID: -1638257903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim10
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 80
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b2eef27d8264124098153b4a1f5d188
+      internalID: 765550070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim9
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 96
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d92b7114491b8a4ea38bfe586a84cdd
+      internalID: -782239667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim8
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 112
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fba626dab610a54b868e15026b8ad0d
+      internalID: -1658852841
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim7
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 128
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b2afe1d410cfa5c4c8774e14d1e2f265
+      internalID: -678655089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim6
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 144
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4395920e2fc20884281d628995468a24
+      internalID: 1576267893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim5
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 160
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09c57d444b0ca6f47af1d868486811a4
+      internalID: 765867155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BookButtonAnim4
+      rect:
+        serializedVersion: 2
+        x: 795
+        y: 176
+        width: 56
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5ad934192f08e74fbf854c95ee0ac2b
+      internalID: -385233722
       vertices: []
       indices: 
       edges: []
@@ -1724,6 +2087,23 @@ TextureImporter:
       BackTimerSprite: 1146136175
       BackgroundSolid: 138599093
       BackgroundTransparent: -1199162342
+      BookButtonAnim: 1520938365
+      BookButtonAnim10: 765550070
+      BookButtonAnim2: 1072378872
+      BookButtonAnim3: -1638257903
+      BookButtonAnim4: -385233722
+      BookButtonAnim5: 765867155
+      BookButtonAnim6: 1576267893
+      BookButtonAnim7: -678655089
+      BookButtonAnim8: -1658852841
+      BookButtonAnim9: -782239667
+      ButtonBook: -889794321
+      ButtonBookS: -689295576
+      ButtonBookS2: -1310980666
+      ButtonMMenu: 359447677
+      ButtonMMenuC: -1962234205
+      ButtonMMenuS: 879287816
+      ButtonMMenuS2: -1755714616
       Close: -382949612
       CooldownEmpty: 879992938
       CooldownFull: 572630869
