@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: Welcome
+  m_Name: FifthNightWarning
   m_EditorClassIdentifier: 
-  stepID: Welcome
-  stepOrder: 0
-  instructionText: Welcome, young druid! This sacred forest is now your responsibility.
-    By day, use your magic to cultivate the land. By night, you must defend it from
-    the corrupt creatures that emerge from the shadows. Let's begin.
-  objectiveType: 15
+  stepID: FifthNightWarning
+  stepOrder: 17
+  instructionText: 'A great trial awaits you. The corruption in this forest coalesces,
+    and on the fifth night, a powerful foe will rise to challenge your light.
+
+
+    Prepare
+    your defenses and grow your strength, for the forest relies on you.'
+  objectiveType: 25
   requiredCount: 1
   waitDuration: 5

@@ -41,5 +41,6 @@ public enum TutorialObjectiveType
     RitualAltarProximity,
     FirstPlantReady,
     Welcome,
-    TeleportSpell
+    TeleportSpell,
+    FifthNightWarning
 }
