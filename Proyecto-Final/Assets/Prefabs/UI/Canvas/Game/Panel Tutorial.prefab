@@ -175,6 +175,8 @@ GameObject:
   - component: {fileID: 465331731759793098}
   - component: {fileID: 8014928949951249319}
   - component: {fileID: 7965042428646199595}
+  - component: {fileID: 6372880803306158497}
+  - component: {fileID: 5829821638755161664}
   m_Layer: 5
   m_Name: Panel Tutorial
   m_TagString: Untagged
@@ -260,10 +262,11 @@ MonoBehaviour:
   instructionText: {fileID: 7606713315468544944}
   canvasGroup: {fileID: 7965042428646199595}
   panelTransform: {fileID: 5450954177986047142}
-  skipButton: {fileID: 8161926094184128953}
   textScrollRect: {fileID: 8583990478505296957}
   continueButton: {fileID: 3071825040681412775}
   scrollIndicator: {fileID: 3430871955309384948}
+  tutorialSoundBase: {fileID: 0}
+  writtingSoundBase: {fileID: 0}
   fadeSpeed: 2
   scaleAnimDuration: 0.3
   typewriterSpeed: 0.015
@@ -282,6 +285,65 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &6372880803306158497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5897033398700126577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71212f36ad5c4cb09dca8c236254054d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  showPanel:
+    clips:
+    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
+    volume: 1
+    pitch: 1.06
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  hidePanel:
+    clips:
+    - {fileID: 8300000, guid: 5f6fb209a6b10634fa7939155960acba, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+  stepComplete:
+    clips: []
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
+--- !u!114 &5829821638755161664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5897033398700126577}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f657c5e70d485c8973cc2fe2ba651d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keypressSounds:
+  - clips:
+    - {fileID: 8300000, guid: 4229f6c289f32f843ba8e9db98d72d32, type: 3}
+    volume: 1
+    pitch: 1
+    pitchVariation: 0.1
+    loop: 0
+    randomizeClip: 1
+    cooldownTime: 0
 --- !u!1 &5926396460613452809
 GameObject:
   m_ObjectHideFlags: 0

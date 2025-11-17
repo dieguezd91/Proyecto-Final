@@ -15,6 +15,10 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private GameObject scrollIndicator;
 
+    [Header("SOUND REFERENCES")]
+    [SerializeField] private TutorialSoundBase tutorialSoundBase;
+    [SerializeField] private WrittingSoundBase writtingSoundBase;
+
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
     [SerializeField] private float scaleAnimDuration = 0.3f;
@@ -54,6 +58,9 @@ public class TutorialUI : MonoBehaviour
             scrollIndicator.SetActive(false);
         }
 
+        if (tutorialSoundBase == null) TryGetComponent(out tutorialSoundBase);
+        if (writtingSoundBase == null) TryGetComponent(out writtingSoundBase);
+
         tutorialPanel.SetActive(false);
     }
 
@@ -67,6 +74,11 @@ public class TutorialUI : MonoBehaviour
 
     public void ShowStep(TutorialStep step)
     {
+        if (tutorialSoundBase != null)
+        {
+            tutorialSoundBase.PlaySound(TutorialSoundType.ShowPanel);
+        }
+
         KillAllAnimations();
 
         isVisible = true;
@@ -92,6 +104,11 @@ public class TutorialUI : MonoBehaviour
     public void HideStep()
     {
         if (!isVisible) return;
+
+        if (tutorialSoundBase != null)
+        {
+            tutorialSoundBase.PlaySound(TutorialSoundType.HidePanel);
+        }
 
         KillAllAnimations();
         isVisible = false;
@@ -134,6 +151,17 @@ public class TutorialUI : MonoBehaviour
         for (int i = 0; i <= totalCharacters; i++)
         {
             instructionText.maxVisibleCharacters = i;
+
+            if (i > 0 && i <= text.Length)
+            {
+                char addedChar = text[i - 1];
+
+                if (writtingSoundBase != null && !char.IsWhiteSpace(addedChar))
+                {
+                    writtingSoundBase.PlayKeypressSound();
+                }
+            }
+
             yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
 
