@@ -38,12 +38,18 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
+        playerController = FindObjectOfType<PlayerController>();
+
         if (enableTutorial && tutorialSteps.Count > 0)
         {
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(false);
+                playerController.SetCanAct(false);
+            }
+
             Invoke(nameof(StartTutorial), 0.5f);
         }
-
-        playerController = FindObjectOfType<PlayerController>();
     }
 
     private void OnEnable()
