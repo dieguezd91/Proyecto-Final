@@ -14,12 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: ChangeTool
   stepOrder: 2
-  instructionText: 'A druid is versatile, mastering many skills.
+  instructionText: 'A druid is versatile, channeling power in multiple forms.
 
 
-    Use the Q
-    and E keys or the Mouse Wheel to cycle through your active abilities, shown on
-    the left of your screen.'
+    Use
+    the Q and E keys or the Mouse Wheel to cycle through your active spells, shown
+    on the left.
+
+
+    Remember that every spell consumes your mana.'
   objectiveType: 26
   requiredCount: 1
   waitDuration: 3

@@ -14,8 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: DefensivePlant
   stepOrder: 4
-  instructionText: Now plant a Defensive seed. These plants will help protect your
-    garden during the night.
+  instructionText: 'It is time to protect your garden. Plant a Defensive seed. These
+    plants will watch over your garden during the night.
+
+
+    Select the seed from
+    the bottom bar on your screen.
+
+
+    You can hover the cursor over any seed to
+    see more information about it.'
   objectiveType: 17
   requiredCount: 1
   waitDuration: 2

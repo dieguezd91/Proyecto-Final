@@ -13,6 +13,7 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private RectTransform panelTransform;
     [SerializeField] private Button skipButton;
     [SerializeField] private ScrollRect textScrollRect;
+    [SerializeField] private Button continueButton;
 
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
@@ -38,6 +39,12 @@ public class TutorialUI : MonoBehaviour
             skipButton.onClick.AddListener(OnSkipButtonPressed);
         }
 
+        if (continueButton != null)
+        {
+            continueButton.onClick.AddListener(OnContinueButtonPressed);
+            continueButton.gameObject.SetActive(false);
+        }
+
         tutorialPanel.SetActive(false);
     }
 
@@ -46,6 +53,14 @@ public class TutorialUI : MonoBehaviour
         if (TutorialManager.Instance != null)
         {
             TutorialManager.Instance.SkipTutorial();
+        }
+    }
+
+    private void OnContinueButtonPressed()
+    {
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ConfirmWaitStep();
         }
     }
 
@@ -59,6 +74,11 @@ public class TutorialUI : MonoBehaviour
         if (typewriterCoroutine != null)
             StopCoroutine(typewriterCoroutine);
         typewriterCoroutine = StartCoroutine(TypewriterEffect(step.instructionText));
+
+        if (continueButton != null)
+        {
+            continueButton.gameObject.SetActive(step.objectiveType == TutorialObjectiveType.Wait);
+        }
 
         currentSequence = DOTween.Sequence();
 
@@ -74,6 +94,11 @@ public class TutorialUI : MonoBehaviour
 
         KillAllAnimations();
         isVisible = false;
+
+        if (continueButton != null)
+        {
+            continueButton.gameObject.SetActive(false);
+        }
 
         currentSequence = DOTween.Sequence();
 
@@ -137,6 +162,11 @@ public class TutorialUI : MonoBehaviour
         if (skipButton != null)
         {
             skipButton.onClick.RemoveListener(OnSkipButtonPressed);
+        }
+
+        if (continueButton != null)
+        {
+            continueButton.onClick.RemoveListener(OnContinueButtonPressed);
         }
     }
 }

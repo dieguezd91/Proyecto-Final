@@ -188,24 +188,11 @@ public class TutorialManager : MonoBehaviour
                 tutorialUI.ShowStep(currentStep);
             }
         }
-
-        if (currentStep.objectiveType == TutorialObjectiveType.Wait && !isTransitioning)
-        {
-            float duration = currentStep.waitDuration > 0 ? currentStep.waitDuration : 3f;
-            StartCoroutine(AutoCompleteWaitStep(duration));
-        }
     }
 
-    private IEnumerator AutoCompleteWaitStep(float delay)
+    public void ConfirmWaitStep()
     {
-        yield return new WaitForSeconds(delay);
-
-        if (!tutorialActive)
-        {
-            yield break;
-        }
-
-        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
+        if (tutorialActive && !isTransitioning && currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
         {
             CompleteCurrentStep();
         }

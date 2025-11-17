@@ -14,8 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Dig
   stepOrder: 3
-  instructionText: The earth responds to your touch. Left-click to dig and prepare
-    the soil for planting.
+  instructionText: 'The earth responds to your touch.
+
+
+    To use this ability,
+    first select the shovel icon on your ability bar.
+
+
+    Then, left-click to dig
+    and prepare the soil for planting.'
   objectiveType: 2
   requiredCount: 1
   waitDuration: 3
