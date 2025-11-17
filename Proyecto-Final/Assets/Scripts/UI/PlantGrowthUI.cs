@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class PlantGrowthUI : MonoBehaviour
 {
     [SerializeField] private Image fillImage;
-    [SerializeField] private Vector3 offset = new Vector3(0, 1.5f, 0);
+    [SerializeField] private Vector3 offset;
 
     [SerializeField] private GameObject promptCanvas;
     [SerializeField] private CanvasGroup canvasGroup;
@@ -58,8 +58,10 @@ public class PlantGrowthUI : MonoBehaviour
         }
     }
 
-    private void UpdateProgressUI()
+    public void UpdateProgressUI()
     {
+        if (resourcePlant == null || fillImage == null) return;
+
         float progress = resourcePlant.GetTotalProgress();
         fillImage.fillAmount = progress;
 

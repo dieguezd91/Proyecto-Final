@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fillImage: {fileID: 8631223598570399721}
-  offset: {x: 0, y: 1.5, z: 0}
+  offset: {x: 0, y: 2, z: 0}
   promptCanvas: {fileID: 6063143227797888360}
   canvasGroup: {fileID: 3197883433471839249}
   fadeSpeed: 7.5

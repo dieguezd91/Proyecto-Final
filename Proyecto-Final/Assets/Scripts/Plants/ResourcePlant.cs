@@ -38,6 +38,8 @@ public class ResourcePlant : Plant
     [SerializeField] private MaterialType rewardType;
     [SerializeField] private int rewardAmount = 1;
 
+    private PlantGrowthUI growthUI;
+
     protected override void Start()
     {
         base.Start();
@@ -46,6 +48,7 @@ public class ResourcePlant : Plant
         originalColor = plantRenderer.color;
 
         cycleStartDay = LevelManager.Instance.GetCurrentDay();
+        growthUI = GetComponentInChildren<PlantGrowthUI>();
 
         if (harvestProgressIndicator != null)
         {
@@ -179,6 +182,11 @@ public class ResourcePlant : Plant
         cycleStartDay = LevelManager.Instance.GetCurrentDay();
 
         DeactivateHarvestReadyParticles();
+
+        if (growthUI != null)
+        {
+            growthUI.UpdateProgressUI();
+        }
     }
 
     private void DeactivateHarvestReadyParticles()
@@ -244,6 +252,11 @@ public class ResourcePlant : Plant
         int elapsed = currentDay - cycleStartDay;
 
         int required = IsFullyGrown() ? daysToProduceResources : plantData.daysToGrow;
+
+        if (required <= 0)
+        {
+            return (elapsed <= 0) ? 0f : 1f;
+        }
 
         return Mathf.Clamp01((float)elapsed / required);
     }

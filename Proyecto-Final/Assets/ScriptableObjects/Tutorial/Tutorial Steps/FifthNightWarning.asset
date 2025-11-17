@@ -20,6 +20,6 @@ MonoBehaviour:
 
     Prepare
     your defenses and grow your strength, for the forest relies on you.'
-  objectiveType: 25
+  objectiveType: 15
   requiredCount: 1
   waitDuration: 5

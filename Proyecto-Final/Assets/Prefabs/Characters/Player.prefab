@@ -5529,9 +5529,6 @@ MonoBehaviour:
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
-  dashSpeed: 30
-  dashLength: 0.15
-  dashCooldown: 1
   surfaceDetector: {fileID: 4856583932368232146}
   handAnimator: {fileID: 1463363302880399508}
   handRenderer: {fileID: 7503550939136486912}
@@ -5564,6 +5561,9 @@ MonoBehaviour:
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   seedInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
+  handAnimator: {fileID: 0}
+  interactionAnimationDuration: 0.5
+  plantingParticlesPrefab: {fileID: 491567316690014037, guid: b4718f9f977adb740a54a6ea904ae4f7, type: 3}
   digAnimationPrefab: {fileID: 1522577013364806030, guid: 330e16aa371d76f47b21ff7817d79261, type: 3}
 --- !u!114 &477447474750530567
 MonoBehaviour:

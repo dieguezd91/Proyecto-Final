@@ -12,6 +12,7 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panelTransform;
     [SerializeField] private Button skipButton;
+    [SerializeField] private ScrollRect textScrollRect;
 
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
@@ -85,16 +86,24 @@ public class TutorialUI : MonoBehaviour
 
     private IEnumerator TypewriterEffect(string text)
     {
+        yield return null;
+
         instructionText.text = "";
         instructionText.maxVisibleCharacters = 0;
         instructionText.text = text;
+
+        if (textScrollRect != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.rectTransform);
+
+            textScrollRect.verticalNormalizedPosition = 1f;
+        }
 
         int totalCharacters = text.Length;
 
         for (int i = 0; i <= totalCharacters; i++)
         {
             instructionText.maxVisibleCharacters = i;
-
             yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
 
