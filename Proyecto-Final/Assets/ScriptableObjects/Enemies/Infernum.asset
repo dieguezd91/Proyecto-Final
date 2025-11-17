@@ -23,7 +23,7 @@ MonoBehaviour:
   homePriority: 1.5
   footstepCooldown: 0.4
   manaDropChance: 0.5
-  shootingRange: 9
+  shootingRange: 6
   fireRate: 0.5
   bulletForce: 5
   aimYOffset: 0.5

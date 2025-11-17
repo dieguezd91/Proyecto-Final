@@ -23,7 +23,7 @@ MonoBehaviour:
   homePriority: 1.5
   footstepCooldown: 0.45
   manaDropChance: 0.5
-  attackDistance: 1.3
+  attackDistance: 0.7
   minDamage: 8
   maxDamage: 12
   attackCooldown: 2

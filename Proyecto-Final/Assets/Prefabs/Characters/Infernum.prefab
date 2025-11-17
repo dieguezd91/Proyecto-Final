@@ -314,7 +314,7 @@ MonoBehaviour:
   isDead: 0
   isCurrentlyAttacking: 0
   nextAttackTime: 0
-  attackCooldown: 0
+  attackCooldown: 2.5
   idleSoundMinTime: 5
   idleSoundMaxTime: 15
   rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
