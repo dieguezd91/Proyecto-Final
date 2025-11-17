@@ -149,6 +149,19 @@ public class EnemyAttackState : IState
 
     public void OnUpdate()
     {
+        // Prevent state changes while attack is in progress
+        if (enemy.isCurrentlyAttacking)
+        {
+            // Only allow transition to dead state if enemy dies
+            if (enemy.isDead)
+            {
+                enemy.StateMachine.ChangeState<EnemyDeadState>();
+                Debug.Log($"[{enemy.gameObject.name}] EnemyAttackState: Transitioning to DeadState during attack.");
+            }
+            // Otherwise, stay in attack state
+            return;
+        }
+
         if (enemy.GetDistanceToTarget() > attackRange + 0.5f)
         {
             enemy.StateMachine.ChangeState<EnemyChaseState>();
@@ -324,4 +337,3 @@ public class EnemySpawnMinionState : IState
             boss.StopCoroutine(spawnRoutine);
     }
 }
-

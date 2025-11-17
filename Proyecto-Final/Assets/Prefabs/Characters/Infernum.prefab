@@ -315,8 +315,8 @@ MonoBehaviour:
   isCurrentlyAttacking: 0
   nextAttackTime: 0
   attackCooldown: 2.5
-  idleSoundMinTime: 5
-  idleSoundMaxTime: 15
+  idleSoundMinTime: 3
+  idleSoundMaxTime: 10
   rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
   firingPoint: {fileID: 1303027347511237169}
 --- !u!114 &935879750160187858
@@ -479,7 +479,7 @@ MonoBehaviour:
     cooldownTime: 0
   hurt:
     clips:
-    - {fileID: 8300000, guid: 2c0d7703205be8f478af5b576934e42a, type: 3}
+    - {fileID: 8300000, guid: 0229992577943db4eb1cd84cee69a275, type: 3}
     volume: 0.8
     pitch: 1
     pitchVariation: 0.2

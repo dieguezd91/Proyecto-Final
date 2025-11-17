@@ -116,7 +116,7 @@ public class Boss : EnemyBase
 
         isDead = true;
         rb.velocity = Vector2.zero;
-        soundBase?.PlaySound(EnemySoundType.Die);
+        PlayEnemySound(EnemySoundType.Die);
 
         KillAllMinions();
         StateMachine.ChangeState<EnemyDeadState>();
@@ -184,7 +184,7 @@ public class Boss : EnemyBase
 
         rb.velocity = Vector2.zero;
         animator.SetTrigger("attackSpecial");
-        soundBase?.PlaySound(EnemySoundType.Special);
+        PlayEnemySound(EnemySoundType.Special);
 
         yield return new WaitForSeconds(bossData.SpecialDelay);
 

@@ -51,7 +51,7 @@ public class Infernum : EnemyBase
         Vector2 adjustedTargetPos = (Vector2)currentTarget.position + Vector2.down * aimYOffset;
         Vector2 direction = (adjustedTargetPos - (Vector2)transform.position).normalized;
 
-        soundBase?.PlaySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
+        PlayEnemySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
         bullet.SetDirection(direction);
     }
 

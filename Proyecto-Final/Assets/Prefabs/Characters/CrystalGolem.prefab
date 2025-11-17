@@ -376,8 +376,9 @@ MonoBehaviour:
     randomizeClip: 1
     cooldownTime: 0
   idle:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 0}
+    volume: 0.5
     pitch: 1
     pitchVariation: 0.1
     loop: 0

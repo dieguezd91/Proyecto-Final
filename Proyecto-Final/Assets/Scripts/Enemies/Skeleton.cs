@@ -84,6 +84,10 @@ public class Skeleton : EnemyBase
 
     public void PerformSwordHit()
     {
+        // Play attack sound at the start of the swing, even if no target is hit
+        PlayEnemySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
+        Debug.Log($"[{gameObject.name}] Skeleton: Playing swing attack sound at {Time.time:F2}s.");
+
         Collider2D[] hitTargets = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, attackableLayers);
         HashSet<GameObject> damagedTargets = new HashSet<GameObject>();
 
@@ -94,8 +98,6 @@ public class Skeleton : EnemyBase
 
             damagedTargets.Add(obj);
             DealDamageTo(obj);
-
-            soundBase?.PlaySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
         }
     }
 

@@ -59,7 +59,6 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected virtual void Start()
     {
         StateMachine = new StateMachine();
-
         StateMachine.RegisterState(new EnemyIdleState(this));
         StateMachine.RegisterState(new EnemyChaseState(this));
         StateMachine.RegisterState(new EnemyAttackState(this));
@@ -70,7 +69,14 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         PlaySpawnSound();
         ScheduleNextIdleSound();
 
-        
+        // Debug: print idle sound setup status
+        if (soundBase == null)
+            soundBase = GetComponent<EnemySoundBase>();
+        var idleClip = soundBase?.GetSound(EnemySoundType.Idle);
+        if (idleClip == null || idleClip.GetClip() == null)
+            Debug.LogWarning($"[{gameObject.name}] EnemyBase: Idle sound is NOT assigned. Assign a clip in EnemySoundBase to enable idle sounds.");
+        else
+            Debug.Log($"[{gameObject.name}] EnemyBase: Idle sound is assigned and will play.");
     }
 
     protected virtual void Update()
@@ -304,20 +310,48 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected void PlaySpawnSound()
     {
-        soundBase?.PlaySound(EnemySoundType.Spawning, SoundSourceType.Localized, transform);
+        PlayEnemySound(EnemySoundType.Spawning, SoundSourceType.Localized);
     }
 
     protected void PlayFootstepSound()
     {
         if (Time.time - lastFootstepTime < footstepCooldown) return;
 
-        soundBase?.PlaySound(EnemySoundType.Steps, SoundSourceType.Localized, transform);
+        PlayEnemySound(EnemySoundType.Steps, SoundSourceType.Localized);
         lastFootstepTime = Time.time;
+    }
+
+    // Centralized sound helper — logs warnings if EnemySoundBase or sound clip is missing
+    protected void PlayEnemySound(EnemySoundType soundType, SoundSourceType sourceType = SoundSourceType.Global, Transform parent = null)
+    {
+        if (soundBase == null)
+        {
+            soundBase = GetComponent<EnemySoundBase>();
+            if (soundBase == null)
+            {
+                Debug.LogWarning($"[{gameObject.name}] EnemyBase: Missing EnemySoundBase component. Cannot play '{soundType}'.");
+                return;
+            }
+        }
+
+        // EnemySoundBase will itself log detailed warnings if the clip is null or SoundManager is missing
+        soundBase.PlaySound(soundType, sourceType, parent == null ? transform : parent);
     }
 
     protected virtual void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        soundBase?.PlaySound(EnemySoundType.Hurt, SoundSourceType.Localized, transform);
+        Debug.Log($"[EnemyBase] {gameObject.name} OnDamaged invoked. Damage={damage} Type={damageType}");
+
+        PlayEnemySound(EnemySoundType.Hurt, SoundSourceType.Localized, transform);
+    }
+
+    // Called when LifeController invokes onDeath
+    private void OnLifeDeath()
+    {
+        Debug.Log($"[EnemyBase] {gameObject.name} OnLifeDeath invoked.");
+
+        // Ensure MarkAsDead is called so EnemyBase handles death logic and audio
+        MarkAsDead();
     }
 
     public virtual void MarkAsDead()
@@ -328,7 +362,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         rb.velocity = Vector2.zero;
         rb.isKinematic = true;
 
-        soundBase?.PlaySound(EnemySoundType.Die, SoundSourceType.Localized, transform);
+        PlayEnemySound(EnemySoundType.Die, SoundSourceType.Localized, transform);
 
         animator.SetTrigger("Death");
         StateMachine.ChangeState<EnemyDeadState>();
@@ -364,7 +398,24 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     private void PlayIdleSound()
     {
-        soundBase?.PlaySound(EnemySoundType.Idle, SoundSourceType.Localized, transform);
+        // Defensive: log if idle sound is missing
+        if (soundBase == null)
+        {
+            soundBase = GetComponent<EnemySoundBase>();
+            if (soundBase == null)
+            {
+                Debug.LogWarning($"[{gameObject.name}] EnemyBase: Missing EnemySoundBase component. Cannot play idle sound.");
+                return;
+            }
+        }
+        var idleClip = soundBase.GetSound(EnemySoundType.Idle);
+        if (idleClip == null || idleClip.GetClip() == null)
+        {
+            Debug.LogWarning($"[{gameObject.name}] EnemyBase: Idle sound clip is missing in EnemySoundBase. Assign a clip in the inspector.");
+            return;
+        }
+        Debug.Log($"[{gameObject.name}] EnemyBase: Playing idle sound '{idleClip.GetClip().name}' at {Time.time:F2}s.");
+        PlayEnemySound(EnemySoundType.Idle, SoundSourceType.Localized);
     }
 
     protected virtual void OnDrawGizmosSelected()
