@@ -16,6 +16,11 @@ public class HouseDoor : MonoBehaviour
     [Header("Door Lock Visual")]
     [SerializeField] private SimpleAnimator doorLockAnimator;
 
+    [Header("Tutorial Gating")]
+    [SerializeField] private GameObject tutorialGatedFeedback;
+    [SerializeField] private float feedbackDuration = 2.5f;
+    private Coroutine feedbackCoroutine;
+
     private WorldTransitionAnimator worldTransition;
     private float lastUseTime;
     private Transform player;
@@ -30,6 +35,7 @@ public class HouseDoor : MonoBehaviour
     private void Awake()
     {
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+        if (tutorialGatedFeedback != null) tutorialGatedFeedback.SetActive(false);
     }
 
     private void Start()
@@ -159,6 +165,20 @@ public class HouseDoor : MonoBehaviour
         player = other.transform;
         bool goingInside = !worldTransition.IsInInterior;
 
+        if (!goingInside)
+        {
+            if (TutorialManager.Instance != null && TutorialManager.Instance.IsPlayerGated())
+            {
+                if (tutorialGatedFeedback != null)
+                {
+                    if (feedbackCoroutine != null) StopCoroutine(feedbackCoroutine);
+                    feedbackCoroutine = StartCoroutine(ShowGatedFeedback());
+                }
+
+                return;
+            }
+        }
+
         if (goingInside && !canEnterAtNight)
         {
             return;
@@ -171,6 +191,17 @@ public class HouseDoor : MonoBehaviour
 
         HandleTransition(goingInside);
         lastUseTime = Time.time;
+    }
+
+    private IEnumerator ShowGatedFeedback()
+    {
+        if (tutorialGatedFeedback != null)
+        {
+            tutorialGatedFeedback.SetActive(true);
+            yield return new WaitForSeconds(feedbackDuration);
+            tutorialGatedFeedback.SetActive(false);
+            feedbackCoroutine = null;
+        }
     }
 
     private void HandleTransition(bool goingInside)
@@ -188,15 +219,12 @@ public class HouseDoor : MonoBehaviour
             if (UIManager.Instance != null)
                 UIManager.Instance.ShowInteriorHUD();
 
-            if (!hasEnteredOnce)
+            if (tutorialCoroutine != null)
             {
-                if (tutorialCoroutine != null)
-                {
-                    StopCoroutine(tutorialCoroutine);
-                }
-
-                tutorialCoroutine = StartCoroutine(InvokeHouseEnteredDelayed());
+                StopCoroutine(tutorialCoroutine);
             }
+
+            tutorialCoroutine = StartCoroutine(InvokeHouseEnteredDelayed());
         }
         else
         {

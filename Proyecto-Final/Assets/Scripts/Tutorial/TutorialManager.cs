@@ -203,23 +203,15 @@ public class TutorialManager : MonoBehaviour
         if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
         {
             if (type == TutorialObjectiveType.Move) return;
-
-            if (!eventBuffer.Contains(type))
-            {
-                eventBuffer.Enqueue(type);
-            }
+            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
             return;
         }
 
         if (isTransitioning)
         {
-            if (!eventBuffer.Contains(type))
-            {
-                eventBuffer.Enqueue(type);
-            }
+            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
             return;
         }
-
         if (!tutorialActive || currentStep == null)
         {
             return;
@@ -227,15 +219,11 @@ public class TutorialManager : MonoBehaviour
 
         if (currentStep.objectiveType != type)
         {
-            if (!eventBuffer.Contains(type))
-            {
-                eventBuffer.Enqueue(type);
-            }
+            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
             return;
         }
 
         currentProgress++;
-
         if (currentProgress >= currentStep.requiredCount)
         {
             CompleteCurrentStep();
@@ -347,5 +335,15 @@ public class TutorialManager : MonoBehaviour
             return 9999;
         }
         return currentStep.stepOrder;
+    }
+
+    public bool IsPlayerGated()
+    {
+        if (!tutorialActive || currentStep == null)
+        {
+            return false;
+        }
+
+        return currentStep.isGatedStep;
     }
 }

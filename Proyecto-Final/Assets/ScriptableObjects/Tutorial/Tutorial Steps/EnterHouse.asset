@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: EnterHouse
   m_EditorClassIdentifier: 
   stepID: EnterHouse
-  stepOrder: 7
+  stepOrder: 8
   instructionText: Your work is done for now. Approach and enter the Sacred Tree
     to prepare for nightfall.
   objectiveType: 6
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 1

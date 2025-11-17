@@ -52,7 +52,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private Coroutine activeDoorLightCoroutine;
 
-    [SerializeField] private int tutorialStepOrderToUnlock = 11;
+    [SerializeField] private int tutorialStepOrderToUnlock = 9;
 
     private void Start()
     {
@@ -277,8 +277,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (!CanInteract()) return;
 
-        TutorialEvents.InvokeRitualAltarUsed();
-
         mainRitualCoroutine = StartCoroutine(PerformRitual());
     }
 
@@ -337,6 +335,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (canTransitionToNight)
         {
+            TutorialEvents.InvokeRitualAltarUsed();
+
             TutorialEvents.InvokeNightStarted();
             levelManager.TransitionToNight();
         }

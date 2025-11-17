@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TutorialStep", menuName = "Tutorial/Step")]
@@ -11,6 +12,8 @@ public class TutorialStep : ScriptableObject
 
     public TutorialObjectiveType objectiveType;
     public int requiredCount = 1;
+
+    public bool isGatedStep = false;
 
     public float waitDuration = 3f;
 }

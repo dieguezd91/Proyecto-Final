@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Harvest
   m_EditorClassIdentifier: 
   stepID: Harvest
-  stepOrder: 20
+  stepOrder: 21
   instructionText: With the new day comes growth. Harvest your mature plants by left-clicking
     on them to gather resources.
   objectiveType: 4
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 3

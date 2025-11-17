@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: TutorialComplete
   m_EditorClassIdentifier: 
   stepID: TutorialComplete
-  stepOrder: 21
+  stepOrder: 22
   instructionText: You have mastered the basics, young druid! Your true journey begins
     now. Good luck!
   objectiveType: 15
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 3

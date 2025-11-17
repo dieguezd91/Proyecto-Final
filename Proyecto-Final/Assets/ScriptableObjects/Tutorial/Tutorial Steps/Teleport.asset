@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Teleport
   m_EditorClassIdentifier: 
   stepID: Teleport
-  stepOrder: 6
+  stepOrder: 7
   instructionText: You can also teleport! Press [Space] to move quickly in your direction
     or toward the mouse. It's the only spell you can use during the day.
   objectiveType: 24
   requiredCount: 1
+  subObjectives: 
+  isGatedStep: 0
   waitDuration: 3

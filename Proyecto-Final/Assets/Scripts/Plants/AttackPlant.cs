@@ -125,8 +125,6 @@ public class AttackPlant : Plant
     {
         base.OnMature();
 
-        Debug.Log("AttackPlant: Plant is now fully grown and ready to attack!");
-
         cooldown *= 0.7f;
         detectionRange *= 1.2f;
     }

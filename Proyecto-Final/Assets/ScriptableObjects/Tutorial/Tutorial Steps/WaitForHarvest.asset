@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: WaitForHarvest
   m_EditorClassIdentifier: 
   stepID: WaitForHarvest
-  stepOrder: 19
+  stepOrder: 20
   instructionText: 
   objectiveType: 22
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 3
