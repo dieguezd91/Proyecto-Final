@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3401855302532294677}
   - component: {fileID: 2630281534700287372}
   - component: {fileID: 4330913303722794977}
-  - component: {fileID: -5662456549538964097}
+  - component: {fileID: 3603939268316707299}
   m_Layer: 0
   m_Name: Seed
   m_TagString: Untagged
@@ -111,8 +111,8 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &4330913303722794977
 BoxCollider2D:
@@ -159,7 +159,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &-5662456549538964097
+--- !u!114 &3603939268316707299
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,11 +168,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8215708087478250761}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e086699a27e9e4492320d4be1950d2, type: 3}
+  m_Script: {fileID: 11500000, guid: c0271f9491eaeee40942933582ebe493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  lifeTime: 3
-  speed: 15
+  damage: 15
+  lifeTime: 10
   floatingDamagePrefab: {fileID: 8011744024934345175, guid: b18d5e020de9918429f62b516be2ef30, type: 3}
-  impactParticlesPrefab: {fileID: 0}
+  impactParticlesPrefab: {fileID: 491567316690014037, guid: b4718f9f977adb740a54a6ea904ae4f7, type: 3}
+  speed: 10

@@ -16,7 +16,8 @@ MonoBehaviour:
   plantPrefab: {fileID: 6736001113723686055, guid: 90a63aa992622ea48b1f19f09449817a, type: 3}
   plantIcon: {fileID: 1726723143, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   fullyGrownSprite: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 3
+  daysToGrow: 1
   description: <u>Defensive plant</u>. Shoots at enemies within range.
   seedType: 14
   slotIndex: 0
+  hasDeathAnimation: 1
