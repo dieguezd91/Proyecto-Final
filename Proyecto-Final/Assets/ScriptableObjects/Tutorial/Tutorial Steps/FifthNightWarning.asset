@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FifthNightWarning
   m_EditorClassIdentifier: 
   stepID: FifthNightWarning
-  stepOrder: 17
+  stepOrder: 18
   instructionText: 'A great trial awaits you. The corruption in this forest coalesces,
     and on the fifth night, a powerful foe will rise to challenge your light.
 

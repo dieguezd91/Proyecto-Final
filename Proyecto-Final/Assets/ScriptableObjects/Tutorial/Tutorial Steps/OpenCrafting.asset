@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpenCrafting
   m_EditorClassIdentifier: 
   stepID: OpenCrafting
-  stepOrder: 9
+  stepOrder: 10
   instructionText: This is the Crafting Cauldron. Interact with it to craft new seeds.
   objectiveType: 12
   requiredCount: 1

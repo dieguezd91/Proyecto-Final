@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefensivePlant
   m_EditorClassIdentifier: 
   stepID: DefensivePlant
-  stepOrder: 3
+  stepOrder: 4
   instructionText: Now plant a Defensive seed. These plants will help protect your
     garden during the night.
   objectiveType: 17

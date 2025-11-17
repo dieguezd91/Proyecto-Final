@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: ProductionPlant
+  m_Name: ChangeTool
   m_EditorClassIdentifier: 
-  stepID: ProductionPlant
-  stepOrder: 5
-  instructionText: Plant your first Production seed. These plants yield valuable
-    resources you can harvest later. Be careful, these plants cannot defend themselves.
-  objectiveType: 16
+  stepID: ChangeTool
+  stepOrder: 2
+  instructionText: 'A druid is versatile, mastering many skills.
+
+
+    Use the Q
+    and E keys or the Mouse Wheel to cycle through your active abilities, shown on
+    the left of your screen.'
+  objectiveType: 26
   requiredCount: 1
-  waitDuration: 2
+  waitDuration: 3

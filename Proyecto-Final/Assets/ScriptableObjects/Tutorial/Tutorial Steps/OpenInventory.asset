@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: OpenInventory
   m_EditorClassIdentifier: 
   stepID: OpenInventory
-  stepOrder: 7
+  stepOrder: 8
   instructionText: Your journal keeps track of all resources you've gathered. Press
     TAB or I to check your inventory.
   objectiveType: 11

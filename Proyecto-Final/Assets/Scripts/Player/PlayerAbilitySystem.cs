@@ -242,6 +242,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         currentAbility = ability;
         OnAbilityChanged?.Invoke(currentAbility);
+        TutorialEvents.InvokeAbilityChanged();
 
         switch (currentAbility)
         {

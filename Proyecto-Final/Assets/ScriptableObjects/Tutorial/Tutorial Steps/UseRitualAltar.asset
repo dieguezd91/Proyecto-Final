@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: UseRitualAltar
   m_EditorClassIdentifier: 
   stepID: UseRitualAltar
-  stepOrder: 13
+  stepOrder: 14
   instructionText: When you're ready to face the darkness, approach the Ritual Altar
     and interact with it to begin the night cycle.
   objectiveType: 7

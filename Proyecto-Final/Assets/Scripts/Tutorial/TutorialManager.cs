@@ -83,7 +83,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarProximity += CheckObjective_RitualAltarProximity;
 
         TutorialEvents.OnFirstPlantReadyToHarvest += CheckObjective_FirstPlantReady;
-
+        TutorialEvents.OnAbilityChanged += CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted += CheckObjective_TeleportCasted;
     }
 
@@ -114,7 +114,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnRitualAltarProximity -= CheckObjective_RitualAltarProximity;
 
         TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
-
+        TutorialEvents.OnAbilityChanged -= CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
     }
 
@@ -318,6 +318,7 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_FirstPlantReady() => CheckObjective(TutorialObjectiveType.FirstPlantReady);
     private void CheckObjective_TeleportCasted() => CheckObjective(TutorialObjectiveType.TeleportSpell);
     private void CheckObjective_InventoryOpened() => CheckObjective(TutorialObjectiveType.OpenInventory);
+    private void CheckObjective_AbilityChanged() => CheckObjective(TutorialObjectiveType.AbilityChanged);
 
 
     public void SkipTutorial()

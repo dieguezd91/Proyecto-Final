@@ -42,5 +42,6 @@ public enum TutorialObjectiveType
     FirstPlantReady,
     Welcome,
     TeleportSpell,
-    FifthNightWarning
+    FifthNightWarning,
+    AbilityChanged
 }

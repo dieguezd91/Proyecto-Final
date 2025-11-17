@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dig
   m_EditorClassIdentifier: 
   stepID: Dig
-  stepOrder: 2
+  stepOrder: 3
   instructionText: The earth responds to your touch. Left-click to dig and prepare
     the soil for planting.
   objectiveType: 2
