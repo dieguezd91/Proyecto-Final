@@ -44,6 +44,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] private Animator handAnimator;
     [SerializeField] private float interactionAnimationDuration = 0.5f;
     private bool isPlayingInteractionAnimation = false;
+    [SerializeField] private GameObject plantingParticlesPrefab;
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
@@ -315,6 +316,12 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             seedInventory.ConsumeSeedInSelectedSlot();
             SoundManager.Instance.Play("Plant");
+
+            if (plantingParticlesPrefab != null)
+            {
+                Vector3 particlePosition = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
+                Instantiate(plantingParticlesPrefab, particlePosition, Quaternion.identity);
+            }
         }
         else
         {
