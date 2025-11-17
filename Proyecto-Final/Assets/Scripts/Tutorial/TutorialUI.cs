@@ -11,7 +11,6 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI instructionText;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private RectTransform panelTransform;
-    [SerializeField] private Button skipButton;
     [SerializeField] private ScrollRect textScrollRect;
     [SerializeField] private Button continueButton;
     [SerializeField] private GameObject scrollIndicator;
@@ -38,11 +37,6 @@ public class TutorialUI : MonoBehaviour
         if (panelTransform != null)
             panelTransform.localScale = Vector3.zero;
 
-        if (skipButton != null)
-        {
-            skipButton.onClick.AddListener(OnSkipButtonPressed);
-        }
-
         if (continueButton != null)
         {
             continueButton.onClick.AddListener(OnContinueButtonPressed);
@@ -61,14 +55,6 @@ public class TutorialUI : MonoBehaviour
         }
 
         tutorialPanel.SetActive(false);
-    }
-
-    private void OnSkipButtonPressed()
-    {
-        if (TutorialManager.Instance != null)
-        {
-            TutorialManager.Instance.SkipTutorial();
-        }
     }
 
     private void OnContinueButtonPressed()
@@ -233,11 +219,6 @@ public class TutorialUI : MonoBehaviour
     private void OnDestroy()
     {
         KillAllAnimations();
-
-        if (skipButton != null)
-        {
-            skipButton.onClick.RemoveListener(OnSkipButtonPressed);
-        }
 
         if (continueButton != null)
         {

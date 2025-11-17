@@ -133,6 +133,7 @@ public class PauseMenuController : UIControllerBase
             _pauseMenuPanel.OnOptionsClicked.AddListener(ShowOptions);
             _pauseMenuPanel.OnMainMenuClicked.AddListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.AddListener(() => GameManager.Instance?.QuitGame());
+            _pauseMenuPanel.OnSkipButtonClicked.AddListener(HandleSkipTutorialClicked);
         }
 
         // Subscribe to OptionsMenuPanel events
@@ -151,6 +152,7 @@ public class PauseMenuController : UIControllerBase
             _pauseMenuPanel.OnOptionsClicked.RemoveListener(ShowOptions);
             _pauseMenuPanel.OnMainMenuClicked.RemoveListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.RemoveListener(() => GameManager.Instance?.QuitGame());
+            _pauseMenuPanel.OnSkipButtonClicked.RemoveListener(HandleSkipTutorialClicked);
         }
 
         // Unsubscribe from OptionsMenuPanel events
@@ -173,7 +175,18 @@ public class PauseMenuController : UIControllerBase
     public void ShowPauseMenu()
     {
         if (_pauseMenuPanel != null)
+        {
+            if (TutorialManager.Instance != null)
+            {
+                _pauseMenuPanel.SetSkipButtonActive(TutorialManager.Instance.IsTutorialActive());
+            }
+            else
+            {
+                _pauseMenuPanel.SetSkipButtonActive(false);
+            }
+
             _pauseMenuPanel.Show();
+        }
         if (_optionsMenuPanel != null)
             _optionsMenuPanel.Hide();
     }
@@ -217,5 +230,15 @@ public class PauseMenuController : UIControllerBase
 
         SoundManager.Instance.PlayOneShot("ButtonClick");
         SceneLoaderManager.Instance.LoadSceneByName("RefactorMenu");
+    }
+
+    private void HandleSkipTutorialClicked()
+    {
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.SkipTutorial();
+        }
+
+        Continue();
     }
 }

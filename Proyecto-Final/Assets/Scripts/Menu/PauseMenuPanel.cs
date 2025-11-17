@@ -9,6 +9,7 @@ public class PauseMenuPanel : UIControllerBase
     [SerializeField] private ImprovedUIButton _instructionsButton;
     [SerializeField] private ImprovedUIButton _mainMenuButton;
     [SerializeField] private ImprovedUIButton _exitButton;
+    [SerializeField] private ImprovedUIButton _skipTutorialButton;
 
     [Header("Panel Events")]
     [HideInInspector] public UnityEvent OnContinueClicked = new();
@@ -16,6 +17,7 @@ public class PauseMenuPanel : UIControllerBase
     [HideInInspector] public UnityEvent OnInstructionsClicked = new();
     [HideInInspector] public UnityEvent OnMainMenuClicked = new();
     [HideInInspector] public UnityEvent OnExitClicked = new();
+    [HideInInspector] public UnityEvent OnSkipButtonClicked = new();
 
     private void Start()
     {
@@ -59,6 +61,20 @@ public class PauseMenuPanel : UIControllerBase
         {
             _exitButton.OnClick.AddListener(() => OnExitClicked.Invoke());
             _exitButton.OnHover.AddListener(() => { });
+        }
+
+        if (_skipTutorialButton != null)
+        {
+            _skipTutorialButton.OnClick.AddListener(() => OnSkipButtonClicked.Invoke());
+            _skipTutorialButton.OnHover.AddListener(() => { });
+        }
+    }
+
+    public void SetSkipButtonActive(bool isActive)
+    {
+        if (_skipTutorialButton != null)
+        {
+            _skipTutorialButton.gameObject.SetActive(isActive);
         }
     }
 }
