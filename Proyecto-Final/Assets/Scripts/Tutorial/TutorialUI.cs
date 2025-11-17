@@ -14,6 +14,7 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private Button skipButton;
     [SerializeField] private ScrollRect textScrollRect;
     [SerializeField] private Button continueButton;
+    [SerializeField] private GameObject scrollIndicator;
 
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
@@ -21,10 +22,13 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private float typewriterSpeed = 0.015f;
     [SerializeField] private Ease showEase = Ease.OutBack;
     [SerializeField] private Ease hideEase = Ease.InBack;
+    [SerializeField] private float blinkFadeTime = 0.6f;
 
     private bool isVisible = false;
     private Coroutine typewriterCoroutine;
     private Sequence currentSequence;
+    private Sequence blinkSequence;
+    private CanvasGroup indicatorCanvasGroup;
 
     private void Awake()
     {
@@ -43,6 +47,17 @@ public class TutorialUI : MonoBehaviour
         {
             continueButton.onClick.AddListener(OnContinueButtonPressed);
             continueButton.gameObject.SetActive(false);
+        }
+
+        if (textScrollRect != null)
+        {
+            textScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
+        }
+
+        if (scrollIndicator != null)
+        {
+            indicatorCanvasGroup = scrollIndicator.GetComponent<CanvasGroup>();
+            scrollIndicator.SetActive(false);
         }
 
         tutorialPanel.SetActive(false);
@@ -100,6 +115,9 @@ public class TutorialUI : MonoBehaviour
             continueButton.gameObject.SetActive(false);
         }
 
+        if (scrollIndicator != null) scrollIndicator.SetActive(false);
+        StopBlinkAnimation();
+
         currentSequence = DOTween.Sequence();
 
         currentSequence.Append(panelTransform.DOScale(Vector3.zero, scaleAnimDuration).SetEase(hideEase));
@@ -122,6 +140,7 @@ public class TutorialUI : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.rectTransform);
 
             textScrollRect.verticalNormalizedPosition = 1f;
+            UpdateScrollIndicator();
         }
 
         int totalCharacters = text.Length;
@@ -133,6 +152,62 @@ public class TutorialUI : MonoBehaviour
         }
 
         typewriterCoroutine = null;
+    }
+
+    private void OnScrollValueChanged(Vector2 position)
+    {
+        UpdateScrollIndicator();
+    }
+
+    private void UpdateScrollIndicator()
+    {
+        if (scrollIndicator == null || textScrollRect == null || indicatorCanvasGroup == null) return;
+
+        bool atBottom = textScrollRect.verticalNormalizedPosition <= 0.01f;
+        bool contentOverflows = textScrollRect.verticalScrollbar.size < 0.99f;
+
+        bool showIndicator = contentOverflows && !atBottom;
+
+        if (showIndicator)
+        {
+            scrollIndicator.SetActive(true);
+            if (blinkSequence == null || !blinkSequence.IsActive())
+            {
+                StartBlinkAnimation();
+            }
+        }
+        else
+        {
+            scrollIndicator.SetActive(false);
+            StopBlinkAnimation();
+        }
+    }
+
+    private void StartBlinkAnimation()
+    {
+        if (indicatorCanvasGroup == null) return;
+
+        indicatorCanvasGroup.alpha = 1f;
+
+        blinkSequence = DOTween.Sequence();
+        blinkSequence.Append(indicatorCanvasGroup.DOFade(0.2f, blinkFadeTime).SetEase(Ease.InOutQuad))
+                     .Append(indicatorCanvasGroup.DOFade(1f, blinkFadeTime).SetEase(Ease.InOutQuad))
+                     .SetLoops(-1)
+                     .SetUpdate(true);
+    }
+
+    private void StopBlinkAnimation()
+    {
+        if (blinkSequence != null && blinkSequence.IsActive())
+        {
+            blinkSequence.Kill();
+        }
+        blinkSequence = null;
+
+        if (indicatorCanvasGroup != null)
+        {
+            indicatorCanvasGroup.alpha = 1f;
+        }
     }
 
     private void KillAllAnimations()
@@ -167,6 +242,11 @@ public class TutorialUI : MonoBehaviour
         if (continueButton != null)
         {
             continueButton.onClick.RemoveListener(OnContinueButtonPressed);
+        }
+
+        if (textScrollRect != null)
+        {
+            textScrollRect.onValueChanged.RemoveListener(OnScrollValueChanged);
         }
     }
 }
