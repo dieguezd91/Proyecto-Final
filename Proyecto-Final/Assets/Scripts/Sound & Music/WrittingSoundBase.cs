@@ -37,6 +37,5 @@ public class WrittingSoundBase : MonoBehaviour
         SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
         // Update lastPlayedIndex to the index in the original list
         lastPlayedIndex = keypressSounds.IndexOf(soundData);
-        Debug.Log($"[{gameObject.name}] WrittingSoundBase: Played keypress sound '{soundData.GetClip().name}' (index {lastPlayedIndex}).");
     }
 }

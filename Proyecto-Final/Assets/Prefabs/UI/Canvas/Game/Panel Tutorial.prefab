@@ -273,6 +273,7 @@ MonoBehaviour:
   showEase: 27
   hideEase: 26
   blinkFadeTime: 0.6
+  keypressesPerSound: 1
 --- !u!225 &7965042428646199595
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -550,7 +551,7 @@ MonoBehaviour:
     bottomLeft: {r: 1, g: 1, b: 1, a: 1}
     bottomRight: {r: 1, g: 1, b: 1, a: 1}
   m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
+  m_spriteAsset: {fileID: 11400000, guid: d81fb97bba4064349a25044ce41ff49b, type: 2}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
   m_TextStyleHashCode: -1183493901

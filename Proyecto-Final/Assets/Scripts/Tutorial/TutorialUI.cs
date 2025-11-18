@@ -29,7 +29,6 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private float blinkFadeTime = 0.6f;
 
     [Header("TYPEWRITER SETTINGS")]
-    [Tooltip("How many non-whitespace keypresses are needed before playing the keypress audio. Minimum 1.")]
     [SerializeField][Range(1, 8)] private int keypressesPerSound = 1;
 
     private bool isVisible = false;
@@ -175,12 +174,7 @@ public class TutorialUI : MonoBehaviour
                         if (((keypressCounter - 1) % k) == 0)
                         {
                             writtingSoundBase.PlayKeypressSound();
-                            Debug.Log($"[TutorialUI] Playing keypress sound (char '{addedChar}', nonWS count {keypressCounter})");
                         }
-                    }
-                    else
-                    {
-                        Debug.LogWarning("[TutorialUI] WrittingSoundBase is null - can't play keypress sound.");
                     }
                 }
             }
