@@ -2073,6 +2073,153 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: SunIcon
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 144
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1d9bdf144e3c8d45a642229cd92aa9f
+      internalID: 400245653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MagicTitle
+      rect:
+        serializedVersion: 2
+        x: 562
+        y: 287
+        width: 141
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 734f1d556a2d384409a84dbc8daf0cf8
+      internalID: -268759011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IKey
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 66
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ffcfec339aa618548b4a3f1ea86c447f
+      internalID: 124537896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: EKey
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 87
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd768e86cab5b4846b2b553778a15d27
+      internalID: 1040677162
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: QKey
+      rect:
+        serializedVersion: 2
+        x: 527
+        y: 108
+        width: 18
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c18cf5cc651b6642912e69ebec56b5d
+      internalID: 1571990461
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ScrollMouse
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 112
+        width: 20
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5d1daed918b114489307ac69cad0e25
+      internalID: -338620794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TABKey
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 77
+        width: 32
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89ed7442dbe857844b9a7abeef1f3e71
+      internalID: -651338353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -2117,6 +2264,7 @@ TextureImporter:
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
       DayPlayerBars: -1991438594
+      EKey: 1040677162
       EmptyHouse: -1902738031
       EmptyKey: -91101795
       EmptyMana: 1316128634
@@ -2136,6 +2284,7 @@ TextureImporter:
       HouseHealthEmpty: 1895773835
       HouseHealthFull: 1028575516
       HouseTrim: -1821449813
+      IKey: 124537896
       IngredientList: -132592085
       IngredientRequirement: -1902967201
       InventoryDeco: -1338539560
@@ -2144,6 +2293,7 @@ TextureImporter:
       ListUI: 336679578
       LowHealth: -2097532737
       LowHealth2: -500271646
+      MagicTitle: -268759011
       ManaEmpty: 1545796611
       ManaFull: -1571704729
       ManaTrim: 981019556
@@ -2153,6 +2303,7 @@ TextureImporter:
       MoonStage3: -1032481509
       MoonStage4: -1529809225
       MouseClick: -140001844
+      QKey: 1571990461
       RestorationButtonHeart: -678659094
       RestorationButtonUI: 924556296
       RestorationButtonUIHover: -236189874
@@ -2174,6 +2325,7 @@ TextureImporter:
       RestorationScreen: -1775831014
       RitualUI: -972838167
       ScrollBar: -1066148658
+      ScrollMouse: -338620794
       SeedCrafting: 1026741367
       SeedCraftingHighlight: -2108002995
       SeedCraftingSelected: -1313676576
@@ -2182,6 +2334,8 @@ TextureImporter:
       ShadowSmall2: 1868388143
       ShadowXS: 1967343564
       SpaceKey: 204002358
+      SunIcon: 400245653
+      TABKey: -651338353
       TimerFill: 1418655247
       TimerSprite: 1953002121
       TutorialBox: 2111154574

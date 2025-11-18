@@ -420,6 +420,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9146128385442736643, guid: d32a5f61f61b93f4b84e739fbda2410b, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 32759
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

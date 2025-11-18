@@ -1920,6 +1920,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: AbilityTPDash
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 257
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e48618309688aaa4c8e6a318180b9c57
+      internalID: -776744814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1936,6 +1957,7 @@ TextureImporter:
       AbilityAreaSpell: -64543203
       AbilityBaseSpell: 444491412
       AbilityMeleeSpell: -876388959
+      AbilityTPDash: -776744814
       BasicMagicAttack: 1957688738
       BlastSpell: -742805743
       BlastSpell1: -742805743
