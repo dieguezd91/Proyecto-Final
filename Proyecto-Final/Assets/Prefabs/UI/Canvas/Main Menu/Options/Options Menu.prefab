@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Music Volume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
+  m_sharedMaterial: {fileID: 7763458193861376953, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -92,10 +92,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 72
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -201,8 +201,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Effects  Volume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
+  m_sharedMaterial: {fileID: 7763458193861376953, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -226,10 +226,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 72
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -335,8 +335,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: General Volume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
+  m_sharedMaterial: {fileID: 7763458193861376953, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -360,10 +360,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 72
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -467,10 +467,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Options
+  m_text: OPTIONS
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
+  m_sharedMaterial: {fileID: 7763458193861376953, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -555,7 +555,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4807649685377728529
 RectTransform:
   m_ObjectHideFlags: 0
@@ -748,26 +748,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3101239247138891692, guid: 0e1aa68f848ddce4ca78b51642925fc7, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3101239247138891692, guid: 0e1aa68f848ddce4ca78b51642925fc7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7435255259507962099, guid: 0e1aa68f848ddce4ca78b51642925fc7, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7435255259507962099, guid: 0e1aa68f848ddce4ca78b51642925fc7, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7435255259507962099, guid: 0e1aa68f848ddce4ca78b51642925fc7, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -827,11 +807,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3685484754103650685, guid: dbb0781b1678e4d47ad77a5888f1eccf, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 104.6021
+      value: 275
       objectReference: {fileID: 0}
     - target: {fileID: 3685484754103650685, guid: dbb0781b1678e4d47ad77a5888f1eccf, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 87.5
       objectReference: {fileID: 0}
     - target: {fileID: 3685484754103650685, guid: dbb0781b1678e4d47ad77a5888f1eccf, type: 3}
       propertyPath: m_LocalPosition.x
@@ -936,11 +916,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1252437218705736604, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 160
+      value: 275
       objectReference: {fileID: 0}
     - target: {fileID: 1252437218705736604, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 30
+      value: 87.5
       objectReference: {fileID: 0}
     - target: {fileID: 1252437218705736604, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -990,16 +970,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2558038829190689955, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
-      propertyPath: Options
-      value: 
-      objectReference: {fileID: 8255177620891932821}
     - target: {fileID: 4401439575277596298, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
       propertyPath: m_Name
       value: Button Menu Options Back
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2558038829190689955, guid: d46abd486b6f1264d819f523e5326e4c, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1028,29 +1003,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4807649685377728529}
     m_Modifications:
-    - target: {fileID: 3878123609760295434, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3878123609760295434, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3878123609760295434, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5741069237351779622, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
       propertyPath: m_Name
       value: Slider Music Volume
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788591097299631445, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8788591097299631445, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8900558918318052950, guid: 9e567cc7a53c8a146a3c42716bbdfba0, type: 3}
       propertyPath: m_Pivot.x
@@ -1241,29 +1196,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2015956784439658608, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2015956784439658608, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3287952116238415875, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
       propertyPath: m_Name
       value: Slider Master Volume
-      objectReference: {fileID: 0}
-    - target: {fileID: 6331106607504924463, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6331106607504924463, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6331106607504924463, guid: 5f0f9de209b74b149b3d2436aa2f0f66, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
