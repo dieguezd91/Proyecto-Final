@@ -259,7 +259,7 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 1768544347340343859, guid: 7419d92434dcb4f40aa3be3f64cc669d, type: 3}
+  objetDrop: {fileID: 1768544347340343859, guid: 6e5cf5dfd5e5d05449e7ddfe43c96b0d, type: 3}
   manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 1
   dotSoundCooldown: 0.2
@@ -590,7 +590,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &328830289171956572
 RectTransform:
   m_ObjectHideFlags: 0
@@ -607,8 +607,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 405}
-  m_SizeDelta: {x: 1.45, y: 0.25}
+  m_AnchoredPosition: {x: 5.0329, y: 405}
+  m_SizeDelta: {x: 1.1656, y: 0.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6135279582378034448
 CanvasRenderer:
@@ -836,9 +836,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1.5439
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 442.61075
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 225.73592
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 442.61075
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.424
+      objectReference: {fileID: 0}
+    - target: {fileID: 8458194027264735393, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 405
+      objectReference: {fileID: 0}
     - target: {fileID: 8478862263821191060, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
       propertyPath: m_RenderMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783055113398384073, guid: 55bd0a7de9e555941a58b6b90bf00f49, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

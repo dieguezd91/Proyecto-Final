@@ -1,10 +1,13 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class DropEnemyMaterial : MonoBehaviour
 {
     [SerializeField] private CraftingMaterialSO materialData;
     [SerializeField] private float attractionSpeed = 8f;
+    [SerializeField] private bool isSpecialItem = false;
+    public UnityEvent onSpecialItemCollected;
     private Transform player;
     private bool isCollected = false;
 
@@ -41,6 +44,20 @@ public class DropEnemyMaterial : MonoBehaviour
         {
             pickupHandler.ShowPickup(materialData.materialName, 1, materialData.materialIcon);
         }
+
+
+        if (isSpecialItem)
+        {
+            if (LevelManager.Instance != null)
+            {
+                LevelManager.Instance.ShowContinuePanel();
+            }
+            else
+            {
+                Debug.LogWarning("LevelManager no encontrado para activar la pantalla de CONTINUARÁ.");
+            }
+        }
+
 
         Destroy(gameObject);
     }

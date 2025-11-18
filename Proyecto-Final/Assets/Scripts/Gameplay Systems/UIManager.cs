@@ -21,6 +21,7 @@ public class UIManager : MonoBehaviour
 
     [Header("UI References")]
     public GameObject gameOverPanel;
+    public GameObject continuePanel;
     public GameObject HUD;
     public GameObject pausePanel;
     public InventoryUI inventoryUI;

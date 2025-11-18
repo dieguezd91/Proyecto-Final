@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -10,6 +10,8 @@ public class BossNightManager : MonoBehaviour
     [SerializeField] private int bossNightInterval = 5;
     [SerializeField] private float bossSpawnDelay = 3f;
     [SerializeField] private Transform bossSpawnPoint;
+    [SerializeField] private GameObject bossRewardItemPrefab;
+
 
     [Header("Boss Night Settings")]
     [SerializeField] private bool useDynamicBossSelection = true;
@@ -133,8 +135,11 @@ public class BossNightManager : MonoBehaviour
 
         yield return new WaitUntil(() => bossDefeated);
 
-        CompleteBossNight();
+       
+
+        onBossDefeated?.Invoke(currentBoss);
     }
+
 
     private void SpawnBoss()
     {
@@ -216,12 +221,16 @@ public class BossNightManager : MonoBehaviour
     private void OnBossDefeated(GameObject defeatedBoss)
     {
         bossDefeated = true;
+
+        
+
         currentBoss = null;
 
         onBossDefeated?.Invoke(defeatedBoss);
 
         GrantBossRewards();
     }
+
 
     private void GrantBossRewards()
     {

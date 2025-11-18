@@ -16,6 +16,7 @@ public enum MaterialType
     FrostSpores,           // EsporasGelidas
     EtherealTendrils,       // ZarcillosEtereos
     HouseHealingPotion,
+    BossHeart,
     Gold
 }
 

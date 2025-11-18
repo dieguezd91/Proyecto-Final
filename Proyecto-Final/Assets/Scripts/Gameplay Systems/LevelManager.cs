@@ -261,6 +261,22 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void ShowContinuePanel()
+    {
+        SetGameState(GameState.GameOver);
+
+        if (uiManager != null && uiManager.continuePanel != null)
+        {
+            uiManager.continuePanel.SetActive(true);
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el panel de 'Continuará' en el UIManager.");
+        }
+    }
+
+
     public int GetCurrentDay()
     {
         return dayCount;
