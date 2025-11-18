@@ -316,6 +316,7 @@ public class UIManager : MonoBehaviour
 
                 yield return null;
             }
+
         }
 
         yield return new WaitForSecondsRealtime(1f);
