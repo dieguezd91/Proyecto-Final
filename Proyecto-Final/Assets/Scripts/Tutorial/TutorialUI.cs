@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -27,11 +28,17 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private Ease hideEase = Ease.InBack;
     [SerializeField] private float blinkFadeTime = 0.6f;
 
+    [Header("TYPEWRITER SETTINGS")]
+    [Tooltip("How many non-whitespace keypresses are needed before playing the keypress audio. Minimum 1.")]
+    [SerializeField][Range(1, 8)] private int keypressesPerSound = 1;
+
     private bool isVisible = false;
     private Coroutine typewriterCoroutine;
     private Sequence currentSequence;
     private Sequence blinkSequence;
     private CanvasGroup indicatorCanvasGroup;
+
+    private int keypressCounter = 0;
 
     private void Awake()
     {
@@ -148,6 +155,8 @@ public class TutorialUI : MonoBehaviour
 
         int totalCharacters = text.Length;
 
+        keypressCounter = 0;
+
         for (int i = 0; i <= totalCharacters; i++)
         {
             instructionText.maxVisibleCharacters = i;
@@ -156,9 +165,23 @@ public class TutorialUI : MonoBehaviour
             {
                 char addedChar = text[i - 1];
 
-                if (writtingSoundBase != null && !char.IsWhiteSpace(addedChar))
+                if (!char.IsWhiteSpace(addedChar))
                 {
-                    writtingSoundBase.PlayKeypressSound();
+                    keypressCounter++;
+                    int k = Mathf.Max(1, keypressesPerSound);
+
+                    if (writtingSoundBase != null)
+                    {
+                        if (((keypressCounter - 1) % k) == 0)
+                        {
+                            writtingSoundBase.PlayKeypressSound();
+                            Debug.Log($"[TutorialUI] Playing keypress sound (char '{addedChar}', nonWS count {keypressCounter})");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[TutorialUI] WrittingSoundBase is null - can't play keypress sound.");
+                    }
                 }
             }
 
