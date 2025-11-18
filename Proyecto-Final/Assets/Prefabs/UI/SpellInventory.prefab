@@ -47,7 +47,7 @@ MonoBehaviour:
   spellSlots:
   - spellType: 1
     spellName: Range
-    spellIcon: {fileID: 1957688738, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellIcon: {fileID: 444491412, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 8215708087478250761, guid: f0abee687d5f1c04b86aae092aa223b6, type: 3}
     manaCost: 30
     cooldown: 1
@@ -55,7 +55,7 @@ MonoBehaviour:
     isUnlocked: 1
   - spellType: 2
     spellName: Melee
-    spellIcon: {fileID: 48356350, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+    spellIcon: {fileID: -876388959, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 2902349897744729807, guid: b8606dfc9b6d8b04a9e71e284b373b0a, type: 3}
     manaCost: 15
     cooldown: 0.5
@@ -63,7 +63,7 @@ MonoBehaviour:
     isUnlocked: 1
   - spellType: 3
     spellName: Area
-    spellIcon: {fileID: 1703350427, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
+    spellIcon: {fileID: -64543203, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 2376951640795662106, guid: 06700ad62ffa5c84c97e0cfe70009e4a, type: 3}
     manaCost: 50
     cooldown: 5

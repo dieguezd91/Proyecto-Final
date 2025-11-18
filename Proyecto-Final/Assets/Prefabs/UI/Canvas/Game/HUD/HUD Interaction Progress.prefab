@@ -68,8 +68,8 @@ MonoBehaviour:
   canvasGroup: {fileID: 7182832857238831333}
   interactionText: {fileID: 0}
   fadeSpeed: 5
-  harvestColor: {r: 0.4, g: 0.8, b: 0.4, a: 1}
-  digColor: {r: 0.6, g: 0.4, b: 0.2, a: 1}
+  harvestColor: {r: 1, g: 1, b: 1, a: 1}
+  digColor: {r: 0.27612138, g: 0.59751576, b: 0.8018868, a: 1}
 --- !u!1 &2490542185719258418
 GameObject:
   m_ObjectHideFlags: 0
@@ -105,7 +105,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: -10}
+  m_SizeDelta: {x: 50, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &589983591805922366
 CanvasRenderer:
