@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -11,7 +12,7 @@ public enum MoonPhase
     FullMoon = 4
 }
 
-[System.Serializable]
+[Serializable]
 public class MoonPhaseChangedEvent : UnityEvent<MoonPhase> { }
 
 public class LunarCycleManager : MonoBehaviour
@@ -24,7 +25,6 @@ public class LunarCycleManager : MonoBehaviour
 
     [Header("SETTINGS")]
     [SerializeField] private bool cyclicProgression = true;
-
     [SerializeField] private ManaSystem manaSystem;
 
     public MoonPhaseChangedEvent onMoonPhaseChanged;
@@ -32,6 +32,7 @@ public class LunarCycleManager : MonoBehaviour
     private GameState lastGameState = GameState.None;
     private bool isFirstNight = true;
     private bool isInitialized = false;
+    private int nightCount = 0;
 
     private void Awake()
     {
@@ -87,33 +88,26 @@ public class LunarCycleManager : MonoBehaviour
 
         GameState currentState = LevelManager.Instance.currentGameState;
 
-        if (WasDayState(lastGameState) && currentState == GameState.Night)
-        {
-            ShowMoon(true);
-
-            if (!isFirstNight && cyclicProgression)
-            {
-                int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
-                SetMoonPhase((MoonPhase)nextPhaseIndex);
-            }
-
-            isFirstNight = false;
-        }
-        else if (lastGameState == GameState.Night && currentState != GameState.Night)
+        if (lastGameState == GameState.Night && currentState != GameState.Night)
         {
             ShowMoon(false);
         }
 
         lastGameState = currentState;
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            Debug.Log($"Fase ANTES: {currentMoonPhase}");
+            ForceNextPhase();
+            Debug.Log($"Fase DESPUÉS: {currentMoonPhase}");
+        }
     }
 
-    private void OnNewDay(int dayCount)
-    {
-        Debug.Log($"Nuevo d�a: {dayCount}. Fase lunar actual: {currentMoonPhase}");
-    }
+    private void OnNewDay(int dayCount) { }
 
     public void SetMoonPhase(MoonPhase phase)
     {
+        MoonPhase previousPhase = currentMoonPhase;
         currentMoonPhase = phase;
 
         if (moonSpriteRenderer != null && moonPhaseSprites != null && moonPhaseSprites.Length == 5)
@@ -149,12 +143,44 @@ public class LunarCycleManager : MonoBehaviour
         return currentMoonPhase;
     }
 
-    private bool WasDayState(GameState state)
+    public void NotifyNightStarted()
     {
-        return state == GameState.Day
-            || state == GameState.Digging
-            || state == GameState.Planting
-            || state == GameState.Harvesting
-            || state == GameState.Removing;
+        if (!isInitialized) return;
+
+        nightCount++;
+        ShowMoon(true);
+
+        if (cyclicProgression)
+        {
+            if (!isFirstNight)
+            {
+                int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
+                MoonPhase newPhase = (MoonPhase)nextPhaseIndex;
+                SetMoonPhase(newPhase);
+            }
+        }
+
+        isFirstNight = false;
+    }
+
+    public void ForceNextPhase()
+    {
+        int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
+        SetMoonPhase((MoonPhase)nextPhaseIndex);
+    }
+
+    public void ResetLunarCycle()
+    {
+        isFirstNight = true;
+        nightCount = 0;
+        SetMoonPhase(MoonPhase.NewMoon);
+    }
+
+    private void OnDestroy()
+    {
+        if (LevelManager.Instance != null)
+        {
+            LevelManager.Instance.onNewDay.RemoveListener(OnNewDay);
+        }
     }
 }

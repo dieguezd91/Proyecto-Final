@@ -73,10 +73,10 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         if (soundBase == null)
             soundBase = GetComponent<EnemySoundBase>();
         var idleClip = soundBase?.GetSound(EnemySoundType.Idle);
-        if (idleClip == null || idleClip.GetClip() == null)
-            Debug.LogWarning($"[{gameObject.name}] EnemyBase: Idle sound is NOT assigned. Assign a clip in EnemySoundBase to enable idle sounds.");
-        else
-            Debug.Log($"[{gameObject.name}] EnemyBase: Idle sound is assigned and will play.");
+        //if (idleClip == null || idleClip.GetClip() == null)
+        //    Debug.LogWarning($"[{gameObject.name}] EnemyBase: Idle sound is NOT assigned. Assign a clip in EnemySoundBase to enable idle sounds.");
+        //else
+        //    Debug.Log($"[{gameObject.name}] EnemyBase: Idle sound is assigned and will play.");
     }
 
     protected virtual void Update()
@@ -340,7 +340,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void OnDamaged(float damage, LifeController.DamageType damageType)
     {
-        Debug.Log($"[EnemyBase] {gameObject.name} OnDamaged invoked. Damage={damage} Type={damageType}");
+        //Debug.Log($"[EnemyBase] {gameObject.name} OnDamaged invoked. Damage={damage} Type={damageType}");
 
         PlayEnemySound(EnemySoundType.Hurt, SoundSourceType.Localized, transform);
     }
@@ -414,7 +414,6 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
             Debug.LogWarning($"[{gameObject.name}] EnemyBase: Idle sound clip is missing in EnemySoundBase. Assign a clip in the inspector.");
             return;
         }
-        Debug.Log($"[{gameObject.name}] EnemyBase: Playing idle sound '{idleClip.GetClip().name}' at {Time.time:F2}s.");
         PlayEnemySound(EnemySoundType.Idle, SoundSourceType.Localized);
     }
 

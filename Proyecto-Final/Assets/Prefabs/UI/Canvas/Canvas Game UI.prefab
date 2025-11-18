@@ -891,14 +891,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Feedback
       objectReference: {fileID: 0}
-    - target: {fileID: 7635416554250135900, guid: 0f73d31d99c866d42b4d99d69eb03f6b, type: 3}
-      propertyPath: bloomVolume
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7635416554250135900, guid: 0f73d31d99c866d42b4d99d69eb03f6b, type: 3}
-      propertyPath: ritualOverlayImage
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 8106260097837764445, guid: 0f73d31d99c866d42b4d99d69eb03f6b, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

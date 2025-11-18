@@ -49,12 +49,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ed3cb69610994c46b63929d0a5e0967, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _defaultState: 0
+  _currentState: 0
   floatingDamagePrefab: {fileID: 8011744024934345175, guid: b18d5e020de9918429f62b516be2ef30, type: 3}
   damagedScreen: {fileID: 7124061192381794680}
   damageFadeSpeed: 2
   damageFadeOutDelay: 1
   bloomVolume: {fileID: 8264518825437891578, guid: 2fef4f59f6fb7bd4f85f575b12fe7e41, type: 3}
   ritualOverlayImage: {fileID: 393752202769428440, guid: 5931669de0f88e64abb0be999dcec7cf, type: 3}
+  ritualMoonPhaseSprites:
+  - {fileID: 1826950300, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -777819846, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: 1795355635, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -170323202, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -487037938, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   overlayFadeDuration: 1.2
 --- !u!1001 &6793011385321039184
 PrefabInstance:

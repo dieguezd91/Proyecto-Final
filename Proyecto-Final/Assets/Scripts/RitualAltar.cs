@@ -322,6 +322,11 @@ public class RitualAltar : MonoBehaviour, IInteractable
         isPerformingRitual = true;
         levelManager.SetGameState(GameState.OnRitual);
 
+        if (canTransitionToNight && LunarCycleManager.Instance != null)
+        {
+            LunarCycleManager.Instance.NotifyNightStarted();
+        }
+
         StartRitualEffects();
         UIManager.Instance?.ShowRitualOverlay();
     }
@@ -336,7 +341,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
         if (canTransitionToNight)
         {
             TutorialEvents.InvokeRitualAltarUsed();
-
             TutorialEvents.InvokeNightStarted();
             levelManager.TransitionToNight();
         }

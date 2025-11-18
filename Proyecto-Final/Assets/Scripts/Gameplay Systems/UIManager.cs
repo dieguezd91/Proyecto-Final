@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TooltipUIController tooltipUI;
     [SerializeField] private SpellSlotsUIController spellSlotsUI;
     [SerializeField] private GameObject hudAbilities;
-
+    [SerializeField] private RitualUIController ritualUI;
 
     [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
@@ -45,6 +45,7 @@ public class UIManager : MonoBehaviour
     public GameStateUIController GameState => gameStateUI;
     public FeedbackUIController Feedback => feedbackUI;
     public TooltipUIController Tooltip => tooltipUI;
+    public RitualUIController Ritual => ritualUI;
 
     private void Awake()
     {
@@ -89,6 +90,7 @@ public class UIManager : MonoBehaviour
         if (feedbackUI == null) feedbackUI = GetComponentInChildren<FeedbackUIController>();
         if (tooltipUI == null) tooltipUI = GetComponentInChildren<TooltipUIController>();
         if (spellSlotsUI == null) spellSlotsUI = GetComponentInChildren<SpellSlotsUIController>();
+        if (ritualUI == null) ritualUI = GetComponentInChildren<RitualUIController>();
 
         pauseMenuController?.Initialize();
         healthUI?.Initialize();
@@ -99,6 +101,7 @@ public class UIManager : MonoBehaviour
         feedbackUI?.Initialize();
         tooltipUI?.Initialize();
         spellSlotsUI?.Initialize();
+        ritualUI?.Initialize();
     }
 
     public void OpenInventoryWithPage(string pageName)
@@ -118,6 +121,8 @@ public class UIManager : MonoBehaviour
         feedbackUI?.Setup();
         tooltipUI?.Setup();
         spellSlotsUI?.Setup();
+        ritualUI?.Setup();
+
     }
 
     private void RegisterGlobalEvents()
@@ -235,18 +240,6 @@ public class UIManager : MonoBehaviour
             Feedback.SetGrayscaleEffect(enabled);
     }
 
-    public void ShowRitualOverlay()
-    {
-        if (Feedback != null)
-            Feedback.ShowRitualOverlay();
-    }
-
-    public void HideRitualOverlay()
-    {
-        if (Feedback != null)
-            Feedback.HideRitualOverlay();
-    }
-
     private IEnumerator AnimateRespawnCoroutine(float duration)
     {
         if (Health != null)
@@ -328,5 +321,15 @@ public class UIManager : MonoBehaviour
             continueButtonsContainer.SetActive(true);
     }
 
+    public void ShowRitualOverlay()
+    {
+        if (ritualUI != null)
+            ritualUI.ShowRitualOverlay();
+    }
 
+    public void HideRitualOverlay()
+    {
+        if (ritualUI != null)
+            ritualUI.HideRitualOverlay();
+    }
 }

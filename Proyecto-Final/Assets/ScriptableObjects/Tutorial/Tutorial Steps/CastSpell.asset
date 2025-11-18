@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: CastSpell
   stepOrder: 16
-  instructionText: Channel your magic! Left-click to cast spells and defend the Sacred
-    Tree from corrupted creatures.
+  instructionText: Channel your magic! <sprite name="MouseClick"> to cast spells
+    and defend the Sacred Tree from corrupted creatures.
   objectiveType: 5
   requiredCount: 1
   isGatedStep: 0
