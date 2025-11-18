@@ -386,7 +386,7 @@ MonoBehaviour:
     cooldownTime: 0
   attack:
     clips:
-    - {fileID: 8300000, guid: 347b0656243ed834fb48f5a46133f80b, type: 3}
+    - {fileID: 8300000, guid: e9758970408b29241ad79e9c76f521aa, type: 3}
     volume: 1
     pitch: 0.8
     pitchVariation: 0.1
