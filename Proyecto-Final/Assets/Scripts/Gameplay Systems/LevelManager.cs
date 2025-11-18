@@ -267,7 +267,7 @@ public class LevelManager : MonoBehaviour
 
         if (uiManager != null && uiManager.continuePanel != null)
         {
-            uiManager.continuePanel.SetActive(true);
+            uiManager.StartCoroutine(uiManager.AnimateContinuePanel());
             Time.timeScale = 0f;
         }
         else
@@ -275,6 +275,7 @@ public class LevelManager : MonoBehaviour
             Debug.LogWarning("No se encontró el panel de 'Continuará' en el UIManager.");
         }
     }
+
 
 
     public int GetCurrentDay()

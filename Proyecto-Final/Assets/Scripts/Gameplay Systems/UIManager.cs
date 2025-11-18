@@ -21,7 +21,13 @@ public class UIManager : MonoBehaviour
 
     [Header("UI References")]
     public GameObject gameOverPanel;
+
+    [Header("Continue Panel Elements")]
     public GameObject continuePanel;
+    public UnityEngine.UI.Image continuePanelBackground;
+    public TMPro.TextMeshProUGUI continueText;
+    public GameObject continueButtonsContainer;
+
     public GameObject HUD;
     public GameObject pausePanel;
     public InventoryUI inventoryUI;
@@ -284,5 +290,42 @@ public class UIManager : MonoBehaviour
         if (hudAbilities != null)
             hudAbilities.SetActive(true);
     }
+
+    public IEnumerator AnimateContinuePanel()
+    {
+        continuePanel.SetActive(true);
+
+        if (continueText != null) continueText.gameObject.SetActive(false);
+        if (continueButtonsContainer != null) continueButtonsContainer.SetActive(false);
+
+        if (continuePanelBackground != null)
+        {
+            Color c = continuePanelBackground.color;
+            c.a = 0f;
+            continuePanelBackground.color = c;
+
+            float duration = 1.2f;
+            float t = 0f;
+
+            while (t < duration)
+            {
+                t += Time.unscaledDeltaTime;
+                float alpha = Mathf.Lerp(0f, 1f, t / duration);
+
+                continuePanelBackground.color = new Color(c.r, c.g, c.b, alpha);
+
+                yield return null;
+            }
+        }
+
+        yield return new WaitForSecondsRealtime(1f);
+        if (continueText != null)
+            continueText.gameObject.SetActive(true);
+
+        yield return new WaitForSecondsRealtime(0.4f);
+        if (continueButtonsContainer != null)
+            continueButtonsContainer.SetActive(true);
+    }
+
 
 }

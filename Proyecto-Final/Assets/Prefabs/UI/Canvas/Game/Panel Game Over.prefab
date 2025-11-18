@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &707977639735090629
 RectTransform:
   m_ObjectHideFlags: 0
@@ -303,9 +303,33 @@ PrefabInstance:
       propertyPath: m_text
       value: Main Menu
       objectReference: {fileID: 0}
+    - target: {fileID: 1044355472996775097, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_fontSize
+      value: 44.85
+      objectReference: {fileID: 0}
+    - target: {fileID: 1044355472996775097, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3433981396125360577, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
       propertyPath: m_Name
       value: Button Game Over Menu
+      objectReference: {fileID: 0}
+    - target: {fileID: 3433981396125360577, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464314565430938728, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -48.603
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464314565430938728, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464314565430938728, guid: 6d7db9a3ef44cc14b8a02582f9fb80ad, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

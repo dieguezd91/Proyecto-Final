@@ -23,10 +23,10 @@ MonoBehaviour:
   homePriority: 1.2
   footstepCooldown: 0.45
   manaDropChance: 0.5
-  bossMaxHealth: 400
+  bossMaxHealth: 500
   minAttackDistance: 3
   meleeRadius: 3
-  specialRadius: 4
+  specialRadius: 5
   meleeDamage: 30
   specialDamage: 50
   attackCooldown: 1
