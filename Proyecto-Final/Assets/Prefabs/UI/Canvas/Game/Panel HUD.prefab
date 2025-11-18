@@ -643,26 +643,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3651982885949665952, guid: 6f628a1661a9e5346b3a05661239295f, type: 3}
-      propertyPath: moonPhaseSprites.Array.data[0]
-      value: 
-      objectReference: {fileID: -1529809225, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
-    - target: {fileID: 3651982885949665952, guid: 6f628a1661a9e5346b3a05661239295f, type: 3}
-      propertyPath: moonPhaseSprites.Array.data[1]
-      value: 
-      objectReference: {fileID: 1841481835, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
-    - target: {fileID: 3651982885949665952, guid: 6f628a1661a9e5346b3a05661239295f, type: 3}
-      propertyPath: moonPhaseSprites.Array.data[2]
-      value: 
-      objectReference: {fileID: -1304058712, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
-    - target: {fileID: 3651982885949665952, guid: 6f628a1661a9e5346b3a05661239295f, type: 3}
-      propertyPath: moonPhaseSprites.Array.data[3]
-      value: 
-      objectReference: {fileID: -956797572, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
-    - target: {fileID: 3651982885949665952, guid: 6f628a1661a9e5346b3a05661239295f, type: 3}
-      propertyPath: moonPhaseSprites.Array.data[4]
-      value: 
-      objectReference: {fileID: -1032481509, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

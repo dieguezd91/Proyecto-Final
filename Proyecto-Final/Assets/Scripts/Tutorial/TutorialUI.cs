@@ -80,7 +80,8 @@ public class TutorialUI : MonoBehaviour
 
     public void ShowStep(TutorialStep step)
     {
-        if (tutorialSoundBase != null)
+        TutorialSoundBase soundController = FindObjectOfType<TutorialSoundBase>();
+        if (soundController != null)
         {
             tutorialSoundBase.PlaySound(TutorialSoundType.ShowPanel);
         }

@@ -19,6 +19,13 @@ public class TutorialSoundBase : MonoBehaviour
 
     private void Awake()
     {
+        InitializeDictionary();
+    }
+
+    private void InitializeDictionary()
+    {
+        if (soundDictionary != null) return;
+
         soundDictionary = new Dictionary<TutorialSoundType, SoundClipData>
         {
             { TutorialSoundType.ShowPanel, showPanel },
@@ -29,16 +36,23 @@ public class TutorialSoundBase : MonoBehaviour
 
     public void PlaySound(TutorialSoundType type, Transform parent = null)
     {
+        if (soundDictionary == null)
+        {
+            InitializeDictionary();
+        }
+
         if (!soundDictionary.TryGetValue(type, out var soundData) || soundData == null || soundData.GetClip() == null)
         {
             Debug.LogWarning($"[{gameObject.name}] TutorialSoundBase: SoundClipData for '{type}' is missing or not assigned.");
             return;
         }
+
         if (SoundManager.Instance == null)
         {
             Debug.LogWarning($"[{gameObject.name}] TutorialSoundBase: SoundManager.Instance is null. Cannot play '{type}'.");
             return;
         }
+
         SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
     }
 }
