@@ -18,11 +18,13 @@ MonoBehaviour:
 
 
     Use
-    the Q and E keys or the Mouse Wheel to cycle through your active spells, shown
-    on the left.
+    the <sprite name="QKey"> and <sprite name="EKey"> keys or <sprite name="ScrollMouse">
+    to cycle through your active spells, shown on the left.
 
 
-    Remember that every spell consumes your mana.'
+    Remember that every
+    spell consumes your mana.'
   objectiveType: 26
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 3

@@ -21,8 +21,9 @@ MonoBehaviour:
     first select the shovel icon on your ability bar.
 
 
-    Then, left-click to dig
-    and prepare the soil for planting.'
+    Then, <sprite name="MouseClick">
+    to dig and prepare the soil for planting.'
   objectiveType: 2
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 3

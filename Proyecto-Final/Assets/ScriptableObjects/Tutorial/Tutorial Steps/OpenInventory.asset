@@ -15,9 +15,8 @@ MonoBehaviour:
   stepID: OpenInventory
   stepOrder: 6
   instructionText: Your journal keeps track of all resources you've gathered. Press
-    TAB or I to check your inventory.
+    <sprite name="TABKey"> or <sprite name="IKey"> to check your inventory.
   objectiveType: 11
   requiredCount: 1
-  subObjectives: 
   isGatedStep: 0
   waitDuration: 3
