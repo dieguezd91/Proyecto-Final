@@ -9,10 +9,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 564081831426989095, guid: 46054446b6ed6ba43b17f5918830b4d7, type: 3}
-      propertyPath: m_Interactable
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 564081831426989095, guid: 46054446b6ed6ba43b17f5918830b4d7, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -102,7 +98,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5467993233487855235, guid: 46054446b6ed6ba43b17f5918830b4d7, type: 3}
       propertyPath: m_text
-      value: Controls
+      value: Credits
       objectReference: {fileID: 0}
     - target: {fileID: 7654868973609511931, guid: 46054446b6ed6ba43b17f5918830b4d7, type: 3}
       propertyPath: m_Name

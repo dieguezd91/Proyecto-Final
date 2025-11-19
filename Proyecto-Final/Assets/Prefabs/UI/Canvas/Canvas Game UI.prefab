@@ -261,6 +261,7 @@ MonoBehaviour:
   tooltipUI: {fileID: 6998435666628285364}
   spellSlotsUI: {fileID: 6281770049668125291}
   hudAbilities: {fileID: 4712039638697272631}
+  ritualUI: {fileID: 0}
   interfaceSounds: {fileID: 6375595165552625574}
   gameOverPanel: {fileID: 2740163807364435899}
   continuePanel: {fileID: 2156195709288513100}
