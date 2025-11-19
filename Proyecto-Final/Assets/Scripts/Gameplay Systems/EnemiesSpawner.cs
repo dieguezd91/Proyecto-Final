@@ -52,6 +52,7 @@ public class EnemiesSpawner : MonoBehaviour
     private List<GameObject> activeEnemies = new List<GameObject>();
     private bool hordeCompleted = false;
     private float currentSpawnInterval;
+    private bool playerHasLeftHouse = false;
 
     private WeightedRoulette<GameObject> enemyRoulette = new WeightedRoulette<GameObject>();
 
@@ -68,6 +69,8 @@ public class EnemiesSpawner : MonoBehaviour
             bossNightManager = GetComponent<BossNightManager>();
         }
 
+        GameplayEvents.OnPlayerExitedHouseDuringNight += OnPlayerExit;
+
         ResetHordeCounters();
     }
 
@@ -75,14 +78,17 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (LevelManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
         {
-            if (IsBossNight())
+            if (playerHasLeftHouse)
             {
-                StartBossNight();
-            }
-            else
-            {
-                ConfigureEnemyRoulette();
-                StartContinuousHorde();
+                if (IsBossNight())
+                {
+                    StartBossNight();
+                }
+                else
+                {
+                    ConfigureEnemyRoulette();
+                    StartContinuousHorde();
+                }
             }
         }
 
@@ -97,6 +103,24 @@ public class EnemiesSpawner : MonoBehaviour
             {
                 hordeCompleted = true;
                 StopContinuousHorde(true);
+            }
+        }
+    }
+
+    private void OnPlayerExit()
+    {
+        playerHasLeftHouse = true;
+
+        if (LevelManager.Instance.currentGameState == GameState.Night && !isSpawning)
+        {
+            if (IsBossNight())
+            {
+                StartBossNight();
+            }
+            else
+            {
+                ConfigureEnemyRoulette();
+                StartContinuousHorde();
             }
         }
     }
@@ -272,6 +296,7 @@ public class EnemiesSpawner : MonoBehaviour
         }
 
         isSpawning = false;
+        playerHasLeftHouse = false;
     }
 
     void OnEnemyDeath(GameObject enemy)
@@ -358,30 +383,6 @@ public class EnemiesSpawner : MonoBehaviour
         return $"Spawn cada {adjustedInterval:F1}s";
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        foreach (Transform point in spawnPoints)
-        {
-            if (point != null)
-            {
-                Gizmos.DrawWireSphere(point.position, 0.5f);
-            }
-        }
-
-        if (dontSpawnWhenPlayerNearby && playerTransform != null)
-        {
-            Gizmos.color = Color.yellow;
-            foreach (Transform point in spawnPoints)
-            {
-                if (point != null)
-                {
-                    Gizmos.DrawWireSphere(point.position, playerCheckRadius);
-                }
-            }
-        }
-    }
-
     public void EndNight()
     {
         var state = LevelManager.Instance.currentGameState;
@@ -441,5 +442,10 @@ public class EnemiesSpawner : MonoBehaviour
     {
         activeEnemies.RemoveAll(e => e == null);
         return activeEnemies.Count;
+    }
+
+    private void OnDestroy()
+    {
+        GameplayEvents.OnPlayerExitedHouseDuringNight -= OnPlayerExit;
     }
 }
