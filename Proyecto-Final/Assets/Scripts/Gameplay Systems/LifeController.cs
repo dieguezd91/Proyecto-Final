@@ -1,8 +1,16 @@
+using System;
 using System.Collections;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.Rendering.Universal;
+
+[Serializable]
+public class LootItem
+{
+    public string name;
+    public GameObject itemPrefab;
+    [Range(0f, 100f)] public float dropChance;
+}
 
 public class LifeController : MonoBehaviour
 {
@@ -33,12 +41,14 @@ public class LifeController : MonoBehaviour
     public UnityEvent<float, float> onHealthChanged;
     public UnityEvent<float, DamageType> onDamaged;
 
-    [Header("OBJECT DROP")]
-    [SerializeField] private GameObject objetDrop;
-
     [Header("MANA DROP")]
     [SerializeField] private GameObject manaPickupPrefab;
     [SerializeField] public float manaDropChance = 1f;
+
+    [Header("OBJECT DROP SYSTEM")]
+    [SerializeField] private List<LootItem> lootTable;
+    [SerializeField] private float dropScatterDistance = 0.5f;
+    [SerializeField] private float explosionForce = 3f;
 
     [Header("AUDIO SETTINGS")]
     [SerializeField] private float dotSoundCooldown = 0.2f;
@@ -301,14 +311,37 @@ public class LifeController : MonoBehaviour
 
     public void Drop()
     {
-        if (objetDrop != null && Random.value < 0.5f)
+        if (lootTable != null && lootTable.Count > 0)
         {
-            Instantiate(objetDrop, transform.position, Quaternion.identity);
+            foreach (var loot in lootTable)
+            {
+                if (UnityEngine.Random.Range(0f, 100f) <= loot.dropChance)
+                {
+                    if (loot.itemPrefab != null)
+                    {
+                        SpawnAndExplode(loot.itemPrefab);
+                    }
+                }
+            }
         }
 
-        if (manaPickupPrefab != null && Random.value < manaDropChance)
+        if (manaPickupPrefab != null && UnityEngine.Random.value < manaDropChance)
         {
-            Instantiate(manaPickupPrefab, transform.position, Quaternion.identity);
+            SpawnAndExplode(manaPickupPrefab);
+        }
+    }
+
+    private void SpawnAndExplode(GameObject prefabToSpawn)
+    {
+        GameObject newItem = Instantiate(prefabToSpawn, transform.position, Quaternion.identity);
+
+        Rigidbody2D rb = newItem.GetComponent<Rigidbody2D>();
+
+        if (rb != null)
+        {
+            Vector2 randomDirection = UnityEngine.Random.insideUnitCircle.normalized;
+
+            rb.AddForce(randomDirection * explosionForce, ForceMode2D.Impulse);
         }
     }
 
