@@ -20,6 +20,8 @@ public class TutorialManager : MonoBehaviour
     private bool isTransitioning = false;
     private bool canAcceptInput = false;
 
+    private bool isPausedByMenu = false;
+
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
     private PlayerController playerController;
 
@@ -388,5 +390,33 @@ public class TutorialManager : MonoBehaviour
         }
 
         return currentStep.isGatedStep;
+    }
+
+    public void PauseTutorial()
+    {
+        if (!tutorialActive || isPausedByMenu) return;
+
+        isPausedByMenu = true;
+
+        if (tutorialUI != null)
+        {
+            tutorialUI.HideStepImmediate();
+        }
+
+        Debug.Log("[Tutorial] Tutorial pausado por menú");
+    }
+
+    public void ResumeTutorial()
+    {
+        if (!tutorialActive || !isPausedByMenu) return;
+
+        isPausedByMenu = false;
+
+        if (tutorialUI != null && currentStep != null)
+        {
+            tutorialUI.ShowStep(currentStep);
+        }
+
+        Debug.Log("[Tutorial] Tutorial reanudado");
     }
 }

@@ -397,7 +397,14 @@ public class RitualAltar : MonoBehaviour, IInteractable
         playerLife.currentHealth = playerLife.maxHealth;
         playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
 
+        ManaSystem playerMana = playerLife.GetComponent<ManaSystem>();
+        if (playerMana != null)
+        {
+            playerMana.SetMana(playerMana.modifiedMaxMana);
+        }
+
         levelManager.uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+        levelManager.uiManager?.UpdateManaUI();
     }
 
     private IEnumerator RitualLightingSequence()

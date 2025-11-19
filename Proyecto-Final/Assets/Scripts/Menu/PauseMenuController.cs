@@ -167,6 +167,11 @@ public class PauseMenuController : UIControllerBase
     {
         if (UIManager.Instance != null && UIManager.Instance.GameState != null)
         {
+            if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+            {
+                TutorialManager.Instance.ResumeTutorial();
+            }
+
             UIManager.Instance.GameState.ResumeGame();
         }
     }

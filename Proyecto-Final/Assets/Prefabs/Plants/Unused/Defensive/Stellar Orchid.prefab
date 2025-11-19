@@ -101,10 +101,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   plantData: {fileID: 11400000, guid: 4ea532f3c282e2742addecdc87352bcc, type: 2}
+  _soundBase: {fileID: 0}
   plantingDay: 0
   growthCompleted: 0
   preMatureParticlesPrefab: {fileID: 8921908033265245887, guid: 46c67c9655e1b244c957359dba845f8d, type: 3}
+  lowHealthParticlesPrefab: {fileID: 0}
+  lowHealthThreshold: 0.5
+  healthBar: {fileID: 0}
+  healthBarVisibilityDistance: 1.5
   tilePosition: {x: 0, y: 0, z: 0}
+  idleSoundMinTime: 5
+  idleSoundMaxTime: 15
   attractionRadius: 10
   reflectRadius: 0.5
   reflectDamage: 5
@@ -141,9 +148,11 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  lootTable: []
+  dropScatterDistance: 0.5
+  explosionForce: 0
   dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 0

@@ -196,7 +196,7 @@ MonoBehaviour:
   lowHealthParticlesPrefab: {fileID: 4174595437753816468, guid: c9d67f64ef09f284b9a02a2cb21a9592, type: 3}
   lowHealthThreshold: 0.5
   healthBar: {fileID: 5331700009452927342}
-  healthBarVisibilityDistance: 7
+  healthBarVisibilityDistance: 1.5
   tilePosition: {x: 0, y: 0, z: 0}
   idleSoundMinTime: 5
   idleSoundMaxTime: 15
@@ -234,9 +234,11 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  lootTable: []
+  dropScatterDistance: 0.5
+  explosionForce: 3
   dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 0

@@ -234,6 +234,11 @@ public class GameStateUIController : UIControllerBase
         GameManager.Instance?.PauseGame();
         LevelManager.Instance?.SetGameState(GameState.Paused);
 
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+        {
+            TutorialManager.Instance.PauseTutorial();
+        }
+
         if (blurTween != null) { blurTween.Kill(); blurTween = null; }
         if (dof != null)
             blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
@@ -326,6 +331,11 @@ public class GameStateUIController : UIControllerBase
 
         if (LevelManager.Instance != null && lastState != GameState.None)
             LevelManager.Instance.SetGameState(lastState);
+
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+        {
+            TutorialManager.Instance.ResumeTutorial();
+        }
 
         if (blurTween != null) { blurTween.Kill(); blurTween = null; }
         if (dof != null)

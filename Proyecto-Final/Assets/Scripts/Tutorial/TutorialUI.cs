@@ -137,6 +137,41 @@ public class TutorialUI : MonoBehaviour
         currentSequence.SetUpdate(true);
     }
 
+    public void HideStepImmediate()
+    {
+        if (!isVisible) return;
+
+        KillAllAnimations();
+        isVisible = false;
+
+        if (continueButton != null)
+        {
+            continueButton.gameObject.SetActive(false);
+        }
+
+        if (scrollIndicator != null)
+        {
+            scrollIndicator.SetActive(false);
+        }
+
+        StopBlinkAnimation();
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+        }
+
+        if (panelTransform != null)
+        {
+            panelTransform.localScale = Vector3.zero;
+        }
+
+        if (tutorialPanel != null)
+        {
+            tutorialPanel.SetActive(false);
+        }
+    }
+
     private IEnumerator TypewriterEffect(string text)
     {
         yield return null;
