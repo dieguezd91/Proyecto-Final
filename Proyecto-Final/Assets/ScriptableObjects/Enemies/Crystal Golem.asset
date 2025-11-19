@@ -21,9 +21,9 @@ MonoBehaviour:
   playerPriority: 1.5
   plantPriority: 1
   homePriority: 1.2
-  footstepCooldown: 0.45
+  footstepCooldown: 1
   manaDropChance: 0.5
-  bossMaxHealth: 500
+  bossMaxHealth: 1000
   minAttackDistance: 3
   meleeRadius: 3
   specialRadius: 5
