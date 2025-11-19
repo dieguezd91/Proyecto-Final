@@ -1,36 +1,60 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
+using System;
 
 public class DayNightSpriteSwapper : MonoBehaviour
 {
-    [Header("SPRITES")]
-    [SerializeField] private Sprite daySprite;
-    [SerializeField] private Sprite nightSprite;
+    [Serializable]
+    public class VisualSettings
+    {
+        public Sprite sprite;
+        public Vector3 localPosition = Vector3.zero;
+        public Vector3 localScale = Vector3.one;
+
+        [Header("Solo para UI")]
+        public Vector2 uiSizeDelta = new Vector2(100, 100);
+    }
+
+    [Header("CONFIGURACIÓN")]
+    [SerializeField] private bool useCustomTransform = true;
+    [Space(10)]
+    [SerializeField] private VisualSettings daySettings;
+    [SerializeField] private VisualSettings nightSettings;
 
     [Header("REFERENCES")]
     [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Image uiImage;
+
+    private RectTransform rectTransform;
 
     private LevelManager levelManager;
     private GameState lastGameState = GameState.None;
     private Coroutine transitionCoroutine;
     private bool isInitialized = false;
+    private bool isUI = false;
 
     void Start()
     {
-        if (spriteRenderer == null)
+        if (uiImage == null) uiImage = GetComponent<Image>();
+
+        if (uiImage != null)
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            isUI = true;
+            rectTransform = GetComponent<RectTransform>();
+
+            if (daySettings.uiSizeDelta == Vector2.zero) daySettings.uiSizeDelta = rectTransform.sizeDelta;
+            if (nightSettings.uiSizeDelta == Vector2.zero) nightSettings.uiSizeDelta = rectTransform.sizeDelta;
+        }
+        else
+        {
+            if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+
             if (spriteRenderer == null)
             {
                 enabled = false;
                 return;
             }
-        }
-
-        if (daySprite == null || nightSprite == null)
-        {
-            enabled = false;
-            return;
         }
 
         StartCoroutine(InitializeDelayed());
@@ -48,7 +72,7 @@ public class DayNightSpriteSwapper : MonoBehaviour
         }
 
         lastGameState = levelManager.currentGameState;
-        SetSprite(lastGameState);
+        SetVisuals(lastGameState);
 
         isInitialized = true;
     }
@@ -66,7 +90,7 @@ public class DayNightSpriteSwapper : MonoBehaviour
 
             if (wasNight != isNight)
             {
-                SetSprite(currentState);
+                SetVisuals(currentState);
             }
 
             lastGameState = currentState;
@@ -78,56 +102,62 @@ public class DayNightSpriteSwapper : MonoBehaviour
         return state == GameState.Night;
     }
 
-    private void SetSprite(GameState state)
+    private void SetVisuals(GameState state)
     {
         if (transitionCoroutine != null)
         {
             StopCoroutine(transitionCoroutine);
             transitionCoroutine = null;
-            Color color = spriteRenderer.color;
-            spriteRenderer.color = new Color(color.r, color.g, color.b, 1f);
+            ResetColorAlpha();
         }
 
-        Sprite targetSprite = IsNightState(state) ? nightSprite : daySprite;
+        VisualSettings targetSettings = IsNightState(state) ? nightSettings : daySettings;
 
-        if (targetSprite != null)
+        if (targetSettings.sprite != null)
         {
-            spriteRenderer.sprite = targetSprite;
+            if (isUI && uiImage != null)
+            {
+                uiImage.sprite = targetSettings.sprite;
+            }
+            else if (!isUI && spriteRenderer != null)
+            {
+                spriteRenderer.sprite = targetSettings.sprite;
+            }
+
+            if (useCustomTransform)
+            {
+                if (isUI && rectTransform != null)
+                {
+                    rectTransform.anchoredPosition = new Vector2(targetSettings.localPosition.x, targetSettings.localPosition.y);
+
+                    rectTransform.sizeDelta = targetSettings.uiSizeDelta;
+                }
+                else
+                {
+                    transform.localPosition = targetSettings.localPosition;
+                }
+
+                transform.localScale = targetSettings.localScale;
+            }
         }
     }
 
-    private void OnDestroy()
+    private void ResetColorAlpha()
     {
-        if (transitionCoroutine != null)
+        if (isUI && uiImage != null)
         {
-            StopCoroutine(transitionCoroutine);
-            transitionCoroutine = null;
+            Color c = uiImage.color;
+            uiImage.color = new Color(c.r, c.g, c.b, 1f);
         }
-    }
-
-    public void SetDaySprite(Sprite sprite)
-    {
-        daySprite = sprite;
-        if (isInitialized && levelManager != null && !IsNightState(levelManager.currentGameState))
+        else if (!isUI && spriteRenderer != null)
         {
-            SetSprite(levelManager.currentGameState);
-        }
-    }
-
-    public void SetNightSprite(Sprite sprite)
-    {
-        nightSprite = sprite;
-        if (isInitialized && levelManager != null && IsNightState(levelManager.currentGameState))
-        {
-            SetSprite(levelManager.currentGameState);
+            Color c = spriteRenderer.color;
+            spriteRenderer.color = new Color(c.r, c.g, c.b, 1f);
         }
     }
 
     public void ForceUpdate()
     {
-        if (levelManager != null)
-        {
-            SetSprite(levelManager.currentGameState);
-        }
+        if (levelManager != null) SetVisuals(levelManager.currentGameState);
     }
 }

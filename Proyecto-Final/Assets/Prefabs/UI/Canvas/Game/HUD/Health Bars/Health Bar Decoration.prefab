@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7073257088515302476}
   - component: {fileID: 3243683774208664332}
   - component: {fileID: 224883934984520344}
+  - component: {fileID: 8841168898430245984}
   m_Layer: 5
   m_Name: Health Bar Decoration
   m_TagString: Untagged
@@ -35,9 +36,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -813.125, y: -54.299988}
+  m_AnchoredPosition: {x: -813.125, y: -298.04996}
   m_SizeDelta: {x: 243.75, y: 481.25}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &7073257088515302476
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -68,7 +69,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: -1338539560, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -99,3 +100,28 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: -2
   m_TargetDisplay: 0
+--- !u!114 &8841168898430245984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408053274622764273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9463f5ef932ea1545a2f014ffd9de1cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useCustomTransform: 1
+  daySettings:
+    sprite: {fileID: -1338539560, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+    localPosition: {x: -813.125, y: -298.05, z: 0}
+    localScale: {x: 1, y: 1, z: 1}
+    uiSizeDelta: {x: 293.75, y: 487.5}
+  nightSettings:
+    sprite: {fileID: -422728739, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+    localPosition: {x: -828, y: -298.05, z: 0}
+    localScale: {x: 1, y: 1, z: 1}
+    uiSizeDelta: {x: 250, y: 487.5}
+  spriteRenderer: {fileID: 0}
+  uiImage: {fileID: 3243683774208664332}
