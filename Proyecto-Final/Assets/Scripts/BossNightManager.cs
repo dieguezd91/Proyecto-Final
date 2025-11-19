@@ -221,9 +221,7 @@ public class BossNightManager : MonoBehaviour
     private void OnBossDefeated(GameObject defeatedBoss)
     {
         bossDefeated = true;
-
         
-
         currentBoss = null;
 
         onBossDefeated?.Invoke(defeatedBoss);
