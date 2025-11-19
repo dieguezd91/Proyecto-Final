@@ -7,8 +7,9 @@ public class CloseButton : ImprovedUIButton
 
     private void Update()
     {
-        if (closeOnEscape && Input.GetKeyDown(KeyCode.Escape))
+        if (closeOnEscape && Input.GetKeyDown(KeyCode.Escape) && !InputConsumptionManager.IsEscapeConsumed)
         {
+            InputConsumptionManager.ConsumeEscape();
             TriggerClick();
         }
     }

@@ -81,12 +81,14 @@ public class InventoryUIController : UIControllerBase
             ToggleInventory();
         }
 
-        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen)
+        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen && !InputConsumptionManager.IsEscapeConsumed)
         {
             if (animationController != null && animationController.IsAnimating)
             {
                 return;
             }
+
+            InputConsumptionManager.ConsumeEscape();
             UIManager.Instance?.Tooltip?.ForceHide();
             CloseInventory();
         }

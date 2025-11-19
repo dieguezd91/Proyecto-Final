@@ -168,10 +168,9 @@ public class GameStateUIController : UIControllerBase
 
     private void HandlePauseInput()
     {
-        if (!Input.GetKeyDown(KeyCode.Escape)) return;
+        if (!Input.GetKeyDown(KeyCode.Escape) || InputConsumptionManager.IsEscapeConsumed) return;
 
         UIManager.Instance?.Tooltip?.ForceHide();
-
 
         if (UIManager.Instance != null && UIManager.Instance.Inventory != null)
         {
