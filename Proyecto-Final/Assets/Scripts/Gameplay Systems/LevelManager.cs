@@ -134,7 +134,7 @@ public class LevelManager : MonoBehaviour
             InventoryManager.Instance.AddGold(100);
         }
 
-        Debug.Log("CURRENT GAME STATE: " + currentGameState);
+        //Debug.Log("CURRENT GAME STATE: " + currentGameState);
     }
 
     public void TransitionToNight()
