@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantName: Storm Rose
   plantPrefab: {fileID: 6736001113723686055, guid: da9555e91a9d4f042bfca2e1721c0ec9, type: 3}
-  plantIcon: {fileID: 697983331, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  fullyGrownSprite: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 3
+  plantIcon: {fileID: -2039217953, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  fullyGrownSprite: {fileID: 1611987579, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  daysToGrow: 2
   description: Defensive plant. Shoots at enemies within range.
   seedType: 15
   slotIndex: 0
+  hasDeathAnimation: 1

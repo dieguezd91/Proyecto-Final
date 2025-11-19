@@ -200,7 +200,7 @@ MonoBehaviour:
   tilePosition: {x: 0, y: 0, z: 0}
   idleSoundMinTime: 5
   idleSoundMaxTime: 15
-  projectile: {fileID: 8215708087478250761, guid: 7be1d34f96524d146b1731c0190452b8, type: 3}
+  projectile: {fileID: 8215708087478250761, guid: 51ebf1bfd9068e141bc7fa4f60719164, type: 3}
   firePoint: {fileID: 5461837167220732977}
   cooldown: 2
   detectionRange: 8
