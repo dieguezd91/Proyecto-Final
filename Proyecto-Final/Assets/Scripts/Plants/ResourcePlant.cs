@@ -87,11 +87,6 @@ public class ResourcePlant : Plant
         isProducing = false;
         isReadyToHarvest = true;
 
-        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
-        {
-            TutorialEvents.InvokeFirstPlantReadyToHarvest();
-        }
-
         ActivateHarvestReadyParticles();
     }
 
@@ -201,6 +196,14 @@ public class ResourcePlant : Plant
          {
              base.HandleGameStateChanged(newState);
              CheckProduction(LevelManager.Instance.GetCurrentDay());
+         }
+
+         if ((newState is GameState.Day or GameState.Digging) && isReadyToHarvest)
+         {
+             if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive() && LevelManager.Instance.GetCurrentGameState() == GameState.Digging)
+             {
+                 TutorialEvents.InvokeFirstPlantReadyToHarvest();
+             }
          }
     }
 
