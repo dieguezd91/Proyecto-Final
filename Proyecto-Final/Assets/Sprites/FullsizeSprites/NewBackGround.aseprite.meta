@@ -139,6 +139,26 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: NewBackGround_Frame_1
+    originalName: 
+    pivot: {x: 0.5, y: 0}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 282
+      width: 480
+      height: 270
+    spriteID: 9c111e4d159e07c4f80f3d53ca163c0a
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 282}
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
@@ -148,7 +168,7 @@ ScriptedImporter:
     layerType: 0
     blendMode: 0
     cells:
-    - name: NewBackGround
+    - name: NewBackGround_Frame_0
       frameIndex: 0
       cellRect:
         x: 0
@@ -156,6 +176,14 @@ ScriptedImporter:
         width: 480
         height: 270
       spriteId: 733e1b51e7c4fa740b0921253bf34cd9
+    - name: NewBackGround_Frame_1
+      frameIndex: 1
+      cellRect:
+        x: 0
+        y: 0
+        width: 480
+        height: 270
+      spriteId: 9c111e4d159e07c4f80f3d53ca163c0a
     linkedCells: []
     parentIndex: -1
   platformSettings: []
