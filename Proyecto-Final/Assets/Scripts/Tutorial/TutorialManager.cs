@@ -300,6 +300,12 @@ public class TutorialManager : MonoBehaviour
         tutorialActive = false;
         canAcceptInput = false;
 
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
+        }
+
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
