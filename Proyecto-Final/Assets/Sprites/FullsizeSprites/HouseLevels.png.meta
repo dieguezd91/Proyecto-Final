@@ -276,9 +276,9 @@ TextureImporter:
       name: Treehouse2
       rect:
         serializedVersion: 2
-        x: 1307
+        x: 1306
         y: 108
-        width: 300
+        width: 301
         height: 450
       alignment: 9
       pivot: {x: 0.5266667, y: -0.10222223}
@@ -461,9 +461,9 @@ TextureImporter:
       name: HouseLevels_2
       rect:
         serializedVersion: 2
-        x: 651
+        x: 650
         y: 188
-        width: 300
+        width: 301
         height: 450
       alignment: 9
       pivot: {x: 0.52666664, y: -0.10222222}
@@ -499,6 +499,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: HouseLevels_4
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 731
+        width: 210
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9fac929abf96a274e829cc5d221714e7
+      internalID: -1014285302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HouseLevels_5
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 828
+        width: 301
+        height: 450
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25df7dc784e6ffe4a8552d8522413830
+      internalID: 1566062994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -526,6 +568,8 @@ TextureImporter:
       HouseLevels_1: 779734044
       HouseLevels_2: 1319975037
       HouseLevels_3: -1050453732
+      HouseLevels_4: -1014285302
+      HouseLevels_5: 1566062994
       HouseMaterial: 2039190353
       HouseMaterial2: 194497764
       HouseMaterial3: 1051854719

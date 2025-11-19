@@ -1663,6 +1663,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: GolemHeart
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 288
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af32f63c031244b4c852e6a1d92fd4da
+      internalID: -1578374781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1672,7 +1693,9 @@ TextureImporter:
     indices: 
     edges: []
     weights: []
-    secondaryTextures: []
+    secondaryTextures:
+    - texture: {fileID: 2800000, guid: f948e7b9d33f37d48af54fe0153fd1cc, type: 3}
+      name: _Glow
     nameFileIdTable:
       BossBomb: 842540238
       BossBomb2: -937052153
@@ -1748,6 +1771,7 @@ TextureImporter:
       CrystalGolem_7: 1863789528
       CrystalGolem_8: 1964452864
       CrystalGolem_9: 561658897
+      GolemHeart: -1578374781
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
