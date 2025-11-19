@@ -268,7 +268,7 @@ public class LevelManager : MonoBehaviour
         if (uiManager != null && uiManager.continuePanel != null)
         {
             uiManager.StartCoroutine(uiManager.AnimateContinuePanel());
-
+            Time.timeScale = 0f;
         }
         else
         {
