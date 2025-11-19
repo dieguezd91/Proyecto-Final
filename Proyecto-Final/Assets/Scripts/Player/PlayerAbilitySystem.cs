@@ -343,17 +343,20 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
-            if (hit.collider == null)
+            Plant plantBase = TilePlantingSystem.Instance.GetPlantAt(cellPos);
+
+            if (plantBase == null)
                 return;
 
-            ResourcePlant plant = hit.collider.GetComponent<ResourcePlant>();
+            ResourcePlant plant = plantBase as ResourcePlant;
             if (plant == null || plant.IsBeingHarvested())
                 return;
 
-            if (Vector2.Distance(transform.position, hit.collider.transform.position) > interactionDistance)
+            Vector3 tileCenter = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
+            if (Vector2.Distance(transform.position, tileCenter) > interactionDistance)
             {
                 warningBubble?.ShowMessage("Too far to harvest.");
                 return;
