@@ -8,7 +8,7 @@ public class ManaSystem : MonoBehaviour
     [SerializeField] private float currentMana;
     [SerializeField] private float baseDayRegenerationRate = 2f;
     [SerializeField] private float baseNightRegenerationRate = 0.5f;
-    [SerializeField] private float modifiedMaxMana;
+    [SerializeField] public float modifiedMaxMana;
 
     [Header("LUNAR INFLUENCE")]
     [SerializeField] private bool useLunarInfluence = true;

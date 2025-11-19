@@ -5610,9 +5610,11 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 0}
   manaPickupPrefab: {fileID: 0}
   manaDropChance: 1
+  lootTable: []
+  dropScatterDistance: 0.5
+  explosionForce: 3
   dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 0
@@ -11114,8 +11116,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.010400057, y: 0}
-  m_SizeDelta: {x: -1.5876002, y: 0}
+  m_AnchoredPosition: {x: 0.010400057, y: 1.1250002}
+  m_SizeDelta: {x: -1.5876, y: 2.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5028926915964139977
 CanvasRenderer:
