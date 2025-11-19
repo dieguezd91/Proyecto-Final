@@ -26,20 +26,43 @@ public class GameStateUIController : UIControllerBase
     private bool isHiding = false;
     private bool wasInventoryOpen = false;
 
+    private WorldTransitionAnimator worldTransition;
+
     public GameState LastState => lastState;
 
-    protected override void CacheReferences() { }
+    protected override void CacheReferences()
+    {
+        if (worldTransition == null)
+        {
+            worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+        }
+    }
 
     protected override void SetupEventListeners()
     {
         UIEvents.OnInventoryClosed += HandleInventoryClosedEvent;
         UIEvents.OnInventoryOpened += HandleInventoryOpenedEvent;
+
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged += OnWorldStateChanged;
+        }
     }
 
     protected override void CleanupEventListeners()
     {
         UIEvents.OnInventoryClosed -= HandleInventoryClosedEvent;
         UIEvents.OnInventoryOpened -= HandleInventoryOpenedEvent;
+
+        if (worldTransition != null)
+        {
+            worldTransition.OnStateChanged -= OnWorldStateChanged;
+        }
+    }
+
+    private void OnWorldStateChanged(WorldState newWorldState)
+    {
+        UpdateAbilityUIVisibility();
     }
 
     protected override void ConfigureInitialState()
@@ -59,6 +82,8 @@ public class GameStateUIController : UIControllerBase
             lastState = lastGameState;
         }
         UpdateUIElementsVisibility();
+
+        UpdateAbilityUIVisibility();
     }
 
     public override void HandleUpdate()
@@ -123,13 +148,20 @@ public class GameStateUIController : UIControllerBase
 
     private void UpdateAbilityUIVisibility()
     {
-        if (abilityPanel == null || LevelManager.Instance == null) return;
+        if (abilityPanel == null || LevelManager.Instance == null)
+        {
+            return;
+        }
 
         GameState state = LevelManager.Instance.currentGameState;
+
+        bool isInInterior = worldTransition != null && worldTransition.IsInInterior;
+
         bool showAbilities = state != GameState.Night &&
                              state != GameState.OnCrafting &&
                              state != GameState.OnAltarRestoration &&
-                             state != GameState.GameOver;
+                             state != GameState.GameOver &&
+                             !isInInterior;
 
         abilityPanel.SetActive(showAbilities);
     }
@@ -322,8 +354,8 @@ public class GameStateUIController : UIControllerBase
                  if (setIsHidingFalseOnComplete) isHiding = false;
              });
 
-         return t;
-     }
+        return t;
+    }
 
     private void HandleInventoryClosedEvent()
     {
