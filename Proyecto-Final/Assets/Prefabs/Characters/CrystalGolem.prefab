@@ -377,10 +377,11 @@ MonoBehaviour:
     cooldownTime: 0
   idle:
     clips:
-    - {fileID: 0}
+    - {fileID: 8300000, guid: f364ab70b07910c4fb34bfd03d8327e6, type: 3}
+    - {fileID: 8300000, guid: aaa090133b3f3404da028e621924dd8a, type: 3}
     volume: 0.5
     pitch: 1
-    pitchVariation: 0.1
+    pitchVariation: 0.05
     loop: 0
     randomizeClip: 1
     cooldownTime: 0

@@ -120,7 +120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4299297939949350997}
   m_HandleRect: {fileID: 730931170890163065}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -300,8 +300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showPanel:
     clips:
-    - {fileID: 8300000, guid: aa25687eb5f9b4a498fe7fe1ec4c1c9e, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 3eaba89ded11ceb4e8b47fa6eb747da4, type: 3}
+    volume: 0.7
     pitch: 1.06
     pitchVariation: 0.1
     loop: 0
@@ -309,16 +309,17 @@ MonoBehaviour:
     cooldownTime: 0
   hidePanel:
     clips:
-    - {fileID: 8300000, guid: 5f6fb209a6b10634fa7939155960acba, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 1b9f0c481cd939245a6b83d2d58ac587, type: 3}
+    volume: 0.7
     pitch: 1
     pitchVariation: 0.1
     loop: 0
     randomizeClip: 1
     cooldownTime: 0
   stepComplete:
-    clips: []
-    volume: 1
+    clips:
+    - {fileID: 8300000, guid: 511b60c0d8040bb40b9cd63697da6fde, type: 3}
+    volume: 0.7
     pitch: 1
     pitchVariation: 0.1
     loop: 0

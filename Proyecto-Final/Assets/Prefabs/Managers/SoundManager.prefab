@@ -418,8 +418,8 @@ MonoBehaviour:
     mute: 0
     audioSource: {fileID: 0}
   - name: HouseHit
-    clip: {fileID: 8300000, guid: 25a7f5f354fd27346815ad6ba439e130, type: 3}
-    volume: 0.2
+    clip: {fileID: 8300000, guid: 8709f98114a64bb43bd1c9ef291e7a61, type: 3}
+    volume: 0.3
     pitch: 1
     playOnAwake: 0
     loop: 0
