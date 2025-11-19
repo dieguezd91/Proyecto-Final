@@ -241,6 +241,11 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (currentAbility == ability) return;
 
+        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+        {
+            return;
+        }
+
         currentAbility = ability;
         OnAbilityChanged?.Invoke(currentAbility);
         TutorialEvents.InvokeAbilityChanged();

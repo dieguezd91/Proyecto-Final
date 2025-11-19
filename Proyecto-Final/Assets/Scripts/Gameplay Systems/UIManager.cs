@@ -280,8 +280,10 @@ public class UIManager : MonoBehaviour
         if (SeedSlots != null)
             SeedSlots.gameObject.SetActive(true);
 
-        if (hudAbilities != null)
-            hudAbilities.SetActive(true);
+        if (GameState != null)
+        {
+            GameState.OnGameStateChanged(LevelManager.Instance.currentGameState);
+        }
     }
 
     public IEnumerator AnimateContinuePanel()
