@@ -259,9 +259,14 @@ MonoBehaviour:
   onDamaged:
     m_PersistentCalls:
       m_Calls: []
-  objetDrop: {fileID: 1768544347340343859, guid: 6e5cf5dfd5e5d05449e7ddfe43c96b0d, type: 3}
   manaPickupPrefab: {fileID: 5772987197591363074, guid: 83d9a560608ef2e438e8562bff94e850, type: 3}
   manaDropChance: 10
+  lootTable:
+  - name: BossHeart
+    itemPrefab: {fileID: 1768544347340343859, guid: 6e5cf5dfd5e5d05449e7ddfe43c96b0d, type: 3}
+    dropChance: 100
+  dropScatterDistance: 0.5
+  explosionForce: 3
   dotSoundCooldown: 0.2
   isRespawning: 0
   isEnemy: 1
