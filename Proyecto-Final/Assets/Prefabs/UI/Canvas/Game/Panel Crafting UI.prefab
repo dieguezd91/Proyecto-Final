@@ -859,6 +859,43 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3008836743601523321}
     m_Modifications:
+    - target: {fileID: 3180047548736517084, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 107.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180047548736517084, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -489.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3739244440356756652, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 3739244440356756652, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -214.64496
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752447410321859416, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_text
+      value: 'PlantDescription PlantDescription PlantDescription PlantDescription
+        PlantDescription PlantDescription PlantDescription PlantDescription '
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752447410321859416, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752447410321859416, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3752447410321859416, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_overflowMode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8320980959970080120, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_text
+      value: PlantName
+      objectReference: {fileID: 0}
     - target: {fileID: 8325069651724435931, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_Name
       value: CraftInfo
@@ -889,11 +926,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 593.75
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 531.25
+      value: 700
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_LocalPosition.x
