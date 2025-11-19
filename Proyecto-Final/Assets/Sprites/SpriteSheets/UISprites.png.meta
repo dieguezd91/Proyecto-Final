@@ -2334,7 +2334,7 @@ TextureImporter:
         width: 64
         height: 64
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2342,6 +2342,27 @@ TextureImporter:
       bones: []
       spriteID: 5596437af8c84f144b3f5ba037dbf0f2
       internalID: -1696816199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NightUI
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 100
+        width: 40
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95f81dd92456be24da393c9f3e090865
+      internalID: -422728739
       vertices: []
       indices: 
       edges: []
@@ -2429,6 +2450,7 @@ TextureImporter:
       MoonStage3: -1032481509
       MoonStage4: -1529809225
       MouseClick: -140001844
+      NightUI: -422728739
       QKey: 1571990461
       RestorationButtonHeart: -678659094
       RestorationButtonUI: 924556296
