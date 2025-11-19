@@ -18,5 +18,6 @@ MonoBehaviour:
   fullyGrownSprite: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 1
   description: hola soy explosive
-  seedType: 0
+  seedType: 10
   slotIndex: 0
+  hasDeathAnimation: 1
