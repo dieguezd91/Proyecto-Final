@@ -402,7 +402,7 @@ MonoBehaviour:
   special:
     clips:
     - {fileID: 8300000, guid: e9758970408b29241ad79e9c76f521aa, type: 3}
-    volume: 0.7
+    volume: 1
     pitch: 1
     pitchVariation: 0.1
     loop: 0

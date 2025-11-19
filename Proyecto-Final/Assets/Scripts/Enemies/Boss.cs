@@ -155,7 +155,7 @@ public class Boss : EnemyBase
         animator.SetTrigger("attack");
 
         ApplyMeleeDamage();
-
+        PlayEnemySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
         yield return new WaitForSeconds(1f);
 
         isCurrentlyAttacking = false;
@@ -184,8 +184,6 @@ public class Boss : EnemyBase
 
         rb.velocity = Vector2.zero;
         animator.SetTrigger("attackSpecial");
-        PlayEnemySound(EnemySoundType.Special);
-
         yield return new WaitForSeconds(bossData.SpecialDelay);
 
         specialDamagedObjects.Clear();
@@ -233,6 +231,9 @@ public class Boss : EnemyBase
 
     public void OnSpawnMinionsAnimationEvent()
     {
+
+        PlayEnemySound(EnemySoundType.Special, SoundSourceType.Localized, transform);
+        Debug.LogWarning("Sonidoos");
         if (isSpawningMinions)
         {
             SpawnMinions();

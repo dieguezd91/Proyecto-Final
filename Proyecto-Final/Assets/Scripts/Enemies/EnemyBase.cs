@@ -324,6 +324,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     // Centralized sound helper — logs warnings if EnemySoundBase or sound clip is missing
     protected void PlayEnemySound(EnemySoundType soundType, SoundSourceType sourceType = SoundSourceType.Global, Transform parent = null)
     {
+        Debug.Log("Sonidoooooo");
         if (soundBase == null)
         {
             soundBase = GetComponent<EnemySoundBase>();
