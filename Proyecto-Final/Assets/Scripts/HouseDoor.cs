@@ -231,6 +231,11 @@ public class HouseDoor : MonoBehaviour
             worldTransition.ExitHouse();
             if (UIManager.Instance != null)
                 UIManager.Instance.ShowExteriorHUD();
+
+            if (levelManager != null && levelManager.GetCurrentGameState() == GameState.Night)
+            {
+                GameplayEvents.InvokePlayerExitedHouseDuringNight();
+            }
         }
     }
 
