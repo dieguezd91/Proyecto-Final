@@ -11,12 +11,14 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private List<TutorialStep> tutorialSteps;
     [SerializeField] private TutorialUI tutorialUI;
     [SerializeField] private bool enableTutorial = true;
+    [SerializeField] private float bufferProcessDelay = 0.3f;
 
     private TutorialStep currentStep;
     private int currentStepIndex = 0;
     private int currentProgress = 0;
     private bool tutorialActive = false;
     private bool isTransitioning = false;
+    private bool canAcceptInput = false;
 
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
     private PlayerController playerController;
@@ -124,7 +126,6 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
     }
 
-
     public void StartTutorial()
     {
         if (tutorialSteps == null || tutorialSteps.Count == 0)
@@ -141,6 +142,31 @@ public class TutorialManager : MonoBehaviour
         ShowStep(0);
     }
 
+    private void CompleteCurrentStep()
+    {
+        if (isTransitioning) return;
+        isTransitioning = true;
+        canAcceptInput = false;
+
+        if (playerController != null)
+        {
+            playerController.SetMovementEnabled(false);
+            playerController.SetCanAct(false);
+        }
+
+        TutorialEvents.InvokeStepCompleted(currentStep);
+
+        if (tutorialUI != null)
+        {
+            tutorialUI.HideStep();
+            Invoke(nameof(ShowNextStepDelayed), 0.6f);
+        }
+        else
+        {
+            ShowStep(currentStepIndex + 1);
+        }
+    }
+
     private void ShowStep(int index)
     {
         if (index >= tutorialSteps.Count)
@@ -153,6 +179,7 @@ public class TutorialManager : MonoBehaviour
         currentStep = tutorialSteps[index];
         currentProgress = 0;
         isTransitioning = false;
+        canAcceptInput = false;
 
         if (playerController != null)
         {
@@ -168,31 +195,56 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
-        int bufferSize = eventBuffer.Count;
-        if (bufferSize > 0)
-        {
-            for (int i = 0; i < bufferSize; i++)
-            {
-                TutorialObjectiveType bufferedEvent = eventBuffer.Dequeue();
-
-                if (bufferedEvent == currentStep.objectiveType)
-                {
-                    CheckObjective(bufferedEvent);
-                    if (isTransitioning) return;
-                }
-                else
-                {
-                    eventBuffer.Enqueue(bufferedEvent);
-                }
-            }
-        }
-
         if (tutorialUI != null)
         {
             if (!string.IsNullOrEmpty(currentStep.instructionText))
             {
                 tutorialUI.ShowStep(currentStep);
             }
+        }
+
+        Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
+    }
+
+    private void ProcessBufferAndEnableInput()
+    {
+        canAcceptInput = true;
+
+        List<TutorialObjectiveType> remainingEvents = new List<TutorialObjectiveType>();
+
+        while (eventBuffer.Count > 0)
+        {
+            TutorialObjectiveType bufferedEvent = eventBuffer.Dequeue();
+
+            if (bufferedEvent == currentStep.objectiveType)
+            {
+                currentProgress++;
+
+                if (currentProgress >= currentStep.requiredCount)
+                {
+                    while (eventBuffer.Count > 0)
+                    {
+                        remainingEvents.Add(eventBuffer.Dequeue());
+                    }
+
+                    foreach (var evt in remainingEvents)
+                    {
+                        eventBuffer.Enqueue(evt);
+                    }
+
+                    CompleteCurrentStep();
+                    return;
+                }
+            }
+            else
+            {
+                remainingEvents.Add(bufferedEvent);
+            }
+        }
+
+        foreach (var evt in remainingEvents)
+        {
+            eventBuffer.Enqueue(evt);
         }
     }
 
@@ -209,15 +261,16 @@ public class TutorialManager : MonoBehaviour
         if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
         {
             if (type == TutorialObjectiveType.Move) return;
-            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
+            eventBuffer.Enqueue(type);
             return;
         }
 
-        if (isTransitioning)
+        if (isTransitioning || !canAcceptInput)
         {
-            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
+            eventBuffer.Enqueue(type);
             return;
         }
+
         if (!tutorialActive || currentStep == null)
         {
             return;
@@ -225,38 +278,15 @@ public class TutorialManager : MonoBehaviour
 
         if (currentStep.objectiveType != type)
         {
-            if (!eventBuffer.Contains(type)) eventBuffer.Enqueue(type);
+            eventBuffer.Enqueue(type);
             return;
         }
 
         currentProgress++;
+
         if (currentProgress >= currentStep.requiredCount)
         {
             CompleteCurrentStep();
-        }
-    }
-
-    private void CompleteCurrentStep()
-    {
-        if (isTransitioning) return;
-        isTransitioning = true;
-
-        if (playerController != null)
-        {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(true);
-        }
-
-        TutorialEvents.InvokeStepCompleted(currentStep);
-
-        if (tutorialUI != null)
-        {
-            tutorialUI.HideStep();
-            Invoke(nameof(ShowNextStepDelayed), 0.6f);
-        }
-        else
-        {
-            ShowStep(currentStepIndex + 1);
         }
     }
 
@@ -268,6 +298,7 @@ public class TutorialManager : MonoBehaviour
     private void CompleteTutorial()
     {
         tutorialActive = false;
+        canAcceptInput = false;
 
         if (tutorialUI != null)
         {
@@ -301,7 +332,6 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_InventoryOpened() => CheckObjective(TutorialObjectiveType.OpenInventory);
     private void CheckObjective_AbilityChanged() => CheckObjective(TutorialObjectiveType.AbilityChanged);
 
-
     public void SkipTutorial()
     {
         if (!tutorialActive) return;
@@ -312,6 +342,7 @@ public class TutorialManager : MonoBehaviour
         CancelInvoke();
 
         isTransitioning = false;
+        canAcceptInput = false;
         eventBuffer.Clear();
         currentStep = null;
 
