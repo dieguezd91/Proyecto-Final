@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f6ecbd619a2ee7f42b9276522cb9bf58, type: 3}
-  m_Name: Storm Rose
+  m_Name: Thorned Tendrils
   m_EditorClassIdentifier: 
-  seedToCraft: 15
+  seedToCraft: 7
   materialsRequired:
   - materialType: 3
     quantity: 3
-  - materialType: 2
+  - materialType: 1
     quantity: 2
-  seedIcon: {fileID: -335066811, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  seedIcon: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
