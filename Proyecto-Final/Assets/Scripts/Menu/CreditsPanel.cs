@@ -12,7 +12,7 @@ public class CreditsPanel : UIControllerBase
     [SerializeField] private RectTransform _contentToScroll;
     [SerializeField] private float _scrollSpeed = 75f;
     [SerializeField] private float _startPositionY = -500f;
-    [SerializeField] private float _limitY = 1500f;
+    [SerializeField] private float _limitY;
 
     [Header("Panel Events")]
     [HideInInspector] public UnityEvent OnGoBackClicked = new();
