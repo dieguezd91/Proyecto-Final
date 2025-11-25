@@ -548,6 +548,15 @@ public class PlayerAbilitySystem : MonoBehaviour
             return false;
 
         Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(position);
+        Vector3Int playerCell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(transform.position);
+
+        if (cell == playerCell)
+        {
+            warningBubble?.ShowMessage("Don't dig your own grave!");
+            SoundManager.Instance?.PlayOneShot("Error");
+            return false;
+        }
+
         TileBase existingTile = TilePlantingSystem.Instance.PlantingTilemap.GetTile(cell);
         if (existingTile == tilledSoilTile)
         {
