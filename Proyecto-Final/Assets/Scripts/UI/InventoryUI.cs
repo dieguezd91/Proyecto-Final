@@ -44,6 +44,7 @@ public class InventoryUI : MonoBehaviour
     private void OnEnable()
     {
         UpdateAllSlots();
+        SelectFirstItem();
     }
 
     private void OnDestroy()
@@ -68,6 +69,23 @@ public class InventoryUI : MonoBehaviour
             uiSlots.Add(slot);
             slot.onLeftClick += HandleSlotClicked;
             slot.Clear();
+        }
+    }
+
+    private void SelectFirstItem()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            List<MaterialItem> allMaterials = InventoryManager.Instance.GetAllMaterials();
+
+            if (allMaterials.Count > 0)
+            {
+                HandleSlotClicked(allMaterials[0].type);
+            }
+            else
+            {
+                ClearDescriptionPanel();
+            }
         }
     }
 
@@ -98,6 +116,11 @@ public class InventoryUI : MonoBehaviour
             {
                 slot.Clear();
                 resourceToSlot.Remove(materialType);
+
+                if (descriptionName.text == InventoryManager.Instance.GetMaterialData(materialType).materialName)
+                {
+                    SelectFirstItem();
+                }
             }
             else
             {
