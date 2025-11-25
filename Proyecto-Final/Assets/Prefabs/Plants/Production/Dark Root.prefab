@@ -129,7 +129,7 @@ MonoBehaviour:
   highlightColor: {r: 1, g: 1, b: 0, a: 1}
   clickColor: {r: 1, g: 0, b: 0, a: 1}
   rewardType: 9
-  rewardAmount: 1
+  rewardAmount: 2
 --- !u!114 &5857128013590860986
 MonoBehaviour:
   m_ObjectHideFlags: 0

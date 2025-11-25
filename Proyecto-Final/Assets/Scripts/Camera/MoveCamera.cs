@@ -68,23 +68,30 @@ public class MoveCamera : MonoBehaviour
         Vector3 playerPos = mainChar.position;
         playerPos.z = transform.position.z;
 
-        Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
-        mouseWorld.z = playerPos.z;
-
-        Vector3 toMouse = mouseWorld - playerPos;
-        float dist = toMouse.magnitude;
-
         Vector3 offset = Vector3.zero;
-        if (dist > deadZoneRadius)
+        float speed = softFollowSpeed;
+
+        bool isTutorialActive = TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive();
+
+        if (!isTutorialActive)
         {
-            float effectiveDist = Mathf.Min(dist - deadZoneRadius, maxOffsetDistance);
-            offset = toMouse.normalized * effectiveDist;
+            Vector3 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = playerPos.z;
+
+            Vector3 toMouse = mouseWorld - playerPos;
+            float dist = toMouse.magnitude;
+
+            if (dist > deadZoneRadius)
+            {
+                float effectiveDist = Mathf.Min(dist - deadZoneRadius, maxOffsetDistance);
+                offset = toMouse.normalized * effectiveDist;
+            }
+
+            speed = (dist < softZoneRadius) ? softFollowSpeed : hardFollowSpeed;
         }
 
         Vector3 targetPos = playerPos + offset;
         targetPos.z = transform.position.z;
-
-        float speed = (dist < softZoneRadius) ? softFollowSpeed : hardFollowSpeed;
 
         transform.position = Vector3.Lerp(transform.position, targetPos, speed * Time.deltaTime);
     }
@@ -129,7 +136,6 @@ public class MoveCamera : MonoBehaviour
 
         Vector3 playerPos = mainChar.position;
 
-        // Dead zone
         Gizmos.color = deadZoneColor;
         Gizmos.DrawWireSphere(playerPos, deadZoneRadius);
 

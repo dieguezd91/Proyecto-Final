@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantName: Thorned Tendrils
   plantPrefab: {fileID: 6736001113723686055, guid: a0286c64e2e6c4a4a9c4554ba174ecd3, type: 3}
-  plantIcon: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  plantIcon: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   fullyGrownSprite: {fileID: -1251527286, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 1
   description: '<u>Defensive plant</u>. Deals damage to enemies that attack it. <u>WARNING:

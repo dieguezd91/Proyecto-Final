@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantName: Dark Root
   plantPrefab: {fileID: 3214456861987219935, guid: a3b61fa3938157140ad7b6fa0d84403f, type: 3}
-  plantIcon: {fileID: 697983331, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  plantIcon: {fileID: -473241699, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   fullyGrownSprite: {fileID: -2043935357, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
   daysToGrow: 1
   description: <u>Production plant</u>. Produces materials used for crafting.

@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   plantName: Volcanic Mushroom
   plantPrefab: {fileID: 6736001113723686055, guid: 8054a5c091224ec4ea656fbf0e6fdd3b, type: 3}
-  plantIcon: {fileID: 1726723143, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  fullyGrownSprite: {fileID: -2001277165, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
-  daysToGrow: 3
+  plantIcon: {fileID: -2039217953, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  fullyGrownSprite: {fileID: 1611987579, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  daysToGrow: 1
   description: <u>Defensive plant</u>. Shoots at enemies within range.
   seedType: 16
   slotIndex: 0

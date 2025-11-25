@@ -18,4 +18,4 @@ MonoBehaviour:
     quantity: 2
   - materialType: 5
     quantity: 2
-  seedIcon: {fileID: -1218528404, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
+  seedIcon: {fileID: -335066811, guid: e385e8b9bc6101e46a9a68cfbe630db3, type: 3}
