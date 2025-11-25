@@ -15,6 +15,7 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private ScrollRect textScrollRect;
     [SerializeField] private Button continueButton;
     [SerializeField] private GameObject scrollIndicator;
+    [SerializeField] private Image stepImageDisplay;
 
     [Header("SOUND REFERENCES")]
     [SerializeField] private TutorialSoundBase tutorialSoundBase;
@@ -64,6 +65,9 @@ public class TutorialUI : MonoBehaviour
             scrollIndicator.SetActive(false);
         }
 
+        if (stepImageDisplay != null)
+            stepImageDisplay.gameObject.SetActive(false);
+
         if (tutorialSoundBase == null) TryGetComponent(out tutorialSoundBase);
         if (writtingSoundBase == null) TryGetComponent(out writtingSoundBase);
 
@@ -90,6 +94,18 @@ public class TutorialUI : MonoBehaviour
 
         isVisible = true;
         tutorialPanel.SetActive(true);
+
+        if (stepImageDisplay != null)
+        {
+            bool hasImage = step.stepImage != null;
+            stepImageDisplay.gameObject.SetActive(hasImage);
+
+            if (hasImage)
+            {
+                stepImageDisplay.sprite = step.stepImage;
+                stepImageDisplay.preserveAspect = true;
+            }
+        }
 
         if (typewriterCoroutine != null)
             StopCoroutine(typewriterCoroutine);

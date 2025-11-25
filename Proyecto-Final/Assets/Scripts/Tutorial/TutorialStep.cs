@@ -10,6 +10,9 @@ public class TutorialStep : ScriptableObject
     [TextArea(3, 10)]
     public string instructionText;
 
+    [Header("VISUALS")]
+    public Sprite stepImage;
+
     public TutorialObjectiveType objectiveType;
     public int requiredCount = 1;
 
