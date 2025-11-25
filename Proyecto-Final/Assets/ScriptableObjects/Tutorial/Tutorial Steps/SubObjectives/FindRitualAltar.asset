@@ -15,6 +15,7 @@ MonoBehaviour:
   stepID: FindRitualAltar
   stepOrder: 13
   instructionText: Finally, locate the Ritual Altar.
+  stepImage: {fileID: 1845753906, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   objectiveType: 21
   requiredCount: 1
   isGatedStep: 1

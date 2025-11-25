@@ -21,6 +21,17 @@ public class TutorialUI : MonoBehaviour
     [SerializeField] private TutorialSoundBase tutorialSoundBase;
     [SerializeField] private WrittingSoundBase writtingSoundBase;
 
+    [Header("LAYOUT REFERENCES")]
+    [SerializeField] private RectTransform textScrollViewport;
+
+    [Header("LAYOUT SETTINGS - NO IMAGE (Full Width)")]
+    [SerializeField] private float sizeDeltaX_NoImage = -50f;
+    [SerializeField] private float anchoredPosX_NoImage = 0f;
+
+    [Header("LAYOUT SETTINGS - WITH IMAGE (Reduced)")]
+    [SerializeField] private float sizeDeltaX_WithImage = -230f;
+    [SerializeField] private float anchoredPosX_WithImage = -80f;
+
     [Header("ANIMATION SETTINGS")]
     [SerializeField] private float fadeSpeed = 0.5f;
     [SerializeField] private float scaleAnimDuration = 0.3f;
@@ -42,11 +53,9 @@ public class TutorialUI : MonoBehaviour
 
     private void Awake()
     {
-        if (canvasGroup != null)
-            canvasGroup.alpha = 0f;
-
-        if (panelTransform != null)
-            panelTransform.localScale = Vector3.zero;
+        if (canvasGroup != null) canvasGroup.alpha = 0f;
+        if (panelTransform != null) panelTransform.localScale = Vector3.zero;
+        if (stepImageDisplay != null) stepImageDisplay.gameObject.SetActive(false);
 
         if (continueButton != null)
         {
@@ -54,19 +63,13 @@ public class TutorialUI : MonoBehaviour
             continueButton.gameObject.SetActive(false);
         }
 
-        if (textScrollRect != null)
-        {
-            textScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
-        }
+        if (textScrollRect != null) textScrollRect.onValueChanged.AddListener(OnScrollValueChanged);
 
         if (scrollIndicator != null)
         {
             indicatorCanvasGroup = scrollIndicator.GetComponent<CanvasGroup>();
             scrollIndicator.SetActive(false);
         }
-
-        if (stepImageDisplay != null)
-            stepImageDisplay.gameObject.SetActive(false);
 
         if (tutorialSoundBase == null) TryGetComponent(out tutorialSoundBase);
         if (writtingSoundBase == null) TryGetComponent(out writtingSoundBase);
@@ -85,21 +88,17 @@ public class TutorialUI : MonoBehaviour
     public void ShowStep(TutorialStep step)
     {
         TutorialSoundBase soundController = FindObjectOfType<TutorialSoundBase>();
-        if (soundController != null)
-        {
-            tutorialSoundBase.PlaySound(TutorialSoundType.ShowPanel);
-        }
+        if (soundController != null) tutorialSoundBase.PlaySound(TutorialSoundType.ShowPanel);
 
         KillAllAnimations();
-
         isVisible = true;
         tutorialPanel.SetActive(true);
 
+        bool hasImage = step.stepImage != null && stepImageDisplay != null;
+
         if (stepImageDisplay != null)
         {
-            bool hasImage = step.stepImage != null;
             stepImageDisplay.gameObject.SetActive(hasImage);
-
             if (hasImage)
             {
                 stepImageDisplay.sprite = step.stepImage;
@@ -107,8 +106,22 @@ public class TutorialUI : MonoBehaviour
             }
         }
 
-        if (typewriterCoroutine != null)
-            StopCoroutine(typewriterCoroutine);
+        if (textScrollViewport != null)
+        {
+            float targetSizeDeltaX = hasImage ? sizeDeltaX_WithImage : sizeDeltaX_NoImage;
+            float targetPosX = hasImage ? anchoredPosX_WithImage : anchoredPosX_NoImage;
+
+            Vector2 size = textScrollViewport.sizeDelta;
+            size.x = targetSizeDeltaX;
+            textScrollViewport.sizeDelta = size;
+
+            Vector2 pos = textScrollViewport.anchoredPosition;
+            pos.x = targetPosX;
+            textScrollViewport.anchoredPosition = pos;
+        }
+
+        if (typewriterCoroutine != null) StopCoroutine(typewriterCoroutine);
+
         typewriterCoroutine = StartCoroutine(TypewriterEffect(step.instructionText));
 
         if (continueButton != null)
@@ -117,10 +130,8 @@ public class TutorialUI : MonoBehaviour
         }
 
         currentSequence = DOTween.Sequence();
-
         currentSequence.Append(canvasGroup.DOFade(1f, fadeSpeed).SetEase(Ease.OutQuad));
         currentSequence.Join(panelTransform.DOScale(Vector3.one, scaleAnimDuration).SetEase(showEase));
-
         currentSequence.SetUpdate(true);
     }
 
@@ -136,20 +147,15 @@ public class TutorialUI : MonoBehaviour
         KillAllAnimations();
         isVisible = false;
 
-        if (continueButton != null)
-        {
-            continueButton.gameObject.SetActive(false);
-        }
-
+        if (continueButton != null) continueButton.gameObject.SetActive(false);
         if (scrollIndicator != null) scrollIndicator.SetActive(false);
+
         StopBlinkAnimation();
 
         currentSequence = DOTween.Sequence();
-
         currentSequence.Append(panelTransform.DOScale(Vector3.zero, scaleAnimDuration).SetEase(hideEase));
         currentSequence.Join(canvasGroup.DOFade(0f, fadeSpeed).SetEase(Ease.InQuad));
         currentSequence.OnComplete(() => tutorialPanel.SetActive(false));
-
         currentSequence.SetUpdate(true);
     }
 
@@ -160,32 +166,14 @@ public class TutorialUI : MonoBehaviour
         KillAllAnimations();
         isVisible = false;
 
-        if (continueButton != null)
-        {
-            continueButton.gameObject.SetActive(false);
-        }
-
-        if (scrollIndicator != null)
-        {
-            scrollIndicator.SetActive(false);
-        }
+        if (continueButton != null) continueButton.gameObject.SetActive(false);
+        if (scrollIndicator != null) scrollIndicator.SetActive(false);
 
         StopBlinkAnimation();
 
-        if (canvasGroup != null)
-        {
-            canvasGroup.alpha = 0f;
-        }
-
-        if (panelTransform != null)
-        {
-            panelTransform.localScale = Vector3.zero;
-        }
-
-        if (tutorialPanel != null)
-        {
-            tutorialPanel.SetActive(false);
-        }
+        if (canvasGroup != null) canvasGroup.alpha = 0f;
+        if (panelTransform != null) panelTransform.localScale = Vector3.zero;
+        if (tutorialPanel != null) tutorialPanel.SetActive(false);
     }
 
     private IEnumerator TypewriterEffect(string text)
@@ -199,41 +187,34 @@ public class TutorialUI : MonoBehaviour
         if (textScrollRect != null)
         {
             LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.rectTransform);
+            if (instructionText.transform.parent != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.transform.parent.GetComponent<RectTransform>());
 
             textScrollRect.verticalNormalizedPosition = 1f;
             UpdateScrollIndicator();
         }
 
         int totalCharacters = text.Length;
-
         keypressCounter = 0;
 
         for (int i = 0; i <= totalCharacters; i++)
         {
             instructionText.maxVisibleCharacters = i;
-
             if (i > 0 && i <= text.Length)
             {
                 char addedChar = text[i - 1];
-
                 if (!char.IsWhiteSpace(addedChar))
                 {
                     keypressCounter++;
                     int k = Mathf.Max(1, keypressesPerSound);
-
-                    if (writtingSoundBase != null)
+                    if (writtingSoundBase != null && ((keypressCounter - 1) % k) == 0)
                     {
-                        if (((keypressCounter - 1) % k) == 0)
-                        {
-                            writtingSoundBase.PlayKeypressSound();
-                        }
+                        writtingSoundBase.PlayKeypressSound();
                     }
                 }
             }
-
             yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
-
         typewriterCoroutine = null;
     }
 

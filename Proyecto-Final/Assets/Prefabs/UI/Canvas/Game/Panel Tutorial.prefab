@@ -266,9 +266,12 @@ MonoBehaviour:
   textScrollRect: {fileID: 8583990478505296957}
   continueButton: {fileID: 3071825040681412775}
   scrollIndicator: {fileID: 3430871955309384948}
-  stepImageDisplay: {fileID: 0}
-  tutorialSoundBase: {fileID: 0}
-  writtingSoundBase: {fileID: 0}
+  stepImageDisplay: {fileID: 1558797820908733529}
+  tutorialSoundBase: {fileID: 6372880803306158497}
+  writtingSoundBase: {fileID: 5829821638755161664}
+  textScrollViewport: {fileID: 7133316237255885089}
+  viewportWidthNoImage: 800
+  viewportWidthWithImage: 520
   fadeSpeed: 2
   scaleAnimDuration: 0.3
   typewriterSpeed: 0.015
@@ -1072,8 +1075,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -85, y: 15}
-  m_SizeDelta: {x: -230, y: -80}
+  m_AnchoredPosition: {x: -9.5, y: 15}
+  m_SizeDelta: {x: -80, y: -80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4701123633476226608
 CanvasRenderer:

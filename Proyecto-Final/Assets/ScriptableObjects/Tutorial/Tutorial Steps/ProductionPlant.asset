@@ -24,6 +24,8 @@ MonoBehaviour:
 
     Remember to hover over them to read
     and learn their details.'
+  stepImage: {fileID: -473241699, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   objectiveType: 16
   requiredCount: 1
+  isGatedStep: 0
   waitDuration: 2
