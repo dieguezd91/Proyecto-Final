@@ -260,25 +260,15 @@ public class TutorialManager : MonoBehaviour
 
     private void CheckObjective(TutorialObjectiveType type)
     {
-        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.Wait)
-        {
-            if (type == TutorialObjectiveType.Move) return;
-            eventBuffer.Enqueue(type);
-            return;
-        }
+        if (!tutorialActive || currentStep == null) return;
 
-        if (isTransitioning || !canAcceptInput)
-        {
-            eventBuffer.Enqueue(type);
-            return;
-        }
+        if (currentStep.objectiveType == TutorialObjectiveType.Wait) return;
 
-        if (!tutorialActive || currentStep == null)
-        {
-            return;
-        }
+        if (currentStep.objectiveType != type) return;
 
-        if (currentStep.objectiveType != type)
+        if (isTransitioning) return;
+
+        if (!canAcceptInput)
         {
             eventBuffer.Enqueue(type);
             return;
