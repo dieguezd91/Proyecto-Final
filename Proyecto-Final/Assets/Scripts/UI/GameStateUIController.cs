@@ -374,6 +374,12 @@ public class GameStateUIController : UIControllerBase
             isHiding = true;
             blurTween = CreateFocalLengthTween(0f, hideTransitionDuration, true);
         }
+
+        // When inventory closes, resume tutorial if it was paused by the menu
+        if (TutorialManager.Instance != null)
+        {
+            TutorialManager.Instance.ResumeTutorial();
+        }
     }
 
     private void HandleInventoryOpenedEvent()
@@ -384,6 +390,12 @@ public class GameStateUIController : UIControllerBase
         {
             isHiding = false;
             blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
+        }
+
+        // Pause the tutorial when the inventory opens so it hides and can be resumed on close
+        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
+        {
+            TutorialManager.Instance.PauseTutorial();
         }
     }
 }
