@@ -308,6 +308,13 @@ public class PlayerController : MonoBehaviour
 
     void CastSpell()
     {
+        // Prevent casting while inside an interior (house)
+        WorldTransitionAnimator worldTransitionCheck = FindObjectOfType<WorldTransitionAnimator>();
+        if (worldTransitionCheck != null && worldTransitionCheck.IsInInterior)
+        {
+            return;
+        }
+
         int selectedSlotIndex = SpellInventory.Instance.GetSelectedSlotIndex();
         SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();
 
@@ -349,6 +356,11 @@ public class PlayerController : MonoBehaviour
 
     private bool CanCastSpell()
     {
+        // Block casting if the player is inside a house/interior
+        WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+        if (worldTransition != null && worldTransition.IsInInterior)
+            return false;
+
         if (SpellInventory.Instance == null) return false;
 
         SpellSlot selectedSpell = SpellInventory.Instance.GetSelectedSpellSlot();

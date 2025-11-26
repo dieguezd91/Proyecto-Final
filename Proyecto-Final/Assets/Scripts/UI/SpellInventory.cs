@@ -122,8 +122,6 @@ public class SpellInventory : MonoBehaviour
         var slot = GetSelectedSpellSlot();
         if (slot == null || !slot.isUnlocked) return false;
         if (slot.currentCooldown > 0f) return false;
-
-        // Verificar si hay suficiente maná
         var manaSystem = FindObjectOfType<ManaSystem>();
         if (manaSystem != null && manaSystem.GetCurrentMana() < slot.manaCost)
             return false;
