@@ -198,6 +198,10 @@ public class PlayerController : MonoBehaviour
         moveInput.y = Input.GetAxisRaw("Vertical");
         moveInput = moveInput.normalized;
 
+        // Tutorial movement trigger: only fire the tutorial move event the first time the player moves
+        // after the tutorial step has armed it (hasMovedForTutorial == false). External systems (e.g.,
+        // TutorialManager) can call ResetHasMovedForTutorial() to re-arm this trigger when showing a
+        // Move tutorial step.
         if (!hasMovedForTutorial && moveInput.sqrMagnitude > 0.01f)
         {
             hasMovedForTutorial = true;
@@ -570,4 +574,18 @@ public class PlayerController : MonoBehaviour
 
         SpellInventory.Instance.StartCooldown(teleportSlotIndex);
     }
+
+    // Public API used by tutorial systems ---------------------------------
+    // Reset the internal flag so the next player movement will invoke the tutorial move event.
+    public void ResetHasMovedForTutorial()
+    {
+        hasMovedForTutorial = false;
+    }
+
+    // Return whether the player is currently moving (useful to immediately trigger move tutorial if already moving)
+    public bool IsCurrentlyMoving()
+    {
+        return rb != null && rb.velocity.sqrMagnitude > 0.01f;
+    }
+    // ---------------------------------------------------------------------
 }
