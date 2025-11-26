@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: FindCraftingCauldron
   stepOrder: 9
-  instructionText: This house is your sanctuary. First, find the Crafting Cauldron.
+  instructionText: Within these walls lies your ancestral power. Seek first the Cauldron,
+    where alchemy breathes life into your defenses.
   stepImage: {fileID: 1046542882, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   objectiveType: 19
   requiredCount: 1

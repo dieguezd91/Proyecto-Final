@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: OpenCrafting
   stepOrder: 10
-  instructionText: This is the Crafting Cauldron. Interact with it to craft new seeds.
+  instructionText: Here, the elements converge. Approach the Cauldron to forge the
+    seeds that will guard our land.
   stepImage: {fileID: 0}
   objectiveType: 12
   requiredCount: 1
