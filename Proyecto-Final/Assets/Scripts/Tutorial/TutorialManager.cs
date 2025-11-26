@@ -20,12 +20,7 @@ public class TutorialManager : MonoBehaviour
     private bool isTransitioning = false;
     private bool canAcceptInput = false;
     private bool _completeAfterTypingSubscribed = false;
-
     private bool isPausedByMenu = false;
-
-    // Defer/hold the automatic showing of the next step after completing the current step.
-    // Useful when the game needs to wait for an external event (e.g., ritual animation) before
-    // showing the next tutorial instruction.
     private bool nextStepDeferred = false;
     private bool nextStepPending = false;
 
@@ -85,8 +80,7 @@ public class TutorialManager : MonoBehaviour
                 playerController.SetMovementEnabled(false);
                 playerController.SetCanAct(false);
             }
-
-            // Prevent accepting buffered input until the next step is shown
+            
             canAcceptInput = false;
         }
     }
@@ -105,11 +99,8 @@ public class TutorialManager : MonoBehaviour
             else
                 tutorialUI.ShowStep(step);
         }
-
-        // Remove stale movement events that might have occurred before the step became visible
+        
         RemoveBufferedObjective(TutorialObjectiveType.Move);
-
-        // Schedule processing of the event buffer after a small delay so UI/LevelManager states settle
         Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
     }
 
@@ -128,9 +119,9 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        playerController = FindObjectOfType<PlayerController>();
+        InitializePlayerController();
 
-        if (enableTutorial && tutorialSteps.Count > 0)
+        if (enableTutorial && tutorialSteps != null && tutorialSteps.Count > 0)
         {
             Invoke(nameof(StartTutorial), 0.5f);
         }
@@ -147,6 +138,13 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void SubscribeToEvents()
+    {
+        // Split subscriptions into tutorial-related and UI-related groups for clarity
+        SubscribeTutorialEventHandlers();
+        SubscribeUIEventHandlers();
+    }
+
+    private void SubscribeTutorialEventHandlers()
     {
         TutorialEvents.OnPlayerMoved += CheckObjective_PlayerMoved;
         TutorialEvents.OnGroundDug += CheckObjective_GroundDug;
@@ -176,8 +174,10 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnFirstPlantReadyToHarvest += CheckObjective_FirstPlantReady;
         TutorialEvents.OnAbilityChanged += CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted += CheckObjective_TeleportCasted;
+    }
 
-        // Pause/resume tutorial when inventory or pause menus open/close
+    private void SubscribeUIEventHandlers()
+    {
         UIEvents.OnPauseMenuRequested += PauseTutorial;
         UIEvents.OnPauseMenuClosed += ResumeTutorial;
         UIEvents.OnInventoryOpened += PauseTutorial;
@@ -185,6 +185,12 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void UnsubscribeFromEvents()
+    {
+        UnsubscribeTutorialEventHandlers();
+        UnsubscribeUIEventHandlers();
+    }
+
+    private void UnsubscribeTutorialEventHandlers()
     {
         TutorialEvents.OnPlayerMoved -= CheckObjective_PlayerMoved;
         TutorialEvents.OnGroundDug -= CheckObjective_GroundDug;
@@ -214,7 +220,10 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
         TutorialEvents.OnAbilityChanged -= CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
+    }
 
+    private void UnsubscribeUIEventHandlers()
+    {
         UIEvents.OnPauseMenuRequested -= PauseTutorial;
         UIEvents.OnPauseMenuClosed -= ResumeTutorial;
         UIEvents.OnInventoryOpened -= PauseTutorial;
@@ -244,18 +253,17 @@ public class TutorialManager : MonoBehaviour
         canAcceptInput = false;
 
         TutorialEvents.InvokeStepCompleted(currentStep);
-
-        // Pre-apply gating for the upcoming step (if any) so the player cannot move
-        // while UI panels/animations execute. This covers both immediate and deferred
-        // transitions to the next tutorial step.
         PreApplyGatingForUpcomingStep();
+        ScheduleShowNextStep();
+    }
 
+    private void ScheduleShowNextStep()
+    {
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
             if (nextStepDeferred)
             {
-                // Mark that a next step is pending, but don't show it yet.
                 nextStepPending = true;
             }
             else
@@ -275,14 +283,12 @@ public class TutorialManager : MonoBehaviour
             }
         }
     }
-
-    // Call to defer showing the next step after the current step completes.
+    
     public void DeferNextStep()
     {
         nextStepDeferred = true;
     }
 
-    // Release a previously deferred next-step and show it if one was pending.
     public void ReleaseDeferredNextStep(bool immediate = false)
     {
         if (!nextStepDeferred && !nextStepPending) return;
@@ -295,24 +301,18 @@ public class TutorialManager : MonoBehaviour
 
         if (immediate)
         {
-            // Show next step immediately (bypass the small transition delay)
-            ShowNextStepDelayed(); // directly call (no invoke) to avoid the 0.6s wait
+
+            ShowNextStepDelayed();
         }
         else
         {
-            // Keep the small delay used when normally transitioning to the next step.
             Invoke(nameof(ShowNextStepDelayed), 0.6f);
         }
     }
     
     private void ShowStep(int index)
     {
-        // Ensure we don't carry over any typing-finish subscription from previous step
-        if (_completeAfterTypingSubscribed && tutorialUI != null)
-        {
-            tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
-            _completeAfterTypingSubscribed = false;
-        }
+        ClearTypingSubscriptionIfNeeded();
 
         if (index >= tutorialSteps.Count)
         {
@@ -326,27 +326,57 @@ public class TutorialManager : MonoBehaviour
         isTransitioning = false;
         canAcceptInput = false;
         
+        if (tutorialUI != null && string.IsNullOrEmpty(currentStep.instructionText))
+        {
+            HandleTrackingOnlyStep(currentStep);
+            return;
+        }
+
         if (tutorialUI != null)
         {
             if (!string.IsNullOrEmpty(currentStep.instructionText))
             {
-                var lm = LevelManager.Instance;
-                bool inInventory = lm != null && lm.currentGameState == GameState.OnInventory;
-                bool inPaused = lm != null && lm.currentGameState == GameState.Paused;
-
-                if (inInventory || inPaused)
+                if (IsLevelPausedOrInInventory())
                 {
-                    isPausedByMenu = true;
-                    UIEvents.OnInventoryClosed += ShowPendingStepFromMenu;
-                    UIEvents.OnPauseMenuClosed += ShowPendingStepFromMenu;
+                    RegisterPendingStepShowHandlers();
                 }
                 else
                 {
-                    // Use centralized display path (applies gating and arms move trigger if needed)
                     DisplayStep(currentStep);
                 }
             }
         }
+    }
+
+    private void RegisterPendingStepShowHandlers()
+    {
+        isPausedByMenu = true;
+        UIEvents.OnInventoryClosed += ShowPendingStepFromMenu;
+        UIEvents.OnPauseMenuClosed += ShowPendingStepFromMenu;
+    }
+
+    private void ClearTypingSubscriptionIfNeeded()
+    {
+        if (_completeAfterTypingSubscribed && tutorialUI != null)
+        {
+            tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
+            _completeAfterTypingSubscribed = false;
+        }
+    }
+
+    private bool IsLevelPausedOrInInventory()
+    {
+        var lm = LevelManager.Instance;
+        return lm != null && (lm.currentGameState == GameState.OnInventory || lm.currentGameState == GameState.Paused);
+    }
+
+    private void HandleTrackingOnlyStep(TutorialStep step)
+    {
+        tutorialUI.HideStepImmediate();
+        ApplyInputGatingForStep(step);
+        ArmMoveTriggerIfNeeded(step);
+        RemoveBufferedObjective(TutorialObjectiveType.Move);
+        Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
     }
 
     private void ProcessBufferAndEnableInput()
@@ -365,19 +395,9 @@ public class TutorialManager : MonoBehaviour
 
                 if (currentProgress >= currentStep.requiredCount)
                 {
-                    // If the UI is still typing text, defer completing the step until typing finishes
                     if (tutorialUI != null && tutorialUI.IsTyping)
                     {
-                        if (!_completeAfterTypingSubscribed)
-                        {
-                            tutorialUI.TypingFinished += OnUITypingFinishedToCompleteStep;
-                            _completeAfterTypingSubscribed = true;
-                        }
-                        // leave remaining events buffered
-                        foreach (var evt in remainingEvents)
-                        {
-                            eventBuffer.Enqueue(evt);
-                        }
+                        SubscribeTypingFinishedIfNeeded(remainingEvents);
                         return;
                     }
 
@@ -391,6 +411,20 @@ public class TutorialManager : MonoBehaviour
             }
         }
 
+        foreach (var evt in remainingEvents)
+        {
+            eventBuffer.Enqueue(evt);
+        }
+    }
+
+    private void SubscribeTypingFinishedIfNeeded(List<TutorialObjectiveType> remainingEvents)
+    {
+        if (!_completeAfterTypingSubscribed)
+        {
+            tutorialUI.TypingFinished += OnUITypingFinishedToCompleteStep;
+            _completeAfterTypingSubscribed = true;
+        }
+        
         foreach (var evt in remainingEvents)
         {
             eventBuffer.Enqueue(evt);
@@ -445,8 +479,6 @@ public class TutorialManager : MonoBehaviour
         }
 
         TutorialEvents.InvokeTutorialCompleted();
-
-        Debug.Log("Tutorial completado");
     }
 
     private void CheckObjective_PlayerMoved() => CheckObjective(TutorialObjectiveType.Move);
@@ -475,9 +507,6 @@ public class TutorialManager : MonoBehaviour
     public void SkipTutorial()
     {
         if (!tutorialActive) return;
-
-        Debug.Log("Saltando tutorial...");
-
         StopAllCoroutines();
         CancelInvoke();
 
@@ -528,8 +557,6 @@ public class TutorialManager : MonoBehaviour
         {
             tutorialUI.HideStepImmediate();
         }
-
-        Debug.Log("[Tutorial] Tutorial pausado por menú");
     }
 
     public void ResumeTutorial()
@@ -540,31 +567,23 @@ public class TutorialManager : MonoBehaviour
 
         if (tutorialUI != null && currentStep != null)
         {
-            // Apply gating and arm move trigger via helpers so behavior is consistent
             ApplyInputGatingForStep(currentStep);
             ArmMoveTriggerIfNeeded(currentStep);
 
             tutorialUI.ForceShowStep(currentStep);
             Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
         }
-
-        Debug.Log("[Tutorial] Tutorial reanudado");
     }
 
     private void ShowPendingStepFromMenu()
     {
-        // Unsubscribe both in case either fires
         UIEvents.OnInventoryClosed -= ShowPendingStepFromMenu;
         UIEvents.OnPauseMenuClosed -= ShowPendingStepFromMenu;
 
         isPausedByMenu = false;
 
-        Debug.LogFormat("TutorialManager: ShowPendingStepFromMenu called for step {0}", currentStepIndex);
-
         if (tutorialUI != null && currentStep != null && !string.IsNullOrEmpty(currentStep.instructionText))
         {
-            // Defer slightly so the UI and LevelManager state can settle and avoid immediate hide races
-            Debug.LogFormat("TutorialManager: scheduling ForceShowStep for step {0} (delayed)", currentStepIndex);
             Invoke(nameof(DelayedForceShowCurrentStep), 0.05f);
         }
     }
@@ -573,13 +592,7 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialUI != null && currentStep != null && !string.IsNullOrEmpty(currentStep.instructionText))
         {
-
-            // If this is a Move tutorial, re-arm the player's move trigger and trigger immediately if moving
-            if (currentStep.objectiveType == TutorialObjectiveType.Move && playerController != null)
-            {
-                playerController.ResetHasMovedForTutorial();
-                if (playerController.IsCurrentlyMoving()) TutorialEvents.InvokePlayerMoved();
-            }
+            ArmMoveTriggerIfNeeded(currentStep);
 
             tutorialUI.ForceShowStep(currentStep);
             RemoveBufferedObjective(TutorialObjectiveType.Move);
@@ -605,8 +618,7 @@ public class TutorialManager : MonoBehaviour
 
         var lm = LevelManager.Instance;
         if (lm == null) return;
-
-        // If we were paused by a menu but the level state no longer indicates pause/inventory, resume and show the pending step
+        
         if (lm.currentGameState != GameState.Paused && lm.currentGameState != GameState.OnInventory)
         {
             ShowPendingStepFromMenu();
@@ -620,11 +632,8 @@ public class TutorialManager : MonoBehaviour
 
     private void OnUITypingFinishedToCompleteStep()
     {
-        // Unsubscribe to avoid repeated triggers
         if (tutorialUI != null) tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
         _completeAfterTypingSubscribed = false;
-
-        // Delay a bit to allow the player to read final characters
         StartCoroutine(DelayedCompleteAfterTypingCoroutine());
     }
 
@@ -635,5 +644,10 @@ public class TutorialManager : MonoBehaviour
         {
             CompleteCurrentStep();
         }
+    }
+
+    private void InitializePlayerController()
+    {
+        playerController = FindObjectOfType<PlayerController>();
     }
 }
