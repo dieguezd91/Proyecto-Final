@@ -33,6 +33,14 @@ public class RecipeButton : ImprovedUIButton
             seedIcon.preserveAspect = true;
         }
     }
+
+    public void SetSelected(bool selected)
+    {
+        // Rely on the Button component's transition (Sprite Swap) to display selected state.
+        var button = GetComponent<Button>();
+        if (button != null && selected)
+            button.Select();
+    }
     #endregion
 
     #region Public API

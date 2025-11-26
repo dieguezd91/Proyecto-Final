@@ -819,7 +819,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1227047478325976810
 RectTransform:
   m_ObjectHideFlags: 0
@@ -892,6 +892,10 @@ PrefabInstance:
       propertyPath: m_overflowMode
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6775591534648735571, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8320980959970080120, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_text
       value: PlantName
@@ -914,7 +918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_AnchorMin.x
@@ -922,7 +926,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_SizeDelta.x
@@ -962,11 +966,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 1013.75
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -350
       objectReference: {fileID: 0}
     - target: {fileID: 8675200087668652037, guid: b19993590589cb84ab75489f5b24bd61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1065,7 +1069,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_AnchorMin.x
@@ -1073,7 +1077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_SizeDelta.x
@@ -1081,7 +1085,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 950
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1117,7 +1121,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -475
       objectReference: {fileID: 0}
     - target: {fileID: 6108517584160988044, guid: 336602ed23672c946ab0780a6187b163, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1131,7 +1135,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8621797777716981263, guid: 336602ed23672c946ab0780a6187b163, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 845175429821698745, guid: 336602ed23672c946ab0780a6187b163, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

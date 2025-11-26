@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Linq;
 
 public class CraftingUIManager : MonoBehaviour
 {
@@ -30,6 +32,7 @@ public class CraftingUIManager : MonoBehaviour
     private SeedsEnum selectedSeed;
     private List<RecipeButton> recipeButtons = new List<RecipeButton>();
     private bool hasSelectedRecipe = false;
+    private RecipeButton _currentSelectedButton = null;
 
     public static bool isCraftingUIOpen = false;
 
@@ -95,6 +98,53 @@ public class CraftingUIManager : MonoBehaviour
         ResetRecipeDisplay();
         HideCraftButton();
 
+        // Ensure the UI shows a recipe when opened: if we previously had a selection, reapply it; otherwise select the first available recipe
+        if (craftingSystem != null)
+        {
+            if (hasSelectedRecipe)
+            {
+                var existingRecipe = craftingSystem.GetRecipe(selectedSeed);
+                if (existingRecipe != null)
+                {
+                    SelectRecipe(existingRecipe);
+                    // Ensure UI layout has updated before toggling visuals
+                    Canvas.ForceUpdateCanvases();
+                    // Ensure the button visuals are set
+                    var btn = FindButtonForRecipe(existingRecipe);
+                    if (btn != null)
+                    {
+                        if (_currentSelectedButton != null && _currentSelectedButton != btn) _currentSelectedButton.SetSelected(false);
+                        btn.SetSelected(true);
+                        // ensure the EventSystem also marks it selected so built-in visuals apply
+                        UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(btn.gameObject);
+                        // Execute pointer enter so hover visuals/sprites activate
+                        ExecuteEvents.Execute(btn.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerEnterHandler);
+                        _currentSelectedButton = btn;
+                    }
+                }
+            }
+            else
+            {
+                var recipes = craftingSystem.GetAllAvailableRecipes();
+                foreach (var r in recipes)
+                {
+                    SelectRecipe(r);
+                    // Ensure UI layout has updated before toggling visuals
+                    Canvas.ForceUpdateCanvases();
+                    var btn = FindButtonForRecipe(r);
+                    if (btn != null)
+                    {
+                        if (_currentSelectedButton != null && _currentSelectedButton != btn) _currentSelectedButton.SetSelected(false);
+                        btn.SetSelected(true);
+                        UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(btn.gameObject);
+                        ExecuteEvents.Execute(btn.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerEnterHandler);
+                        _currentSelectedButton = btn;
+                    }
+                    break;
+                }
+            }
+        }
+
         LevelManager.Instance?.SetGameState(GameState.OnCrafting);
     }
 
@@ -119,9 +169,20 @@ public class CraftingUIManager : MonoBehaviour
         CleanupRecipeButtons();
 
         var recipes = craftingSystem.GetAllAvailableRecipes();
+
+        // Track the first recipe so we can explicitly select it and populate the UI
+        CraftingRecipeSeedData firstRecipe = null;
         foreach (var recipe in recipes)
         {
+            if (firstRecipe == null) firstRecipe = recipe;
             CreateRecipeButton(recipe);
+        }
+
+        // If there is at least one recipe, explicitly select it so the materials and craft button are populated.
+        if (firstRecipe != null)
+        {
+            // Select on the next frame to avoid initialization/timing issues that prevent UI from updating immediately
+            StartCoroutine(SelectFirstRecipeNextFrame(firstRecipe));
         }
     }
 
@@ -139,9 +200,37 @@ public class CraftingUIManager : MonoBehaviour
         var plantData = craftingSystem.GetPlantData(recipe.SeedToCraft);
         recipeBtn.Setup(recipe, plantData);
 
-        recipeBtn.OnClick.AddListener(() => SelectRecipe(recipe));
+        // register handler passing the button reference so we can manage visual selection
+        recipeBtn.OnClick.AddListener(() => OnRecipeButtonClicked(recipeBtn, recipe));
 
         recipeButtons.Add(recipeBtn);
+    }
+
+    // Helper to find the RecipeButton instance for a given recipe
+    private RecipeButton FindButtonForRecipe(CraftingRecipeSeedData recipe)
+    {
+        if (recipe == null) return null;
+        foreach (var rb in recipeButtons)
+        {
+            if (rb == null) continue;
+            var data = rb.GetRecipeData();
+            if (data != null && data.SeedToCraft == recipe.SeedToCraft)
+                return rb;
+        }
+        return null;
+    }
+
+    private void OnRecipeButtonClicked(RecipeButton btn, CraftingRecipeSeedData recipe)
+    {
+        SelectRecipe(recipe);
+        // update visual selection
+        if (_currentSelectedButton != null && _currentSelectedButton != btn)
+            _currentSelectedButton.SetSelected(false);
+        btn.SetSelected(true);
+        _currentSelectedButton = btn;
+        // ensure the EventSystem and hover visuals reflect selection
+        EventSystem.current?.SetSelectedGameObject(btn.gameObject);
+        ExecuteEvents.Execute(btn.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerEnterHandler);
     }
 
     private void CleanupRecipeButtons()
@@ -150,6 +239,8 @@ public class CraftingUIManager : MonoBehaviour
         {
             if (btn != null)
                 btn.OnClick.RemoveAllListeners();
+            // reset selection visuals
+            btn.SetSelected(false);
         }
 
         recipeButtons.Clear();
@@ -170,6 +261,44 @@ public class CraftingUIManager : MonoBehaviour
         UpdateRecipeDisplay(plantData, recipe);
         UpdateMaterialsList(recipe);
         UpdateCraftButton(recipe);
+
+        // Ensure the corresponding RecipeButton is highlighted/selected visually
+        HighlightRecipeButton(recipe);
+    }
+
+    // Marks the recipe button corresponding to the provided recipe as selected in the UI
+    private void HighlightRecipeButton(CraftingRecipeSeedData recipe)
+    {
+        if (recipe == null) return;
+
+        RecipeButton target = null;
+        foreach (var rb in recipeButtons)
+        {
+            if (rb == null) continue;
+            var data = rb.GetRecipeData();
+            if (data != null && data.SeedToCraft == recipe.SeedToCraft)
+            {
+                target = rb;
+                break;
+            }
+        }
+
+        if (target == null) return;
+
+        // Clear prior selected visual
+        if (_currentSelectedButton != null && _currentSelectedButton != target)
+        {
+            _currentSelectedButton.SetSelected(false);
+        }
+
+        // Set new selected visual and cache it
+        target.SetSelected(true);
+        _currentSelectedButton = target;
+
+        // Also trigger the hover event so any hover visuals/audio fire
+        target.TriggerHover();
+        // ensure pointer enter is executed so UI visuals that depend on it update
+        ExecuteEvents.Execute(target.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerEnterHandler);
     }
 
     private void UpdateRecipeDisplay(PlantDataSO plantData, CraftingRecipeSeedData recipe)
@@ -319,8 +448,8 @@ public class CraftingUIManager : MonoBehaviour
     #region Helper Methods
     private void ResetRecipeDisplay()
     {
-        hasSelectedRecipe = false;
-
+        // Do not clear hasSelectedRecipe here so we keep track of an existing selection
+        // Reset only the visible recipe details (name/icon/description)
         selectedPlantIcon.enabled = false;
         selectedPlantIcon.sprite = null;
         selectedPlantName.text = "";
@@ -341,4 +470,56 @@ public class CraftingUIManager : MonoBehaviour
         selectedPlantName.text = plantData.plantName;
     }
     #endregion
+
+    private System.Collections.IEnumerator SelectFirstRecipeNextFrame(CraftingRecipeSeedData recipe)
+    {
+        yield return null; // wait one frame
+        if (recipe != null)
+        {
+            SelectRecipe(recipe);
+            var btn = FindButtonForRecipe(recipe);
+            if (btn != null)
+            {
+                if (_currentSelectedButton != null && _currentSelectedButton != btn) _currentSelectedButton.SetSelected(false);
+                btn.SetSelected(true);
+                // ensure the EventSystem also marks it selected so built-in visuals apply
+                UnityEngine.EventSystems.EventSystem.current?.SetSelectedGameObject(btn.gameObject);
+                // Execute pointer enter so hover visuals/sprites activate
+                ExecuteEvents.Execute(btn.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerEnterHandler);
+                _currentSelectedButton = btn;
+            }
+            else
+            {
+                // fallback: ensure HighlightRecipeButton tries to set selection
+                HighlightRecipeButton(recipe);
+            }
+        }
+    }
+
+    private void Update()
+    {
+        if (!isCraftingUIOpen) return;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            // Raycast UI elements under the pointer
+            var es = EventSystem.current;
+            if (es == null) return;
+
+            var ped = new PointerEventData(es) { position = Input.mousePosition };
+            var results = new List<RaycastResult>();
+            es.RaycastAll(ped, results);
+
+            // If any RecipeButton was clicked, do nothing (its own handler will manage selection)
+            bool clickedRecipeButton = results.Any(r => r.gameObject.GetComponentInParent<RecipeButton>() != null);
+
+            // If the click was NOT on a recipe button, restore the current selection visuals
+            if (!clickedRecipeButton && _currentSelectedButton != null)
+            {
+                _currentSelectedButton.SetSelected(true);
+                _currentSelectedButton.TriggerHover();
+                es.SetSelectedGameObject(_currentSelectedButton.gameObject);
+            }
+        }
+    }
 }
