@@ -173,6 +173,9 @@ public class InventoryUIController : UIControllerBase
         }
 
         UIManager.Instance.HUD.SetActive(true);
+
+        // Always notify listeners that inventory has closed to avoid missed events
+        UIEvents.TriggerInventoryClosed();
     }
 
     private bool CanOpenInventory()

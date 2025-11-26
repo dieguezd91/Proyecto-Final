@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: LeaveHouse
+  m_Name: 14-FindRitualAltar
   m_EditorClassIdentifier: 
-  stepID: LeaveHouse
-  stepOrder: 15
-  instructionText: You are now prepared for the night. You may exit the house.
-  objectiveType: 15
+  stepID: FindRitualAltar
+  stepOrder: 13
+  instructionText: Finally, locate the Ritual Altar.
+  stepImage: {fileID: 1845753906, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
+  objectiveType: 21
   requiredCount: 1
-  isGatedStep: 0
-  waitDuration: 3
+  isGatedStep: 1
+  waitDuration: 1

@@ -19,6 +19,7 @@ public class TutorialManager : MonoBehaviour
     private bool tutorialActive = false;
     private bool isTransitioning = false;
     private bool canAcceptInput = false;
+    private bool _completeAfterTypingSubscribed = false;
 
     private bool isPausedByMenu = false;
 
@@ -26,6 +27,66 @@ public class TutorialManager : MonoBehaviour
     private PlayerController playerController;
 
     public bool IsTutorialActive() => tutorialActive;
+    
+    private void ApplyInputGatingForStep(TutorialStep step)
+    {
+        if (playerController == null || step == null) return;
+
+        if (step.objectiveType == TutorialObjectiveType.Move)
+        {
+            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
+            return;
+        }
+
+        if (step.isGatedStep)
+        {
+            playerController.SetMovementEnabled(false);
+            playerController.SetCanAct(false);
+        }
+        else
+        {
+            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
+        }
+    }
+    
+    private void ArmMoveTriggerIfNeeded(TutorialStep step)
+    {
+        if (step == null || playerController == null) return;
+
+        if (step.objectiveType != TutorialObjectiveType.Move) return;
+
+        playerController.ResetHasMovedForTutorial();
+        if (playerController.IsCurrentlyMoving())
+        {
+            TutorialEvents.InvokePlayerMoved();
+        }
+    }
+
+    // Centralized display path for showing a step (applies gating/arming then displays and schedules processing)
+    // If force==true the UI will be ForceShowStep (used when resuming or forcing from menus)
+    private void DisplayStep(TutorialStep step, bool force = false)
+    {
+        if (step == null) return;
+
+        ApplyInputGatingForStep(step);
+        ArmMoveTriggerIfNeeded(step);
+
+        if (tutorialUI != null)
+        {
+            if (force)
+                tutorialUI.ForceShowStep(step);
+            else
+                tutorialUI.ShowStep(step);
+        }
+
+        // Remove stale movement events that might have occurred before the step became visible
+        RemoveBufferedObjective(TutorialObjectiveType.Move);
+
+        // Schedule processing of the event buffer after a small delay so UI/LevelManager states settle
+        Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
+    }
 
     private void Awake()
     {
@@ -46,12 +107,6 @@ public class TutorialManager : MonoBehaviour
 
         if (enableTutorial && tutorialSteps.Count > 0)
         {
-            if (playerController != null)
-            {
-                playerController.SetMovementEnabled(false);
-                playerController.SetCanAct(false);
-            }
-
             Invoke(nameof(StartTutorial), 0.5f);
         }
     }
@@ -95,6 +150,12 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnFirstPlantReadyToHarvest += CheckObjective_FirstPlantReady;
         TutorialEvents.OnAbilityChanged += CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted += CheckObjective_TeleportCasted;
+
+        // Pause/resume tutorial when inventory or pause menus open/close
+        UIEvents.OnPauseMenuRequested += PauseTutorial;
+        UIEvents.OnPauseMenuClosed += ResumeTutorial;
+        UIEvents.OnInventoryOpened += PauseTutorial;
+        UIEvents.OnInventoryClosed += ResumeTutorial;
     }
 
     private void UnsubscribeFromEvents()
@@ -126,6 +187,11 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
         TutorialEvents.OnAbilityChanged -= CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
+
+        UIEvents.OnPauseMenuRequested -= PauseTutorial;
+        UIEvents.OnPauseMenuClosed -= ResumeTutorial;
+        UIEvents.OnInventoryOpened -= PauseTutorial;
+        UIEvents.OnInventoryClosed -= ResumeTutorial;
     }
 
     public void StartTutorial()
@@ -150,12 +216,6 @@ public class TutorialManager : MonoBehaviour
         isTransitioning = true;
         canAcceptInput = false;
 
-        if (playerController != null)
-        {
-            playerController.SetMovementEnabled(false);
-            playerController.SetCanAct(false);
-        }
-
         TutorialEvents.InvokeStepCompleted(currentStep);
 
         if (tutorialUI != null)
@@ -171,6 +231,13 @@ public class TutorialManager : MonoBehaviour
 
     private void ShowStep(int index)
     {
+        // Ensure we don't carry over any typing-finish subscription from previous step
+        if (_completeAfterTypingSubscribed && tutorialUI != null)
+        {
+            tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
+            _completeAfterTypingSubscribed = false;
+        }
+
         if (index >= tutorialSteps.Count)
         {
             CompleteTutorial();
@@ -182,30 +249,28 @@ public class TutorialManager : MonoBehaviour
         currentProgress = 0;
         isTransitioning = false;
         canAcceptInput = false;
-
-        if (playerController != null)
-        {
-            if (currentStep.objectiveType == TutorialObjectiveType.Wait)
-            {
-                playerController.SetMovementEnabled(false);
-                playerController.SetCanAct(false);
-            }
-            else
-            {
-                playerController.SetMovementEnabled(true);
-                playerController.SetCanAct(true);
-            }
-        }
-
+        
         if (tutorialUI != null)
         {
             if (!string.IsNullOrEmpty(currentStep.instructionText))
             {
-                tutorialUI.ShowStep(currentStep);
+                var lm = LevelManager.Instance;
+                bool inInventory = lm != null && lm.currentGameState == GameState.OnInventory;
+                bool inPaused = lm != null && lm.currentGameState == GameState.Paused;
+
+                if (inInventory || inPaused)
+                {
+                    isPausedByMenu = true;
+                    UIEvents.OnInventoryClosed += ShowPendingStepFromMenu;
+                    UIEvents.OnPauseMenuClosed += ShowPendingStepFromMenu;
+                }
+                else
+                {
+                    // Use centralized display path (applies gating and arms move trigger if needed)
+                    DisplayStep(currentStep);
+                }
             }
         }
-
-        Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
     }
 
     private void ProcessBufferAndEnableInput()
@@ -224,14 +289,20 @@ public class TutorialManager : MonoBehaviour
 
                 if (currentProgress >= currentStep.requiredCount)
                 {
-                    while (eventBuffer.Count > 0)
+                    // If the UI is still typing text, defer completing the step until typing finishes
+                    if (tutorialUI != null && tutorialUI.IsTyping)
                     {
-                        remainingEvents.Add(eventBuffer.Dequeue());
-                    }
-
-                    foreach (var evt in remainingEvents)
-                    {
-                        eventBuffer.Enqueue(evt);
+                        if (!_completeAfterTypingSubscribed)
+                        {
+                            tutorialUI.TypingFinished += OnUITypingFinishedToCompleteStep;
+                            _completeAfterTypingSubscribed = true;
+                        }
+                        // leave remaining events buffered
+                        foreach (var evt in remainingEvents)
+                        {
+                            eventBuffer.Enqueue(evt);
+                        }
+                        return;
                     }
 
                     CompleteCurrentStep();
@@ -292,12 +363,6 @@ public class TutorialManager : MonoBehaviour
         tutorialActive = false;
         canAcceptInput = false;
 
-        if (playerController != null)
-        {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(true);
-        }
-
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
@@ -343,12 +408,6 @@ public class TutorialManager : MonoBehaviour
         canAcceptInput = false;
         eventBuffer.Clear();
         currentStep = null;
-
-        if (playerController != null)
-        {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(true);
-        }
 
         CompleteTutorial();
     }
@@ -404,9 +463,100 @@ public class TutorialManager : MonoBehaviour
 
         if (tutorialUI != null && currentStep != null)
         {
-            tutorialUI.ShowStep(currentStep);
+            // Apply gating and arm move trigger via helpers so behavior is consistent
+            ApplyInputGatingForStep(currentStep);
+            ArmMoveTriggerIfNeeded(currentStep);
+
+            tutorialUI.ForceShowStep(currentStep);
+            Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
         }
 
         Debug.Log("[Tutorial] Tutorial reanudado");
+    }
+
+    private void ShowPendingStepFromMenu()
+    {
+        // Unsubscribe both in case either fires
+        UIEvents.OnInventoryClosed -= ShowPendingStepFromMenu;
+        UIEvents.OnPauseMenuClosed -= ShowPendingStepFromMenu;
+
+        isPausedByMenu = false;
+
+        Debug.LogFormat("TutorialManager: ShowPendingStepFromMenu called for step {0}", currentStepIndex);
+
+        if (tutorialUI != null && currentStep != null && !string.IsNullOrEmpty(currentStep.instructionText))
+        {
+            // Defer slightly so the UI and LevelManager state can settle and avoid immediate hide races
+            Debug.LogFormat("TutorialManager: scheduling ForceShowStep for step {0} (delayed)", currentStepIndex);
+            Invoke(nameof(DelayedForceShowCurrentStep), 0.05f);
+        }
+    }
+
+    private void DelayedForceShowCurrentStep()
+    {
+        if (tutorialUI != null && currentStep != null && !string.IsNullOrEmpty(currentStep.instructionText))
+        {
+
+            // If this is a Move tutorial, re-arm the player's move trigger and trigger immediately if moving
+            if (currentStep.objectiveType == TutorialObjectiveType.Move && playerController != null)
+            {
+                playerController.ResetHasMovedForTutorial();
+                if (playerController.IsCurrentlyMoving()) TutorialEvents.InvokePlayerMoved();
+            }
+
+            tutorialUI.ForceShowStep(currentStep);
+            RemoveBufferedObjective(TutorialObjectiveType.Move);
+            Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
+        }
+    }
+    
+    private void RemoveBufferedObjective(TutorialObjectiveType type)
+    {
+        if (eventBuffer == null || eventBuffer.Count == 0) return;
+        var newQueue = new Queue<TutorialObjectiveType>();
+        while (eventBuffer.Count > 0)
+        {
+            var evt = eventBuffer.Dequeue();
+            if (evt != type) newQueue.Enqueue(evt);
+        }
+        eventBuffer = newQueue;
+    }
+
+    private void Update()
+    {
+        if (!isPausedByMenu) return;
+
+        var lm = LevelManager.Instance;
+        if (lm == null) return;
+
+        // If we were paused by a menu but the level state no longer indicates pause/inventory, resume and show the pending step
+        if (lm.currentGameState != GameState.Paused && lm.currentGameState != GameState.OnInventory)
+        {
+            ShowPendingStepFromMenu();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            CompleteCurrentStep();
+        }
+    }
+
+    private void OnUITypingFinishedToCompleteStep()
+    {
+        // Unsubscribe to avoid repeated triggers
+        if (tutorialUI != null) tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
+        _completeAfterTypingSubscribed = false;
+
+        // Delay a bit to allow the player to read final characters
+        StartCoroutine(DelayedCompleteAfterTypingCoroutine());
+    }
+
+    private IEnumerator DelayedCompleteAfterTypingCoroutine()
+    {
+        yield return new WaitForSeconds(1f);
+        if (!isTransitioning)
+        {
+            CompleteCurrentStep();
+        }
     }
 }

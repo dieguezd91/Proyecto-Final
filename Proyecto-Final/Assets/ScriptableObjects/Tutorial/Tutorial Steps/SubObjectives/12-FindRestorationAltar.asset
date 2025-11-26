@@ -10,17 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: FifthNightWarning
+  m_Name: 12-FindRestorationAltar
   m_EditorClassIdentifier: 
-  stepID: FifthNightWarning
-  stepOrder: 19
-  instructionText: 'A great trial awaits you. The corruption in this forest coalesces,
-    and on the fifth night, a powerful foe will rise to challenge your light.
-
-
-    Prepare
-    your defenses and grow your strength, for the forest relies on you.'
-  objectiveType: 15
+  stepID: FindRestorationAltar
+  stepOrder: 11
+  instructionText: Next, find the Restoration Altar.
+  stepImage: {fileID: 1439159968, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
+  objectiveType: 20
   requiredCount: 1
-  isGatedStep: 0
-  waitDuration: 5
+  isGatedStep: 1
+  waitDuration: 1

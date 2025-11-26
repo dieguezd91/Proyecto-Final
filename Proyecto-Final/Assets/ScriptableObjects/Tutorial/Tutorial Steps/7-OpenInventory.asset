@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: WaitForHarvest
+  m_Name: 7-OpenInventory
   m_EditorClassIdentifier: 
-  stepID: WaitForHarvest
-  stepOrder: 20
-  instructionText: 
-  objectiveType: 22
+  stepID: OpenInventory
+  stepOrder: 6
+  instructionText: Your journal keeps track of all resources you've gathered. Press
+    <sprite name="TABKey"> or <sprite name="IKey"> to check your inventory.
+  objectiveType: 11
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 3

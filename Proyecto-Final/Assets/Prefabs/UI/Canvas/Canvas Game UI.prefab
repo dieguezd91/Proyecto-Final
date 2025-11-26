@@ -762,22 +762,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6957300524887467834}
     m_Modifications:
-    - target: {fileID: 607890182999717513, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 730931170890163065, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 730931170890163065, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 730931170890163065, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5450954177986047142, guid: f5825193587de7f408c516001458fa7e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -862,77 +846,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Panel Tutorial
       objectReference: {fileID: 0}
-    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: fadeSpeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: stepImageDisplay
-      value: 
-      objectReference: {fileID: 1348999429710490348}
-    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: tutorialSoundBase
-      value: 
-      objectReference: {fileID: 6874860130266650388}
-    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: writtingSoundBase
-      value: 
-      objectReference: {fileID: 6340719090135546101}
-    - target: {fileID: 8014928949951249319, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: keypressesPerSound
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8144178945931306544, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_Size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8144178945931306544, guid: f5825193587de7f408c516001458fa7e, type: 3}
-      propertyPath: m_Value
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5825193587de7f408c516001458fa7e, type: 3}
---- !u!114 &1348999429710490348 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1558797820908733529, guid: f5825193587de7f408c516001458fa7e, type: 3}
-  m_PrefabInstance: {fileID: 511560491314851509}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &5529506097355293203 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5450954177986047142, guid: f5825193587de7f408c516001458fa7e, type: 3}
   m_PrefabInstance: {fileID: 511560491314851509}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6340719090135546101 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5829821638755161664, guid: f5825193587de7f408c516001458fa7e, type: 3}
-  m_PrefabInstance: {fileID: 511560491314851509}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f1f657c5e70d485c8973cc2fe2ba651d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &6874860130266650388 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6372880803306158497, guid: f5825193587de7f408c516001458fa7e, type: 3}
-  m_PrefabInstance: {fileID: 511560491314851509}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71212f36ad5c4cb09dca8c236254054d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1766967150129047002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1054,38 +977,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6957300524887467834}
     m_Modifications:
-    - target: {fileID: 5209968338163083618, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5209968338163083618, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5209968338163083618, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 1010.625
-      objectReference: {fileID: 0}
-    - target: {fileID: 5209968338163083618, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -265.625
-      objectReference: {fileID: 0}
-    - target: {fileID: 6918443726541225761, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6918443726541225761, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6918443726541225761, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 346.875
-      objectReference: {fileID: 0}
-    - target: {fileID: 6918443726541225761, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -475
-      objectReference: {fileID: 0}
     - target: {fileID: 7177410150620398362, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1169,10 +1060,6 @@ PrefabInstance:
     - target: {fileID: 7418085635518981879, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
       propertyPath: m_Name
       value: Panel Crafting UI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8666372750011356693, guid: cd1eddac78b73bd45b88762b38f9ebc8, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

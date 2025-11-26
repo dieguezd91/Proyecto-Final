@@ -10,21 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: ChangeTool
+  m_Name: 19-SurviveNight
   m_EditorClassIdentifier: 
-  stepID: ChangeTool
-  stepOrder: 2
-  instructionText: 'A druid is versatile, channeling power in multiple forms.
-
-
-    Use
-    the <sprite name="QKey"> and <sprite name="EKey"> keys or <sprite name="ScrollMouse">
-    to cycle through your active spells, shown on the left.
-
-
-    Remember that every
-    spell consumes your mana.'
-  objectiveType: 26
+  stepID: SurviveNight
+  stepOrder: 18
+  instructionText: Hold the line until dawn breaks! Protect the Sacred Tree from
+    all threats until morning light returns.
+  objectiveType: 10
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 3

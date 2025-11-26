@@ -10,22 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: DefensivePlant
+  m_Name: 5-DefensivePlant-A
   m_EditorClassIdentifier: 
   stepID: DefensivePlant
   stepOrder: 4
-  instructionText: 'It is time to protect your garden. Plant a Defensive seed. These
+  instructionText: It is time to protect your garden. Plant a Defensive seed. These
     plants will watch over your garden during the night.
-
-
-    Select the seed from
-    the bottom bar on your screen.
-
-
-    You can hover the cursor over any seed to
-    see more information about it.'
   stepImage: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-  objectiveType: 17
+  objectiveType: 15
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 2

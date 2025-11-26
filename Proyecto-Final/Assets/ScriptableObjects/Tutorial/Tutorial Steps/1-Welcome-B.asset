@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: CastSpell
+  m_Name: 1-Welcome-B
   m_EditorClassIdentifier: 
-  stepID: CastSpell
-  stepOrder: 16
-  instructionText: Channel your magic! <sprite name="MouseClick"> to cast spells
-    and defend the Sacred Tree from corrupted creatures.
-  objectiveType: 5
+  stepID: Welcome
+  stepOrder: 0
+  instructionText: By day, use your magic to cultivate the land. By night, you must
+    defend it from the corrupt creatures that emerge from the shadows. Let's begin.
+  stepImage: {fileID: 0}
+  objectiveType: 15
   requiredCount: 1
   isGatedStep: 0
-  waitDuration: 3
+  waitDuration: 5

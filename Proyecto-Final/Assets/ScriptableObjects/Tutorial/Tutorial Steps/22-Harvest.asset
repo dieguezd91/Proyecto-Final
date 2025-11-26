@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: FindCraftingCauldron
+  m_Name: 22-Harvest
   m_EditorClassIdentifier: 
-  stepID: FindCraftingCauldron
-  stepOrder: 9
-  instructionText: This house is your sanctuary. First, find the Crafting Cauldron.
-  stepImage: {fileID: 1046542882, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
-  objectiveType: 19
+  stepID: Harvest
+  stepOrder: 21
+  instructionText: With the new day comes growth. Harvest your mature plants by left-clicking
+    on them to gather resources.
+  objectiveType: 4
   requiredCount: 1
-  isGatedStep: 1
-  waitDuration: 1
+  isGatedStep: 0
+  waitDuration: 3

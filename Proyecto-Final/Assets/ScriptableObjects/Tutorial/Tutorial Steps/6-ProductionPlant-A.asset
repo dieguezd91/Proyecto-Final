@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: Welcome
+  m_Name: 6-ProductionPlant-A
   m_EditorClassIdentifier: 
-  stepID: Welcome
-  stepOrder: 0
-  instructionText: Welcome, young druid! This sacred forest is now your responsibility.
-    By day, use your magic to cultivate the land. By night, you must defend it from
-    the corrupt creatures that emerge from the shadows. Let's begin.
-  objectiveType: 15
+  stepID: ProductionPlant
+  stepOrder: 5
+  instructionText: Plant your first Production seed. These plants yield valuable
+    resources to harvest. BE CAREFUL, THEY CANNOT DEFEND THEMSELVES.
+  stepImage: {fileID: -473241699, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  objectiveType: 16
   requiredCount: 1
-  waitDuration: 5
+  isGatedStep: 0
+  waitDuration: 2

@@ -7,6 +7,15 @@ public class WrittingSoundBase : MonoBehaviour
     public List<SoundClipData> keypressSounds;
 
     private int lastPlayedIndex = -1;
+    private AudioSource _sfxSource;
+
+    private void Awake()
+    {
+        _sfxSource = GetComponent<AudioSource>();
+        if (_sfxSource == null)
+            _sfxSource = gameObject.AddComponent<AudioSource>();
+        _sfxSource.playOnAwake = false;
+    }
 
     public void PlayKeypressSound()
     {
@@ -29,13 +38,23 @@ public class WrittingSoundBase : MonoBehaviour
             Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: Keypress SoundClipData or AudioClip is missing.");
             return;
         }
-        if (SoundManager.Instance == null)
+        // Play via a local AudioSource so we can stop it if typing ends abruptly
+        if (_sfxSource == null)
         {
-            Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: SoundManager.Instance is null. Cannot play keypress sound.");
+            Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: No AudioSource available to play keypress sound.");
             return;
         }
-        SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
+        _sfxSource.pitch = soundData.GetPitch();
+        _sfxSource.PlayOneShot(soundData.GetClip(), soundData.volume);
         // Update lastPlayedIndex to the index in the original list
         lastPlayedIndex = keypressSounds.IndexOf(soundData);
+    }
+
+    public void StopKeypressSounds()
+    {
+        if (_sfxSource != null && _sfxSource.isPlaying)
+        {
+            _sfxSource.Stop();
+        }
     }
 }

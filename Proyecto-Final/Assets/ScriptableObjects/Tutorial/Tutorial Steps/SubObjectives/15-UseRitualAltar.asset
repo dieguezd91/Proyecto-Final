@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cfcb4ccc532b709488bc7e73f2917f2c, type: 3}
-  m_Name: OpenCrafting
+  m_Name: 15-UseRitualAltar
   m_EditorClassIdentifier: 
-  stepID: OpenCrafting
-  stepOrder: 10
-  instructionText: This is the Crafting Cauldron. Interact with it to craft new seeds.
-  objectiveType: 12
+  stepID: UseRitualAltar
+  stepOrder: 14
+  instructionText: When you're ready to face the darkness, approach the Ritual Altar
+    and interact with it to begin the night cycle.
+  objectiveType: 7
   requiredCount: 1
   isGatedStep: 1
-  waitDuration: 1
+  waitDuration: 3
