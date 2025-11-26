@@ -14,7 +14,7 @@ public class FireBullet : MonoBehaviour
 
     [Header("FireTrail Settings")]
     public GameObject fireTrailPrefab;
-    public float trailSpawnRate = 0.1f;
+    public float trailSpawnRate = 0.01f;
     private float trailTimer;
 
     [Header("Impact Effects")]
