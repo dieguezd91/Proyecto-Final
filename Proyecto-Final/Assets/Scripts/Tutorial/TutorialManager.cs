@@ -69,9 +69,28 @@ public class TutorialManager : MonoBehaviour
             TutorialEvents.InvokePlayerMoved();
         }
     }
+    
+    private void PreApplyGatingForUpcomingStep()
+    {
+        int nextIndex = currentStepIndex + 1;
+        if (tutorialSteps == null || nextIndex >= tutorialSteps.Count) return;
 
-    // Centralized display path for showing a step (applies gating/arming then displays and schedules processing)
-    // If force==true the UI will be ForceShowStep (used when resuming or forcing from menus)
+        var nextStep = tutorialSteps[nextIndex];
+        if (nextStep == null) return;
+
+        if (nextStep.isGatedStep)
+        {
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(false);
+                playerController.SetCanAct(false);
+            }
+
+            // Prevent accepting buffered input until the next step is shown
+            canAcceptInput = false;
+        }
+    }
+    
     private void DisplayStep(TutorialStep step, bool force = false)
     {
         if (step == null) return;
@@ -223,6 +242,11 @@ public class TutorialManager : MonoBehaviour
         canAcceptInput = false;
 
         TutorialEvents.InvokeStepCompleted(currentStep);
+
+        // Pre-apply gating for the upcoming step (if any) so the player cannot move
+        // while UI panels/animations execute. This covers both immediate and deferred
+        // transitions to the next tutorial step.
+        PreApplyGatingForUpcomingStep();
 
         if (tutorialUI != null)
         {
