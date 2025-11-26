@@ -16,6 +16,7 @@ MonoBehaviour:
   stepOrder: 12
   instructionText: This is the Restoration Altar. You can restore the Sacred Tree's
     health here.
+  stepImage: {fileID: 0}
   objectiveType: 13
   requiredCount: 1
   isGatedStep: 1

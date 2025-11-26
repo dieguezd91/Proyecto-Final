@@ -15,6 +15,7 @@ MonoBehaviour:
   stepID: OpenCrafting
   stepOrder: 10
   instructionText: This is the Crafting Cauldron. Interact with it to craft new seeds.
+  stepImage: {fileID: 0}
   objectiveType: 12
   requiredCount: 1
   isGatedStep: 1

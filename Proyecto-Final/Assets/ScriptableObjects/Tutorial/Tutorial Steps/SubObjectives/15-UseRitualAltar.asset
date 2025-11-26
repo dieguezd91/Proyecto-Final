@@ -16,6 +16,7 @@ MonoBehaviour:
   stepOrder: 14
   instructionText: When you're ready to face the darkness, approach the Ritual Altar
     and interact with it to begin the night cycle.
+  stepImage: {fileID: 0}
   objectiveType: 7
   requiredCount: 1
   isGatedStep: 1

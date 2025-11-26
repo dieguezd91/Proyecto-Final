@@ -186,8 +186,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keypressSounds:
   - clips:
-    - {fileID: 8300000, guid: 4229f6c289f32f843ba8e9db98d72d32, type: 3}
-    volume: 1
+    - {fileID: 8300000, guid: 7daf1adb008f4dc41bdf361d3e144fd2, type: 3}
+    - {fileID: 8300000, guid: 7d321b0ac8851064aa9d696a6ce714d2, type: 3}
+    - {fileID: 8300000, guid: db22810224abe694db245dd9458eb344, type: 3}
+    - {fileID: 8300000, guid: 7f0ae76b049a947409c09f5acc06274b, type: 3}
+    volume: 0.7
     pitch: 1
     pitchVariation: 0.1
     loop: 0
@@ -348,8 +351,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8, y: 0}
-  m_SizeDelta: {x: -16, y: -16}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7739156905356810898
 CanvasRenderer:
@@ -872,8 +875,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -35, y: 30}
-  m_SizeDelta: {x: 100, y: 20}
+  m_AnchoredPosition: {x: -39, y: 30}
+  m_SizeDelta: {x: 146.875, y: 28.125}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &8015968491067762834
 CanvasRenderer:

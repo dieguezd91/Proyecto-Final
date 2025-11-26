@@ -70,3 +70,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d3178642d5f6f524caa68f9a44276f34, type: 2}
   tutorialUI: {fileID: 0}
   enableTutorial: 1
+  bufferProcessDelay: 0.3
