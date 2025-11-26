@@ -16,6 +16,7 @@ public static class TutorialEvents
     public static event Action OnCraftingOpened;
     public static event Action OnRestorationOpened;
     public static event Action OnHouseEntered;
+    public static event Action OnHouseExited;
     public static event Action OnRitualAltarUsed;
     public static event Action OnCraftingClosed;
     public static event Action OnRestorationClosed;
@@ -49,6 +50,7 @@ public static class TutorialEvents
     public static void InvokeCraftingClosed() => OnCraftingClosed?.Invoke();
     public static void InvokeRestorationClosed() => OnRestorationClosed?.Invoke();
     public static void InvokeHouseEntered() => OnHouseEntered?.Invoke();
+    public static void InvokeHouseExited() => OnHouseExited?.Invoke();
     public static void InvokeRitualAltarUsed() => OnRitualAltarUsed?.Invoke();
     public static void InvokeCraftingProximity() => OnCraftingProximity?.Invoke();
     public static void InvokeRestorationProximity() => OnRestorationProximity?.Invoke();

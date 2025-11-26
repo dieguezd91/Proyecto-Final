@@ -48,7 +48,8 @@ public class InteractionTrigger : MonoBehaviour
         if (isPlayerNear &&
             !isInteracting &&
             Input.GetKeyDown(interactionKey) &&
-            interactable.CanInteract())
+            interactable.CanInteract() &&
+            (TutorialManager.Instance == null || TutorialManager.Instance.CanAcceptPlayerInput()))
         {
             if (hidePromptDuringInteraction)
             {
@@ -76,7 +77,8 @@ public class InteractionTrigger : MonoBehaviour
 
         bool shouldShow = isPlayerNear &&
                          !isInteracting &&
-                         interactable.CanInteract();
+                         interactable.CanInteract() &&
+                         (TutorialManager.Instance == null || TutorialManager.Instance.CanAcceptPlayerInput());
 
         interactionPromptCanvas.SetActive(shouldShow);
     }

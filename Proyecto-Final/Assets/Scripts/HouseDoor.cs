@@ -236,6 +236,9 @@ public class HouseDoor : MonoBehaviour
             {
                 GameplayEvents.InvokePlayerExitedHouseDuringNight();
             }
+
+            // Notify tutorial system that the player has exited the house (exterior)
+            TutorialEvents.InvokeHouseExited();
         }
     }
 

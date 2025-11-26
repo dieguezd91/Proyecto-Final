@@ -297,6 +297,12 @@ public class RitualAltar : MonoBehaviour, IInteractable
         if (isPerformingRitual || levelManager == null || playerLife == null)
             return false;
 
+        // Respect tutorial gating: if the tutorial is active and currently blocking input, disallow interaction
+        if (TutorialManager.Instance != null && !TutorialManager.Instance.CanAcceptPlayerInput())
+        {
+            return false;
+        }
+
         if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
         {
             int currentStepOrder = TutorialManager.Instance.GetCurrentStepOrder();

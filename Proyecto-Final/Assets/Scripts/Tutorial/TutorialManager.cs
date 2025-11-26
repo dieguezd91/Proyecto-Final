@@ -20,6 +20,9 @@ public class TutorialManager : MonoBehaviour
     private bool isTransitioning = false;
     private bool canAcceptInput = false;
     private bool _completeAfterTypingSubscribed = false;
+    private bool _enableInputAfterTypingSubscribed = false;
+    private bool _houseExitReleaseSubscribed = false;
+
     private bool isPausedByMenu = false;
     private bool nextStepDeferred = false;
     private bool nextStepPending = false;
@@ -28,6 +31,17 @@ public class TutorialManager : MonoBehaviour
     private PlayerController playerController;
 
     public bool IsTutorialActive() => tutorialActive;
+    public bool CanAcceptPlayerInput()
+    {
+        if (!tutorialActive) return true;
+
+        if (!canAcceptInput) return false;
+
+        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.UseRitualAltar && tutorialUI != null && tutorialUI.IsTyping)
+            return false;
+
+        return true;
+    }
     
     private void ApplyInputGatingForStep(TutorialStep step)
     {
@@ -99,8 +113,32 @@ public class TutorialManager : MonoBehaviour
             else
                 tutorialUI.ShowStep(step);
         }
-        
+
+        // Remove stale movement events that might have occurred before the step became visible
         RemoveBufferedObjective(TutorialObjectiveType.Move);
+
+        // Special case: for the Ritual Altar step we must prevent player input until the UI finishes typing
+        if (step.objectiveType == TutorialObjectiveType.UseRitualAltar && tutorialUI != null)
+        {
+            // Subscribe before disabling input to avoid missing the event
+            if (!_enableInputAfterTypingSubscribed)
+            {
+                tutorialUI.TypingFinished += OnUITypingFinishedToEnableInput;
+                _enableInputAfterTypingSubscribed = true;
+            }
+
+            // Ensure input is gated until typing finishes
+            canAcceptInput = false;
+            if (playerController != null)
+                playerController.SetCanAct(false);
+            
+            // Cancel any scheduled buffer processing that might re-enable input prematurely
+            CancelInvoke(nameof(ProcessBufferAndEnableInput));
+            // Don't schedule processing of the buffer now; it will be scheduled when typing finishes
+            return;
+        }
+
+        // Schedule processing of the event buffer after a small delay so UI/LevelManager states settle
         Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
     }
 
@@ -220,6 +258,13 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnFirstPlantReadyToHarvest -= CheckObjective_FirstPlantReady;
         TutorialEvents.OnAbilityChanged -= CheckObjective_AbilityChanged;
         TutorialEvents.OnTeleportCasted -= CheckObjective_TeleportCasted;
+
+        // Clean up any dynamic subscription we may have added for waiting on house exit
+        if (_houseExitReleaseSubscribed)
+        {
+            TutorialEvents.OnHouseExited -= OnHouseExitedToReleaseNextStep;
+            _houseExitReleaseSubscribed = false;
+        }
     }
 
     private void UnsubscribeUIEventHandlers()
@@ -254,7 +299,36 @@ public class TutorialManager : MonoBehaviour
 
         TutorialEvents.InvokeStepCompleted(currentStep);
         PreApplyGatingForUpcomingStep();
+
+        // If the just-completed step was entering the house and the following step
+        // is "CastSpell", defer showing the CastSpell step until the player exits the house.
+        int nextIndex = currentStepIndex + 1;
+        if (currentStep != null && currentStep.objectiveType == TutorialObjectiveType.EnterHouse
+            && tutorialSteps != null && nextIndex < tutorialSteps.Count
+            && tutorialSteps[nextIndex].objectiveType == TutorialObjectiveType.CastSpell)
+        {
+            DeferNextStep();
+            if (!_houseExitReleaseSubscribed)
+            {
+                TutorialEvents.OnHouseExited += OnHouseExitedToReleaseNextStep;
+                _houseExitReleaseSubscribed = true;
+            }
+        }
+
+        // Centralized scheduling for showing the next step
         ScheduleShowNextStep();
+    }
+
+    private void OnHouseExitedToReleaseNextStep()
+    {
+        if (_houseExitReleaseSubscribed)
+        {
+            TutorialEvents.OnHouseExited -= OnHouseExitedToReleaseNextStep;
+            _houseExitReleaseSubscribed = false;
+        }
+
+        // Release deferred next step now that the player has exited the house
+        ReleaseDeferredNextStep();
     }
 
     private void ScheduleShowNextStep()
@@ -357,10 +431,19 @@ public class TutorialManager : MonoBehaviour
 
     private void ClearTypingSubscriptionIfNeeded()
     {
-        if (_completeAfterTypingSubscribed && tutorialUI != null)
+        if (tutorialUI != null)
         {
-            tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
-            _completeAfterTypingSubscribed = false;
+            if (_completeAfterTypingSubscribed)
+            {
+                tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
+                _completeAfterTypingSubscribed = false;
+            }
+
+            if (_enableInputAfterTypingSubscribed)
+            {
+                tutorialUI.TypingFinished -= OnUITypingFinishedToEnableInput;
+                _enableInputAfterTypingSubscribed = false;
+            }
         }
     }
 
@@ -515,6 +598,13 @@ public class TutorialManager : MonoBehaviour
         eventBuffer.Clear();
         currentStep = null;
 
+        // Ensure dynamic subscriptions are cleaned up
+        if (_houseExitReleaseSubscribed)
+        {
+            TutorialEvents.OnHouseExited -= OnHouseExitedToReleaseNextStep;
+            _houseExitReleaseSubscribed = false;
+        }
+
         CompleteTutorial();
     }
 
@@ -592,13 +682,32 @@ public class TutorialManager : MonoBehaviour
     {
         if (tutorialUI != null && currentStep != null && !string.IsNullOrEmpty(currentStep.instructionText))
         {
+            // Re-arm move trigger using existing helper to avoid code duplication
             ArmMoveTriggerIfNeeded(currentStep);
 
             tutorialUI.ForceShowStep(currentStep);
             RemoveBufferedObjective(TutorialObjectiveType.Move);
-            Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
-        }
-    }
+            // If this is the ritual altar step we must delay processing until typing finishes
+            if (currentStep.objectiveType == TutorialObjectiveType.UseRitualAltar)
+            {
+                if (!_enableInputAfterTypingSubscribed)
+                {
+                    tutorialUI.TypingFinished += OnUITypingFinishedToEnableInput;
+                    _enableInputAfterTypingSubscribed = true;
+                }
+
+                canAcceptInput = false;
+                if (playerController != null)
+                    playerController.SetCanAct(false);
+                // Cancel any scheduled buffer processing that might re-enable input prematurely
+                CancelInvoke(nameof(ProcessBufferAndEnableInput));
+                return;
+            }
+
+             // Otherwise, schedule buffer processing normally
+             Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
+         }
+     }
     
     private void RemoveBufferedObjective(TutorialObjectiveType type)
     {
@@ -632,9 +741,24 @@ public class TutorialManager : MonoBehaviour
 
     private void OnUITypingFinishedToCompleteStep()
     {
+        // Unsubscribe to avoid repeated triggers
         if (tutorialUI != null) tutorialUI.TypingFinished -= OnUITypingFinishedToCompleteStep;
         _completeAfterTypingSubscribed = false;
+
+        // Delay a bit to allow the player to read final characters
         StartCoroutine(DelayedCompleteAfterTypingCoroutine());
+    }
+    
+    private void OnUITypingFinishedToEnableInput()
+    {
+        if (tutorialUI != null) tutorialUI.TypingFinished -= OnUITypingFinishedToEnableInput;
+        _enableInputAfterTypingSubscribed = false;
+
+        // Re-apply input gating for the current step (this will re-enable input when appropriate)
+        ApplyInputGatingForStep(currentStep);
+
+        // Give a short delay to let UI settle before processing buffered events
+        Invoke(nameof(ProcessBufferAndEnableInput), bufferProcessDelay);
     }
 
     private IEnumerator DelayedCompleteAfterTypingCoroutine()
