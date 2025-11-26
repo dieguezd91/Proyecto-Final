@@ -18,7 +18,7 @@ MonoBehaviour:
     <sprite name="ScrollMouse"> to cycle through your active spells, shown on the
     left.
   stepImage: {fileID: 0}
-  objectiveType: 26
+  objectiveType: 27
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 3

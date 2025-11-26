@@ -17,7 +17,7 @@ MonoBehaviour:
   instructionText: It is time to protect your garden. Plant a Defensive seed. These
     plants will watch over your garden during the night.
   stepImage: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-  objectiveType: 15
+  objectiveType: 17
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 2

@@ -17,7 +17,8 @@ MonoBehaviour:
   instructionText: You can also teleport! Press <sprite name="SpaceKey"> to move
     quickly in your direction or toward the mouse. It's the only spell you can use
     during the day.
-  objectiveType: 24
+  stepImage: {fileID: 0}
+  objectiveType: 25
   requiredCount: 1
   isGatedStep: 0
   waitDuration: 3
