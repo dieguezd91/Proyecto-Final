@@ -9,7 +9,7 @@ public class PlantGrowthUI : MonoBehaviour
     [SerializeField] private GameObject promptCanvas;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private float fadeSpeed = 5f;
-    [SerializeField] private float showDistance = 2.5f;
+    [SerializeField] private float showDistance = 2f;
     private Transform player;
 
     private ResourcePlant resourcePlant;
@@ -46,7 +46,11 @@ public class PlantGrowthUI : MonoBehaviour
         transform.position = resourcePlant.transform.position + offset;
 
         float dist = Vector2.Distance(resourcePlant.transform.position, player.position);
-        bool shouldShow = dist <= showDistance && !resourcePlant.IsBeingHarvested() && LevelManager.Instance.currentGameState != GameState.Night;
+
+        bool shouldShow = dist <= showDistance
+                          && !resourcePlant.IsBeingHarvested()
+                          && LevelManager.Instance.currentGameState != GameState.Night
+                          && resourcePlant.IsFullyGrown();
 
         float targetAlpha = shouldShow ? 1f : 0f;
         canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);

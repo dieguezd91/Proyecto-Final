@@ -446,10 +446,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7827403136463133310, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 1.408
-      objectReference: {fileID: 0}
-    - target: {fileID: 7827403136463133310, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
@@ -464,14 +460,6 @@ PrefabInstance:
     - target: {fileID: 8458194027264735393, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8478862263821191060, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
-      propertyPath: m_SortingOrder
-      value: 10000
-      objectReference: {fileID: 0}
-    - target: {fileID: 8478862263821191060, guid: 3321d746bea54234ebc7c9bf34760f10, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1297908157
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -635,7 +623,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 527822959690859295, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 2
+      value: 2.2
       objectReference: {fileID: 0}
     - target: {fileID: 527822959690859295, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -648,18 +636,6 @@ PrefabInstance:
     - target: {fileID: 527822959690859295, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1687274042610399536, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3776289407950135857, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
-      propertyPath: m_BlockingMask.m_Bits
-      value: 8183
-      objectReference: {fileID: 0}
-    - target: {fileID: 6197800282546646891, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6690542697468327941, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
       propertyPath: m_Name
