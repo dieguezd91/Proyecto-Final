@@ -161,6 +161,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnCraftingClosed += CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationClosed += CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed += CheckObjective_RitualAltarUsed;
+        TutorialEvents.OnSeedTooltipDisplayed += CheckObjective_SeedTooltipDisplayed;
 
         TutorialEvents.OnProductionPlantPlanted += CheckObjective_ProductionPlantPlanted;
         TutorialEvents.OnProductionPlantPlanted += CheckObjective_SeedPlanted;
@@ -198,6 +199,7 @@ public class TutorialManager : MonoBehaviour
         TutorialEvents.OnCraftingClosed -= CheckObjective_CraftingOpened;
         TutorialEvents.OnRestorationClosed -= CheckObjective_RestorationOpened;
         TutorialEvents.OnRitualAltarUsed -= CheckObjective_RitualAltarUsed;
+        TutorialEvents.OnSeedTooltipDisplayed -= CheckObjective_SeedTooltipDisplayed;
 
         TutorialEvents.OnProductionPlantPlanted -= CheckObjective_ProductionPlantPlanted;
         TutorialEvents.OnProductionPlantPlanted -= CheckObjective_SeedPlanted;
@@ -468,6 +470,7 @@ public class TutorialManager : MonoBehaviour
     private void CheckObjective_TeleportCasted() => CheckObjective(TutorialObjectiveType.TeleportSpell);
     private void CheckObjective_InventoryOpened() => CheckObjective(TutorialObjectiveType.OpenInventory);
     private void CheckObjective_AbilityChanged() => CheckObjective(TutorialObjectiveType.AbilityChanged);
+    private void CheckObjective_SeedTooltipDisplayed() => CheckObjective(TutorialObjectiveType.SeedTooltipDisplayed);
 
     public void SkipTutorial()
     {

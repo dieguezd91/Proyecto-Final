@@ -272,6 +272,12 @@ public class TooltipUIController : UIControllerBase
         ConfigureTooltipImage(data);
 
         UpdateTooltipPosition();
+
+        var tm = TutorialManager.Instance;
+        if (tm != null && tm.IsTutorialActive() && tm.GetCurrentObjectiveType() == TutorialObjectiveType.SeedTooltipDisplayed)
+        {
+            TutorialEvents.InvokeSeedTooltipDisplayed();
+        }
     }
 
     private string FormatPlantDescription(PlantDataSO data)
