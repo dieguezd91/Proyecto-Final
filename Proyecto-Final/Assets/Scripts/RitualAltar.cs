@@ -359,6 +359,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
                     Debug.Log("[RitualAltar] Ritual completed - releasing deferred tutorial next step (event already fired on interact).");
                 }
                 else
+                {
+                    Debug.Log("[RitualAltar] Ritual completed - confirming tutorial progression now.");
                     TutorialEvents.InvokeRitualAltarUsed();
                     TutorialManager.Instance?.ConfirmWaitStep();
                 }
