@@ -189,6 +189,9 @@ public class TutorialUI : MonoBehaviour
 
         if (typewriterCoroutine != null) StopCoroutine(typewriterCoroutine);
 
+        // Ensure any previous keypress sounds are stopped before starting a new typewriter sequence
+        writtingSoundBase?.StopKeypressSounds();
+
         // Ensure continue button is visible and usable as fast-forward while typing
         if (continueButton != null)
         {
@@ -282,6 +285,9 @@ public class TutorialUI : MonoBehaviour
 
     private IEnumerator TypewriterEffect(string text)
     {
+        // make sure no previous keypress sounds linger when the coroutine starts
+        writtingSoundBase?.StopKeypressSounds();
+
         yield return null;
 
         instructionText.text = "";
@@ -467,6 +473,12 @@ public class TutorialUI : MonoBehaviour
                 OnPauseMenuClosed();
             }
         }
+
+        // Safety: if typing is not active and no coroutine is running, ensure keypress sounds are stopped.
+        if (!typingActive && typewriterCoroutine == null)
+        {
+            writtingSoundBase?.StopKeypressSounds();
+        }
     }
 
     private void FastForwardTypewriter()
@@ -491,6 +503,10 @@ public class TutorialUI : MonoBehaviour
 
         // When fast-forwarding, treat it as typing finished and update the continue button accordingly
         typingActive = false;
+
+        // Ensure any lingering keypress sounds are stopped when fast-forwarding
+        writtingSoundBase?.StopKeypressSounds();
+
         OnTypingFinished();
         // notify external listeners that typing finished (fast-forward)
         TypingFinished?.Invoke();
@@ -499,6 +515,9 @@ public class TutorialUI : MonoBehaviour
     // Centralized handler to update the Continue button after typing finishes (natural or fast-forward)
     private void OnTypingFinished()
     {
+        // Always stop any keypress sounds as soon as typing is considered finished
+        writtingSoundBase?.StopKeypressSounds();
+
         if (continueButton == null) return;
 
         if (_currentStepObjectiveType != TutorialObjectiveType.Wait)

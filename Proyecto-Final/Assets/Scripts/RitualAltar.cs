@@ -51,8 +51,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private float doorLightOriginalIntensity;
 
     private Coroutine activeDoorLightCoroutine;
-
     [SerializeField] private int tutorialStepOrderToUnlock = 9;
+    private bool tutorialInteractionPending = false;
+    // Whether we already fired the ritual-used tutorial event at interaction time
+    private bool tutorialEventFiredOnInteract = false;
 
     private void Start()
     {
@@ -276,6 +278,16 @@ public class RitualAltar : MonoBehaviour, IInteractable
     public void Interact()
     {
         if (!CanInteract()) return;
+        var tm = TutorialManager.Instance;
+        if (tm != null && tm.IsTutorialActive())
+        {
+            tm.DeferNextStep();
+            TutorialEvents.InvokeRitualAltarUsed();
+            tm.ConfirmWaitStep();
+
+            tutorialInteractionPending = true;
+            tutorialEventFiredOnInteract = true;
+        }
 
         mainRitualCoroutine = StartCoroutine(PerformRitual());
     }
@@ -340,7 +352,23 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (canTransitionToNight)
         {
-            TutorialEvents.InvokeRitualAltarUsed();
+            if (tutorialInteractionPending)
+            {
+                if (tutorialEventFiredOnInteract)
+                {
+                    Debug.Log("[RitualAltar] Ritual completed - releasing deferred tutorial next step (event already fired on interact).");
+                }
+                else
+                    TutorialEvents.InvokeRitualAltarUsed();
+                    TutorialManager.Instance?.ConfirmWaitStep();
+                }
+            }
+            else
+            {
+
+                Debug.Log("[RitualAltar] Ritual completed - invoking ritual-used (non-tutorial pending).");
+                TutorialEvents.InvokeRitualAltarUsed();
+            }
             TutorialEvents.InvokeNightStarted();
             levelManager.TransitionToNight();
         }
@@ -348,11 +376,30 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
     private void EndRitual()
     {
+        if (mainRitualCoroutine != null)
+            StartCoroutine(EndRitualSequence());
+    }
+
+    private IEnumerator EndRitualSequence()
+    {
         EndRitualEffects();
-        StartCoroutine(FadeInRitualLight());
+
+        // Release the deferred tutorial next-step now so the next instruction appears
+        // immediately after the ritual end effects (do not wait for the visual fade).
+        if (tutorialInteractionPending || tutorialEventFiredOnInteract)
+        {
+            TutorialManager.Instance?.ReleaseDeferredNextStep(true);
+        }
+        
+        // Continue with the visual fade; the tutorial will already be shown.
+        yield return FadeInRitualLight();
+
         isPerformingRitual = false;
         candlesLitAfterRitual = true;
         mainRitualCoroutine = null;
+
+        tutorialInteractionPending = false;
+        tutorialEventFiredOnInteract = false;
     }
 
     private void StartRitualEffects()
@@ -630,6 +677,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
         TurnOffAllCandles();
         UIManager.Instance?.HideRitualOverlay();
         UpdateAltarAppearance();
+        tutorialInteractionPending = false;
+        tutorialEventFiredOnInteract = false;
     }
 
     private void RestoreEnvironment()

@@ -23,6 +23,12 @@ public class TutorialManager : MonoBehaviour
 
     private bool isPausedByMenu = false;
 
+    // Defer/hold the automatic showing of the next step after completing the current step.
+    // Useful when the game needs to wait for an external event (e.g., ritual animation) before
+    // showing the next tutorial instruction.
+    private bool nextStepDeferred = false;
+    private bool nextStepPending = false;
+
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
     private PlayerController playerController;
 
@@ -221,14 +227,58 @@ public class TutorialManager : MonoBehaviour
         if (tutorialUI != null)
         {
             tutorialUI.HideStep();
-            Invoke(nameof(ShowNextStepDelayed), 0.6f);
+            if (nextStepDeferred)
+            {
+                // Mark that a next step is pending, but don't show it yet.
+                nextStepPending = true;
+            }
+            else
+            {
+                Invoke(nameof(ShowNextStepDelayed), 0.6f);
+            }
         }
         else
         {
-            ShowStep(currentStepIndex + 1);
+            if (nextStepDeferred)
+            {
+                nextStepPending = true;
+            }
+            else
+            {
+                ShowStep(currentStepIndex + 1);
+            }
         }
     }
 
+    // Call to defer showing the next step after the current step completes.
+    public void DeferNextStep()
+    {
+        nextStepDeferred = true;
+    }
+
+    // Release a previously deferred next-step and show it if one was pending.
+    public void ReleaseDeferredNextStep(bool immediate = false)
+    {
+        if (!nextStepDeferred && !nextStepPending) return;
+
+        nextStepDeferred = false;
+
+        if (!nextStepPending) return;
+
+        nextStepPending = false;
+
+        if (immediate)
+        {
+            // Show next step immediately (bypass the small transition delay)
+            ShowNextStepDelayed(); // directly call (no invoke) to avoid the 0.6s wait
+        }
+        else
+        {
+            // Keep the small delay used when normally transitioning to the next step.
+            Invoke(nameof(ShowNextStepDelayed), 0.6f);
+        }
+    }
+    
     private void ShowStep(int index)
     {
         // Ensure we don't carry over any typing-finish subscription from previous step

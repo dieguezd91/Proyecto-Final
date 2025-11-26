@@ -101,7 +101,7 @@ MonoBehaviour:
   panelTransform: {fileID: 5450954177986047142}
   textScrollRect: {fileID: 0}
   continueButton: {fileID: 3071825040681412775}
-  continueButtonTMPLabel: {fileID: 0}
+  continueButtonTMPLabel: {fileID: 9172995809708079909}
   scrollIndicator: {fileID: 0}
   stepImageDisplay: {fileID: 1558797820908733529}
   tutorialSoundBase: {fileID: 6372880803306158497}

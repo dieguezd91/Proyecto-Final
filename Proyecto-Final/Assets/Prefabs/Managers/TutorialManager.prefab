@@ -46,11 +46,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialSteps:
   - {fileID: 11400000, guid: b5b4175de3cb5684e8d3e96c0cd4112a, type: 2}
+  - {fileID: 11400000, guid: a31fc7518f137254b897040382fa3f24, type: 2}
   - {fileID: 11400000, guid: d4710db85cc460f4599be7dbc410419f, type: 2}
   - {fileID: 11400000, guid: 7724bf5ddbeed4d47969c4ff0796194d, type: 2}
+  - {fileID: 11400000, guid: 1dc6aaeb639939140a69319d8279561a, type: 2}
+  - {fileID: 11400000, guid: 1f9ddf4199f4b20499d318bdb854163e, type: 2}
   - {fileID: 11400000, guid: 16ffda535a901394d8ffed95633194d3, type: 2}
   - {fileID: 11400000, guid: 35354b9ca811854458056aa6d7ad6a5d, type: 2}
+  - {fileID: 11400000, guid: 5de9cf85a7eec3949856211449ed9c4f, type: 2}
   - {fileID: 11400000, guid: 536a720b13d02e44b96a2eda612c0db1, type: 2}
+  - {fileID: 11400000, guid: 302cacc48d23c8e479e159c4a0caf756, type: 2}
   - {fileID: 11400000, guid: 4763f6112cc2f0141a77bf338b3c0164, type: 2}
   - {fileID: 11400000, guid: 32923ab09714fac4797e4fee3fcfd529, type: 2}
   - {fileID: 11400000, guid: cb7dacc489cc747499b90491e8aeff6e, type: 2}
@@ -65,6 +70,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2e8b3aab2ba8ab346aa27ec42ff94f86, type: 2}
   - {fileID: 11400000, guid: f97ff75d134e45b4493aa0b0db1a75ee, type: 2}
   - {fileID: 11400000, guid: 74943831dc0444448804893e72802426, type: 2}
+  - {fileID: 11400000, guid: 3983da6ed6154cd4ab92c8b1f425aae4, type: 2}
   - {fileID: 11400000, guid: d8396c2943bf36143b16752d83673439, type: 2}
   - {fileID: 11400000, guid: 2fb5c407efd677244b021bb8ebf88593, type: 2}
   - {fileID: 11400000, guid: d3178642d5f6f524caa68f9a44276f34, type: 2}

@@ -18,5 +18,5 @@ MonoBehaviour:
   stepImage: {fileID: 1046542882, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
   objectiveType: 19
   requiredCount: 1
-  isGatedStep: 1
+  isGatedStep: 0
   waitDuration: 1
