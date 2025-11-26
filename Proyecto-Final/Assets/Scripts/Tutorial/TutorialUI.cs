@@ -77,6 +77,12 @@ public class TutorialUI : MonoBehaviour
         tutorialPanel.SetActive(false);
     }
 
+    private void OnEnable()
+    {
+        UIEvents.OnInventoryOpened += HideStep;
+        UIEvents.OnPauseMenuRequested += HideStep;
+    }
+
     private void OnContinueButtonPressed()
     {
         if (TutorialManager.Instance != null)
@@ -87,7 +93,7 @@ public class TutorialUI : MonoBehaviour
 
     public void ShowStep(TutorialStep step)
     {
-        TutorialSoundBase soundController = FindObjectOfType<TutorialSoundBase>();
+        var soundController = FindObjectOfType<TutorialSoundBase>();
         if (soundController != null) tutorialSoundBase.PlaySound(TutorialSoundType.ShowPanel);
 
         KillAllAnimations();
@@ -289,9 +295,45 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (typewriterCoroutine != null && (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter)))
+        {
+            FastForwardTypewriter();
+        }
+    }
+
+    private void FastForwardTypewriter()
+    {
+        if (typewriterCoroutine != null)
+        {
+            StopCoroutine(typewriterCoroutine);
+            typewriterCoroutine = null;
+        }
+
+        if (instructionText == null) return;
+
+        // Reveal the full text immediately
+        instructionText.maxVisibleCharacters = instructionText.text.Length;
+
+        // Ensure layout/scroll are updated so the end of the text is visible
+        if (textScrollRect != null)
+        {
+            LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.rectTransform);
+            if (instructionText.transform.parent != null)
+                LayoutRebuilder.ForceRebuildLayoutImmediate(instructionText.transform.parent.GetComponent<RectTransform>());
+
+            textScrollRect.verticalNormalizedPosition = 0f;
+            UpdateScrollIndicator();
+        }
+    }
+
     private void OnDisable()
     {
         KillAllAnimations();
+        
+        UIEvents.OnInventoryOpened -= HideStep;
+        UIEvents.OnPauseMenuRequested -= HideStep;
     }
 
     private void OnDestroy()
