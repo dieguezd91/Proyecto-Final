@@ -43,7 +43,11 @@ public class InventoryUI : MonoBehaviour
 
     private void OnEnable()
     {
+        if (uiSlots.Count == 0)
+            InitializeSlots();
+
         UpdateAllSlots();
+
         SelectFirstItem();
     }
 
