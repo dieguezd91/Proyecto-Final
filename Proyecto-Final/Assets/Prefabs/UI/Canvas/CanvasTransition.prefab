@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 8809962273277725228}
   - component: {fileID: 4774640564035546361}
   - component: {fileID: 6706244801007116601}
+  - component: {fileID: 3338616440537122616}
   m_Layer: 5
-  m_Name: FadeImage
+  m_Name: LeafTransitionImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,14 +59,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -2019882364, guid: 3b91ff2804f66584eb8424ec5b5f84f9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -75,6 +76,27 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &3338616440537122616
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310240551480712671}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 37a453c528668a7419d1f29fcd86b654, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3981933308895134860
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,11 +145,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d4c0766cf9c85b439dd5be7534e82f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  transitionType: 1
   fadeImage: {fileID: 6706244801007116601}
-  fadeDuration: 1.5
-  fadeColor: {r: 0, g: 0, b: 0, a: 1}
+  fadeDuration: 0.5
+  fadeColor: {r: 1, g: 1, b: 1, a: 1}
+  animatedTransitionImage: {fileID: 6706244801007116601}
+  transitionAnimator: {fileID: 3338616440537122616}
+  fadeOutAnimationName: FadeOut
+  fadeInAnimationName: FadeIn
+  animationDuration: 0.5
   showLoadingScreen: 0
-  minimumLoadTime: 0.5
+  minimumLoadTime: 0.05
 --- !u!1 &8934270256268860062
 GameObject:
   m_ObjectHideFlags: 0
