@@ -8,6 +8,7 @@ public class GardenGnome : EnemyBase
 
     [Header("Combat References")]
     [SerializeField] private LayerMask playerLayerMask;
+    [SerializeField] private ParticleSystem explosionParticles;
 
     private float acceleration;
     private float stopDistance;
@@ -27,6 +28,12 @@ public class GardenGnome : EnemyBase
         base.Awake();
         rb.gravityScale = 0f;
         rb.drag = 0.5f;
+
+        if (explosionParticles != null)
+        {
+            explosionParticles.Stop();
+            explosionParticles.gameObject.SetActive(false);
+        }
     }
 
     protected override EnemyDataSO GetEnemyData() => gnomeData;
@@ -139,6 +146,7 @@ public class GardenGnome : EnemyBase
 
     public void Explode()
     {
+        // 1. Lógica de Daño
         if (targetLife != null && targetLife.IsTargetable())
         {
             float damage = Random.Range(minExplosionDamage, maxExplosionDamage);
@@ -146,6 +154,21 @@ public class GardenGnome : EnemyBase
             CameraShaker.Instance?.Shake(0.3f, 0.3f);
         }
 
+        if (explosionParticles != null)
+        {
+            explosionParticles.transform.SetParent(null);
+
+            explosionParticles.transform.position = transform.position;
+            explosionParticles.transform.rotation = Quaternion.identity;
+
+            explosionParticles.gameObject.SetActive(true);
+            explosionParticles.Play();
+
+            var main = explosionParticles.main;
+            Destroy(explosionParticles.gameObject, main.duration + main.startLifetime.constantMax);
+        }
+
+        // 3. Muerte del Gnomo
         LifeController selfLife = GetComponent<LifeController>();
         if (selfLife != null) selfLife.Die();
 
