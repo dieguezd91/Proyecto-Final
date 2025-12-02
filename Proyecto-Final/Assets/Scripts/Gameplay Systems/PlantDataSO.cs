@@ -12,4 +12,5 @@ public class PlantDataSO : ScriptableObject
     public SeedsEnum seedType;
     public int slotIndex = 0;
     public bool hasDeathAnimation = true;
+    public bool spriteFacesLeft = false;
 }

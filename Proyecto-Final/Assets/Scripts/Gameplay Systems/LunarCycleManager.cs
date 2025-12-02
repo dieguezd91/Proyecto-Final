@@ -46,7 +46,9 @@ public class LunarCycleManager : MonoBehaviour
         if (onMoonPhaseChanged == null)
             onMoonPhaseChanged = new MoonPhaseChangedEvent();
 
+        #if !UNITY_EDITOR
         Cursor.lockState = CursorLockMode.Confined;
+        #endif
     }
 
     private void Start()

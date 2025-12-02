@@ -21,3 +21,4 @@ MonoBehaviour:
   seedType: 14
   slotIndex: 0
   hasDeathAnimation: 1
+  spriteFacesLeft: 1

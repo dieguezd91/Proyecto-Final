@@ -16,6 +16,7 @@ MonoBehaviour:
   stepOrder: 21
   instructionText: With the new day comes growth. Harvest your mature plants by left-clicking
     on them to gather resources.
+  stepImage: {fileID: -1594061710, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   objectiveType: 4
   requiredCount: 1
   isGatedStep: 0

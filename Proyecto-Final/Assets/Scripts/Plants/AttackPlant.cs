@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackPlant : Plant
@@ -18,9 +16,21 @@ public class AttackPlant : Plant
     private bool isPerformingAttack = false;
     private Transform queuedTarget;
 
+    private SpriteRenderer spriteRenderer;
+    private Vector3 originalFirePointLocalPos;
+    private bool isFlipped = false;
+    private bool spriteFacesLeft = false;
+
     protected override void Start()
     {
         base.Start();
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (plantData != null)
+        {
+            spriteFacesLeft = plantData.spriteFacesLeft;
+        }
 
         if (firePoint == null)
         {
@@ -29,6 +39,8 @@ public class AttackPlant : Plant
             point.transform.localPosition = new Vector3(0, 0.5f, 0);
             firePoint = point.transform;
         }
+
+        originalFirePointLocalPos = firePoint.localPosition;
 
         LifeController lifeController = GetComponent<LifeController>();
         if (lifeController != null)
@@ -57,9 +69,37 @@ public class AttackPlant : Plant
                 }
 
                 Vector3 direction = target.position - transform.position;
+
+                UpdateSpriteFlipAndFirePoint(direction);
+
                 float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
                 firePoint.rotation = Quaternion.Euler(0, 0, angle);
             }
+        }
+    }
+
+    private void UpdateSpriteFlipAndFirePoint(Vector3 direction)
+    {
+        if (spriteRenderer == null) return;
+
+        bool shouldFlip;
+        if (spriteFacesLeft)
+        {
+            shouldFlip = direction.x > 0;
+        }
+        else
+        {
+            shouldFlip = direction.x < 0;
+        }
+
+        if (shouldFlip != isFlipped)
+        {
+            isFlipped = shouldFlip;
+            spriteRenderer.flipX = isFlipped;
+
+            Vector3 adjustedPos = originalFirePointLocalPos;
+            adjustedPos.x *= isFlipped ? -1 : 1;
+            firePoint.localPosition = adjustedPos;
         }
     }
 
@@ -90,9 +130,7 @@ public class AttackPlant : Plant
         if (target != null && animator != null)
         {
             isPerformingAttack = true;
-
             queuedTarget = target;
-
             animator.SetTrigger("Attack");
         }
     }
