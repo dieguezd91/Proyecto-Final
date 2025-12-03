@@ -101,4 +101,28 @@ MonoBehaviour:
     description: 
     seedCount: 0
     data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
+  - seedType: 0
+    plantPrefab: {fileID: 0}
+    plantName: 
+    plantIcon: {fileID: 0}
+    daysToGrow: 0
+    description: 
+    seedCount: 0
+    data: {fileID: 0}
   selectedSlotIndex: 0

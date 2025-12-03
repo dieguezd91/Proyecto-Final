@@ -15,6 +15,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private SpellSlotsUIController spellSlotsUI;
     [SerializeField] private GameObject hudAbilities;
     [SerializeField] private RitualUIController ritualUI;
+    [SerializeField] private TeleportAbilityUI teleportAbilityUI;
 
     [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
@@ -46,6 +47,7 @@ public class UIManager : MonoBehaviour
     public FeedbackUIController Feedback => feedbackUI;
     public TooltipUIController Tooltip => tooltipUI;
     public RitualUIController Ritual => ritualUI;
+    public TeleportAbilityUI TeleportAbility => teleportAbilityUI;
 
     private void Awake()
     {
@@ -75,6 +77,7 @@ public class UIManager : MonoBehaviour
         inventoryUIController?.HandleUpdate();
         seedSlotsUI?.HandleUpdate();
         spellSlotsUI?.HandleUpdate();
+        teleportAbilityUI?.HandleUpdate();
     }
 
 
@@ -91,6 +94,7 @@ public class UIManager : MonoBehaviour
         if (tooltipUI == null) tooltipUI = GetComponentInChildren<TooltipUIController>();
         if (spellSlotsUI == null) spellSlotsUI = GetComponentInChildren<SpellSlotsUIController>();
         if (ritualUI == null) ritualUI = GetComponentInChildren<RitualUIController>();
+        if (teleportAbilityUI == null) teleportAbilityUI = GetComponentInChildren<TeleportAbilityUI>();
 
         pauseMenuController?.Initialize();
         healthUI?.Initialize();
@@ -102,6 +106,7 @@ public class UIManager : MonoBehaviour
         tooltipUI?.Initialize();
         spellSlotsUI?.Initialize();
         ritualUI?.Initialize();
+        teleportAbilityUI?.Initialize();
     }
 
     public void OpenInventoryWithPage(string pageName)
@@ -122,6 +127,7 @@ public class UIManager : MonoBehaviour
         tooltipUI?.Setup();
         spellSlotsUI?.Setup();
         ritualUI?.Setup();
+        teleportAbilityUI?.Setup();
 
     }
 
