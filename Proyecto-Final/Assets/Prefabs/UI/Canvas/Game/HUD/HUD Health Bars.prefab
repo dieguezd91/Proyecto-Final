@@ -595,42 +595,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7938343660367704894}
     m_Modifications:
-    - target: {fileID: 4311148320990379696, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_AdditionalShaderChannelsFlag
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 4633929747100589470, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 104.9085
-      objectReference: {fileID: 0}
-    - target: {fileID: 4633929747100589470, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 54.8863
-      objectReference: {fileID: 0}
-    - target: {fileID: 4633929747100589470, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0.8999
-      objectReference: {fileID: 0}
-    - target: {fileID: 4633929747100589470, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 2.4431
-      objectReference: {fileID: 0}
-    - target: {fileID: 6258376759470319849, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_fontSize
-      value: 22.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6258376759470319849, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_fontAsset
-      value: 
-      objectReference: {fileID: 11400000, guid: 52be7e01f8fbce54186eac8da2da70cc, type: 2}
-    - target: {fileID: 6258376759470319849, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_enableAutoSizing
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6258376759470319849, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_hasFontAssetChanged
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6593846270854615387, guid: 447c144a81beb40478751597af5e3850, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -709,10 +673,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6593846270854615387, guid: 447c144a81beb40478751597af5e3850, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8025661063276402060, guid: 447c144a81beb40478751597af5e3850, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9008286119224646080, guid: 447c144a81beb40478751597af5e3850, type: 3}
