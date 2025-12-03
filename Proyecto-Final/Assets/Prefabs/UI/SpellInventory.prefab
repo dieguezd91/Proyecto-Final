@@ -93,11 +93,11 @@ MonoBehaviour:
     cooldown: 0
     currentCooldown: 0
     isUnlocked: 0
-  - spellType: 4
-    spellName: Teleport
-    spellIcon: {fileID: -776744814, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-    spellPrefab: {fileID: 5912720115365117075, guid: 70508e1f9da1bc3429c418f3d13312a9, type: 3}
-    manaCost: 25
-    cooldown: 1
+  - spellType: 0
+    spellName: 
+    spellIcon: {fileID: 0}
+    spellPrefab: {fileID: 0}
+    manaCost: 0
+    cooldown: 0
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
