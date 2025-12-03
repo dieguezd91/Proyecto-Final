@@ -7,7 +7,13 @@ public class WrittingSoundBase : MonoBehaviour
     public List<SoundClipData> KeypressSounds;
 
     private int lastPlayedIndex = -1;
-    
+    private Camera mainCamera;
+
+    private void Awake()
+    {
+        mainCamera = Camera.main;
+    }
+
     public void PlayKeypressSound()
     {
         if (KeypressSounds == null || KeypressSounds.Count == 0) return;
@@ -28,7 +34,7 @@ public class WrittingSoundBase : MonoBehaviour
         
         if (SoundManager.Instance == null) return;
         
-        SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
+        SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, mainCamera?.transform);
         lastPlayedIndex = KeypressSounds.IndexOf(soundData);
     }
     
