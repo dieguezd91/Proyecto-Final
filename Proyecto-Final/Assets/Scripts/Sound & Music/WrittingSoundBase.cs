@@ -4,57 +4,31 @@ using UnityEngine;
 public class WrittingSoundBase : MonoBehaviour
 {
     [Header("Keypress Sounds")]
-    public List<SoundClipData> keypressSounds;
+    public List<SoundClipData> KeypressSounds;
 
     private int lastPlayedIndex = -1;
-    private AudioSource _sfxSource;
-
-    private void Awake()
-    {
-        _sfxSource = GetComponent<AudioSource>();
-        if (_sfxSource == null)
-            _sfxSource = gameObject.AddComponent<AudioSource>();
-        _sfxSource.playOnAwake = false;
-    }
-
+    
     public void PlayKeypressSound()
     {
-        if (keypressSounds == null || keypressSounds.Count == 0)
-        {
-            Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: No keypress sounds assigned.");
-            return;
-        }
-        var clipCount = keypressSounds.Count;
-        var tempList = keypressSounds;
+        if (KeypressSounds == null || KeypressSounds.Count == 0) return;
+        
+        var clipCount = KeypressSounds.Count;
+        var tempList = KeypressSounds;
+        
         if (clipCount > 1 && lastPlayedIndex >= 0 && lastPlayedIndex < clipCount)
         {
-            tempList = new List<SoundClipData>(keypressSounds);
+            tempList = new List<SoundClipData>(KeypressSounds);
             tempList.RemoveAt(lastPlayedIndex);
         }
+        
         var index = Random.Range(0, tempList.Count);
         var soundData = tempList[index];
-        if (soundData == null || soundData.GetClip() == null)
-        {
-            Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: Keypress SoundClipData or AudioClip is missing.");
-            return;
-        }
-        // Play via a local AudioSource so we can stop it if typing ends abruptly
-        if (_sfxSource == null)
-        {
-            Debug.LogWarning($"[{gameObject.name}] WrittingSoundBase: No AudioSource available to play keypress sound.");
-            return;
-        }
-        _sfxSource.pitch = soundData.GetPitch();
-        _sfxSource.PlayOneShot(soundData.GetClip(), soundData.volume);
-        // Update lastPlayedIndex to the index in the original list
-        lastPlayedIndex = keypressSounds.IndexOf(soundData);
-    }
-
-    public void StopKeypressSounds()
-    {
-        if (_sfxSource != null && _sfxSource.isPlaying)
-        {
-            _sfxSource.Stop();
-        }
+        
+        if (soundData == null || soundData.GetClip() == null) return;
+        
+        if (SoundManager.Instance == null) return;
+        
+        SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
+        lastPlayedIndex = KeypressSounds.IndexOf(soundData);
     }
 }
