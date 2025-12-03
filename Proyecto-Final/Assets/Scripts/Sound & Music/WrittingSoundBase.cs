@@ -31,4 +31,9 @@ public class WrittingSoundBase : MonoBehaviour
         SoundManager.Instance.PlayClip(soundData, SoundSourceType.Global, Camera.main?.transform);
         lastPlayedIndex = KeypressSounds.IndexOf(soundData);
     }
+    
+    public void StopKeypressSounds()
+    {
+        Debug.Log("Stop Writting Sound");
+    }
 }
