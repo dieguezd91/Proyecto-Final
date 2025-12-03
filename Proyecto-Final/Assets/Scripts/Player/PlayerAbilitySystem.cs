@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -46,6 +47,18 @@ public class PlayerAbilitySystem : MonoBehaviour
     private bool isPlayingInteractionAnimation = false;
     [SerializeField] private GameObject plantingParticlesPrefab;
 
+    [Header("TELEPORT")]
+    [SerializeField] private GameObject teleportPrefab;
+    [SerializeField] private int teleportManaCost = 10;
+    [SerializeField] private float teleportCooldown = 2f;
+    private Transform playerTransform;
+    private float currentTeleportCooldown = 0f;
+    public event Action<float, float> OnTeleportCooldownChanged;
+    public event Action<bool> OnTeleportAvailabilityChanged;
+    public float TeleportManaCost => teleportManaCost;
+    public float TeleportCooldown => teleportCooldown;
+    public float CurrentTeleportCooldown => currentTeleportCooldown;
+
     private PlayerAbility currentAbility = PlayerAbility.Digging;
     private PlayerController playerController;
     private bool isDigging = false;
@@ -73,6 +86,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         seedInventory ??= FindObjectOfType<SeedInventory>();
+        playerTransform = transform;
 
         if (handAnimator == null)
         {
@@ -165,6 +179,9 @@ public class PlayerAbilitySystem : MonoBehaviour
                 HandleRemoving();
                 break;
         }
+
+        UpdateTeleportCooldown();
+
     }
 
     private void PlayInteractionAnimation()
@@ -693,6 +710,72 @@ public class PlayerAbilitySystem : MonoBehaviour
     public bool IsBusy()
     {
         return isDigging || isHarvesting || isPlayingInteractionAnimation;
+    }
+
+    private void UpdateTeleportCooldown()
+    {
+        if (currentTeleportCooldown > 0f)
+        {
+            currentTeleportCooldown -= Time.deltaTime;
+
+            if (currentTeleportCooldown <= 0f)
+            {
+                currentTeleportCooldown = 0f;
+                OnTeleportAvailabilityChanged?.Invoke(CanUseTeleport());
+            }
+
+            OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
+        }
+    }
+
+    public bool CanUseTeleport()
+    {
+        if (currentTeleportCooldown > 0f) return false;
+        if (manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
+
+        WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
+        if (worldTransition != null && worldTransition.IsInInterior) return false;
+
+        return true;
+    }
+
+    public bool TryUseTeleport(Vector2 direction)
+    {
+        if (!CanUseTeleport()) return false;
+
+        if (manaSystem != null)
+        {
+            manaSystem.UseMana(teleportManaCost);
+        }
+
+        if (teleportPrefab != null && playerTransform != null)
+        {
+            GameObject spellObject = Instantiate(teleportPrefab, playerTransform.position, Quaternion.identity);
+            Spell spellComponent = spellObject.GetComponent<Spell>();
+
+            if (spellComponent != null)
+            {
+                spellComponent.Cast(direction, playerTransform.position);
+            }
+            else
+            {
+                Destroy(spellObject);
+            }
+        }
+
+        currentTeleportCooldown = teleportCooldown;
+        OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
+        OnTeleportAvailabilityChanged?.Invoke(false);
+
+        TutorialEvents.InvokeTeleportCasted();
+
+        return true;
+    }
+
+    public float GetCooldownProgress()
+    {
+        if (teleportCooldown <= 0f) return 0f;
+        return currentTeleportCooldown / teleportCooldown;
     }
 
     private void OnDrawGizmosSelected()

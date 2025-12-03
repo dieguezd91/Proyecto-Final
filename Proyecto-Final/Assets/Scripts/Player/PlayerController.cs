@@ -524,39 +524,13 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CastTeleportSpell();
+            TryTeleport();
         }
     }
 
-    private void CastTeleportSpell()
+    private void TryTeleport()
     {
-        if (SpellInventory.Instance == null) return;
-
-        WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
-        if (worldTransition != null && worldTransition.IsInInterior)
-        {
-            return;
-        }
-
-        SpellSlot teleportSlot = null;
-        int teleportSlotIndex = -1;
-
-        for (int i = 0; i < SpellInventory.Instance.spellSlots.Length; i++)
-        {
-            if (SpellInventory.Instance.spellSlots[i].spellType == SpellType.Teleport)
-            {
-                teleportSlot = SpellInventory.Instance.spellSlots[i];
-                teleportSlotIndex = i;
-                break;
-            }
-        }
-
-        if (teleportSlot == null || !teleportSlot.isUnlocked) return;
-        if (teleportSlot.currentCooldown > 0f) return;
-        if (manaSystem != null && manaSystem.GetCurrentMana() < teleportSlot.manaCost) return;
-        if (teleportSlot.spellPrefab == null) return;
-
-        manaSystem.UseMana(teleportSlot.manaCost);
+        if (playerAbilitySystem == null) return;
 
         Vector2 castDirection;
         if (moveInput.sqrMagnitude > 0.01f)
@@ -570,21 +544,7 @@ public class PlayerController : MonoBehaviour
             castDirection = (mousePos - transform.position).normalized;
         }
 
-        GameObject spellObject = Instantiate(teleportSlot.spellPrefab, transform.position, Quaternion.identity);
-        Spell spellComponent = spellObject.GetComponent<Spell>();
-
-        if (spellComponent != null)
-        {
-            spellComponent.Cast(castDirection, transform.position);
-        }
-        else
-        {
-            Destroy(spellObject);
-        }
-
-        TutorialEvents.InvokeTeleportCasted();
-
-        SpellInventory.Instance.StartCooldown(teleportSlotIndex);
+        playerAbilitySystem.TryUseTeleport(castDirection);
     }
 
     // Public API used by tutorial systems ---------------------------------
