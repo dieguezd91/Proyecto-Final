@@ -1129,7 +1129,7 @@ TextureImporter:
         x: 443
         y: 51
         width: 15
-        height: 15
+        height: 12
       alignment: 9
       pivot: {x: 0.504717, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -2355,7 +2355,7 @@ TextureImporter:
         width: 40
         height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -2363,6 +2363,48 @@ TextureImporter:
       bones: []
       spriteID: 95f81dd92456be24da393c9f3e090865
       internalID: -422728739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashCooldwonNO
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 65
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7241365a513e04440b64a18208df4100
+      internalID: -641304466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DashCooldown
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 65
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 406412ae980e1814b92afb7f545953bd
+      internalID: 1560702431
       vertices: []
       indices: 
       edges: []
@@ -2410,6 +2452,8 @@ TextureImporter:
       CrosshairDigIcon: 125339148
       CrosshairGatherIcon: 861525276
       CrosshairPlantIcon: 1710208436
+      DashCooldown: 1560702431
+      DashCooldwonNO: -641304466
       DayPlayerBars: -1991438594
       EKey: 1040677162
       EmptyHouse: -1902738031
