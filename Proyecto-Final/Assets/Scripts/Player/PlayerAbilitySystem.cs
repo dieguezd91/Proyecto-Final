@@ -121,6 +121,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void Update()
     {
+        UpdateTeleportCooldown();
+
         if ((isDigging || isHarvesting) && progressBar != null && progressBarTarget != null)
         {
             progressBar.transform.position = Camera.main.WorldToScreenPoint(

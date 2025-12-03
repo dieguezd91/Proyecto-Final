@@ -142,6 +142,8 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
+        HandleTeleport();
+
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
             rb.velocity = Vector2.zero;
@@ -158,8 +160,6 @@ public class PlayerController : MonoBehaviour
             CheckForSpellTypeChange();
             HandleAttack();
         }
-
-        HandleTeleport();
     }
 
     void FixedUpdate()
