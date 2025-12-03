@@ -184,13 +184,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1f657c5e70d485c8973cc2fe2ba651d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keypressSounds:
+  KeypressSounds:
   - clips:
     - {fileID: 8300000, guid: 7daf1adb008f4dc41bdf361d3e144fd2, type: 3}
     - {fileID: 8300000, guid: 7d321b0ac8851064aa9d696a6ce714d2, type: 3}
     - {fileID: 8300000, guid: db22810224abe694db245dd9458eb344, type: 3}
     - {fileID: 8300000, guid: 7f0ae76b049a947409c09f5acc06274b, type: 3}
-    volume: 0.7
+    volume: 1
     pitch: 1
     pitchVariation: 0.1
     loop: 0
