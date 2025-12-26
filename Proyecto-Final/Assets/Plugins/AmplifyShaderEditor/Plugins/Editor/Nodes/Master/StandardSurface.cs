@@ -80,25 +80,6 @@ namespace AmplifyShaderEditor
 		Overlay
 	}
 
-	public enum RenderPlatforms
-	{
-		d3d9,
-		d3d11,
-		glcore,
-		gles,
-		gles3,
-		metal,
-		d3d11_9x,
-		xbox360,
-		xboxone,
-		ps4,
-		psp2,
-		n3ds,
-		wiiu,
-		vulkan,
-		all
-	}
-
 	[Serializable]
 	public class NodeCache
 	{
@@ -208,6 +189,7 @@ namespace AmplifyShaderEditor
 		private const string VertexPositionStr = "Local Vertex Position";
 		private const string VertexDataStr = "VertexData";
 		private const string VertexNormalStr = "Local Vertex Normal";
+		private const string VertexTangentStr = "Local Vertex Tangent";
 		private const string CustomLightingStr = "Custom Lighting";
 		private const string AlbedoStr = "Albedo";
 		private const string NormalStr = "Normal";
@@ -472,7 +454,7 @@ namespace AmplifyShaderEditor
 
 		public override void AddMasterPorts()
 		{
-			int vertexCorrection = 2;
+			int vertexCorrection = 3;
 			int index = vertexCorrection + 2;
 			base.AddMasterPorts();
 			switch( m_currentLightModel )
@@ -589,6 +571,7 @@ namespace AmplifyShaderEditor
 			m_tessOpHelper.VertexOffsetIndexPort = m_vertexPortId;
 			AddInputPort( WirePortDataType.FLOAT3, false, ( m_vertexMode == VertexMode.Relative ? VertexDisplacementStr : VertexPositionStr ), VertexDataStr, 0/*index++*/, MasterNodePortCategory.Vertex, 11 );
 			AddInputPort( WirePortDataType.FLOAT3, false, VertexNormalStr, 1/*index++*/, MasterNodePortCategory.Vertex, 12 );
+			AddInputPort( WirePortDataType.FLOAT4, false, VertexTangentStr, 2/*index++*/, MasterNodePortCategory.Vertex, 16 );
 
 			//AddInputPort( WirePortDataType.FLOAT3, false, CustomLightModelStr, index++, MasterNodePortCategory.Fragment, 13 );
 			//m_inputPorts[ m_inputPorts.Count - 1 ].Locked = true;// !(m_currentLightModel == StandardShaderLightModel.CustomLighting);
@@ -678,6 +661,8 @@ namespace AmplifyShaderEditor
 			m_inputPorts[ portId++ ].ChangeType( WirePortDataType.FLOAT3, false );
 			//Vertex Normal
 			m_inputPorts[ portId++ ].ChangeType( WirePortDataType.FLOAT3, false );
+			//Vertex Tangents
+			m_inputPorts[ portId++ ].ChangeType( WirePortDataType.FLOAT4, false );
 			//Tessellation
 			m_inputPorts[ portId++ ].ChangeType( WirePortDataType.FLOAT4, false );
 			//Debug
@@ -1370,6 +1355,13 @@ namespace AmplifyShaderEditor
 			
 
 			m_currentDataCollector.TesselationActive = m_tessOpHelper.EnableTesselation;
+			#if UNITY_IOS
+			if ( m_currentDataCollector.TesselationActive )
+			{
+				// On iOS custom app data must be used since fixed4 color from appdata_full generates an error on it when tessellation is active
+				m_currentDataCollector.ForceCustomAppDataUsage();
+			}
+			#endif
 			m_currentDataCollector.CurrentRenderPath = m_renderPath;
 
 			StandardShaderLightModel cachedLightModel = m_currentLightModel;
@@ -1488,6 +1480,9 @@ namespace AmplifyShaderEditor
 			{
 				sortedPorts.Add( m_inputPorts[ i ].OrderId, m_inputPorts[ i ] );
 			}
+
+			//This must be set before node code generation since it will be used by Outline node
+			m_currentDataCollector.SurfaceCustomShadowCaster = CustomShadowCaster;
 
 			bool normalIsConnected = m_normalPort.IsConnected;
 			m_tessOpHelper.Reset();
@@ -1698,6 +1693,11 @@ namespace AmplifyShaderEditor
 							string vertexInstructions = CreateInstructionsForVertexPort( sortedPorts[ i ] );
 							m_currentDataCollector.AddToVertexNormal( vertexInstructions );
 						}
+						else if ( sortedPorts[ i ].DataName.Equals( VertexTangentStr ) )
+						{
+							string vertexInstructions = CreateInstructionsForVertexPort( sortedPorts[ i ] );
+							m_currentDataCollector.AddToVertexTangent( vertexInstructions );
+						}
 						else if( m_tessOpHelper.IsTessellationPort( sortedPorts[ i ].PortId ) && sortedPorts[ i ].IsConnected  /* && m_tessOpHelper.EnableTesselation*/)
 						{
 							//Vertex displacement and per vertex custom data
@@ -1804,6 +1804,7 @@ namespace AmplifyShaderEditor
 			}
 
 			m_customShadowCaster = CustomShadowCaster;
+			
 			//if( !m_renderingOptionsOpHelper.UseDefaultShadowCaster && 
 			//	( ( m_castShadows && ( m_alphaToCoverage || m_inlineAlphaToCoverage.Active ) ) ||
 			//	( m_castShadows && hasOpacity ) ||
@@ -1871,15 +1872,6 @@ namespace AmplifyShaderEditor
 				m_outlineHelper.AddToDataCollector( ref m_currentDataCollector );
 			}
 
-#if !UNITY_2017_1_OR_NEWER
-			if( m_renderingOptionsOpHelper.LodCrossfade )
-			{
-				m_currentDataCollector.AddToPragmas( UniqueId, "multi_compile _ LOD_FADE_CROSSFADE" );
-				m_currentDataCollector.AddToStartInstructions( "\t\t\tUNITY_APPLY_DITHER_CROSSFADE(i);\n" );
-				m_currentDataCollector.AddToInput( UniqueId, "UNITY_DITHER_CROSSFADE_COORDS", false );
-				m_currentDataCollector.AddVertexInstruction( "UNITY_TRANSFER_DITHER_CROSSFADE( " + Constants.VertexShaderOutputStr + ", " + Constants.VertexShaderInputStr + ".vertex )", UniqueId, true );
-			}
-#endif
 			//m_additionalIncludes.AddToDataCollector( ref m_currentDataCollector );
 			//m_additionalPragmas.AddToDataCollector( ref m_currentDataCollector );
 			//m_additionalDefines.AddToDataCollector( ref m_currentDataCollector );
@@ -1952,7 +1944,8 @@ namespace AmplifyShaderEditor
 					}
 
 					// Build Color Mask
-					m_colorMaskHelper.BuildColorMask( ref ShaderBody, m_customBlendAvailable );
+					bool forceDefault = m_outlineHelper.ActiveColorMask;
+					m_colorMaskHelper.BuildColorMask( ref ShaderBody, m_customBlendAvailable, forceDefault );
 
 					//ShaderBody += "\t\tZWrite " + _zWriteMode + '\n';
 					//ShaderBody += "\t\tZTest " + _zTestMode + '\n';
@@ -2188,7 +2181,7 @@ namespace AmplifyShaderEditor
 						//Tesselation
 						if( m_tessOpHelper.EnableTesselation && !usingDebugPort )
 						{
-							ShaderBody += m_tessOpHelper.GetCurrentTessellationFunction + "\n";
+							ShaderBody += m_tessOpHelper.GetCurrentTessellationFunction( ref m_currentDataCollector ) + "\n";
 						}
 
 						//Add Custom Vertex Data
@@ -2255,7 +2248,8 @@ namespace AmplifyShaderEditor
 							ShaderBody += "\t\tinline half4 Lighting" + m_currentLightModel.ToString() + Constants.CustomLightStructStr + "(" + outputStruct + " " + Constants.CustomLightOutputVarStr + ", half3 viewDir, UnityGI gi )\n\t\t{\n";
 							if( hasTranslucency )
 							{
-								ShaderBody += "\t\t\t#if !DIRECTIONAL\n";
+								//ShaderBody += "\t\t\t#if !DIRECTIONAL\n";
+								ShaderBody += "\t\t\t#if !defined(DIRECTIONAL)\n";
 								ShaderBody += "\t\t\tfloat3 lightAtten = gi.light.color;\n";
 								ShaderBody += "\t\t\t#else\n";
 								ShaderBody += "\t\t\tfloat3 lightAtten = lerp( _LightColor0.rgb, gi.light.color, _TransShadow );\n";
@@ -2410,12 +2404,8 @@ namespace AmplifyShaderEditor
 						ShaderBody += "\t\t\t#pragma multi_compile UNITY_PASS_SHADOWCASTER\n";
 						ShaderBody += "\t\t\t#pragma skip_variants FOG_LINEAR FOG_EXP FOG_EXP2\n";
 						ShaderBody += "\t\t\t#include \"HLSLSupport.cginc\"\n";
-#if UNITY_2018_3_OR_NEWER
 						//Preventing WebGL to throw error Duplicate system value semantic definition: input semantic 'SV_POSITION' and input semantic 'VPOS'
 						ShaderBody += "\t\t\t#if ( SHADER_API_D3D11 || SHADER_API_GLCORE || SHADER_API_GLES || SHADER_API_GLES3 || SHADER_API_METAL || SHADER_API_VULKAN )\n";
-#else
-						ShaderBody += "\t\t\t#if ( SHADER_API_D3D11 || SHADER_API_GLCORE || SHADER_API_GLES3 || SHADER_API_METAL || SHADER_API_VULKAN )\n";
-#endif
 						ShaderBody += "\t\t\t\t#define CAN_SKIP_VPOS\n";
 						ShaderBody += "\t\t\t#endif\n";
 						ShaderBody += "\t\t\t#include \"UnityCG.cginc\"\n";
@@ -2463,7 +2453,7 @@ namespace AmplifyShaderEditor
 						ShaderBody += "\t\t\t\tUNITY_VERTEX_OUTPUT_STEREO\n";
 						ShaderBody += "\t\t\t};\n";
 
-						ShaderBody += "\t\t\tv2f vert( " + m_currentDataCollector.CustomAppDataName + " v )\n";
+						ShaderBody += "\t\t\tv2f vert( " + m_currentDataCollector.SurfaceVertexStructure + " v )\n";
 						ShaderBody += "\t\t\t{\n";
 						ShaderBody += "\t\t\t\tv2f o;\n";
 
@@ -2693,12 +2683,10 @@ namespace AmplifyShaderEditor
 				{
 					if( m_currentShader != m_currentMaterial.shader )
 						m_currentMaterial.shader = m_currentShader;
-#if UNITY_5_6_OR_NEWER
 					if ( isInstancedShader )
 					{
 						m_currentMaterial.enableInstancing = true;
 					}
-#endif
 					m_currentDataCollector.UpdateMaterialOnPropertyNodes( m_currentMaterial );
 					UpdateMaterialEditor();
 					// need to always get asset datapath because a user can change and asset location from the project window

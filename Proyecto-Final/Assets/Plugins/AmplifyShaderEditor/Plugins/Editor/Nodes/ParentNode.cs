@@ -27,8 +27,6 @@ namespace AmplifyShaderEditor
 	[Serializable]
 	public class ParentNode : UndoParentNode, ISerializationCallbackReceiver
 	{
-		public const int PreviewWidth = 128;
-		public const int PreviewHeight = 128;
 
 		protected readonly string[] PrecisionLabels = { "Float", "Half" };
 		protected readonly string[] PrecisionLabelsExtra = { "Float", "Half", "Inherit" };
@@ -347,7 +345,33 @@ namespace AmplifyShaderEditor
 		public virtual void OnEnable()
 		{
 			hideFlags = HideFlags.HideAndDontSave;
-			if( m_nodeAttribs != null )
+
+			RefreshUIHeaderColor();
+
+			m_tooltipTimestamp = Time.realtimeSinceStartup;
+			hideFlags = HideFlags.DontSave;
+		}		
+
+		public void RefreshUIHeaderColor()
+		{
+			// @diogo: handle special shader function case; this will have to do for now...
+			var functionNode = this as FunctionNode;
+			if ( functionNode != null && functionNode.Function != null )
+			{				
+				if ( functionNode.Function.Header == AmplifyShaderFunction.HeaderStyle.Custom )
+				{
+					m_headerColor = functionNode.Function.HeaderColor;
+				}
+				else if ( functionNode.Function.Header == AmplifyShaderFunction.HeaderStyle.Category )
+				{
+					m_headerColor = UIUtils.GetColorFromCategory( functionNode.Function.CustomNodeCategory );
+				}
+				else
+				{
+					m_headerColor = UIUtils.GetColorFromCategory( "Functions" );
+				}
+			}
+			else if ( m_nodeAttribs != null )
 			{
 				if( UIUtils.HasColorCategory( m_nodeAttribs.Category ) )
 				{
@@ -361,9 +385,6 @@ namespace AmplifyShaderEditor
 					}
 				}
 			}
-
-			m_tooltipTimestamp = Time.realtimeSinceStartup;
-			hideFlags = HideFlags.DontSave;
 		}
 
 		protected virtual void CommonInit( int uniqueId )
@@ -981,14 +1002,15 @@ namespace AmplifyShaderEditor
 			}
 
 			float headerWidth = Mathf.Max( UIUtils.UnZoomedNodeTitleStyle.CalcSize( m_content ).x + m_paddingTitleLeft + m_paddingTitleRight, UIUtils.UnZoomedPropertyValuesTitleStyle.CalcSize( m_additionalContent ).x + m_paddingTitleLeft + m_paddingTitleRight );
-			m_position.width = Mathf.Max( headerWidth, Mathf.Max( MinInsideBoxWidth, m_insideSize.x ) + inSize.x + outSize.x ) + Constants.NODE_HEADER_LEFTRIGHT_MARGIN * 2;
-			//m_position.width += m_extraSize.x;
+			m_position.width = Mathf.Max(headerWidth, Mathf.Max(MinInsideBoxWidth, m_insideSize.x) + inSize.x + outSize.x);/* + Constants.NODE_HEADER_LEFTRIGHT_MARGIN * 2;*/
+			m_position.width = Mathf.Round(m_position.width / 32) * 32 + 32;
+            //m_position.width += m_extraSize.x;
 
-			m_fontHeight = Mathf.Max( inSize.y, outSize.y );
+            m_fontHeight = Mathf.Max( inSize.y, outSize.y );
 
 			m_position.height = Mathf.Max( inputCount, outputCount ) * ( m_fontHeight + Constants.INPUT_PORT_DELTA_Y );// + Constants.INPUT_PORT_DELTA_Y;
 			m_position.height = Mathf.Max( m_position.height, Mathf.Max( MinInsideBoxHeight, m_insideSize.y ) );
-			m_position.height += UIUtils.HeaderMaxHeight + m_extraHeaderHeight + Constants.INPUT_PORT_DELTA_Y;// + m_extraSize.y;
+			m_position.height += UIUtils.HeaderMaxHeight + /*m_extraHeaderHeight +*/ Constants.INPUT_PORT_DELTA_Y;// + m_extraSize.y;
 			if( m_showErrorMessage )
 				m_position.height += 24;
 
@@ -1402,9 +1424,9 @@ namespace AmplifyShaderEditor
 				m_titlePos = m_globalPosition;
 				m_titlePos.height = m_headerPosition.height;
 				if( m_hasSubtitle )
-					m_titlePos.yMin += ( 4 * drawInfo.InvertedZoom );
+					m_titlePos.yMin += ( 2 * drawInfo.InvertedZoom );
 				else
-					m_titlePos.yMin += ( 7 * drawInfo.InvertedZoom );
+					m_titlePos.yMin += ( 8 * drawInfo.InvertedZoom );
 				m_titlePos.width -= ( m_paddingTitleLeft + m_paddingTitleRight ) * drawInfo.InvertedZoom;
 				m_titlePos.x += m_paddingTitleLeft * drawInfo.InvertedZoom;
 
@@ -1413,7 +1435,7 @@ namespace AmplifyShaderEditor
 				{
 					m_addTitlePos = m_titlePos;
 					m_addTitlePos.y = m_globalPosition.y;
-					m_addTitlePos.yMin += ( 19 * drawInfo.InvertedZoom );
+					m_addTitlePos.yMin += ( 15 * drawInfo.InvertedZoom );
 				}
 
 				// Left Dropdown
@@ -1754,6 +1776,14 @@ namespace AmplifyShaderEditor
 				GUI.Label( m_headerPosition, string.Empty, UIUtils.GetCustomStyle( CustomStyle.NodeHeader ) );
 			GUI.color = m_colorBuffer;
 
+			// @diogo: shader function icon
+			var functionNode = this as FunctionNode;
+			if ( functionNode != null )
+			{
+				float scaledSize = FunctionNode.HeaderIconSize * drawInfo.InvertedZoom;
+				GUI.DrawTexture( new Rect( m_globalPosition.x, m_globalPosition.y, scaledSize, scaledSize ), functionNode.HeaderIcon, ScaleMode.ScaleAndCrop, true );
+			}			
+
 			// Title
 			DrawTitle( m_titlePos );
 
@@ -1946,6 +1976,11 @@ namespace AmplifyShaderEditor
 		}
 
 		public bool DropdownEditing { get { return m_dropdownEditing; } set { m_dropdownEditing = value; PreviewIsDirty = true; } }
+		public void DisablePreview()
+		{
+			m_showPreview = false;
+			m_sizeIsDirty = true;
+		}
 		/// <summary>
 		/// Handles gui controls, runs before node layout
 		/// </summary>
@@ -2533,8 +2568,8 @@ namespace AmplifyShaderEditor
 			{
 				switch( dataCollector.CurrentSRPType )
 				{
-					case TemplateSRPType.HD: if(OnHDAction!=null) OnHDAction( outputId, ref dataCollector ); break;
-					case TemplateSRPType.Lightweight:if(OnLightweightAction != null) OnLightweightAction( outputId, ref dataCollector ); break;	
+					case TemplateSRPType.HDRP: if(OnHDAction!=null) OnHDAction( outputId, ref dataCollector ); break;
+					case TemplateSRPType.URP:if(OnLightweightAction != null) OnLightweightAction( outputId, ref dataCollector ); break;	
 				}
 			}
 			return string.Empty;
@@ -2598,8 +2633,12 @@ namespace AmplifyShaderEditor
 		public string GenerateInputInVertex( ref MasterNodeDataCollector dataCollector , int inputPortUniqueId , string varName , bool createInterpolator , bool noInterpolationFlag = false , bool sampleFlag = false )
 		{
 			InputPort inputPort = GetInputPortByUniqueId( inputPortUniqueId );
-			if( !dataCollector.IsFragmentCategory)
-				return inputPort.GeneratePortInstructions( ref dataCollector );
+			if( !dataCollector.IsFragmentCategory )
+			{
+				string value = inputPort.GeneratePortInstructions( ref dataCollector );
+				dataCollector.AddLocalVariable( -1 , CurrentPrecisionType , inputPort.DataType , varName , value );
+				return varName;
+			}
 
 			//TEMPLATES
 			if( dataCollector.IsTemplate )
@@ -2721,7 +2760,7 @@ namespace AmplifyShaderEditor
 			}
 			else
 			{
-				dataCollector.AddToLocalVariables( m_uniqueId, localVar );
+				dataCollector.AddToFragmentLocalVariables( m_uniqueId, localVar );
 			}
 		}
 
@@ -2962,6 +3001,7 @@ namespace AmplifyShaderEditor
 			}
 			m_repopulateDictionaries = true;
 			m_sizeIsDirty = true;
+			m_previewIsDirty = true;
 		}
 
 		public virtual int InputIdFromDeprecated( int oldInputId ) { return oldInputId; }
@@ -3465,64 +3505,67 @@ namespace AmplifyShaderEditor
 			if( m_cachedPortId == -1 )
 				m_cachedPortId = Shader.PropertyToID( "_Port" );
 
-			int count = m_outputPorts.Count;
-			for( int i = 0; i < count; i++ )
+			if (!Preferences.GlobalDisablePreviews)
 			{
-				if( i == 0 )
+				RenderTexture temp = RenderTexture.active;
+				RenderTexture beforeMask = RenderTexture.GetTemporary(Constants.PreviewSize, Constants.PreviewSize, 0, Constants.PreviewFormat, RenderTextureReadWrite.Linear);
+
+				int count = m_outputPorts.Count;
+				for( int i = 0; i < count; i++ )
 				{
-					RenderTexture temp = RenderTexture.active;
-					RenderTexture beforeMask = RenderTexture.GetTemporary( PreviewWidth, PreviewHeight, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear );
-					RenderTexture.active = beforeMask;
-					Graphics.Blit( null, beforeMask, PreviewMaterial, m_previewMaterialPassId );
-
-					m_portMask.Set( 0, 0, 0, 0 );
-
-					switch( m_outputPorts[ i ].DataType )
+					if( i == 0 )
 					{
-						case WirePortDataType.INT:
-						case WirePortDataType.FLOAT:
-						m_portMask.Set( 1, 1, 1, 1 );
-						break;
-						case WirePortDataType.FLOAT2:
-						m_portMask.Set( 1, 1, 0, 0 );
-						break;
-						case WirePortDataType.FLOAT3:
-						m_portMask.Set( 1, 1, 1, 0 );
-						break;
-						case WirePortDataType.COLOR:
-						case WirePortDataType.FLOAT4:
-						m_portMask.Set( 1, 1, 1, 1 );
-						break;
-						default:
-						m_portMask.Set( 1, 1, 1, 1 );
-						break;
-					}
+						RenderTexture.active = beforeMask;
+						Graphics.Blit( null, beforeMask, PreviewMaterial, m_previewMaterialPassId );
 
-					if( m_outputPorts[ i ].DataType == WirePortDataType.FLOAT3x3 || m_outputPorts[ i ].DataType == WirePortDataType.FLOAT4x4 )
-					{
-						m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMainTexId, EditorGUIUtility.whiteTexture );
+						m_portMask.Set( 0, 0, 0, 0 );
+
+						switch( m_outputPorts[ i ].DataType )
+						{
+							case WirePortDataType.INT:
+							case WirePortDataType.FLOAT:
+							m_portMask.Set( 1, 1, 1, 1 );
+							break;
+							case WirePortDataType.FLOAT2:
+							m_portMask.Set( 1, 1, 0, 0 );
+							break;
+							case WirePortDataType.FLOAT3:
+							m_portMask.Set( 1, 1, 1, 0 );
+							break;
+							case WirePortDataType.COLOR:
+							case WirePortDataType.FLOAT4:
+							m_portMask.Set( 1, 1, 1, 1 );
+							break;
+							default:
+							m_portMask.Set( 1, 1, 1, 1 );
+							break;
+						}
+
+						if( m_outputPorts[ i ].DataType == WirePortDataType.FLOAT3x3 || m_outputPorts[ i ].DataType == WirePortDataType.FLOAT4x4 )
+						{
+							m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMainTexId, EditorGUIUtility.whiteTexture );
+						}
+						else
+						{
+							m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMainTexId, beforeMask );
+						}
+						m_outputPorts[ i ].MaskingMaterial.SetVector( m_cachedPortsId, m_portMask );
+
+						RenderTexture.active = m_outputPorts[ i ].OutputPreviewTexture;
+						Graphics.Blit( null , m_outputPorts[ i ].OutputPreviewTexture , m_outputPorts[ i ].MaskingMaterial , 0 );
 					}
 					else
 					{
-						m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMainTexId, beforeMask );
+						m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMaskTexId , PreviewTexture );
+						m_outputPorts[ i ].MaskingMaterial.SetFloat( m_cachedPortId , i );
+
+						RenderTexture.active = m_outputPorts[ i ].OutputPreviewTexture;
+						Graphics.Blit( null , m_outputPorts[ i ].OutputPreviewTexture , m_outputPorts[ i ].MaskingMaterial , 1 );					
 					}
-					m_outputPorts[ i ].MaskingMaterial.SetVector( m_cachedPortsId, m_portMask );
-					RenderTexture.active = m_outputPorts[ i ].OutputPreviewTexture;
-					Graphics.Blit( null, m_outputPorts[ i ].OutputPreviewTexture, m_outputPorts[ i ].MaskingMaterial, 0 );
-
-					RenderTexture.ReleaseTemporary( beforeMask );
-					RenderTexture.active = temp;
 				}
-				else
-				{
-					RenderTexture temp = RenderTexture.active;
-					m_outputPorts[ i ].MaskingMaterial.SetTexture( m_cachedMaskTexId, PreviewTexture );
-					m_outputPorts[ i ].MaskingMaterial.SetFloat( m_cachedPortId, i );
 
-					RenderTexture.active = m_outputPorts[ i ].OutputPreviewTexture;
-					Graphics.Blit( null, m_outputPorts[ i ].OutputPreviewTexture, m_outputPorts[ i ].MaskingMaterial, 1 );
-					RenderTexture.active = temp;
-				}
+				RenderTexture.ReleaseTemporary(beforeMask);
+				RenderTexture.active = temp;
 			}
 
 			PreviewIsDirty = m_continuousPreviewRefresh;
@@ -3735,7 +3778,7 @@ namespace AmplifyShaderEditor
 		{
 			m_containerGraph = newgraph;
 		}
-		public virtual void OnMasterNodeReplaced( MasterNode newMasterNode ) { }
+		public virtual void OnMasterNodeReplaced( MasterNode newMasterNode ) { PreviewIsDirty = true;  }
 		public virtual void RefreshExternalReferences() { }
 
 		public Rect DropdownRect { get { return m_dropdownRect; } }

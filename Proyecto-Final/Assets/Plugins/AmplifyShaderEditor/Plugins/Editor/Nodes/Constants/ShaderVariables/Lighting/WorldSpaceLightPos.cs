@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AmplifyShaderEditor
 {
 	[System.Serializable]
-	[NodeAttributes( "World Space Light Pos", "Light", "Light Position" )]
+	[NodeAttributes( "World Space Light Pos", "Lighting", "Light Position" )]
 	public sealed class WorldSpaceLightPos : ShaderVariablesNode
 	{
 		private const string HelperText =
@@ -75,17 +75,18 @@ namespace AmplifyShaderEditor
 				return;
 
 			SetPreviewInputs();
+			if( !Preferences.GlobalDisablePreviews )
+			{
+				RenderTexture temp = RenderTexture.active;
 
-			RenderTexture temp = RenderTexture.active;
+				RenderTexture.active = m_outputPorts[ 0 ].OutputPreviewTexture;
+				Graphics.Blit( null , m_outputPorts[ 0 ].OutputPreviewTexture , PreviewMaterial , 0 );
+				Graphics.Blit( m_outputPorts[ 0 ].OutputPreviewTexture , m_outputPorts[ 1 ].OutputPreviewTexture );
 
-			RenderTexture.active = m_outputPorts[ 0 ].OutputPreviewTexture;
-			Graphics.Blit( null, m_outputPorts[ 0 ].OutputPreviewTexture, PreviewMaterial, 0 );
-			Graphics.Blit( m_outputPorts[ 0 ].OutputPreviewTexture, m_outputPorts[ 1 ].OutputPreviewTexture );
-
-			RenderTexture.active = m_outputPorts[ 2 ].OutputPreviewTexture;
-			Graphics.Blit( null, m_outputPorts[ 2 ].OutputPreviewTexture, PreviewMaterial, 1 );
-			RenderTexture.active = temp;
-
+				RenderTexture.active = m_outputPorts[ 2 ].OutputPreviewTexture;
+				Graphics.Blit( null , m_outputPorts[ 2 ].OutputPreviewTexture , PreviewMaterial , 1 );
+				RenderTexture.active = temp;
+			}
 			PreviewIsDirty = m_continuousPreviewRefresh;
 		}
 	}

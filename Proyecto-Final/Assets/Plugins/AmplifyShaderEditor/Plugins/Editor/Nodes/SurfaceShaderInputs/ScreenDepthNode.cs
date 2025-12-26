@@ -90,19 +90,23 @@ namespace AmplifyShaderEditor
 			if( !( dataCollector.IsTemplate && dataCollector.IsSRP ) )
 				dataCollector.AddToIncludes( UniqueId, Constants.UnityCgLibFuncs );
 
-			if( !dataCollector.IsTemplate || dataCollector.TemplateDataCollectorInstance.CurrentSRPType != TemplateSRPType.HD )
+			if( !dataCollector.IsTemplate || dataCollector.TemplateDataCollectorInstance.CurrentSRPType != TemplateSRPType.HDRP )
 			{
-				if( dataCollector.IsTemplate && dataCollector.CurrentSRPType == TemplateSRPType.Lightweight )
+				if( dataCollector.IsTemplate && dataCollector.CurrentSRPType == TemplateSRPType.URP )
 				{
 					//dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureSRPVar );
 					//dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureSRPSampler );
 					dataCollector.AddToDirectives( Constants.CameraDepthTextureLWEnabler, -1, AdditionalLineType.Define );
+					if ( ASEPackageManagerHelper.PackageSRPVersion < ( int )ASESRPBaseline.ASE_SRP_16 )
+					{
+						dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureTexelSize );
+					}
 				}
 				else
 				{
 					dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureValue );
+					dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureTexelSize );
 				}
-				dataCollector.AddToUniforms( UniqueId, Constants.CameraDepthTextureTexelSize );
 			}
 
 
