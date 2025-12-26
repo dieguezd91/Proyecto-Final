@@ -1,0 +1,875 @@
+fileFormatVersion: 2
+guid: 023176822c7636a4db345f9d1033e6cf
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 12
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_0
+      rect:
+        serializedVersion: 2
+        x: 1520
+        y: 7
+        width: 80
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da0af85f3b118f9449350f0e42b88d08
+      internalID: 597046986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_1
+      rect:
+        serializedVersion: 2
+        x: 1621
+        y: 21
+        width: 79
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b60ab2217e317974bb399dbc244b49df
+      internalID: 992106613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_2
+      rect:
+        serializedVersion: 2
+        x: 1663
+        y: 82
+        width: 5
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5b6078c16114e946ba9b3d1be3514e2
+      internalID: 1760201144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_3
+      rect:
+        serializedVersion: 2
+        x: 2229
+        y: 17
+        width: 52
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 824644a74d42fba499b7a994f71b1c20
+      internalID: -1190620722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_4
+      rect:
+        serializedVersion: 2
+        x: 2320
+        y: 20
+        width: 68
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a7b36cfc7768d244b3d52a4d005aca8
+      internalID: 1694675172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_5
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 24
+        width: 61
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3d47bec35c69c4458275fbf82e6d486
+      internalID: 1663056160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_6
+      rect:
+        serializedVersion: 2
+        x: 119
+        y: 24
+        width: 62
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4dd9ebce825e55429557ddfe08d874d
+      internalID: -1567625445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_7
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 24
+        width: 62
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57ad5fd40a28e7e47a2abee47d12bda0
+      internalID: -1918469467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_8
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 24
+        width: 60
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8037b1325831b844785bfb046b1656cc
+      internalID: -1245129216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_9
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 24
+        width: 61
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbe446d755791364d96a63a84de4dbc1
+      internalID: -1130198036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_10
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 24
+        width: 62
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28679c16b25c8b141a3cfcebd066c421
+      internalID: 335715873
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_11
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 24
+        width: 61
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a7126136ebb0e8043a49c68ff01f8e07
+      internalID: 1204069180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_12
+      rect:
+        serializedVersion: 2
+        x: 719
+        y: 24
+        width: 62
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 044c355b4d897ea4b96a6e68e02c902c
+      internalID: 1417536541
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_13
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 24
+        width: 70
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58d9fc0042712604998fee7a709fee5d
+      internalID: 82273247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_14
+      rect:
+        serializedVersion: 2
+        x: 922
+        y: 24
+        width: 63
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1520768a52d05944ab0230415d90a604
+      internalID: 2060544175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_15
+      rect:
+        serializedVersion: 2
+        x: 1022
+        y: 24
+        width: 61
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4dd8d933ae896344ba7516b6386d7da
+      internalID: 813446728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_16
+      rect:
+        serializedVersion: 2
+        x: 1121
+        y: 24
+        width: 60
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f551b7e75f8f2984696db4e1a2bda1d3
+      internalID: 711943346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_17
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 24
+        width: 64
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86743220b763a624ba333c05b49bdb6c
+      internalID: 1850123463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_18
+      rect:
+        serializedVersion: 2
+        x: 1303
+        y: 24
+        width: 82
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3053fa3d54588544fb6ba2dc0bdf9ced
+      internalID: -264817615
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_19
+      rect:
+        serializedVersion: 2
+        x: 1413
+        y: 16
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ecd28aa63c4ed34bae0d95bdd89839a
+      internalID: -56453817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_20
+      rect:
+        serializedVersion: 2
+        x: 1697
+        y: 23
+        width: 4
+        height: 4
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f8357192227ec0e468ec7f7a23d9464d
+      internalID: 91415517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_21
+      rect:
+        serializedVersion: 2
+        x: 1720
+        y: 24
+        width: 78
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2431e1f6cd9688548ae3d3294a79c03a
+      internalID: 1953566858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_22
+      rect:
+        serializedVersion: 2
+        x: 1820
+        y: 24
+        width: 79
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a8756bc077f4874487c07f223653f92
+      internalID: -2092719789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_23
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 24
+        width: 71
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9717254781cb834ca2f86de0e04371a
+      internalID: 490106216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_24
+      rect:
+        serializedVersion: 2
+        x: 2019
+        y: 24
+        width: 72
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02096428b885f5842ac20470d4f241df
+      internalID: 858434660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_25
+      rect:
+        serializedVersion: 2
+        x: 2129
+        y: 17
+        width: 63
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: afc35a504f76cd14f8331d6a29fbf8fe
+      internalID: -1371577569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_26
+      rect:
+        serializedVersion: 2
+        x: 2419
+        y: 24
+        width: 69
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ab43931f4f1a8e42ab2d979c925315f
+      internalID: 2141226489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_27
+      rect:
+        serializedVersion: 2
+        x: 2519
+        y: 20
+        width: 70
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69e0f6fd0cde56644b4a2dd2002fe610
+      internalID: 1610383050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_28
+      rect:
+        serializedVersion: 2
+        x: 2620
+        y: 24
+        width: 66
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6923b644c1def4243808124eb20693b0
+      internalID: 1317810926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_29
+      rect:
+        serializedVersion: 2
+        x: 2721
+        y: 24
+        width: 66
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b8b280d6ee64f540a3061e618cfde7a
+      internalID: -805483570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_30
+      rect:
+        serializedVersion: 2
+        x: 2821
+        y: 24
+        width: 65
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f63021eaa2cb43346ab94629bcff9918
+      internalID: 523096188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_31
+      rect:
+        serializedVersion: 2
+        x: 2920
+        y: 24
+        width: 66
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12988bbe420cd8f46a9a2f900af8344a
+      internalID: 2052113175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_32
+      rect:
+        serializedVersion: 2
+        x: 1677
+        y: 4
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b79923d4e7e533946931a748ef928cd3
+      internalID: 138671969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: hellshaw_spritesheet 100x100_33
+      rect:
+        serializedVersion: 2
+        x: 1693
+        y: 10
+        width: 5
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 206a20699c742964182568853219b424
+      internalID: -1540385763
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      hellshaw_spritesheet 100x100_0: 597046986
+      hellshaw_spritesheet 100x100_1: 992106613
+      hellshaw_spritesheet 100x100_10: 335715873
+      hellshaw_spritesheet 100x100_11: 1204069180
+      hellshaw_spritesheet 100x100_12: 1417536541
+      hellshaw_spritesheet 100x100_13: 82273247
+      hellshaw_spritesheet 100x100_14: 2060544175
+      hellshaw_spritesheet 100x100_15: 813446728
+      hellshaw_spritesheet 100x100_16: 711943346
+      hellshaw_spritesheet 100x100_17: 1850123463
+      hellshaw_spritesheet 100x100_18: -264817615
+      hellshaw_spritesheet 100x100_19: -56453817
+      hellshaw_spritesheet 100x100_2: 1760201144
+      hellshaw_spritesheet 100x100_20: 91415517
+      hellshaw_spritesheet 100x100_21: 1953566858
+      hellshaw_spritesheet 100x100_22: -2092719789
+      hellshaw_spritesheet 100x100_23: 490106216
+      hellshaw_spritesheet 100x100_24: 858434660
+      hellshaw_spritesheet 100x100_25: -1371577569
+      hellshaw_spritesheet 100x100_26: 2141226489
+      hellshaw_spritesheet 100x100_27: 1610383050
+      hellshaw_spritesheet 100x100_28: 1317810926
+      hellshaw_spritesheet 100x100_29: -805483570
+      hellshaw_spritesheet 100x100_3: -1190620722
+      hellshaw_spritesheet 100x100_30: 523096188
+      hellshaw_spritesheet 100x100_31: 2052113175
+      hellshaw_spritesheet 100x100_32: 138671969
+      hellshaw_spritesheet 100x100_33: -1540385763
+      hellshaw_spritesheet 100x100_4: 1694675172
+      hellshaw_spritesheet 100x100_5: 1663056160
+      hellshaw_spritesheet 100x100_6: -1567625445
+      hellshaw_spritesheet 100x100_7: -1918469467
+      hellshaw_spritesheet 100x100_8: -1245129216
+      hellshaw_spritesheet 100x100_9: -1130198036
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
