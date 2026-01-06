@@ -714,6 +714,21 @@ public class PlayerAbilitySystem : MonoBehaviour
         return isDigging || isHarvesting || isPlayingInteractionAnimation;
     }
 
+    private bool IsDaytime()
+    {
+        if (LevelManager.Instance == null) return false;
+
+        var state = LevelManager.Instance.currentGameState;
+
+        return state == GameState.Day ||
+               state == GameState.Digging ||
+               state == GameState.Planting ||
+               state == GameState.Harvesting ||
+               state == GameState.Removing;
+    }
+
+
+
     private void UpdateTeleportCooldown()
     {
         if (currentTeleportCooldown > 0f)
@@ -733,7 +748,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     public bool CanUseTeleport()
     {
         if (currentTeleportCooldown > 0f) return false;
-        if (manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
+        if (!IsDaytime() && manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
 
         WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         if (worldTransition != null && worldTransition.IsInInterior) return false;
@@ -745,7 +760,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (!CanUseTeleport()) return false;
 
-        if (manaSystem != null)
+        if (manaSystem != null && !IsDaytime())
         {
             manaSystem.UseMana(teleportManaCost);
         }
