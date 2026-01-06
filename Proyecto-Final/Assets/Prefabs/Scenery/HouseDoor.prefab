@@ -237,8 +237,8 @@ MonoBehaviour:
   cooldown: 0.5
   outsideCollider: {fileID: 1751500892440672662}
   insideCollider: {fileID: 50142797407054427}
-  outsideSpawn: {fileID: 4023424293725834511}
-  insideSpawn: {fileID: 4436553468171871127}
+  outsideSpawn: {fileID: 0}
+  insideSpawn: {fileID: 0}
   doorLockAnimator: {fileID: 0}
   tutorialGatedFeedback: {fileID: 0}
   feedbackDuration: 2.5
