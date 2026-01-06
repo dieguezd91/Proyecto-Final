@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Move
   stepOrder: 1
-  instructionText: Use <sprite name="WASDKeys"> or Arrow Keys to explore your sacred
-    garden.
+  instructionText: Use <sprite name="WASDKeys"> or <u>Arrow Keys</u> to explore your
+    sacred garden.
+  stepImage: {fileID: 0}
   objectiveType: 1
   requiredCount: 1
   isGatedStep: 0

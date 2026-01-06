@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Dig
   stepOrder: 3
-  instructionText: The earth responds to your touch. To use this ability, first select
-    the shovel icon on your ability bar. Then, <sprite name="MouseClick"> to dig
-    and prepare the soil for planting.
+  instructionText: The earth responds to your touch. To use this ability, first <u>select
+    the shovel icon on your ability bar.</u> Then, <sprite name="MouseClick"> to
+    <u>dig</u> and prepare the soil for planting.
   stepImage: {fileID: -1576750221, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   objectiveType: 2
   requiredCount: 1

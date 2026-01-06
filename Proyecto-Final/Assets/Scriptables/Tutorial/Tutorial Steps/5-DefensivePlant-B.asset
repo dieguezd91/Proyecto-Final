@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: DefensivePlant
   stepOrder: 4
-  instructionText: It is time to protect your garden. Plant a Defensive seed. These
-    plants will watch over your garden during the night.
+  instructionText: It is time to protect your garden. <u>Plant a Defensive seed.</u>
+    These plants will watch over your garden during the night.
   stepImage: {fileID: 668908640, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
   objectiveType: 17
   requiredCount: 1

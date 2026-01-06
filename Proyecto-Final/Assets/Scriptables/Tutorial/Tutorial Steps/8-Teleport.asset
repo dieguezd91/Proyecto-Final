@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Teleport
   stepOrder: 7
-  instructionText: You can also teleport! Press <sprite name="SpaceKey"> to move
-    quickly in your direction or toward the mouse. It's the only spell you can use
-    during the day.
+  instructionText: You can also teleport! <u>Press <sprite name="SpaceKey"> to move
+    quickly in your direction or toward the mouse.</u> It's the only spell you can
+    use during the day.
   stepImage: {fileID: 0}
   objectiveType: 25
   requiredCount: 1

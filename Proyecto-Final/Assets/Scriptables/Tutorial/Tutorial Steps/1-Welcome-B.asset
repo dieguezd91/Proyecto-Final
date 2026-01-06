@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stepID: Welcome
   stepOrder: 0
-  instructionText: By day, use your magic to cultivate the land. By night, you must
-    defend it from the corrupt creatures that emerge from the shadows. Let's begin.
+  instructionText: By day, use your magic to <u>cultivate</u> the land. By night,
+    you must <u>defend</u> it from the corrupt creatures that emerge from the shadows.
+    Let's begin.
   stepImage: {fileID: 0}
   objectiveType: 15
   requiredCount: 1
