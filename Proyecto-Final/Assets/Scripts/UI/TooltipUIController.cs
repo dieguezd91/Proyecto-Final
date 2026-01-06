@@ -24,6 +24,9 @@ public class TooltipUIController : UIControllerBase
 
     private PlayerAbility currentAbilityData;
 
+    private SpellSlot currentSpellData;
+
+
     private void Awake()
     {
         Initialize();
@@ -50,6 +53,10 @@ public class TooltipUIController : UIControllerBase
         UIEvents.OnAbilityTooltipHideRequested += OnTooltipHideRequested;
 
         UIEvents.OnGameStateChanged += OnGameStateChanged;
+
+        UIEvents.OnSpellTooltipRequested += OnSpellTooltipRequested;
+        UIEvents.OnSpellTooltipHideRequested += OnTooltipHideRequested;
+
     }
 
     protected override void ConfigureInitialState()
@@ -68,13 +75,15 @@ public class TooltipUIController : UIControllerBase
         }
     }
 
+
     private bool CanShowTooltipInState(GameState state)
     {
         return state == GameState.Planting ||
                state == GameState.Digging ||
                state == GameState.Harvesting ||
                state == GameState.Removing ||
-               state == GameState.Day;
+               state == GameState.Day ||
+               state == GameState.Night;
     }
 
     void Update()
@@ -197,7 +206,12 @@ public class TooltipUIController : UIControllerBase
         {
             ShowAbilityTooltip(currentAbilityData);
         }
+        else if (currentSpellData != null)
+        {
+            ShowSpellTooltip(currentSpellData);
+        }
     }
+
 
     private void ShowAbilityTooltip(PlayerAbility ability)
     {
@@ -385,14 +399,7 @@ public class TooltipUIController : UIControllerBase
         }
     }
 
-    protected override void CleanupEventListeners()
-    {
-        UIEvents.OnTooltipRequested -= OnTooltipRequested;
-        UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
-        UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
-        UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
-        UIEvents.OnGameStateChanged -= OnGameStateChanged;
-    }
+    
 
     private string GetAbilityName(PlayerAbility ability)
     {
@@ -416,6 +423,103 @@ public class TooltipUIController : UIControllerBase
             PlayerAbility.Removing => "Remove unwanted plants.\n<color=#9B59B6>Recover some seeds when removing</color>",
             _ => "Unknown ability"
         };
+    }
+
+    private void ShowSpellTooltip(SpellSlot spell)
+    {
+        if (!ValidateTooltipComponents()) return;
+        if (spell == null || !spell.isUnlocked)
+        {
+            HideTooltip();
+            return;
+        }
+
+        tooltipPanel.SetActive(true);
+        isTooltipVisible = true;
+
+        seedNameText.text = spell.spellName;
+        seedDescriptionText.text = GetSpellDescription(spell);
+
+        if (fullyGrownImage != null)
+        {
+            if (spell.spellIcon != null)
+            {
+                fullyGrownImage.sprite = spell.spellIcon;
+                fullyGrownImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                fullyGrownImage.gameObject.SetActive(false);
+            }
+        }
+
+        UpdateTooltipPosition();
+    }
+
+
+
+
+
+
+    private void OnSpellTooltipRequested(SpellSlot spell)
+    {
+        if (spell == null) return;
+
+        CancelHide();
+
+        currentSpellData = spell;
+        currentSlotIndex = -1;
+        currentAbilityData = PlayerAbility.None;
+
+        if (isTooltipVisible)
+        {
+            ShowSpellTooltip(spell);
+        }
+        else
+        {
+            pendingShow = true;
+            showTimer = 0.3f;
+        }
+    }
+
+    private string GetSpellDescription(SpellSlot spell)
+    {
+        if (spell == null) return "Unknown spell";
+
+        return spell.spellName switch
+        {
+            "Range" =>
+                "Shoot a fast fire projectile.\n" +
+                "<color=#9B59B6>Deals damage at long range</color>\n" +
+                $"<color=#3498DB>Mana Cost: {spell.manaCost}</color>",
+
+            "Melee" =>
+                "Perform a close-range sword attack.\n" +
+                "<color=#9B59B6>Deals big damage to enemies hit</color>\n" +
+                $"<color=#3498DB>Mana Cost: {spell.manaCost}</color>",
+
+            "Area" =>
+                "Release an explosive projectile infront of you to deal big damage.\n" +
+                "<color=#9B59B6>Big area damage</color>\n" +
+                $"<color=#3498DB>Mana Cost: {spell.manaCost}</color>",
+
+            _ =>
+                "An unknown spell.\n" +
+                $"<color=#3498DB>Mana Cost: {spell.manaCost}</color>",
+        };
+    }
+
+
+    protected override void CleanupEventListeners()
+    {
+        UIEvents.OnTooltipRequested -= OnTooltipRequested;
+        UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
+        UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
+        UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
+        UIEvents.OnGameStateChanged -= OnGameStateChanged;
+        UIEvents.OnSpellTooltipRequested -= OnSpellTooltipRequested;
+        UIEvents.OnSpellTooltipHideRequested -= OnTooltipHideRequested;
+
     }
 
     protected override void OnDestroy()

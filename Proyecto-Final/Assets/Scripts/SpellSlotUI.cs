@@ -2,8 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
 
-public class SpellSlotUI : ImprovedUIButton
+public class SpellSlotUI : ImprovedUIButton, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Slot Components")]
     [SerializeField] private Image slotBackground;
@@ -157,4 +158,21 @@ public class SpellSlotUI : ImprovedUIButton
         float scale = selected ? selectedScale : normalScale;
         transform.localScale = new Vector3(scale, scale, 1f);
     }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SpellSlot spell = SpellInventory.Instance?.GetSpellSlot(SlotIndex);
+        if (spell != null && spell.isUnlocked)
+        {
+            UIEvents.RequestSpellTooltip(spell);
+            Debug.Log("Hover Spell Slot: " + SlotIndex);
+
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UIEvents.HideSpellTooltip();
+    }
+
+
 }

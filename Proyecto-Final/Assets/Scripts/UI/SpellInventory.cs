@@ -168,4 +168,6 @@ public class SpellInventory : MonoBehaviour
 
         return slot.currentCooldown / slot.cooldown;
     }
+
+
 }

@@ -143,6 +143,7 @@ public class UIManager : MonoBehaviour
         UIEvents.OnGameStateChanged += GameState.OnGameStateChanged;
 
         UIEvents.OnPlayerDamaged += Feedback.ShowDamageEffect;
+
     }
 
     private void OnDestroy()

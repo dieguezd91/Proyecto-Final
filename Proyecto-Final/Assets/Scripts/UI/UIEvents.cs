@@ -35,6 +35,10 @@ public static class UIEvents
     public static event Action<PlayerAbility> OnAbilityTooltipRequested;
     public static event Action OnAbilityTooltipHideRequested;
 
+    public static event Action<SpellSlot> OnSpellTooltipRequested;
+    public static event Action OnSpellTooltipHideRequested;
+
+
     public static event Action OnCraftingUIToggleRequested;
     public static event Action OnRestorationAltarUIToggleRequested;
     public static event Action OnCraftingUIClosed;
@@ -105,4 +109,15 @@ public static class UIEvents
 
     public static void TriggerPauseMenuClosed()
         => OnPauseMenuClosed?.Invoke();
+
+
+    public static void RequestSpellTooltip(SpellSlot spell)
+    {
+        OnSpellTooltipRequested?.Invoke(spell);
+    }
+
+    public static void HideSpellTooltip()
+    {
+        OnSpellTooltipHideRequested?.Invoke();
+    }
 }
