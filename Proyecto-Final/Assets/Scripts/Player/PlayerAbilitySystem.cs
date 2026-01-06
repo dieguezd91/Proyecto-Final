@@ -727,6 +727,17 @@ public class PlayerAbilitySystem : MonoBehaviour
                state == GameState.Removing;
     }
 
+    private bool IsInsideHouseLayer()
+    {
+        int houseLayer = LayerMask.NameToLayer("House");
+
+        Collider2D hit = Physics2D.OverlapPoint(
+            transform.position,
+            1 << houseLayer
+        );
+
+        return hit != null;
+    }
 
 
     private void UpdateTeleportCooldown()
@@ -748,6 +759,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     public bool CanUseTeleport()
     {
         if (currentTeleportCooldown > 0f) return false;
+        if (IsInsideHouseLayer()) return false;
         if (!IsDaytime() && manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
 
         WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
