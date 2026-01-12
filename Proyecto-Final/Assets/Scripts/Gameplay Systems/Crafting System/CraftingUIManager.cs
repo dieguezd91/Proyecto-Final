@@ -349,9 +349,15 @@ public class CraftingUIManager : MonoBehaviour
         if (textComponent == null) return;
 
         int playerAmount = InventoryManager.Instance.GetMaterialAmount(material.materialType);
-        textComponent.color = playerAmount >= material.quantity ? Color.green : Color.red;
-        textComponent.text = $"{materialData.materialName} x{material.quantity}";
+        int requiredAmount = material.quantity;
+
+        bool hasEnough = playerAmount >= requiredAmount;
+
+        textComponent.color = hasEnough ? Color.green : Color.red;
+
+        textComponent.text = $"{materialData.materialName} {playerAmount} / {requiredAmount}";
     }
+
 
     private void SetupMaterialIcon(GameObject reqUI, CraftingMaterialSO materialData)
     {
