@@ -325,7 +325,7 @@ public class LevelManager : MonoBehaviour
     public void GameOverMainMenu()
     {
         SetGameState(GameState.Digging);
-        ResetGameData();
+        ResetGameData(); 
         SceneLoaderManager.Instance.LoadMenuScene();
     }
 

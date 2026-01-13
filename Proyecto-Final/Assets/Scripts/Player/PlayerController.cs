@@ -157,9 +157,11 @@ public class PlayerController : MonoBehaviour
 
         if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
         {
+            HandleSpellSwitchInput();
             CheckForSpellTypeChange();
             HandleAttack();
         }
+
     }
 
     void FixedUpdate()
@@ -308,7 +310,6 @@ public class PlayerController : MonoBehaviour
 
     void CastSpell()
     {
-        // Prevent casting while inside an interior (house)
         WorldTransitionAnimator worldTransitionCheck = FindObjectOfType<WorldTransitionAnimator>();
         if (worldTransitionCheck != null && worldTransitionCheck.IsInInterior)
         {
@@ -356,7 +357,6 @@ public class PlayerController : MonoBehaviour
 
     private bool CanCastSpell()
     {
-        // Block casting if the player is inside a house/interior
         WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         if (worldTransition != null && worldTransition.IsInInterior)
             return false;
@@ -554,10 +554,24 @@ public class PlayerController : MonoBehaviour
         hasMovedForTutorial = false;
     }
 
-    // Return whether the player is currently moving (useful to immediately trigger move tutorial if already moving)
     public bool IsCurrentlyMoving()
     {
         return rb != null && rb.velocity.sqrMagnitude > 0.01f;
     }
-    // ---------------------------------------------------------------------
+
+
+    private void HandleSpellSwitchInput()
+    {
+        if (SpellInventory.Instance == null) return;
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            SpellInventory.Instance.CycleSpell(-1);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            SpellInventory.Instance.CycleSpell(1);
+        }
+    }
+
 }

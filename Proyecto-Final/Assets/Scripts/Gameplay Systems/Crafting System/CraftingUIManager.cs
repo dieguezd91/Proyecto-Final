@@ -506,6 +506,12 @@ public class CraftingUIManager : MonoBehaviour
     {
         if (!isCraftingUIOpen) return;
 
+        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+        {
+            TryCraftWithKeyboard();
+            return;
+        }
+
         if (Input.GetMouseButtonDown(0))
         {
             // Raycast UI elements under the pointer
@@ -528,4 +534,15 @@ public class CraftingUIManager : MonoBehaviour
             }
         }
     }
+
+    private void TryCraftWithKeyboard()
+    {
+        if (!hasSelectedRecipe) return;
+        if (craftButton == null) return;
+        if (!craftButton.HasRecipe()) return;
+        if (!craftButton.gameObject.activeInHierarchy) return;
+        Debug.Log("Funciona el ENTER");
+        HandleCraftButtonClick();
+    }
+
 }

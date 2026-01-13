@@ -226,6 +226,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         SetAbility(validAbilities[nextIndex]);
     }
 
+
     private void HandleMouseScroll()
     {
         if (isDigging || isHarvesting)

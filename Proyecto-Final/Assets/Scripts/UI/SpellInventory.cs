@@ -169,5 +169,13 @@ public class SpellInventory : MonoBehaviour
         return slot.currentCooldown / slot.cooldown;
     }
 
+    public void CycleSpell(int direction)
+    {
+        if (spellSlots == null || spellSlots.Length == 0) return;
+
+        int nextIndex = (selectedSlotIndex + direction + spellSlots.Length) % spellSlots.Length;
+        SelectSlot(nextIndex);
+    }
+
 
 }
