@@ -71,7 +71,8 @@ public class InventoryUI : MonoBehaviour
         foreach (InventorySlotUI slot in slots)
         {
             uiSlots.Add(slot);
-            slot.onLeftClick += HandleSlotClicked;
+            slot.onHoverEnter += HandleSlotHovered;
+            slot.onHoverExit += ClearDescriptionPanel;
             slot.Clear();
         }
     }
@@ -106,6 +107,21 @@ public class InventoryUI : MonoBehaviour
         descriptionName.text = data.materialName;
         descriptionDetails.text = data.materialDescription;
     }
+
+    private void HandleSlotHovered(MaterialType type)
+    {
+        var data = InventoryManager.Instance.GetMaterialData(type);
+        if (data == null) return;
+
+        descriptionIcon.sprite = data.materialIcon;
+        var color = descriptionIcon.color;
+        color.a = 1f;
+        descriptionIcon.color = color;
+
+        descriptionName.text = data.materialName;
+        descriptionDetails.text = data.materialDescription;
+    }
+
 
     private void OnMaterialChanged(MaterialType materialType, int amount)
     {

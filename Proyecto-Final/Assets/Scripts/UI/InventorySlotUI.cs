@@ -4,7 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 
-public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
+public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+
 {
     public event Action<MaterialType> onLeftClick;
 
@@ -21,6 +22,10 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
     private string resourceName;
     private int resourceAmount;
     private bool isOccupied;
+
+    public event System.Action<MaterialType> onHoverEnter;
+    public event System.Action onHoverExit;
+
 
     private void Start()
     {
@@ -91,4 +96,17 @@ public class InventorySlotUI : MonoBehaviour, IPointerClickHandler
             onLeftClick?.Invoke(typeHeld);
         }
     }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!IsOccupied()) return;
+
+        onHoverEnter?.Invoke(typeHeld);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        onHoverExit?.Invoke();
+    }
+
 }
