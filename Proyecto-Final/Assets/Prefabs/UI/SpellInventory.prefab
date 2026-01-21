@@ -57,8 +57,8 @@ MonoBehaviour:
     spellName: Melee
     spellIcon: {fileID: -876388959, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
     spellPrefab: {fileID: 2902349897744729807, guid: b8606dfc9b6d8b04a9e71e284b373b0a, type: 3}
-    manaCost: 15
-    cooldown: 0.5
+    manaCost: 20
+    cooldown: 1
     currentCooldown: 0
     isUnlocked: 1
   - spellType: 3
