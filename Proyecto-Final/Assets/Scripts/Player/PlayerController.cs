@@ -6,6 +6,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Camera cam;
     [SerializeField] private Transform firePoint;
 
+    [Header("INPUT")]
+    [SerializeField] private InputReader input;
+
     [Header("MOVEMENT ACCELERATION")]
     [SerializeField] private float accelerationRate = 8f;
     [SerializeField] private float decelerationRate = 10f;
@@ -48,6 +51,24 @@ public class PlayerController : MonoBehaviour
 
     private SpellType currentSpellType = SpellType.Range;
 
+    private void OnEnable()
+    {
+        if (input == null) return;
+
+        input.OnPrimaryPressed   += HandleAttack;
+        input.OnTeleportPressed  += HandleTeleport;
+        input.OnCycleInput       += HandleSpellSwitchInput;
+    }
+
+    private void OnDisable()
+    {
+        if (input == null) return;
+
+        input.OnPrimaryPressed   -= HandleAttack;
+        input.OnTeleportPressed  -= HandleTeleport;
+        input.OnCycleInput       -= HandleSpellSwitchInput;
+    }
+
     private void Start()
     {
         animator = GetComponent<Animator>();
@@ -81,6 +102,13 @@ public class PlayerController : MonoBehaviour
     {
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+
+        if (input != null)
+        {
+            input.OnPrimaryPressed   -= HandleAttack;
+            input.OnTeleportPressed  -= HandleTeleport;
+            input.OnCycleInput       -= HandleSpellSwitchInput;
+        }
     }
 
     private void OnGameStateChanged(GameState newState)
@@ -142,26 +170,18 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        HandleTeleport();
-
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
             rb.velocity = Vector2.zero;
-
             currentVelocity = Vector2.zero;
-
             animator.SetBool("IsMoving", false);
-
             return;
         }
 
         if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
         {
-            HandleSpellSwitchInput();
             CheckForSpellTypeChange();
-            HandleAttack();
         }
-
     }
 
     void FixedUpdate()
@@ -196,9 +216,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        moveInput.x = Input.GetAxisRaw("Horizontal");
-        moveInput.y = Input.GetAxisRaw("Vertical");
-        moveInput = moveInput.normalized;
+        moveInput = input != null ? input.MoveInput : Vector2.zero;
 
         // Tutorial movement trigger: only fire the tutorial move event the first time the player moves
         // after the tutorial step has armed it (hasMovedForTutorial == false). External systems (e.g.,
@@ -295,9 +313,11 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
+        if (LevelManager.Instance.currentGameState != GameState.Night) return;
         if (!canAct) return;
+        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy()) return;
 
-        if (Input.GetMouseButtonDown(0) && CanCastSpell())
+        if (CanCastSpell())
         {
             handAnimator.SetBool("IsAttacking", true);
         }
@@ -321,7 +341,7 @@ public class PlayerController : MonoBehaviour
 
         manaSystem.UseMana(selectedSpell.manaCost);
 
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(input != null ? (Vector3)input.MouseScreenPosition : Input.mousePosition);
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
 
@@ -521,11 +541,9 @@ public class PlayerController : MonoBehaviour
     {
         if (!canAct) return;
         if (!movementEnabled) return;
+        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy()) return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TryTeleport();
-        }
+        TryTeleport();
     }
 
     private void TryTeleport()
@@ -539,7 +557,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(input != null ? (Vector3)input.MouseScreenPosition : Input.mousePosition);
             mousePos.z = 0f;
             castDirection = (mousePos - transform.position).normalized;
         }
@@ -559,19 +577,13 @@ public class PlayerController : MonoBehaviour
         return rb != null && rb.velocity.sqrMagnitude > 0.01f;
     }
 
-
-    private void HandleSpellSwitchInput()
+    private void HandleSpellSwitchInput(int direction)
     {
         if (SpellInventory.Instance == null) return;
+        if (LevelManager.Instance.currentGameState != GameState.Night) return;
+        if (!canAct) return;
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SpellInventory.Instance.CycleSpell(-1);
-        }
-        else if (Input.GetKeyDown(KeyCode.E))
-        {
-            SpellInventory.Instance.CycleSpell(1);
-        }
+        SpellInventory.Instance.CycleSpell(direction);
     }
 
 }

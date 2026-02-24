@@ -47,6 +47,9 @@ public class PlayerAbilitySystem : MonoBehaviour
     private bool isPlayingInteractionAnimation = false;
     [SerializeField] private GameObject plantingParticlesPrefab;
 
+    [Header("INPUT")]
+    [SerializeField] private InputReader input;
+
     [Header("TELEPORT")]
     [SerializeField] private GameObject teleportPrefab;
     [SerializeField] private int teleportManaCost = 10;
@@ -77,7 +80,29 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private bool initialized = false;
 
+    private bool _cancelDiggingRequested = false;
+
     public PlayerAbility CurrentAbility => currentAbility;
+
+    private void OnEnable()
+    {
+        if (input == null) return;
+
+        input.OnEscapePressed  += HandleEscapeInput;
+        input.OnCycleInput     += HandleCycleInput;
+        input.OnScrollInput    += HandleScrollInput;
+        input.OnPrimaryPressed += HandlePrimaryInput;
+    }
+
+    private void OnDisable()
+    {
+        if (input == null) return;
+
+        input.OnEscapePressed  -= HandleEscapeInput;
+        input.OnCycleInput     -= HandleCycleInput;
+        input.OnScrollInput    -= HandleScrollInput;
+        input.OnPrimaryPressed -= HandlePrimaryInput;
+    }
 
     private void Awake()
     {
@@ -128,62 +153,6 @@ public class PlayerAbilitySystem : MonoBehaviour
             progressBar.transform.position = Camera.main.WorldToScreenPoint(
                 progressBarTarget.position + progressBarOffset);
         }
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        if (currentAbility == PlayerAbility.Digging && !isDigging)
-        {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            Vector3Int cell = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
-            Vector3 cellWorldPos = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cell);
-            float dist = Vector2.Distance(transform.position, cellWorldPos);
-        }
-
-        if (!isDigging && !isHarvesting)
-        {
-            HandleMouseScroll();
-        }
-
-        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
-            return;
-
-        if (!IsAbilityGameState())
-            return;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CancelCurrentAction();
-            return;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CycleAbility(-1);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            CycleAbility(1);
-        }
-
-        switch (currentAbility)
-        {
-            case PlayerAbility.Planting:
-                HandlePlanting();
-                break;
-            case PlayerAbility.Harvesting:
-                HandleHarvesting();
-                break;
-            case PlayerAbility.Digging:
-                HandleDigging();
-                break;
-            case PlayerAbility.Removing:
-                HandleRemoving();
-                break;
-        }
-
-        UpdateTeleportCooldown();
-
     }
 
     private void PlayInteractionAnimation()
@@ -226,19 +195,56 @@ public class PlayerAbilitySystem : MonoBehaviour
         SetAbility(validAbilities[nextIndex]);
     }
 
-
-    private void HandleMouseScroll()
+    private void HandleEscapeInput()
     {
+        if (InputConsumptionManager.IsEscapeConsumed) return;
+        if (!IsAbilityGameState()) return;
+        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+
         if (isDigging || isHarvesting)
-            return;
-
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-
-        if (Mathf.Abs(scroll) > 0.01f)
         {
-            int direction = scroll > 0 ? -1 : 1;
-            CycleAbility(direction);
+            InputConsumptionManager.ConsumeEscape();
+            _cancelDiggingRequested = true;
+            CancelCurrentAction();
         }
+    }
+
+    private void HandleCycleInput(int direction)
+    {
+        if (!IsAbilityGameState()) return;
+        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+
+        CycleAbility(direction);
+    }
+
+    private void HandleScrollInput(float scrollDelta)
+    {
+        if (isDigging || isHarvesting) return;
+        if (!IsAbilityGameState()) return;
+
+        int direction = scrollDelta > 0 ? -1 : 1;
+        CycleAbility(direction);
+    }
+
+    private void HandlePrimaryInput()
+    {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+        if (!IsAbilityGameState()) return;
+        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+
+        switch (currentAbility)
+        {
+            case PlayerAbility.Planting:   HandlePlanting();   break;
+            case PlayerAbility.Harvesting: HandleHarvesting(); break;
+            case PlayerAbility.Digging:    HandleDigging();    break;
+            case PlayerAbility.Removing:   HandleRemoving();   break;
+        }
+    }
+
+    private Vector2 GetMouseWorldPosition()
+    {
+        Vector3 screen = input != null ? (Vector3)input.MouseScreenPosition : Input.mousePosition;
+        return Camera.main.ScreenToWorldPoint(screen);
     }
 
     private void OnSeedSlotSelected(int slotIndex)
@@ -292,9 +298,9 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandlePlanting()
     {
-        if (Input.GetMouseButtonDown(0) && !isPlayingInteractionAnimation)
+        if (!isPlayingInteractionAnimation)
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorld = GetMouseWorldPosition();
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
             GameObject selectedPlant = seedInventory.GetSelectedPlantPrefab();
             if (selectedPlant == null) return;
@@ -361,9 +367,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleHarvesting()
     {
-        if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorld = GetMouseWorldPosition();
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
             Plant plantBase = TilePlantingSystem.Instance.GetPlantAt(cellPos);
@@ -407,9 +412,9 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void HandleRemoving()
     {
-        if (Input.GetMouseButtonDown(0) && !isPlayingInteractionAnimation)
+        if (!isPlayingInteractionAnimation)
         {
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mouseWorld = GetMouseWorldPosition();
             Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
 
             Plant plant = TilePlantingSystem.Instance.GetPlantAt(cellPos);
@@ -482,7 +487,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         StartCoroutine(MonitorHarvest());
     }
 
-
     private IEnumerator MonitorHarvest()
     {
         float startTime = Time.time;
@@ -549,11 +553,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (roofHit != null)
             return;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            TryDig(mousePos);
-        }
+        Vector2 mousePos = GetMouseWorldPosition();
+        TryDig(mousePos);
     }
 
     public bool TryDig(Vector2 position)
@@ -637,6 +638,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private IEnumerator DiggingProcess()
     {
         float timer = 0;
+        _cancelDiggingRequested = false;
 
         while (timer < digDuration)
         {
@@ -649,8 +651,9 @@ public class PlayerAbilitySystem : MonoBehaviour
             timer += Time.deltaTime;
             progressBar?.SetProgress(timer / digDuration);
 
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (_cancelDiggingRequested)
             {
+                _cancelDiggingRequested = false;
                 CancelDigging();
                 yield break;
             }
@@ -739,7 +742,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         return hit != null;
     }
-
 
     private void UpdateTeleportCooldown()
     {
