@@ -144,7 +144,7 @@ public class InventoryManager : MonoBehaviour
             return materialDatabase.GetMaterial(type);
         }
         return null;
-    } 
+    }
 
     public void AddGold(int amount)
     {
