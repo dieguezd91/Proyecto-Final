@@ -26,9 +26,6 @@ public class StormRoseReactiveAura : MonoBehaviour
     private float cooldownTimer = 0f;
     private bool areaActive = false;
 
-    private Dictionary<LifeController, Coroutine> poisonedTargets =
-        new Dictionary<LifeController, Coroutine>();
-
     private HashSet<LifeController> damagedTargets =
         new HashSet<LifeController>();
 
@@ -104,37 +101,16 @@ public class StormRoseReactiveAura : MonoBehaviour
                 damagedTargets.Add(enemyLife);
             }
 
-            if (!poisonedTargets.ContainsKey(enemyLife))
+            PoisonEffect poison = enemyLife.GetComponent<PoisonEffect>();
+
+            if (poison == null)
             {
-                Coroutine poisonRoutine =
-                    StartCoroutine(ApplyPoison(enemyLife));
-                poisonedTargets.Add(enemyLife, poisonRoutine);
+                poison = enemyLife.gameObject.AddComponent<PoisonEffect>();
             }
+
+            poison.ApplyPoison(poisonDuration, poisonTickRate, poisonDamagePerTick);
         }
     }
-
-    private IEnumerator ApplyPoison(LifeController target)
-    {
-        float elapsed = 0f;
-
-        while (elapsed < poisonDuration)
-        {
-            if (target == null || !target.IsAlive())
-                break;
-
-            target.TakeDamage(
-                poisonDamagePerTick,
-                LifeController.DamageType.DamageOverTime
-            );
-            ShowDamageText(target.transform, poisonDamagePerTick);
-            elapsed += poisonTickRate;
-            yield return new WaitForSeconds(poisonTickRate);
-        }
-
-        if (target != null && poisonedTargets.ContainsKey(target))
-            poisonedTargets.Remove(target);
-    }
-
 
     private void ShowDamageText(Transform target, float dmg)
     {
