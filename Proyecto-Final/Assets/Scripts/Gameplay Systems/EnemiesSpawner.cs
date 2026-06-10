@@ -53,6 +53,7 @@ public class EnemiesSpawner : MonoBehaviour
     private bool hordeCompleted = false;
     private float currentSpawnInterval;
     private bool playerHasLeftHouse = false;
+    private DayTimerController dayTimerController;
 
     private WeightedRoulette<GameObject> enemyRoulette = new WeightedRoulette<GameObject>();
 
@@ -70,6 +71,7 @@ public class EnemiesSpawner : MonoBehaviour
         }
 
         GameplayEvents.OnPlayerExitedHouseDuringNight += OnPlayerExit;
+        dayTimerController = FindObjectOfType<DayTimerController>();
 
         ResetHordeCounters();
     }
@@ -78,7 +80,8 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (LevelManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
         {
-            if (playerHasLeftHouse)
+            
+            if (playerHasLeftHouse || (dayTimerController != null && dayTimerController.NightStartedByTimer))
             {
                 if (IsBossNight())
                 {
