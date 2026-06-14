@@ -5585,7 +5585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseMaxMana: 1000
   currentMana: 0
-  baseDayRegenerationRate: 2
+  baseDayRegenerationRate: 0
   baseNightRegenerationRate: 0.5
   modifiedMaxMana: 0
   useLunarInfluence: 1
@@ -5902,7 +5902,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68a3d0ab6ac0d504a82bf4579fc27668, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  penaltyConfig: {fileID: 0}
 --- !u!1 &7795105065535252630
 GameObject:
   m_ObjectHideFlags: 0
