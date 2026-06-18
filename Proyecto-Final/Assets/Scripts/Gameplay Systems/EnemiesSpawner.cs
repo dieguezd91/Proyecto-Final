@@ -322,6 +322,7 @@ public class EnemiesSpawner : MonoBehaviour
             !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;
+            RitualBuffManager.Instance?.ClearBuff();
             StopContinuousHorde(true);
         }
     }
