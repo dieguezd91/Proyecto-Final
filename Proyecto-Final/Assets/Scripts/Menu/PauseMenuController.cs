@@ -234,7 +234,7 @@ public class PauseMenuController : UIControllerBase
             _pauseMenuPanel.Hide();
 
         SoundManager.Instance.PlayOneShot("ButtonClick");
-        SceneLoaderManager.Instance.LoadSceneByName("RefactorMenu");
+        SceneLoaderManager.Instance.LoadSceneByName("Menu");
     }
 
     private void HandleSkipTutorialClicked()
