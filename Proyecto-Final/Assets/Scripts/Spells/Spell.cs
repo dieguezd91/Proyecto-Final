@@ -24,6 +24,11 @@ public abstract class Spell : MonoBehaviour
     {
         float dmg = Random.Range(damage, damage + 5f);
 
+        if (RitualBuffManager.Instance != null)
+        {
+            dmg *= RitualBuffManager.Instance.GetDamageMultiplier();
+        }
+
         var life = target.GetComponent<LifeController>();
         life?.TakeDamage(dmg);
 

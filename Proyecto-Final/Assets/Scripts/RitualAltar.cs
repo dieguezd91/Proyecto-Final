@@ -378,6 +378,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
                 TutorialEvents.InvokeRitualAltarUsed();
             }
             TutorialEvents.InvokeNightStarted();
+            RitualBuffManager.Instance?.ActivateRitualBuff();
             levelManager.TransitionToNight();
         }
     }
