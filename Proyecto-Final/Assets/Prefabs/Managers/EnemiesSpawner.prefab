@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8872074525022528548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1263923123498174143}
+  - component: {fileID: 6602158624202418330}
+  - component: {fileID: 4165809831630955328}
+  m_Layer: 0
+  m_Name: EnemiesSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1263923123498174143
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8872074525022528548}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6602158624202418330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8872074525022528548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cc40d102b1a7a41b460bb5809d54a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useContinuousHordeSystem: 1
+  baseEnemiesPerNight: 4
+  enemiesPerNightIncrement: 6
+  difficultyScalingFactor: 1.7
+  baseSpawnInterval: 3
+  minSpawnInterval: 0.4
+  spawnIntervalDecreasePerDay: 0.1
+  spawnPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  useRandomSpawnPoint: 1
+  dontSpawnWhenPlayerNearby: 1
+  playerCheckRadius: 5
+  enemyWeights:
+  - prefab: {fileID: 654258422932643597, guid: cbec6260f6e304b499c47224480c584f, type: 3}
+    weight: 0.6
+  - prefab: {fileID: 4654744101768285803, guid: 44ca0037d2621034db113ad614aea001, type: 3}
+    weight: 0.3
+  - prefab: {fileID: 7894955776486503493, guid: 6171ad0f73df2fa4db59be62d9ef0f25, type: 3}
+    weight: 0.2
+  bossNightManager: {fileID: 0}
+  onHordeStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onHordeEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnemySpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  onHordeProgress:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4165809831630955328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8872074525022528548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: def6b02da164ed34c8d514292f1ef6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bossPrefabs:
+  - {fileID: 2501910690517604512, guid: c5656cbb0adda984f89d79ed3f23685b, type: 3}
+  bossNightInterval: 5
+  bossSpawnDelay: 3
+  bossSpawnPoint: {fileID: 0}
+  bossRewardItemPrefab: {fileID: 0}
+  useDynamicBossSelection: 1
+  bossAnnouncementDuration: 2
+  onBossNightStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onBossSpawned:
+    m_PersistentCalls:
+      m_Calls: []
+  onBossDefeated:
+    m_PersistentCalls:
+      m_Calls: []
+  onBossNightComplete:
+    m_PersistentCalls:
+      m_Calls: []
