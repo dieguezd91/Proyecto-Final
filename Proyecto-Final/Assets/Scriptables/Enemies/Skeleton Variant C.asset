@@ -15,15 +15,15 @@ MonoBehaviour:
   enemyName: Skeleton
   enemyIcon: {fileID: -1222204734, guid: 494fce19c09feb14ebcd3992662734f6, type: 3}
   description: 
-  maxHealth: 50
-  moveSpeed: 1.25
+  maxHealth: 150
+  moveSpeed: 1.5
   detectionRange: 50
   playerPriority: 1
   plantPriority: 1.2
   homePriority: 1.5
-  footstepCooldown: 0.45
+  footstepCooldown: 0.42
   manaDropChance: 0.5
-  attackDistance: 0.7
+  attackDistance: 1
   minDamage: 16
   maxDamage: 20
   attackCooldown: 2
