@@ -60,7 +60,7 @@ public class DayTimerController : MonoBehaviour
             countdownActive = false;
             resetWhenDayStarts = true;
             NightStartedByTimer = true;
-            LevelManager.Instance?.TransitionToNight();
+            DayCycleController.Instance?.StartNight();
 
             return;
         }
@@ -135,3 +135,4 @@ public class DayTimerController : MonoBehaviour
         timerText.text = $"{minutes:00}:{seconds:00}";
     }
 }
+

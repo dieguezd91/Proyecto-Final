@@ -132,7 +132,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         if (bossNightManager == null) return false;
 
-        int currentDay = LevelManager.Instance.GetCurrentDay();
+        int currentDay = DayCycleController.Instance.CurrentDay;
         return bossNightManager.IsBossNightDay(currentDay);
     }
 
@@ -162,7 +162,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         ResetHordeCounters();
 
-        int currentDay = LevelManager.Instance.GetCurrentDay();
+        int currentDay = DayCycleController.Instance.CurrentDay;
         totalEnemiesToKill = baseEnemiesPerNight + ((currentDay - 1) * enemiesPerNightIncrement);
 
         currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay);
@@ -453,4 +453,5 @@ public class EnemiesSpawner : MonoBehaviour
         GameplayEvents.OnPlayerExitedHouseDuringNight -= OnPlayerExit;
     }
 }
+
 

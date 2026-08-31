@@ -47,7 +47,7 @@ public class ResourcePlant : Plant
         plantRenderer = GetComponent<SpriteRenderer>();
         originalColor = plantRenderer.color;
 
-        cycleStartDay = LevelManager.Instance.GetCurrentDay();
+        cycleStartDay = DayCycleController.Instance.CurrentDay;
         growthUI = GetComponentInChildren<PlantGrowthUI>();
 
         if (harvestProgressIndicator != null)
@@ -59,7 +59,7 @@ public class ResourcePlant : Plant
     protected override void OnMature()
     {
         base.OnMature();
-        cycleStartDay = LevelManager.Instance.GetCurrentDay();
+        cycleStartDay = DayCycleController.Instance.CurrentDay;
     }
 
     private void CheckProduction(int currentDay)
@@ -174,7 +174,7 @@ public class ResourcePlant : Plant
 
         isReadyToHarvest = false;
         isBeingHarvested = false;
-        cycleStartDay = LevelManager.Instance.GetCurrentDay();
+        cycleStartDay = DayCycleController.Instance.CurrentDay;
 
         DeactivateHarvestReadyParticles();
 
@@ -195,7 +195,7 @@ public class ResourcePlant : Plant
          if (newPhase == GamePhase.Night)
          {
              base.HandleGameStateChanged(newPhase);
-             CheckProduction(LevelManager.Instance.GetCurrentDay());
+             CheckProduction(DayCycleController.Instance.CurrentDay);
          }
 
          if (newPhase == GamePhase.Day && isReadyToHarvest)
@@ -251,7 +251,7 @@ public class ResourcePlant : Plant
         if (isReadyToHarvest)
             return 1f;
 
-        int currentDay = LevelManager.Instance.GetCurrentDay();
+        int currentDay = DayCycleController.Instance.CurrentDay;
         int elapsed = currentDay - cycleStartDay;
 
         int required = IsFullyGrown() ? daysToProduceResources : plantData.daysToGrow;
@@ -295,3 +295,4 @@ public class ResourcePlant : Plant
 
     public void CompletedHarvest() => CompleteHarvest();
 }
+

@@ -19,7 +19,7 @@ public class HouseRestorationSystem : MonoBehaviour
 
     private void Start()
     {
-        LevelManager.Instance.onNewDay.AddListener(OnNewDayStarted);
+        DayCycleController.Instance.OnNewDay.AddListener(OnNewDayStarted);
     }
 
     public bool CanRestore() => !hasRestoredToday;
@@ -69,3 +69,4 @@ public class HouseRestorationSystem : MonoBehaviour
 
     public int OptionCount => options.Length;
 }
+

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -52,7 +52,7 @@ public class BossNightManager : MonoBehaviour
 
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.onNewDay.AddListener(OnNewDay);
+            DayCycleController.Instance.OnNewDay.AddListener(OnNewDay);
         }
     }
 
@@ -65,7 +65,7 @@ public class BossNightManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            int currentDay = LevelManager.Instance.GetCurrentDay();
+            int currentDay = DayCycleController.Instance.CurrentDay;
             if (currentDay != lastBossNightDay)
             {
                 isBossNight = true;
@@ -104,7 +104,7 @@ public class BossNightManager : MonoBehaviour
             return;
         }
 
-        int currentDay = LevelManager.Instance.GetCurrentDay();
+        int currentDay = DayCycleController.Instance.CurrentDay;
         bool isActuallyBossNight = IsBossNightDay(currentDay);
 
         if (!isActuallyBossNight)
@@ -187,7 +187,7 @@ public class BossNightManager : MonoBehaviour
         }
         else
         {
-            int bossNightCount = LevelManager.Instance.GetCurrentDay() / bossNightInterval;
+            int bossNightCount = DayCycleController.Instance.CurrentDay / bossNightInterval;
             int bossIndex = (bossNightCount - 1) % bossPrefabs.Count;
             return bossPrefabs[bossIndex];
         }
@@ -234,7 +234,7 @@ public class BossNightManager : MonoBehaviour
     {
         if (InventoryManager.Instance != null)
         {
-            int goldReward = 100 + (LevelManager.Instance.GetCurrentDay() / bossNightInterval) * 50;
+            int goldReward = 100 + (DayCycleController.Instance.CurrentDay / bossNightInterval) * 50;
             InventoryManager.Instance.AddGold(goldReward);
         }
     }
@@ -285,7 +285,7 @@ public class BossNightManager : MonoBehaviour
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.onNewDay.RemoveListener(OnNewDay);
+            DayCycleController.Instance.OnNewDay.RemoveListener(OnNewDay);
         }
     }
 }

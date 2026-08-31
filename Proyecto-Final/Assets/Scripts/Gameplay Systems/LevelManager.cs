@@ -29,10 +29,6 @@ public class LevelManager : MonoBehaviour
     [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
 
-    [Header("Day Counter")]
-    [SerializeField] private int dayCount = 0;
-    public UnityEvent<int> onNewDay;
-
     [Header("Respawn")]
     [SerializeField] public float playerRespawnTime;
     [SerializeField] private Transform playerRespawnPoint;
@@ -56,9 +52,6 @@ public class LevelManager : MonoBehaviour
         }
 
         Instance = this;
-
-        if (onNewDay == null)
-            onNewDay = new UnityEvent<int>();
 
         if (player == null)
         {
@@ -93,18 +86,7 @@ public class LevelManager : MonoBehaviour
 
         if (uiManager == null)
             uiManager = FindObjectOfType<UIManager>();
-
-        dayCount = 0;
-        GameFlowController.Instance.SetPhase(GamePhase.Day);
-        StartDayCycle();
-    }
-
-    private void StartDayCycle()
-    {
-        GameFlowController.Instance.SetPhase(GamePhase.Day);
-
-        onNewDay?.Invoke(dayCount);
-    }
+        DayCycleController.Instance.StartDay();`r`n    }
 
 
     private void Update()
@@ -119,31 +101,18 @@ public class LevelManager : MonoBehaviour
 
     }
 
-    public void TransitionToNight()
-    {
-        dayCount++;
-        GameFlowController.Instance.SetPhase(GamePhase.Night);
-        RewardsSystem.Instance?.StartNightEvaluation();
-    }
-
 
     private void HandleHordeCompleted()
     {
         RewardsSystem.Instance?.EvaluateAndGrantReward();
-        StartDayCycle();
-    }
+        DayCycleController.Instance.StartDay();`r`n    }
 
     private void OnDestroy() { if (GameFlowController.Instance != null) GameFlowController.Instance.OnPhaseChanged -= HandlePhaseChanged; }
 
     private void HandlePhaseChanged(GamePhase newPhase)
     {
 bool isNight = newPhase == GamePhase.Night;
-
-        foreach (var spawnpoint in spawnpoints)
-        {
-            if (spawnpoint != null) spawnpoint.SetNightMode(isNight);
-        }
-    }
+        foreach (var spawnpoint in spawnpoints)`r`n        {`r`n            if (spawnpoint != null) spawnpoint.SetNightMode(isNight);`r`n        }`r`n`r`n        if (isNight)`r`n        {`r`n            RewardsSystem.Instance?.StartNightEvaluation();`r`n        }`r`n    }
     private void HandleHomeDeath()
     {
         StartCoroutine(ShowGameOverAfterDelay());
@@ -176,18 +145,6 @@ bool isNight = newPhase == GamePhase.Night;
         {
             Debug.LogWarning("No se encontr� el panel de 'Continuar�' en el UIManager.");
         }
-    }
-
-
-
-    public int GetCurrentDay()
-    {
-        return dayCount;
-    }
-
-    public void ResetDayCount()
-    {
-        dayCount = 1;
     }
 
     public IEnumerator RespawnPlayer()
@@ -258,9 +215,7 @@ bool isNight = newPhase == GamePhase.Night;
             InventoryManager.Instance.ClearAllMaterials();
             InventoryManager.Instance.SetGold(0);
         }
-
-        ResetDayCount();
-
+        DayCycleController.Instance.ResetDayCount();`r`n
         if (playerLife != null)
         {
             playerLife.currentHealth = playerLife.maxHealth;
@@ -320,10 +275,10 @@ bool isNight = newPhase == GamePhase.Night;
         var spawner = FindObjectOfType<EnemiesSpawner>();
         if (spawner != null) spawner.EndNight();
         else GameFlowController.Instance.SetPhase(GamePhase.Day);
-
-        StartDayCycle();
-    }
+        DayCycleController.Instance.StartDay();`r`n    }
 }
+
+
 
 
 

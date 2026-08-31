@@ -70,7 +70,7 @@ public class LunarCycleManager : MonoBehaviour
 
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.onNewDay.AddListener(OnNewDay);
+            DayCycleController.Instance.OnNewDay.AddListener(OnNewDay);
             lastPhase = GameFlowController.Instance.CurrentPhase;
 
             if (GameFlowController.Instance.CurrentPhase != GamePhase.Night)
@@ -182,7 +182,8 @@ public class LunarCycleManager : MonoBehaviour
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.onNewDay.RemoveListener(OnNewDay);
+            DayCycleController.Instance.OnNewDay.RemoveListener(OnNewDay);
         }
     }
 }
+
