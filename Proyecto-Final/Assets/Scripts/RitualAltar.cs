@@ -374,7 +374,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
             }
             TutorialEvents.InvokeNightStarted();
             RitualBuffManager.Instance?.ActivateRitualBuff();
-            levelManager.TransitionToNight();
+            DayCycleController.Instance.StartNight();
         }
     }
 
@@ -740,4 +740,5 @@ public class RitualAltar : MonoBehaviour, IInteractable
         }
     }
 }
+
 

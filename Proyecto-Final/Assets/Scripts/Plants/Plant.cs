@@ -69,7 +69,7 @@ public class Plant : MonoBehaviour
             plantCollider.enabled = false;
         }
 
-        plantingDay = LevelManager.Instance.GetCurrentDay();
+        plantingDay = DayCycleController.Instance.CurrentDay;
         GameFlowController.Instance.OnPhaseChanged += HandleGameStateChanged;
 
         abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
@@ -287,7 +287,7 @@ public class Plant : MonoBehaviour
         if (growthCompleted)
             return 1.0f;
 
-        int currentDay = LevelManager.Instance.GetCurrentDay();
+        int currentDay = DayCycleController.Instance.CurrentDay;
         int daysSincePlanting = currentDay - plantingDay;
 
         if (daysSincePlanting <= 0)
@@ -321,7 +321,7 @@ public class Plant : MonoBehaviour
     {
         if (newPhase == GamePhase.Night)
         {
-            UpdateGrowthStatus(LevelManager.Instance.GetCurrentDay());
+            UpdateGrowthStatus(DayCycleController.Instance.CurrentDay);
         }
     }
 
@@ -350,3 +350,4 @@ public class Plant : MonoBehaviour
         return plantData;
     }
 }
+

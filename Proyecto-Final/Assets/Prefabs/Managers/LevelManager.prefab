@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8558585227190645083}
   - component: {fileID: 9182144013199346339}
   - component: {fileID: 1234567890123456789}
+  - component: {fileID: 2345678901234567890}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -58,7 +59,6 @@ MonoBehaviour:
   - {fileID: 0}
   ambienceSoundManager: {fileID: 0}
   gameOverDelay: 2
-  dayCount: 0
   onNewDay:
     m_PersistentCalls:
       m_Calls: []
@@ -82,4 +82,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPhase: 0
   worldAnimator: {fileID: 0}
+
+--- !u!114 &2345678901234567890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993218346133697943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b9c9f6d71b3e8990c74902123d45678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentDay: 0
+
 

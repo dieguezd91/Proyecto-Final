@@ -32,14 +32,14 @@ public class PlantManager : MonoBehaviour
         lastPhase = GameFlowController.Instance.CurrentPhase;
 
         if (LevelManager.Instance != null && notifyPlantsOnNewDay)
-            LevelManager.Instance.onNewDay.AddListener(OnGameManagerNewDay);
+            DayCycleController.Instance.OnNewDay.AddListener(OnGameManagerNewDay);
     }
 
     private void OnDestroy()
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.onNewDay.RemoveListener(OnGameManagerNewDay);
+            DayCycleController.Instance.OnNewDay.RemoveListener(OnGameManagerNewDay);
         }
     }
 
@@ -121,3 +121,4 @@ public class PlantManager : MonoBehaviour
         return result;
     }
 }
+

@@ -18,12 +18,12 @@ public class WeatherController : MonoBehaviour
 
     void Start()
     {
-        LevelManager.Instance.onNewDay.AddListener(HandleNewDay);
+        DayCycleController.Instance.OnNewDay.AddListener(HandleNewDay);
     }
 
     void OnDisable()
     {
-        LevelManager.Instance.onNewDay.RemoveListener(HandleNewDay);
+        DayCycleController.Instance.OnNewDay.RemoveListener(HandleNewDay);
     }
 
     private void HandleNewDay(int dayIndex)
@@ -64,3 +64,4 @@ public class WeatherController : MonoBehaviour
         currentWeather = null;
     }
 }
+
