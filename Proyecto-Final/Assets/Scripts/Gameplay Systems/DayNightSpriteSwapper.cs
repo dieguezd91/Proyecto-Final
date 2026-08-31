@@ -16,7 +16,7 @@ public class DayNightSpriteSwapper : MonoBehaviour
         public Vector2 uiSizeDelta = new Vector2(100, 100);
     }
 
-    [Header("CONFIGURACIÓN")]
+    [Header("CONFIGURACIï¿½N")]
     [SerializeField] private bool useCustomTransform = true;
     [Space(10)]
     [SerializeField] private VisualSettings daySettings;
@@ -29,7 +29,7 @@ public class DayNightSpriteSwapper : MonoBehaviour
     private RectTransform rectTransform;
 
     private LevelManager levelManager;
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private Coroutine transitionCoroutine;
     private bool isInitialized = false;
     private bool isUI = false;
@@ -71,8 +71,8 @@ public class DayNightSpriteSwapper : MonoBehaviour
             yield break;
         }
 
-        lastGameState = levelManager.currentGameState;
-        SetVisuals(lastGameState);
+        lastPhase = GameFlowController.Instance.CurrentPhase;
+        SetVisuals(lastPhase);
 
         isInitialized = true;
     }
@@ -81,28 +81,28 @@ public class DayNightSpriteSwapper : MonoBehaviour
     {
         if (!isInitialized || levelManager == null) return;
 
-        GameState currentState = levelManager.currentGameState;
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 
-        if (currentState != lastGameState)
+        if (currentPhase != lastPhase)
         {
-            bool wasNight = IsNightState(lastGameState);
-            bool isNight = IsNightState(currentState);
+            bool wasNight = IsNightState(lastPhase);
+            bool isNight = IsNightState(currentPhase);
 
             if (wasNight != isNight)
             {
-                SetVisuals(currentState);
+                SetVisuals(currentPhase);
             }
 
-            lastGameState = currentState;
+            lastPhase = currentPhase;
         }
     }
 
-    private bool IsNightState(GameState state)
+    private bool IsNightState(GamePhase phase)
     {
-        return state == GameState.Night;
+        return phase == GamePhase.Night;
     }
 
-    private void SetVisuals(GameState state)
+    private void SetVisuals(GamePhase phase)
     {
         if (transitionCoroutine != null)
         {
@@ -111,7 +111,7 @@ public class DayNightSpriteSwapper : MonoBehaviour
             ResetColorAlpha();
         }
 
-        VisualSettings targetSettings = IsNightState(state) ? nightSettings : daySettings;
+        VisualSettings targetSettings = IsNightState(phase) ? nightSettings : daySettings;
 
         if (targetSettings.sprite != null)
         {
@@ -158,6 +158,6 @@ public class DayNightSpriteSwapper : MonoBehaviour
 
     public void ForceUpdate()
     {
-        if (levelManager != null) SetVisuals(levelManager.currentGameState);
+        if (levelManager != null) SetVisuals(GameFlowController.Instance.CurrentPhase);
     }
 }

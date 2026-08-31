@@ -13,6 +13,7 @@ public static class TutorialEvents
     public static event Action OnEnemyDefeated;
     public static event Action OnNightSurvived;
     public static event Action OnInventoryOpened;
+    public static event Action OnInventoryClosed;
     public static event Action OnCraftingOpened;
     public static event Action OnRestorationOpened;
     public static event Action OnHouseEntered;

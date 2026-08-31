@@ -20,9 +20,7 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     private HouseRestorationSystem restorationSystem;
     private HouseLifeController houseLife;
-    private GameState previousGameState;
 
-    public static bool isUIOpen = false;
 
     private void Start()
     {
@@ -94,9 +92,9 @@ public class RestorationAltarUIManager : MonoBehaviour
         UpdateAllOptionButtons();
     }
 
-    private void ToggleUI()
+    private void Update() { if (!(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Restoration))) return; if (Input.GetKeyDown(KeyCode.Escape) && !InputConsumptionManager.IsEscapeConsumed) { InputConsumptionManager.ConsumeEscape(); CloseUI(); return; } } private void ToggleUI()
     {
-        if (altarUIPanel.activeSelf)
+        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Restoration))
             CloseUI();
         else
             OpenRestoratioUI();
@@ -104,28 +102,22 @@ public class RestorationAltarUIManager : MonoBehaviour
 
     private void OpenRestoratioUI()
     {
-        if (LevelManager.Instance != null)
-        {
-            previousGameState = LevelManager.Instance.GetCurrentGameState();
-        }
+        var flow = UIManager.Instance?.Flow;
+        if (flow == null || !flow.Open(UIModal.Restoration))
+            return;
 
         altarUIPanel.SetActive(true);
         TutorialEvents.InvokeRestorationOpened();
-        isUIOpen = true;
 
         UpdateAllOptionButtons();
         UpdateHeartVisual();
-
-        LevelManager.Instance?.SetGameState(GameState.OnAltarRestoration);
     }
 
     public void CloseUI()
     {
         altarUIPanel.SetActive(false);
-        isUIOpen = false;
-
         ClearEventSystemSelection();
-        RestoreGameState();
+        UIManager.Instance?.Flow?.Close(UIModal.Restoration);
 
         UIEvents.TriggerRestorationAltarUIClosed();
         TutorialEvents.InvokeRestorationClosed();
@@ -210,36 +202,5 @@ public class RestorationAltarUIManager : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(null);
     }
 
-    private void RestoreGameState()
-    {
-        if (LevelManager.Instance == null) return;
-
-        GameState currentState = LevelManager.Instance.GetCurrentGameState();
-
-        if (currentState != GameState.OnAltarRestoration)
-        {
-            return;
-        }
-
-        GameState stateToRestore = GetStateToRestore();
-
-        LevelManager.Instance.SetGameState(stateToRestore);
     }
 
-    private GameState GetStateToRestore()
-    {
-        if (IsValidPreviousState(previousGameState))
-            return previousGameState;
-
-        return GameState.Digging;
-    }
-
-    private bool IsValidPreviousState(GameState state)
-    {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
-    }
-}

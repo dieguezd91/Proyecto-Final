@@ -4,23 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public enum GameState
-{
-    None = 0,
-    Paused,
-    GameOver,
-    Day,
-    Night,
-    Digging,
-    Planting,
-    Harvesting,
-    OnInventory,
-    OnCrafting,
-    MainMenu,
-    Removing,
-    OnAltarRestoration,
-    OnRitual
-}
+
 
 public enum ElementEnum
 {
@@ -34,6 +18,7 @@ public enum ElementEnum
 
 public class LevelManager : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [Header("References")]
     [SerializeField] private GameObject player;
     [SerializeField] public GameObject home;
@@ -53,20 +38,17 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform playerRespawnPoint;
 
     [Header("World Transition")]
-    [SerializeField] private WorldTransitionAnimator worldAnimator;
 
     public LifeController playerLife;
     private HouseLifeController HomeLife;
     public AmbienceSoundManager AmbienceSoundManager => ambienceSoundManager;
     public UIManager uiManager;
-    public GameState currentGameState;
 
     public static LevelManager Instance { get; private set; }
 
-    public event Action<GameState> OnGameStateChanged;
-
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -91,6 +73,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        if (GameFlowController.Instance != null) GameFlowController.Instance.OnPhaseChanged += HandlePhaseChanged;
         if (home == null)
             home = GameObject.FindGameObjectWithTag("Home");
 
@@ -112,13 +95,13 @@ public class LevelManager : MonoBehaviour
             uiManager = FindObjectOfType<UIManager>();
 
         dayCount = 0;
-        SetGameState(GameState.Digging);
+        GameFlowController.Instance.SetPhase(GamePhase.Day);
         StartDayCycle();
     }
 
     private void StartDayCycle()
     {
-        SetGameState(GameState.Digging);
+        GameFlowController.Instance.SetPhase(GamePhase.Day);
 
         onNewDay?.Invoke(dayCount);
     }
@@ -134,13 +117,12 @@ public class LevelManager : MonoBehaviour
             InventoryManager.Instance.AddGold(100);
         }
 
-        //Debug.Log("CURRENT GAME STATE: " + currentGameState);
     }
 
     public void TransitionToNight()
     {
         dayCount++;
-        SetGameState(GameState.Night);
+        GameFlowController.Instance.SetPhase(GamePhase.Night);
         RewardsSystem.Instance?.StartNightEvaluation();
     }
 
@@ -151,97 +133,17 @@ public class LevelManager : MonoBehaviour
         StartDayCycle();
     }
 
-    public GameState GetCurrentGameState()
+    private void OnDestroy() { if (GameFlowController.Instance != null) GameFlowController.Instance.OnPhaseChanged -= HandlePhaseChanged; }
+
+    private void HandlePhaseChanged(GamePhase newPhase)
     {
-        return currentGameState;
-    }
-
-    public void SetGameState(GameState newState)
-    {
-        if (currentGameState == newState)
-            return;
-
-        HandleWorldTransition(newState);
-
-        currentGameState = newState;
-
-        OnGameStateChanged?.Invoke(currentGameState);
-
-        if (newState == GameState.Digging)
-        {
-            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
-            if (abilitySystem != null && abilitySystem.CurrentAbility != PlayerAbility.Digging)
-            {
-                abilitySystem.SetAbility(PlayerAbility.Digging);
-            }
-        }
-
-        UICursor cursorController = FindObjectOfType<UICursor>();
-        if (cursorController != null)
-        {
-            cursorController.SetCursorForGameState(newState);
-        }
-
-        switch (newState)
-        {
-            case GameState.Day:
-            case GameState.Night:
-                Time.timeScale = 1f;
-                break;
-            case GameState.Paused:
-                Time.timeScale = 0f;
-                break;
-            case GameState.GameOver:
-                break;
-        }
-
-        bool isNight = newState == GameState.Night;
+bool isNight = newPhase == GamePhase.Night;
 
         foreach (var spawnpoint in spawnpoints)
         {
-            spawnpoint.SetNightMode(isNight);
+            if (spawnpoint != null) spawnpoint.SetNightMode(isNight);
         }
     }
-
-    private void HandleWorldTransition(GameState newState)
-    {
-        if (worldAnimator == null)
-        {
-            worldAnimator = FindObjectOfType<WorldTransitionAnimator>();
-            if (worldAnimator == null) return;
-        }
-
-        HashSet<GameState> nonTransitionStates = new HashSet<GameState>
-    {
-        GameState.GameOver,
-        GameState.OnInventory,
-        GameState.OnCrafting,
-        GameState.OnAltarRestoration,
-        GameState.OnRitual,
-        GameState.Paused
-    };
-
-        if (nonTransitionStates.Contains(newState))
-        {
-            return;
-        }
-
-        switch (newState)
-        {
-            case GameState.Night:
-                worldAnimator.TransitionToNight();
-                break;
-
-            case GameState.Day:
-            case GameState.Digging:
-            case GameState.Planting:
-            case GameState.Harvesting:
-            case GameState.Removing:
-                worldAnimator.TransitionToDay();
-                break;
-        }
-    }
-
     private void HandleHomeDeath()
     {
         StartCoroutine(ShowGameOverAfterDelay());
@@ -251,28 +153,28 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(gameOverDelay);
 
-        SetGameState(GameState.GameOver);
+        GameFlowController.Instance.SetPhase(GamePhase.GameOver);
 
         if (uiManager != null && uiManager.gameOverPanel != null)
         {
             uiManager.gameOverPanel.SetActive(true);
 
-            Time.timeScale = 0f;
+            if (pauseController != null) pauseController.Pause();
         }
     }
 
     public void ShowContinuePanel()
     {
-        SetGameState(GameState.GameOver);
+        GameFlowController.Instance.SetPhase(GamePhase.GameOver);
 
         if (uiManager != null && uiManager.continuePanel != null)
         {
             uiManager.StartCoroutine(uiManager.AnimateContinuePanel());
-            Time.timeScale = 0f;
+            if (pauseController != null) pauseController.Pause();
         }
         else
         {
-            Debug.LogWarning("No se encontró el panel de 'Continuará' en el UIManager.");
+            Debug.LogWarning("No se encontrï¿½ el panel de 'Continuarï¿½' en el UIManager.");
         }
     }
 
@@ -317,22 +219,22 @@ public class LevelManager : MonoBehaviour
 
     public void GameOverRestart()
     {
-        SetGameState(GameState.Digging);
+        GameFlowController.Instance.SetPhase(GamePhase.Day);
         ResetGameData();
         SceneLoaderManager.Instance.LoadGameScene();
     }
     
     public void GameOverMainMenu()
     {
-        SetGameState(GameState.Digging);
+        GameFlowController.Instance.SetPhase(GamePhase.Day);
         ResetGameData(); 
         SceneLoaderManager.Instance.LoadMenuScene();
     }
 
     public void ResetGameData()
     {
-        Debug.Log("Reseteando");
-        Time.timeScale = 1f;
+
+        if (pauseController != null) pauseController.Resume();
 
         if (uiManager != null)
         {
@@ -408,7 +310,6 @@ public class LevelManager : MonoBehaviour
         uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
         uiManager?.UpdateManaUI();
 
-        Debug.Log("Reset completado.");
     }
 
     public void ForceEndNight()
@@ -418,8 +319,16 @@ public class LevelManager : MonoBehaviour
 
         var spawner = FindObjectOfType<EnemiesSpawner>();
         if (spawner != null) spawner.EndNight();
-        else SetGameState(GameState.Digging);
+        else GameFlowController.Instance.SetPhase(GamePhase.Day);
 
         StartDayCycle();
     }
 }
+
+
+
+
+
+
+
+

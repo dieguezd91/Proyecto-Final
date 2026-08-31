@@ -49,7 +49,7 @@ public class PlantGrowthUI : MonoBehaviour
 
         bool shouldShow = dist <= showDistance
                           && !resourcePlant.IsBeingHarvested()
-                          && LevelManager.Instance.currentGameState != GameState.Night
+                          && GameFlowController.Instance.CurrentPhase != GamePhase.Night
                           && resourcePlant.IsFullyGrown();
 
         float targetAlpha = shouldShow ? 1f : 0f;

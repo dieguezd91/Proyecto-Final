@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     public static TutorialManager Instance { get; private set; }
 
     [Header("SETTINGS")]
@@ -144,6 +145,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         if (Instance == null)
         {
             Instance = this;
@@ -450,7 +452,7 @@ public class TutorialManager : MonoBehaviour
     private bool IsLevelPausedOrInInventory()
     {
         var lm = LevelManager.Instance;
-        return lm != null && (lm.currentGameState == GameState.OnInventory || lm.currentGameState == GameState.Paused);
+        return lm != null && ((UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal) || (pauseController != null && pauseController.IsPaused));
     }
 
     private void HandleTrackingOnlyStep(TutorialStep step)
@@ -728,7 +730,7 @@ public class TutorialManager : MonoBehaviour
         var lm = LevelManager.Instance;
         if (lm == null) return;
         
-        if (lm.currentGameState != GameState.Paused && lm.currentGameState != GameState.OnInventory)
+        if ((pauseController == null || !pauseController.IsPaused) && !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal))
         {
             ShowPendingStepFromMenu();
         }

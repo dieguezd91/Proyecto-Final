@@ -34,7 +34,6 @@ public class CraftingUIManager : MonoBehaviour
     private bool hasSelectedRecipe = false;
     private RecipeButton _currentSelectedButton = null;
 
-    public static bool isCraftingUIOpen = false;
 
     #region Unity Lifecycle
     private void Start()
@@ -84,7 +83,7 @@ public class CraftingUIManager : MonoBehaviour
     #region UI Toggle
     private void ToggleCraftingUI()
     {
-        if (isCraftingUIOpen)
+        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Crafting))
             CloseCraftingUI();
         else
             OpenCraftingUI();
@@ -93,7 +92,7 @@ public class CraftingUIManager : MonoBehaviour
     private void OpenCraftingUI()
     {
         craftingUIPanel.SetActive(true);
-        isCraftingUIOpen = true;
+        
 
         ResetRecipeDisplay();
         HideCraftButton();
@@ -145,18 +144,17 @@ public class CraftingUIManager : MonoBehaviour
             }
         }
 
-        LevelManager.Instance?.SetGameState(GameState.OnCrafting);
+        UIManager.Instance?.Flow?.Open(UIModal.Crafting);
     }
 
     public void CloseCraftingUI()
     {
         craftingUIPanel.SetActive(false);
-        isCraftingUIOpen = false;
+        
 
         ClearMaterialList();
 
-        if (LevelManager.Instance?.GetCurrentGameState() == GameState.OnCrafting)
-            LevelManager.Instance.SetGameState(GameState.Digging);
+        UIManager.Instance?.Flow?.Close(UIModal.Crafting);
 
         UIEvents.TriggerCraftingUIClosed();
         TutorialEvents.InvokeCraftingClosed();
@@ -502,9 +500,7 @@ public class CraftingUIManager : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (!isCraftingUIOpen) return;
+    private void Update() { if (!(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Crafting))) return; if (Input.GetKeyDown(KeyCode.Escape) && !InputConsumptionManager.IsEscapeConsumed) { InputConsumptionManager.ConsumeEscape(); CloseCraftingUI(); return; }
 
         if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
         {
@@ -546,3 +542,4 @@ public class CraftingUIManager : MonoBehaviour
     }
 
 }
+

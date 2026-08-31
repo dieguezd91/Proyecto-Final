@@ -22,7 +22,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private GameObject dragIcon;
     private int dragSourceIndex = -1;
-    private GameState lastGameState;
+    private GamePhase lastPhase;
 
     protected override void SetupEventListeners()
     {
@@ -33,7 +33,7 @@ public class SeedSlotsUIController : UIControllerBase
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
 
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
 
         UIEvents.OnSlotSelected += UpdateSelectedSlotUI;
         UIEvents.OnSeedCountsUpdated += UpdateSeedCounts;
@@ -47,8 +47,8 @@ public class SeedSlotsUIController : UIControllerBase
 
         if (LevelManager.Instance != null)
         {
-            lastGameState = LevelManager.Instance.currentGameState;
-            UpdateVisibilityBasedOnGameState(lastGameState);
+            lastPhase = GameFlowController.Instance.CurrentPhase;
+            UpdateVisibilityBasedOnPhase(lastPhase);
         }
         else
         {
@@ -65,19 +65,19 @@ public class SeedSlotsUIController : UIControllerBase
         HandleSeedSlotInput();
     }
 
-    private void OnGameStateChanged(GameState newState)
+    private void OnPhaseChanged(GamePhase newPhase)
     {
-        if (lastGameState == newState) return;
+        if (lastPhase == newPhase) return;
 
-        UpdateVisibilityBasedOnGameState(newState);
-        lastGameState = newState;
+        UpdateVisibilityBasedOnPhase(newPhase);
+        lastPhase = newPhase;
     }
 
-    private void UpdateVisibilityBasedOnGameState(GameState state)
+    private void UpdateVisibilityBasedOnPhase(GamePhase phase)
     {
         if (seedSlotsCanvasGroup == null) return;
 
-        if (state == GameState.Night)
+        if (phase == GamePhase.Night)
         {
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
 
@@ -85,7 +85,7 @@ public class SeedSlotsUIController : UIControllerBase
             seedSlotsCanvasGroup.interactable = false;
             seedSlotsCanvasGroup.blocksRaycasts = false;
         }
-        else if (IsDayState(state))
+        else if (IsDayPhase(phase))
         {
             var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
             bool shouldShow = abilitySystem?.CurrentAbility == PlayerAbility.Planting;
@@ -107,13 +107,9 @@ public class SeedSlotsUIController : UIControllerBase
         }
     }
 
-    private bool IsDayState(GameState state)
+    private bool IsDayPhase(GamePhase phase)
     {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
+        return phase == GamePhase.Day;
     }
 
     private void SetupSlotEventListeners()
@@ -177,7 +173,7 @@ public class SeedSlotsUIController : UIControllerBase
     {
         if (seedSlotsCanvasGroup == null || !isActiveAndEnabled) return;
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
         {
             return;
         }
@@ -434,10 +430,8 @@ public class SeedSlotsUIController : UIControllerBase
     {
         if (LevelManager.Instance == null) return false;
 
-        var state = LevelManager.Instance.currentGameState;
-        return state == GameState.Day || state == GameState.Digging ||
-               state == GameState.Planting || state == GameState.Harvesting ||
-               state == GameState.Removing;
+        var phase = GameFlowController.Instance.CurrentPhase;
+        return phase == GamePhase.Day;
     }
 
     private void OnSlotKeyPressed(int slotIndex)
@@ -570,7 +564,7 @@ public class SeedSlotsUIController : UIControllerBase
             abilitySystem.OnAbilityChanged -= OnAbilityChanged;
 
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
 
         UIEvents.OnSlotSelected -= UpdateSelectedSlotUI;
         UIEvents.OnSeedCountsUpdated -= UpdateSeedCounts;

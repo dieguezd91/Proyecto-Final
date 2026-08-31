@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private void Awake() { if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); }
+    [SerializeField] private PauseController pauseController;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Camera cam;
     [SerializeField] private Transform firePoint;
@@ -34,7 +36,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private bool movementEnabled = true;
     private bool canAct = true;
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private Animator animator;
     private int lastHorizontalDirection = 0;
     private SpriteRenderer spriteRenderer;
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour
         knockbackReceiver = GetComponent<KnockbackReceiver>();
         playerAbilitySystem = GetComponent<PlayerAbilitySystem>();
 
-        LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
+        GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
 
         if (gameStateController == null)
         {
@@ -93,15 +95,15 @@ public class PlayerController : MonoBehaviour
             manaSystem = GetComponent<ManaSystem>();
         }
 
-        OnGameStateChanged(LevelManager.Instance.currentGameState);
+        OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
 
-        lastGameState = LevelManager.Instance.currentGameState;
+        lastPhase = GameFlowController.Instance.CurrentPhase;
     }
 
     private void OnDestroy()
     {
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
 
         if (input != null)
         {
@@ -111,24 +113,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnGameStateChanged(GameState newState)
+    private void OnPhaseChanged(GamePhase newPhase)
     {
         var lifeController = GetComponent<LifeController>();
         bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !lifeController.isRespawning);
-        bool gameIsPaused = (GameManager.Instance != null && GameManager.Instance.IsGamePaused());
+        bool gameIsPaused = (GameManager.Instance != null && (pauseController != null && pauseController.IsPaused));
 
-        movementEnabled = ShouldAllowMovementForState(newState) &&
+        movementEnabled = ShouldAllowMovementForPhase(newPhase) &&
                           playerIsAliveAndNotRespawning &&
                           !gameIsPaused;
 
         canAct = playerIsAliveAndNotRespawning &&
                  !gameIsPaused &&
-                 newState != GameState.OnInventory &&
-                 newState != GameState.OnCrafting &&
-                 newState != GameState.OnRitual &&
-                 newState != GameState.OnAltarRestoration;
+                 !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal) &&
+                 newPhase != GamePhase.OnRitual ;
 
-        bool isNight = newState == GameState.Night;
+        bool isNight = newPhase == GamePhase.Night;
         handAnimator.SetBool("IsNight", isNight);
 
         if (!isNight)
@@ -152,14 +152,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool ShouldAllowMovementForState(GameState state)
+    private bool ShouldAllowMovementForPhase(GamePhase phase)
     {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing ||
-               state == GameState.Night;
+        return phase == GamePhase.Day ||
+               phase == GamePhase.Night;
     }
 
     void Update()
@@ -178,7 +174,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (LevelManager.Instance.currentGameState == GameState.Night && canAct)
+        if (GameFlowController.Instance.CurrentPhase == GamePhase.Night && canAct)
         {
             CheckForSpellTypeChange();
         }
@@ -186,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        GameState state = LevelManager.Instance.currentGameState;
+        GamePhase phase = GameFlowController.Instance.CurrentPhase;
 
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
@@ -313,7 +309,7 @@ public class PlayerController : MonoBehaviour
 
     void HandleAttack()
     {
-        if (LevelManager.Instance.currentGameState != GameState.Night) return;
+        if (GameFlowController.Instance.CurrentPhase != GamePhase.Night) return;
         if (!canAct) return;
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy()) return;
 
@@ -441,7 +437,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
-        if (enabled && LevelManager.Instance != null && (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()))
+        if (enabled && LevelManager.Instance != null && ((pauseController != null && pauseController.IsPaused)))
         {
             return;
         }
@@ -520,7 +516,7 @@ public class PlayerController : MonoBehaviour
 
     public void RefreshHandNightness()
     {
-        bool isNight = LevelManager.Instance.currentGameState == GameState.Night;
+        bool isNight = GameFlowController.Instance.CurrentPhase == GamePhase.Night;
         handAnimator.SetBool("IsNight", isNight);
 
         if (!isNight)
@@ -580,7 +576,7 @@ public class PlayerController : MonoBehaviour
     private void HandleSpellSwitchInput(int direction)
     {
         if (SpellInventory.Instance == null) return;
-        if (LevelManager.Instance.currentGameState != GameState.Night) return;
+        if (GameFlowController.Instance.CurrentPhase != GamePhase.Night) return;
         if (!canAct) return;
 
         SpellInventory.Instance.CycleSpell(direction);

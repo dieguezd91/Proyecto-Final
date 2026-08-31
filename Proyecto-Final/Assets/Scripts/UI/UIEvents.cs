@@ -17,7 +17,7 @@ public static class UIEvents
     public static event Action OnPauseMenuClosed;
 
     // Game State Events
-    public static event Action<GameState> OnGameStateChanged;
+    public static event Action<GamePhase> OnPhaseChanged;
     public static event Action OnInstructionsRequested;
 
     // Seed Slots Events
@@ -68,8 +68,8 @@ public static class UIEvents
     public static void TriggerInventoryClosed()
         => OnInventoryClosed?.Invoke();
 
-    public static void TriggerGameStateChanged(GameState newState)
-        => OnGameStateChanged?.Invoke(newState);
+    public static void TriggerGameStateChanged(GamePhase newPhase)
+        => OnPhaseChanged?.Invoke(newPhase);
 
     public static void TriggerInstructionsRequested()
         => OnInstructionsRequested?.Invoke();

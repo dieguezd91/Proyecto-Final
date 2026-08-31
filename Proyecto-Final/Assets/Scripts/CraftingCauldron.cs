@@ -20,8 +20,8 @@ public class CraftingCauldron : MonoBehaviour, IInteractable
 
     public bool CanInteract()
     {
-        return LevelManager.Instance.currentGameState != GameState.Night &&
-               !CraftingUIManager.isCraftingUIOpen;
+        return GameFlowController.Instance.CurrentPhase != GamePhase.Night &&
+               !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Crafting));
     }
 
     public void OnInteractionComplete()

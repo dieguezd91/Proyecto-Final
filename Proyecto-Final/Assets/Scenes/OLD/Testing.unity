@@ -216225,7 +216225,7 @@ MonoBehaviour:
   playerRespawnTime: 0
   playerRespawnPoint: {fileID: 0}
   uiManager: {fileID: 0}
-  currentGameState: 0
+  currentPhase: 0
 --- !u!4 &1941896399
 Transform:
   m_ObjectHideFlags: 0

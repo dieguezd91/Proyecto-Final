@@ -47,7 +47,7 @@ public class HouseDoor : MonoBehaviour
 
         if (levelManager != null)
         {
-            levelManager.OnGameStateChanged += OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
         }
 
         if (worldTransition != null)
@@ -59,7 +59,7 @@ public class HouseDoor : MonoBehaviour
 
         if (levelManager != null && doorLockAnimator != null)
         {
-            bool shouldBeLocked = levelManager.GetCurrentGameState() == GameState.Night;
+            bool shouldBeLocked = GameFlowController.Instance.CurrentPhase == GamePhase.Night;
             doorLockAnimator.SetVisualState(shouldBeLocked);
         }
     }
@@ -68,7 +68,7 @@ public class HouseDoor : MonoBehaviour
     {
         if (levelManager != null)
         {
-            levelManager.OnGameStateChanged -= OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
         }
 
         if (worldTransition != null)
@@ -83,16 +83,16 @@ public class HouseDoor : MonoBehaviour
         }
     }
 
-    private void OnGameStateChanged(GameState newState)
+    private void OnPhaseChanged(GamePhase newPhase)
     {
         bool shouldBeLocked = false;
 
-        if (newState == GameState.Day || newState == GameState.Digging)
+        if (newPhase == GamePhase.Day)
         {
             canEnterAtNight = true;
             shouldBeLocked = false;
         }
-        else if (newState == GameState.Night)
+        else if (newPhase == GamePhase.Night)
         {
             canEnterAtNight = false;
             shouldBeLocked = true;
@@ -136,7 +136,7 @@ public class HouseDoor : MonoBehaviour
 
                 if (levelManager != null)
                 {
-                    bool shouldBeLocked = levelManager.GetCurrentGameState() == GameState.Night;
+                    bool shouldBeLocked = GameFlowController.Instance.CurrentPhase == GamePhase.Night;
                     StartCoroutine(UpdateLockAfterExitDelay(shouldBeLocked));
                 }
             }
@@ -184,7 +184,7 @@ public class HouseDoor : MonoBehaviour
             return;
         }
 
-        if (goingInside && levelManager.GetCurrentGameState() == GameState.Night)
+        if (goingInside && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
         {
             canEnterAtNight = false;
         }
@@ -232,7 +232,7 @@ public class HouseDoor : MonoBehaviour
             if (UIManager.Instance != null)
                 UIManager.Instance.ShowExteriorHUD();
 
-            if (levelManager != null && levelManager.GetCurrentGameState() == GameState.Night)
+            if (levelManager != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
             {
                 GameplayEvents.InvokePlayerExitedHouseDuringNight();
             }
@@ -267,3 +267,4 @@ public class HouseDoor : MonoBehaviour
         if (outsideCollider != null) outsideCollider.gameObject.SetActive(!isInterior);
     }
 }
+

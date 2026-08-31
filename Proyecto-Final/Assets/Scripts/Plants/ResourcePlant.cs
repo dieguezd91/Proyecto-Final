@@ -101,7 +101,7 @@ public class ResourcePlant : Plant
         if (!isReadyToHarvest || isBeingHarvested)
             return;
 
-        if (LevelManager.Instance.currentGameState != GameState.Harvesting)
+        if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
         {
             return;
         }
@@ -120,7 +120,7 @@ public class ResourcePlant : Plant
         float harvestTimer = 0f;
         while (harvestTimer < harvestDuration)
         {
-            if (LevelManager.Instance.currentGameState != GameState.Harvesting)
+            if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
             {
                 CancelHarvest();
                 yield break;
@@ -190,17 +190,17 @@ public class ResourcePlant : Plant
             harvestReadyParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
     }
 
-    protected override void HandleGameStateChanged(GameState newState)
+    protected override void HandleGameStateChanged(GamePhase newPhase)
     {
-         if (newState == GameState.Night)
+         if (newPhase == GamePhase.Night)
          {
-             base.HandleGameStateChanged(newState);
+             base.HandleGameStateChanged(newPhase);
              CheckProduction(LevelManager.Instance.GetCurrentDay());
          }
 
-         if ((newState is GameState.Day or GameState.Digging) && isReadyToHarvest)
+         if (newPhase == GamePhase.Day && isReadyToHarvest)
          {
-             if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive() && LevelManager.Instance.GetCurrentGameState() == GameState.Digging)
+             if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
              {
                  TutorialEvents.InvokeFirstPlantReadyToHarvest();
              }
@@ -212,7 +212,7 @@ public class ResourcePlant : Plant
         base.OnDestroy();
 
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= HandleGameStateChanged;
     }
 
     void OnMouseOver()

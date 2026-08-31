@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class MoveCamera : MonoBehaviour
 {
@@ -47,9 +47,9 @@ public class MoveCamera : MonoBehaviour
         if (abilitySystem != null && (abilitySystem.IsDigging() || abilitySystem.IsHarvesting()))
             return;
 
-        var state = LevelManager.Instance.currentGameState;
+        var state = GameFlowController.Instance.CurrentPhase;
 
-        if (state == GameState.OnRitual)
+        if (state == GamePhase.OnRitual)
         {
             HandleRitualCamera();
             return;
@@ -60,7 +60,7 @@ public class MoveCamera : MonoBehaviour
             cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, originalCameraSize, Time.deltaTime * ritualCameraSpeed);
         }
 
-        if (state == GameState.OnInventory || state == GameState.OnCrafting)
+        if ((UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal))
             return;
 
         if (mainChar == null || cam == null) return;

@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public SettingsManager SettingsManager { get; private set; }
-    private bool isPaused = false;
 
     private void Awake()
     {
@@ -22,32 +21,6 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
-
-    public void PauseGame()
-    {
-        if (!isPaused)
-        {
-            Time.timeScale = 0f;
-            isPaused = true;
-        }
-    }
-
-    public void ResumeGame()
-    {
-        isPaused = false;
-        Time.timeScale = 1f;
-
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
-        {
-            UIManager.Instance.CloseInventory();
-        }
-    }
-
-    public bool IsGamePaused()
-    {
-        return isPaused;
-    }
-
     public void LoadGameScene()
     {
         SceneLoaderManager.Instance.LoadSceneByName(name);

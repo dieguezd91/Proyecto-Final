@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -35,16 +35,12 @@ public class InventoryAnimationController : MonoBehaviour
 
     private void Awake()
     {
-        if (bookAnimator == null)
-        {
-            bookAnimator = GetComponent<Animator>();
-        }
+        if (bookAnimator == null) { bookAnimator = GetComponent<Animator>(); } if (bookAnimator != null) { bookAnimator.updateMode = AnimatorUpdateMode.UnscaledTime; }
     }
 
     private void OnEnable()
     {
         UIEvents.OnInventoryOpened += HandleInventoryOpened;
-        UIEvents.OnInventoryClosed += HandleInventoryClosed;
         UIEvents.OnPauseMenuRequested += HandlePauseMenuRequested;
         UIEvents.OnPauseMenuClosed += HandlePauseMenuClosed;
     }
@@ -52,7 +48,6 @@ public class InventoryAnimationController : MonoBehaviour
     private void OnDisable()
     {
         UIEvents.OnInventoryOpened -= HandleInventoryOpened;
-        UIEvents.OnInventoryClosed -= HandleInventoryClosed;
         UIEvents.OnPauseMenuRequested -= HandlePauseMenuRequested;
         UIEvents.OnPauseMenuClosed -= HandlePauseMenuClosed;
     }
@@ -211,9 +206,7 @@ public class InventoryAnimationController : MonoBehaviour
                 if (inventoryPage != null) inventoryPage.SetActive(true);
                 break;
 
-            case "Options":
-                if (optionsPage != null) optionsPage.SetActive(true);
-                break;
+            case "Options": if (optionsPage != null) { optionsPage.SetActive(true); var pauseMenu = optionsPage.GetComponentInChildren<PauseMenuController>(true); if (pauseMenu != null) pauseMenu.gameObject.SetActive(true); } break;
 
             case "Calendar":
                 if (calendarPage != null) calendarPage.SetActive(true);
@@ -253,3 +246,5 @@ public class InventoryAnimationController : MonoBehaviour
         CloseBook();
     }
 }
+
+

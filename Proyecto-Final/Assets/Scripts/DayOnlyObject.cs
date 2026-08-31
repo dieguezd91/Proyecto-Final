@@ -9,7 +9,7 @@ public class DayOnlyObject : MonoBehaviour
     [SerializeField] private bool deactivateGameObject = true;
 
     private Renderer[] renderers;
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
 
     private void Awake()
     {
@@ -28,8 +28,8 @@ public class DayOnlyObject : MonoBehaviour
     {
         if (LevelManager.Instance != null)
         {
-            UpdateVisibility(LevelManager.Instance.GetCurrentGameState());
-            lastGameState = LevelManager.Instance.GetCurrentGameState();
+            UpdateVisibility(GameFlowController.Instance.CurrentPhase);
+            lastPhase = GameFlowController.Instance.CurrentPhase;
         }
     }
 
@@ -37,18 +37,18 @@ public class DayOnlyObject : MonoBehaviour
     {
         if (LevelManager.Instance == null) return;
 
-        GameState currentState = LevelManager.Instance.GetCurrentGameState();
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 
-        if (currentState != lastGameState)
+        if (currentPhase != lastPhase)
         {
-            UpdateVisibility(currentState);
-            lastGameState = currentState;
+            UpdateVisibility(currentPhase);
+            lastPhase = currentPhase;
         }
     }
 
-    private void UpdateVisibility(GameState state)
+    private void UpdateVisibility(GamePhase phase)
     {
-        bool shouldBeVisible = IsDayState(state);
+        bool shouldBeVisible = IsDayPhase(phase);
 
         if (deactivateGameObject)
         {
@@ -72,8 +72,8 @@ public class DayOnlyObject : MonoBehaviour
         }
     }
 
-    private bool IsDayState(GameState state)
+    private bool IsDayPhase(GamePhase phase)
     {
-        return state != GameState.Night && state != GameState.GameOver;
+        return phase != GamePhase.Night && phase != GamePhase.GameOver;
     }
 }

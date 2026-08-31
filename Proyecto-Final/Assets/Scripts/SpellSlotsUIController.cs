@@ -10,7 +10,7 @@ public class SpellSlotsUIController : UIControllerBase
     [Header("Visibility Settings")]
     [SerializeField] private float fadeDuration = 0.3f;
 
-    private GameState lastGameState;
+    private GamePhase lastPhase;
 
     protected override void SetupEventListeners()
     {
@@ -22,7 +22,7 @@ public class SpellSlotsUIController : UIControllerBase
 
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged += OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
         }
     }
 
@@ -43,7 +43,7 @@ public class SpellSlotsUIController : UIControllerBase
         HandleSpellSlotInput();
 
         if (LevelManager.Instance != null &&
-            LevelManager.Instance.currentGameState == GameState.Night)
+            GameFlowController.Instance.CurrentPhase == GamePhase.Night)
         {
             UpdateAllCooldownDisplays();
         }
@@ -66,9 +66,9 @@ public class SpellSlotsUIController : UIControllerBase
         }
     }
 
-    private void OnGameStateChanged(GameState newState)
+    private void OnPhaseChanged(GamePhase newPhase)
     {
-        bool shouldShow = newState == GameState.Night;
+        bool shouldShow = newPhase == GamePhase.Night;
 
         if (shouldShow && spellSlotsCanvasGroup != null)
         {
@@ -79,7 +79,7 @@ public class SpellSlotsUIController : UIControllerBase
             HideSpellSlots();
         }
 
-        lastGameState = newState;
+        lastPhase = newPhase;
     }
 
     private void ShowSpellSlots()
@@ -163,7 +163,7 @@ public class SpellSlotsUIController : UIControllerBase
     {
         if (LevelManager.Instance == null) return false;
 
-        return LevelManager.Instance.currentGameState == GameState.Night;
+        return GameFlowController.Instance.CurrentPhase == GamePhase.Night;
     }
 
     private void OnSlotClicked(int slotIndex)
@@ -239,7 +239,7 @@ public class SpellSlotsUIController : UIControllerBase
 
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged -= OnGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
         }
 
         for (int i = 0; i < spellSlotUIs.Length; i++)

@@ -1,4 +1,4 @@
-Ôªøusing UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MusicManager : MonoBehaviour
@@ -6,19 +6,19 @@ public class MusicManager : MonoBehaviour
     public static MusicManager Instance;
 
     [Header("Clips de Audio")]
-    [Tooltip("M√∫sica que se reproducir√° en el men√∫")]
+    [Tooltip("M˙sica que se reproducir· en el men˙")]
     public AudioClip menuMusic;
 
-    [Tooltip("M√∫sica de fondo durante el d√≠a en la escena de juego")]
+    [Tooltip("M˙sica de fondo durante el dÌa en la escena de juego")]
     public AudioClip dayMusic;
 
-    [Tooltip("M√∫sica de fondo durante la noche en la escena de juego")]
+    [Tooltip("M˙sica de fondo durante la noche en la escena de juego")]
     public AudioClip nightMusic;
 
     [SerializeField] private AudioSource audioSource;
 
     
-    private GameState lastOfficialGameState = GameState.None;
+    private GamePhase lastOfficialGameState = GamePhase.None;
 
     private void Awake()
     {
@@ -64,7 +64,7 @@ public class MusicManager : MonoBehaviour
     {
         if (LevelManager.Instance == null)
             return;
-        GameState currentState = LevelManager.Instance.GetCurrentGameState();
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
         string sceneName = SceneManager.GetActiveScene().name;
 
         if (sceneName == "RefactorMenu")
@@ -72,27 +72,27 @@ public class MusicManager : MonoBehaviour
 
         if (sceneName == "SampleScene" || sceneName == "GameScene" || sceneName == "TreeScene")
         {
-            if (IsDaylikeState(currentState))
+            if (IsDaylikePhase(currentPhase))
             {
-                if (lastOfficialGameState == GameState.Day)
+                if (lastOfficialGameState == GamePhase.Day)
                     return;
 
-                lastOfficialGameState = GameState.Day;
+                lastOfficialGameState = GamePhase.Day;
                 PlayMusic(dayMusic);
             }
-            else if (currentState == GameState.Night)
+            else if (currentPhase == GamePhase.Night)
             {
-                if (lastOfficialGameState == GameState.Night)
+                if (lastOfficialGameState == GamePhase.Night)
                     return;
 
-                lastOfficialGameState = GameState.Night;
+                lastOfficialGameState = GamePhase.Night;
                 PlayMusic(nightMusic);
             }
         }
     }
 
     /// <summary>
-    /// Reproduce la m√∫sica correcta al cargar una escena o al iniciar el juego.
+    /// Reproduce la m˙sica correcta al cargar una escena o al iniciar el juego.
     /// </summary>
     private void PlayMusicAccordingToSceneOrState()
     {
@@ -100,7 +100,7 @@ public class MusicManager : MonoBehaviour
 
         if (sceneName == "RefactorMenu")
         {
-            lastOfficialGameState = GameState.None;
+            lastOfficialGameState = GamePhase.None;
             PlayMusic(menuMusic);
             return;
         }
@@ -109,27 +109,27 @@ public class MusicManager : MonoBehaviour
         {
             if (LevelManager.Instance != null)
             {
-                GameState current = LevelManager.Instance.GetCurrentGameState();
+                GamePhase current = GameFlowController.Instance.CurrentPhase;
 
-                if (IsDaylikeState(current))
+                if (IsDaylikePhase(current))
                 {
-                    lastOfficialGameState = GameState.Day;
+                    lastOfficialGameState = GamePhase.Day;
                     PlayMusic(dayMusic);
                 }
-                else if (current == GameState.Night)
+                else if (current == GamePhase.Night)
                 {
-                    lastOfficialGameState = GameState.Night;
+                    lastOfficialGameState = GamePhase.Night;
                     PlayMusic(nightMusic);
                 }
                 else
                 {
-                    lastOfficialGameState = GameState.Day;
+                    lastOfficialGameState = GamePhase.Day;
                     PlayMusic(dayMusic);
                 }
             }
             else
             {
-                lastOfficialGameState = GameState.Day;
+                lastOfficialGameState = GamePhase.Day;
                 PlayMusic(dayMusic);
             }
         }
@@ -137,15 +137,11 @@ public class MusicManager : MonoBehaviour
     }
 
     /// <summary>
-    /// M√©todo auxiliar que devuelve true si el estado dado debe contarse como ‚Äúd√≠a‚Äù a efectos de m√∫sica.
+    /// MÈtodo auxiliar que devuelve true si el estado dado debe contarse como ìdÌaî a efectos de m˙sica.
     /// </summary>
-    private bool IsDaylikeState(GameState state)
+    private bool IsDaylikePhase(GamePhase phase)
     {
-        return state == GameState.Day
-               || state == GameState.Digging
-               || state == GameState.Planting
-               || state == GameState.Harvesting
-               || state == GameState.Removing;
+        return phase == GamePhase.Day;
     }
 
     /// <summary>
@@ -167,3 +163,4 @@ public class MusicManager : MonoBehaviour
         audioSource.Play();
     }
 }
+

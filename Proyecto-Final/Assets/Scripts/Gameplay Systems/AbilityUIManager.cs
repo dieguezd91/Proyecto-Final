@@ -63,7 +63,7 @@ public class AbilityUIManager : MonoBehaviour
 
     private void UpdateAllSlotVisuals()
     {
-        bool isDaytime = LevelManager.Instance?.currentGameState != GameState.Night;
+        bool isDaytime = GameFlowController.Instance?.CurrentPhase != GamePhase.Night;
         PlayerAbility currentAbility = playerAbilitySystem?.CurrentAbility ?? PlayerAbility.Planting;
         
         foreach (var slot in abilitySlots)

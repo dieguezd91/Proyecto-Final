@@ -14,7 +14,7 @@ public class PlantManager : MonoBehaviour
 
     private List<Plant> registeredPlants = new List<Plant>();
 
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private int dayCounter = 0;
 
     private void Awake()
@@ -29,7 +29,7 @@ public class PlantManager : MonoBehaviour
 
     private void Start()
     {
-        lastGameState = LevelManager.Instance.currentGameState;
+        lastPhase = GameFlowController.Instance.CurrentPhase;
 
         if (LevelManager.Instance != null && notifyPlantsOnNewDay)
             LevelManager.Instance.onNewDay.AddListener(OnGameManagerNewDay);

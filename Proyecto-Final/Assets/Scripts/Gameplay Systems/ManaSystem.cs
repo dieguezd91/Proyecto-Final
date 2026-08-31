@@ -13,7 +13,7 @@ public class ManaSystem : MonoBehaviour
     [Header("LUNAR INFLUENCE")]
     [SerializeField] private bool useLunarInfluence = true;
 
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private LunarCycleManager lunarCycleManager;
     private LunarInfluenceManager lunarInfluenceManager;
     private bool isNight = false;
@@ -41,8 +41,8 @@ public class ManaSystem : MonoBehaviour
 
         if (LevelManager.Instance != null)
         {
-            lastGameState = LevelManager.Instance.currentGameState;
-            isNight = lastGameState == GameState.Night;
+            lastPhase = GameFlowController.Instance.CurrentPhase;
+            isNight = lastPhase == GamePhase.Night;
         }
 
         if (isNight)
@@ -68,10 +68,10 @@ public class ManaSystem : MonoBehaviour
 
     private void Update()
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != lastGameState)
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase != lastPhase)
         {
-            bool wasNight = lastGameState == GameState.Night;
-            isNight = LevelManager.Instance.currentGameState == GameState.Night;
+            bool wasNight = lastPhase == GamePhase.Night;
+            isNight = GameFlowController.Instance.CurrentPhase == GamePhase.Night;
 
             if (wasNight != isNight)
             {
@@ -97,7 +97,7 @@ public class ManaSystem : MonoBehaviour
                 }
             }
 
-            lastGameState = LevelManager.Instance.currentGameState;
+            lastPhase = GameFlowController.Instance.CurrentPhase;
         }
     }
 
@@ -138,7 +138,7 @@ public class ManaSystem : MonoBehaviour
     private float GetCurrentRegenerationRate()
     {
         bool isGameManagerValid = LevelManager.Instance != null;
-        bool isNightState = isGameManagerValid && LevelManager.Instance.currentGameState == GameState.Night;
+        bool isNightState = isGameManagerValid && GameFlowController.Instance.CurrentPhase == GamePhase.Night;
         float baseRate = isNightState ? baseNightRegenerationRate : baseDayRegenerationRate;
         float lunarModifier = 1.0f;
 
@@ -167,14 +167,14 @@ public class ManaSystem : MonoBehaviour
 
     public bool UseMana(float amount)
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
             useLunarInfluence && lunarInfluenceManager != null)
         {
             float costModifier = lunarInfluenceManager.GetManaCostModifier();
             amount *= costModifier;
         }
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
             useLunarInfluence && lunarCycleManager != null &&
             lunarCycleManager.GetCurrentMoonPhase() == MoonPhase.GibbousMoon)
         {
@@ -199,7 +199,7 @@ public class ManaSystem : MonoBehaviour
 
     public void AddMana(float amount)
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night &&
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
             useLunarInfluence && lunarInfluenceManager != null && lunarCycleManager != null &&
             lunarCycleManager.GetCurrentMoonPhase() == MoonPhase.CrescentMoon)
         {
@@ -223,7 +223,7 @@ public class ManaSystem : MonoBehaviour
             float maxManaModifier = lunarInfluenceManager.GetMaxManaModifier();
             float oldMax = modifiedMaxMana;
 
-            if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+            if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
             {
                 modifiedMaxMana = baseMaxMana * maxManaModifier;
             }
@@ -245,7 +245,7 @@ public class ManaSystem : MonoBehaviour
 
     public void OnMoonPhaseChanged(MoonPhase newPhase)
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
         {
             if (lunarInfluenceManager != null)
             {

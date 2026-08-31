@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -112,7 +112,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged += OnGameStateChangedHandler;
+            GameFlowController.Instance.OnPhaseChanged += OnGameStateChangedHandler;
         }
 
         if (worldTransition != null)
@@ -127,14 +127,12 @@ public class RitualAltar : MonoBehaviour, IInteractable
             worldTransition.OnStateChanged -= HandleWorldStateChanged;
 
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= OnGameStateChangedHandler;
+            GameFlowController.Instance.OnPhaseChanged -= OnGameStateChangedHandler;
     }
 
-    private void OnGameStateChangedHandler(GameState newState)
+    private void OnGameStateChangedHandler(GamePhase newPhase)
     {
-        if (newState == GameState.Day || newState == GameState.Digging ||
-            newState == GameState.Planting || newState == GameState.Harvesting ||
-            newState == GameState.Removing)
+        if (newPhase == GamePhase.Day)
         {
             SetDoorLightIntensity(0f, 0.5f);
         }
@@ -184,8 +182,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
             if (levelManager != null)
             {
-                GameState currentState = levelManager.GetCurrentGameState();
-                if (currentState == GameState.Night)
+                GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
+                if (currentPhase == GamePhase.Night)
                 {
                     StartCoroutine(FadeInRitualLight(0.5f));
                 }
@@ -313,15 +311,12 @@ public class RitualAltar : MonoBehaviour, IInteractable
             }
         }
 
-        return IsValidGameStateForRitual(levelManager.GetCurrentGameState());
+        return IsValidPhaseForRitual(GameFlowController.Instance.CurrentPhase);
     }
 
-    private bool IsValidGameStateForRitual(GameState state)
+    private bool IsValidPhaseForRitual(GamePhase phase)
     {
-        return state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
+        return phase == GamePhase.Day;
     }
 
     private IEnumerator PerformRitual()
@@ -338,7 +333,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void BeginRitual()
     {
         isPerformingRitual = true;
-        levelManager.SetGameState(GameState.OnRitual);
+        GameFlowController.Instance.SetPhase(GamePhase.OnRitual);
 
         if (canTransitionToNight && LunarCycleManager.Instance != null)
         {
@@ -440,7 +435,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (lightController != null)
         {
-            lightController.RestoreLightAfterRitual(GameState.Night, vignetteFadeDuration);
+            lightController.RestoreLightAfterRitual(GamePhase.Night, vignetteFadeDuration);
         }
 
         UpdateAltarAppearance();
@@ -633,7 +628,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (!IsVignetteAvailable()) yield break;
 
-        float targetIntensity = GetVignetteIntensityForState(levelManager.GetCurrentGameState());
+        float targetIntensity = GetVignetteIntensityForState(GameFlowController.Instance.CurrentPhase);
 
         vignetteComponent.center.value = new Vector2(0.5f, 0.5f);
         yield return AnimateVignetteIntensity(vignetteComponent.intensity.value, targetIntensity, 1f);
@@ -643,16 +638,16 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (!IsVignetteAvailable()) return;
 
-        GameState currentState = levelManager?.GetCurrentGameState() ?? GameState.Day;
-        float targetIntensity = GetVignetteIntensityForState(currentState);
+        GamePhase currentPhase = GameFlowController.Instance?.CurrentPhase ?? GamePhase.Day;
+        float targetIntensity = GetVignetteIntensityForState(currentPhase);
 
         vignetteComponent.center.value = new Vector2(0.5f, 0.5f);
         vignetteComponent.intensity.value = targetIntensity;
     }
 
-    private float GetVignetteIntensityForState(GameState state)
+    private float GetVignetteIntensityForState(GamePhase phase)
     {
-        return state == GameState.Night ? NIGHT_VIGNETTE_INTENSITY : DAY_VIGNETTE_INTENSITY;
+        return phase == GamePhase.Night ? NIGHT_VIGNETTE_INTENSITY : DAY_VIGNETTE_INTENSITY;
     }
 
     private bool IsVignetteAvailable()
@@ -696,8 +691,8 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (lightController != null)
         {
-            GameState currentState = levelManager?.GetCurrentGameState() ?? GameState.Day;
-            lightController.RestoreLightAfterRitual(currentState, 0.5f);
+            GamePhase currentPhase = GameFlowController.Instance?.CurrentPhase ?? GamePhase.Day;
+            lightController.RestoreLightAfterRitual(currentPhase, 0.5f);
         }
 
         if (worldTransition != null && worldTransition.IsInInterior && interiorLightsDimmed)
@@ -708,9 +703,9 @@ public class RitualAltar : MonoBehaviour, IInteractable
 
         if (DoorLight != null && levelManager != null)
         {
-            GameState currentState = levelManager.GetCurrentGameState();
+            GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 
-            if (currentState == GameState.Night)
+            if (currentPhase == GamePhase.Night)
             {
                 StartCoroutine(FadeInRitualLight(0.5f));
             }
@@ -745,3 +740,4 @@ public class RitualAltar : MonoBehaviour, IInteractable
         }
     }
 }
+

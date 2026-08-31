@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class InventoryUIController : UIControllerBase
 {
+    private void Awake()
+    {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
+    }
+    [SerializeField] private PauseController pauseController;
     [Header("Inventory Settings")]
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private KeyCode toggleInventoryKey = KeyCode.I;
@@ -17,9 +22,7 @@ public class InventoryUIController : UIControllerBase
     [Header("Page Management")]
     [SerializeField] private bool animationControllerManagesPages = true;
 
-    private bool isInventoryOpen = false;
-
-    public bool IsInventoryOpen => isInventoryOpen;
+    public bool IsInventoryOpen => UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Inventory);
 
     protected override void CacheReferences()
     {
@@ -49,7 +52,7 @@ public class InventoryUIController : UIControllerBase
         if (inventoryPanel != null)
         {
             inventoryPanel.SetActive(false);
-            isInventoryOpen = false;
+            
         }
     }
 
@@ -72,7 +75,7 @@ public class InventoryUIController : UIControllerBase
 
     private void HandleInventoryInput()
     {
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        if (LevelManager.Instance != null && (pauseController != null && pauseController.IsPaused))
             return;
 
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
@@ -81,7 +84,7 @@ public class InventoryUIController : UIControllerBase
             ToggleInventory();
         }
 
-        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && isInventoryOpen && !InputConsumptionManager.IsEscapeConsumed)
+        if (closeInventoryOnEscape && Input.GetKeyDown(KeyCode.Escape) && IsInventoryOpen && !InputConsumptionManager.IsEscapeConsumed)
         {
             if (animationController != null && animationController.IsAnimating)
             {
@@ -96,7 +99,7 @@ public class InventoryUIController : UIControllerBase
 
     public void ToggleInventory()
     {
-        if (isInventoryOpen)
+        if (IsInventoryOpen)
             CloseInventory();
         else
             OpenInventory();
@@ -116,9 +119,9 @@ public class InventoryUIController : UIControllerBase
 
         inventoryPanel.SetActive(true);
         TutorialEvents.InvokeInventoryOpened();
-        isInventoryOpen = true;
+        
 
-        LevelManager.Instance?.SetGameState(GameState.OnInventory);
+        UIManager.Instance?.Flow?.Open(UIModal.Inventory);
 
         UIEvents.TriggerInventoryOpened();
     }
@@ -143,7 +146,7 @@ public class InventoryUIController : UIControllerBase
 
         if (waitForAnimationToComplete && animationController != null)
         {
-            UIEvents.TriggerInventoryClosed();
+            animationController.CloseBook();
         }
         else
         {
@@ -159,20 +162,13 @@ public class InventoryUIController : UIControllerBase
             inventoryUI.ClearDescriptionPanel();
 
         inventoryPanel.SetActive(false);
-        isInventoryOpen = false;
+        
 
-        GameManager.Instance?.ResumeGame();
+        if (pauseController != null) pauseController.Resume();
 
-        if (LevelManager.Instance != null)
-        {
-            var uiController = UIManager.Instance?.GameState;
-            if (uiController != null)
-            {
-                LevelManager.Instance.SetGameState(uiController.LastState);
-            }
-        }
+        UIManager.Instance?.Flow?.Close(UIModal.Inventory);
 
-        UIManager.Instance.HUD.SetActive(true);
+        if (UIManager.Instance != null && UIManager.Instance.HUD != null) UIManager.Instance.HUD.SetActive(true);
 
         // Always notify listeners that inventory has closed to avoid missed events
         UIEvents.TriggerInventoryClosed();
@@ -180,12 +176,10 @@ public class InventoryUIController : UIControllerBase
 
     private bool CanOpenInventory()
     {
-        var state = LevelManager.Instance.currentGameState;
-        return state != GameState.Night &&
-               state != GameState.Paused &&
-               state != GameState.OnCrafting &&
-               state != GameState.GameOver &&
-               state != GameState.OnAltarRestoration;
+        var state = GameFlowController.Instance.CurrentPhase;
+        return state != GamePhase.Night &&
+               (pauseController == null || !pauseController.IsPaused) &&
+               state != GamePhase.GameOver ;
     }
 
     private void OnInventoryOpenAnimationComplete()
@@ -219,10 +213,7 @@ public class InventoryUIController : UIControllerBase
             return;
         }
 
-        inventoryPanel.SetActive(true);
-        isInventoryOpen = true;
-
-        if (animationController != null)
+        inventoryPanel.SetActive(true); UIManager.Instance?.Flow?.Open(UIModal.Inventory); if (animationController != null)
         {
             animationController.OpenWithPage(pageName);
         }
@@ -232,3 +223,10 @@ public class InventoryUIController : UIControllerBase
 
     public bool IsAnimating => animationController != null && animationController.IsAnimating;
 }
+
+
+
+
+
+
+

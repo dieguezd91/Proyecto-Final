@@ -26,7 +26,7 @@ public class MoonPhaseUI : MonoBehaviour
     {
         if (moonPhaseImage != null && LevelManager.Instance != null)
         {
-            moonPhaseImage.color = LevelManager.Instance.currentGameState == GameState.Night ? nightColor : dayColor;
+            moonPhaseImage.color = GameFlowController.Instance.CurrentPhase == GamePhase.Night ? nightColor : dayColor;
         }
     }
 

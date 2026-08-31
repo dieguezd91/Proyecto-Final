@@ -20,8 +20,8 @@ public class RestorationAltar : MonoBehaviour, IInteractable
 
     public bool CanInteract()
     {
-        return LevelManager.Instance.currentGameState != GameState.Night &&
-               !RestorationAltarUIManager.isUIOpen;
+        return GameFlowController.Instance.CurrentPhase != GamePhase.Night &&
+               !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal);
     }
 
     public void OnInteractionComplete()

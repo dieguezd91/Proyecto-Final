@@ -46,7 +46,7 @@ public class EnemiesSpawner : MonoBehaviour
     private int totalEnemiesSpawned;
     private bool isSpawning = false;
     private Transform playerTransform;
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private Coroutine continuousSpawnCoroutine;
     private float currentHordeTime;
     private List<GameObject> activeEnemies = new List<GameObject>();
@@ -78,7 +78,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     void Update()
     {
-        if (LevelManager.Instance.currentGameState == GameState.Night && lastGameState != GameState.Night)
+        if (GameFlowController.Instance.CurrentPhase == GamePhase.Night && lastPhase != GamePhase.Night)
         {
             
             if (playerHasLeftHouse || (dayTimerController != null && dayTimerController.NightStartedByTimer))
@@ -95,11 +95,11 @@ public class EnemiesSpawner : MonoBehaviour
             }
         }
 
-        lastGameState = LevelManager.Instance.currentGameState;
+        lastPhase = GameFlowController.Instance.CurrentPhase;
 
         if (!IsBossNight())
         {
-            if (LevelManager.Instance.currentGameState == GameState.Night &&
+            if (GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
                 totalEnemiesKilled >= totalEnemiesToKill &&
                 GetTrulyAliveEnemiesCount() <= 0 &&
                 !hordeCompleted)
@@ -114,7 +114,7 @@ public class EnemiesSpawner : MonoBehaviour
     {
         playerHasLeftHouse = true;
 
-        if (LevelManager.Instance.currentGameState == GameState.Night && !isSpawning)
+        if (GameFlowController.Instance.CurrentPhase == GamePhase.Night && !isSpawning)
         {
             if (IsBossNight())
             {
@@ -151,7 +151,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void StartContinuousHorde()
     {
-        if (LevelManager.Instance.currentGameState != GameState.Night)
+        if (GameFlowController.Instance.CurrentPhase != GamePhase.Night)
             return;
 
         if (IsBossNight())
@@ -185,7 +185,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        while (LevelManager.Instance.currentGameState == GameState.Night &&
+        while (GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
                totalEnemiesSpawned < totalEnemiesToKill &&
                !IsBossNight())
         {
@@ -318,7 +318,7 @@ public class EnemiesSpawner : MonoBehaviour
 
         if (totalEnemiesKilled >= totalEnemiesToKill &&
             GetTrulyAliveEnemiesCount() <= 0 &&
-            LevelManager.Instance.currentGameState == GameState.Night &&
+            GameFlowController.Instance.CurrentPhase == GamePhase.Night &&
             !hordeCompleted && !IsBossNight())
         {
             hordeCompleted = true;
@@ -345,7 +345,7 @@ public class EnemiesSpawner : MonoBehaviour
 
             if (!IsBossNight())
             {
-                LevelManager.Instance.SetGameState(GameState.Digging);
+                GameFlowController.Instance.SetPhase(GamePhase.Day);
             }
         }
     }
@@ -389,17 +389,17 @@ public class EnemiesSpawner : MonoBehaviour
 
     public void EndNight()
     {
-        var state = LevelManager.Instance.currentGameState;
+        var state = GameFlowController.Instance.CurrentPhase;
 
-        if (state != GameState.Night && state != GameState.OnRitual)
+        if (state != GamePhase.Night && state != GamePhase.OnRitual)
             return;
 
         if (IsBossNight() && bossNightManager != null)
         {
             bossNightManager.ForceEndBossNight();
 
-            if (LevelManager.Instance.currentGameState != GameState.Digging)
-                LevelManager.Instance.SetGameState(GameState.Digging);
+            if (GameFlowController.Instance.CurrentPhase != GamePhase.Day)
+                GameFlowController.Instance.SetPhase(GamePhase.Day);
 
             return;
         }
@@ -453,3 +453,4 @@ public class EnemiesSpawner : MonoBehaviour
         GameplayEvents.OnPlayerExitedHouseDuringNight -= OnPlayerExit;
     }
 }
+

@@ -15,6 +15,7 @@ public enum PlayerAbility
 
 public class PlayerAbilitySystem : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [Header("DIG ABILITY")]
     [SerializeField] public LayerMask diggableLayer;
     [SerializeField] public float digDistance = 2f;
@@ -106,6 +107,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         playerController = GetComponent<PlayerController>();
         manaSystem = GetComponent<ManaSystem>();
         progressBar ??= FindObjectOfType<ProgressBar>();
@@ -157,7 +159,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void PlayInteractionAnimation()
     {
-        if (handAnimator != null && LevelManager.Instance.currentGameState != GameState.Night)
+        if (handAnimator != null && GameFlowController.Instance.CurrentPhase != GamePhase.Night)
         {
             handAnimator.SetBool("IsDay", true);
             handAnimator.SetTrigger("IsInteracting");
@@ -199,7 +201,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (InputConsumptionManager.IsEscapeConsumed) return;
         if (!IsAbilityGameState()) return;
-        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+        if ((pauseController != null && pauseController.IsPaused)) return;
 
         if (isDigging || isHarvesting)
         {
@@ -212,7 +214,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private void HandleCycleInput(int direction)
     {
         if (!IsAbilityGameState()) return;
-        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+        if ((pauseController != null && pauseController.IsPaused)) return;
 
         CycleAbility(direction);
     }
@@ -230,7 +232,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
         if (!IsAbilityGameState()) return;
-        if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused()) return;
+        if ((pauseController != null && pauseController.IsPaused)) return;
 
         switch (currentAbility)
         {
@@ -255,7 +257,7 @@ public class PlayerAbilitySystem : MonoBehaviour
             return;
         }
 
-        if (LevelManager.Instance.currentGameState == GameState.Night)
+        if (GameFlowController.Instance.CurrentPhase == GamePhase.Night)
             return;
 
         SetAbility(PlayerAbility.Planting);
@@ -267,7 +269,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         if (currentAbility == ability) return;
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Night)
+        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
         {
             return;
         }
@@ -276,24 +278,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         OnAbilityChanged?.Invoke(currentAbility);
         TutorialEvents.InvokeAbilityChanged();
 
-        switch (currentAbility)
-        {
-            case PlayerAbility.Digging:
-                LevelManager.Instance.SetGameState(GameState.Digging);
-                break;
-            case PlayerAbility.Planting:
-                LevelManager.Instance.SetGameState(GameState.Planting);
-                break;
-            case PlayerAbility.Harvesting:
-                LevelManager.Instance.SetGameState(GameState.Harvesting);
-                break;
-            case PlayerAbility.Removing:
-                LevelManager.Instance.SetGameState(GameState.Removing);
-                break;
-            default:
-                LevelManager.Instance.SetGameState(GameState.Digging);
-                break;
-        }
+
     }
 
     private void HandlePlanting()
@@ -494,7 +479,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         while (isHarvesting && currentHarvestPlant != null)
         {
-            if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
+            if ((pauseController != null && pauseController.IsPaused))
             {
                 yield return null;
                 continue;
@@ -611,8 +596,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void StartDigging(Vector2 position)
     {
-        if (LevelManager.Instance.currentGameState == GameState.Paused ||
-            GameManager.Instance.IsGamePaused() ||
+        if ((pauseController != null && pauseController.IsPaused) ||
             isPlayingInteractionAnimation)
             return;
 
@@ -642,7 +626,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
         while (timer < digDuration)
         {
-            if (LevelManager.Instance.currentGameState == GameState.Paused || GameManager.Instance.IsGamePaused())
+            if ((pauseController != null && pauseController.IsPaused))
             {
                 yield return null;
                 continue;
@@ -705,12 +689,8 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private bool IsAbilityGameState()
     {
-        var state = LevelManager.Instance.currentGameState;
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
+        var phase = GameFlowController.Instance.CurrentPhase;
+        return phase == GamePhase.Day;
     }
 
     public bool IsBusy()
@@ -722,13 +702,9 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         if (LevelManager.Instance == null) return false;
 
-        var state = LevelManager.Instance.currentGameState;
+        var phase = GameFlowController.Instance.CurrentPhase;
 
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
+        return phase == GamePhase.Day;
     }
 
     private bool IsInsideHouseLayer()

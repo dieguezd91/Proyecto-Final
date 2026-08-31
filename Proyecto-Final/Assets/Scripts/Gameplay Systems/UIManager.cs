@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class UIManager : MonoBehaviour
@@ -19,6 +19,8 @@ public class UIManager : MonoBehaviour
 
     [Header("Sound")]
     [SerializeField] private InterfaceSoundBase interfaceSounds;
+
+    [SerializeField] private UIFlowController uiFlowController;
 
     [Header("UI References")]
     public GameObject gameOverPanel;
@@ -43,14 +45,14 @@ public class UIManager : MonoBehaviour
     public InventoryUIController Inventory => inventoryUIController;
     public SeedSlotsUIController SeedSlots => seedSlotsUI;
     public SpellSlotsUIController SpellSlots => spellSlotsUI;
-    public GameStateUIController GameState => gameStateUI;
+    public GameStateUIController GamePhase => gameStateUI;
     public FeedbackUIController Feedback => feedbackUI;
     public TooltipUIController Tooltip => tooltipUI;
     public RitualUIController Ritual => ritualUI;
     public TeleportAbilityUI TeleportAbility => teleportAbilityUI;
+    public UIFlowController Flow => uiFlowController;
 
-    private void Awake()
-    {
+    private void Awake() { if (uiFlowController == null) uiFlowController = GetComponent<UIFlowController>(); if (uiFlowController == null) uiFlowController = gameObject.AddComponent<UIFlowController>();
         if (Instance == null)
         {
             Instance = this;
@@ -140,7 +142,7 @@ public class UIManager : MonoBehaviour
 
         UIEvents.OnInventoryToggleRequested += Inventory.ToggleInventory;
 
-        UIEvents.OnGameStateChanged += GameState.OnGameStateChanged;
+        UIEvents.OnPhaseChanged += GamePhase.OnPhaseChanged;
 
         UIEvents.OnPlayerDamaged += Feedback.ShowDamageEffect;
 
@@ -152,7 +154,7 @@ public class UIManager : MonoBehaviour
         if (Health != null) UIEvents.OnHomeHealthChanged -= Health.UpdateHomeHealth;
         if (Mana != null) UIEvents.OnManaChanged -= Mana.UpdateMana;
         if (Inventory != null) UIEvents.OnInventoryToggleRequested -= Inventory.ToggleInventory;
-        if (GameState != null) UIEvents.OnGameStateChanged -= GameState.OnGameStateChanged;
+        if (GamePhase != null) UIEvents.OnPhaseChanged -= GamePhase.OnPhaseChanged;
         if (Feedback != null) UIEvents.OnPlayerDamaged -= Feedback.ShowDamageEffect;
     }
 
@@ -287,9 +289,9 @@ public class UIManager : MonoBehaviour
         if (SeedSlots != null)
             SeedSlots.gameObject.SetActive(true);
 
-        if (GameState != null)
+        if (GamePhase != null)
         {
-            GameState.OnGameStateChanged(LevelManager.Instance.currentGameState);
+            GamePhase.OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
         }
     }
 
@@ -342,3 +344,4 @@ public class UIManager : MonoBehaviour
             ritualUI.HideRitualOverlay();
     }
 }
+

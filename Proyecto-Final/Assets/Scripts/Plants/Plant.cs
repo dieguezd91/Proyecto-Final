@@ -70,7 +70,7 @@ public class Plant : MonoBehaviour
         }
 
         plantingDay = LevelManager.Instance.GetCurrentDay();
-        LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
+        GameFlowController.Instance.OnPhaseChanged += HandleGameStateChanged;
 
         abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
 
@@ -110,7 +110,7 @@ public class Plant : MonoBehaviour
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= HandleGameStateChanged;
         }
 
         if (lifeController != null)
@@ -317,9 +317,9 @@ public class Plant : MonoBehaviour
         lifeController.ConfigureAsPlant(hasAnimation);
     }
 
-    protected virtual void HandleGameStateChanged(GameState newState)
+    protected virtual void HandleGameStateChanged(GamePhase newPhase)
     {
-        if (newState == GameState.Night)
+        if (newPhase == GamePhase.Night)
         {
             UpdateGrowthStatus(LevelManager.Instance.GetCurrentDay());
         }

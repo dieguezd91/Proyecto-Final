@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(HouseLifeController))]
 public class HouseShakeOnDamage : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [Header("Shake Settings")]
     [SerializeField] private float duration = 0.3f;
     [SerializeField] private float magnitude = 0.2f;
@@ -20,6 +21,7 @@ public class HouseShakeOnDamage : MonoBehaviour
 
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         life = GetComponent<HouseLifeController>();
 
         foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
@@ -61,7 +63,7 @@ public class HouseShakeOnDamage : MonoBehaviour
 
         while (elapsed < duration)
         {
-            if (LevelManager.Instance.currentGameState == GameState.Paused)
+            if ((pauseController != null && pauseController.IsPaused))
             {
                 yield return null;
                 continue;

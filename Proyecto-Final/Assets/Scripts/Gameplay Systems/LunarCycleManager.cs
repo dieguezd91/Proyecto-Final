@@ -29,7 +29,7 @@ public class LunarCycleManager : MonoBehaviour
 
     public MoonPhaseChangedEvent onMoonPhaseChanged;
     private MoonPhase currentMoonPhase;
-    private GameState lastGameState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     private bool isFirstNight = true;
     private bool isInitialized = false;
     private int nightCount = 0;
@@ -71,13 +71,13 @@ public class LunarCycleManager : MonoBehaviour
         if (LevelManager.Instance != null)
         {
             LevelManager.Instance.onNewDay.AddListener(OnNewDay);
-            lastGameState = LevelManager.Instance.currentGameState;
+            lastPhase = GameFlowController.Instance.CurrentPhase;
 
-            if (LevelManager.Instance.currentGameState != GameState.Night)
+            if (GameFlowController.Instance.CurrentPhase != GamePhase.Night)
             {
                 ShowMoon(false);
             }
-            else if (LevelManager.Instance.currentGameState == GameState.Night)
+            else if (GameFlowController.Instance.CurrentPhase == GamePhase.Night)
             {
                 ShowMoon(true);
             }
@@ -88,14 +88,14 @@ public class LunarCycleManager : MonoBehaviour
     {
         if (!isInitialized || LevelManager.Instance == null) return;
 
-        GameState currentState = LevelManager.Instance.currentGameState;
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 
-        if (lastGameState == GameState.Night && currentState != GameState.Night)
+        if (lastPhase == GamePhase.Night && currentPhase != GamePhase.Night)
         {
             ShowMoon(false);
         }
 
-        lastGameState = currentState;
+        lastPhase = currentPhase;
 
         if (Input.GetKeyDown(KeyCode.M))
         {

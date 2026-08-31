@@ -7,6 +7,7 @@ using System.Collections;
 
 public class TutorialUI : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [Header("REFERENCES")]
     [SerializeField] private GameObject tutorialPanel;
     [SerializeField] private TextMeshProUGUI instructionText;
@@ -73,6 +74,7 @@ public class TutorialUI : MonoBehaviour
 
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         if (canvasGroup != null) canvasGroup.alpha = 0f;
         if (panelTransform != null) panelTransform.localScale = Vector3.zero;
         if (stepImageDisplay != null) stepImageDisplay.gameObject.SetActive(false);
@@ -135,8 +137,8 @@ public class TutorialUI : MonoBehaviour
         // If inventory or pause is active, defer showing until they are closed
         // Also check the LevelManager game state in case the Inventory/Pause events haven't fired yet.
         var lm = LevelManager.Instance;
-        bool isInInventoryState = (lm != null && lm.currentGameState == GameState.OnInventory) || inventoryOpenFlag;
-        bool isInPausedState = (lm != null && lm.currentGameState == GameState.Paused) || pauseOpenFlag;
+        bool isInInventoryState = (lm != null && (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal)) || inventoryOpenFlag;
+        bool isInPausedState = (lm != null && (pauseController != null && pauseController.IsPaused)) || pauseOpenFlag;
 
         if (isInInventoryState || isInPausedState)
         {
@@ -458,7 +460,7 @@ public class TutorialUI : MonoBehaviour
         if (inventoryOpenFlag)
         {
             var lm = LevelManager.Instance;
-            if (lm != null && lm.currentGameState != GameState.OnInventory)
+            if (lm != null && !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal))
             {
                 // inventory appears to be closed even if we didn't get the closed event
                 OnInventoryClosed();
@@ -468,7 +470,7 @@ public class TutorialUI : MonoBehaviour
         if (pauseOpenFlag)
         {
             var lm2 = LevelManager.Instance;
-            if (lm2 != null && lm2.currentGameState != GameState.Paused)
+            if (lm2 != null && (pauseController == null || !pauseController.IsPaused))
             {
                 OnPauseMenuClosed();
             }

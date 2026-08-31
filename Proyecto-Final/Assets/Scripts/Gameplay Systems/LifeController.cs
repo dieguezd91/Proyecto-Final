@@ -377,11 +377,7 @@ public class LifeController : MonoBehaviour
             }
         }
 
-        UICursor cursorController = FindObjectOfType<UICursor>();
-        if (cursorController != null)
-        {
-            cursorController.SetCursorForGameState(LevelManager.Instance.currentGameState);
-        }
+        
     }
 
     public IEnumerator StartInvulnerability(float duration)

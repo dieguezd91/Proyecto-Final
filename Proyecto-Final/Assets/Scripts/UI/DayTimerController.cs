@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class DayTimerController : MonoBehaviour
 {
+    [SerializeField] private PauseController pauseController;
     [Header("Timer Settings")]
     [SerializeField] private float dayDuration = 180f;
     [SerializeField] private TMP_Text timerText;
@@ -19,6 +20,7 @@ public class DayTimerController : MonoBehaviour
 
     private void Awake()
     {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         remainingTime = dayDuration;
         UpdateTimerText();
     }
@@ -27,8 +29,8 @@ public class DayTimerController : MonoBehaviour
     {
         if (LevelManager.Instance != null)
         {
-            LevelManager.Instance.OnGameStateChanged += HandleGameStateChanged;
-            HandleGameStateChanged(LevelManager.Instance.GetCurrentGameState());
+            GameFlowController.Instance.OnPhaseChanged += HandleGameStateChanged;
+            HandleGameStateChanged(GameFlowController.Instance.CurrentPhase);
         }
         
     }
@@ -40,7 +42,7 @@ public class DayTimerController : MonoBehaviour
     private void OnDisable()
     {
         if (LevelManager.Instance != null)
-            LevelManager.Instance.OnGameStateChanged -= HandleGameStateChanged;
+            GameFlowController.Instance.OnPhaseChanged -= HandleGameStateChanged;
     }
 
     private void Update()
@@ -66,15 +68,15 @@ public class DayTimerController : MonoBehaviour
         UpdateTimerText();
     }
 
-    private void HandleGameStateChanged(GameState newState)
+    private void HandleGameStateChanged(GamePhase newPhase)
     {
 
         
-        bool isDayState = IsDayGameplayState(newState);
+        bool isDayState = IsDayGameplayPhase(newPhase);
         
         SetVisible(isDayState);
 
-        if (newState == GameState.Night)
+        if (newPhase == GamePhase.Night)
         {
             countdownActive = false;
             resetWhenDayStarts = true;
@@ -98,15 +100,11 @@ public class DayTimerController : MonoBehaviour
         }
     }
 
-    private bool IsDayGameplayState(GameState state)
+    private bool IsDayGameplayPhase(GamePhase phase)
     {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing ||
-               state == GameState.None ||
-               state == GameState.Paused;
+        return phase == GamePhase.Day ||
+               phase == GamePhase.None ||
+               (pauseController != null && pauseController.IsPaused);
     }
 
     private void SetVisible(bool visible)

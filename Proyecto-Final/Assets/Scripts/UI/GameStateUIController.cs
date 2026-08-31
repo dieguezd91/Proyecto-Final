@@ -1,8 +1,14 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 
 public class GameStateUIController : UIControllerBase
 {
+
+    private void Awake()
+    {
+        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
+    }
+    [SerializeField] private PauseController pauseController;
     [Header("UI Elements")]
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject gameOverPanel;
@@ -11,8 +17,7 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject abilityPanel;
 
     private bool openedFromPauseMenu = false;
-    private GameState lastGameState = GameState.None;
-    private GameState lastState = GameState.None;
+    private GamePhase lastPhase = GamePhase.None;
     [SerializeField] private PauseMenuController _pauseMenuController;
 
     [Header("Blur Settings")]
@@ -28,7 +33,6 @@ public class GameStateUIController : UIControllerBase
 
     private WorldTransitionAnimator worldTransition;
 
-    public GameState LastState => lastState;
 
     protected override void CacheReferences()
     {
@@ -78,8 +82,7 @@ public class GameStateUIController : UIControllerBase
 
         if (LevelManager.Instance != null)
         {
-            lastGameState = LevelManager.Instance.currentGameState;
-            lastState = lastGameState;
+            lastPhase = GameFlowController.Instance.CurrentPhase;
         }
         UpdateUIElementsVisibility();
 
@@ -88,7 +91,7 @@ public class GameStateUIController : UIControllerBase
 
     public override void HandleUpdate()
     {
-        CheckGameStateChanges();
+        CheckPhaseChanges();
         HandleGameOverState();
         HandlePauseInput();
         CheckInventoryOpenState();
@@ -122,28 +125,27 @@ public class GameStateUIController : UIControllerBase
         wasInventoryOpen = isOpen;
     }
 
-    private void CheckGameStateChanges()
+    private void CheckPhaseChanges()
     {
         if (LevelManager.Instance == null) return;
 
-        if (LevelManager.Instance.currentGameState != lastGameState)
+        if (GameFlowController.Instance.CurrentPhase != lastPhase)
         {
-            if (LevelManager.Instance.currentGameState == GameState.Paused &&
-                lastGameState != GameState.Paused &&
-                lastGameState != GameState.None)
+            if ((pauseController != null && pauseController.IsPaused) &&
+                (pauseController == null || !pauseController.IsPaused) &&
+                lastPhase != GamePhase.None)
             {
-                lastState = lastGameState;
             }
 
-            OnGameStateChanged(LevelManager.Instance.currentGameState);
+            OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
         }
     }
 
-    public void OnGameStateChanged(GameState newState)
+    public void OnPhaseChanged(GamePhase newPhase)
     {
         UpdateUIElementsVisibility();
         UpdateAbilityUIVisibility();
-        lastGameState = newState;
+        lastPhase = newPhase;
     }
 
     private void UpdateAbilityUIVisibility()
@@ -153,14 +155,12 @@ public class GameStateUIController : UIControllerBase
             return;
         }
 
-        GameState state = LevelManager.Instance.currentGameState;
+        GamePhase phase = GameFlowController.Instance.CurrentPhase;
 
         bool isInInterior = worldTransition != null && worldTransition.IsInInterior;
 
-        bool showAbilities = state != GameState.Night &&
-                             state != GameState.OnCrafting &&
-                             state != GameState.OnAltarRestoration &&
-                             state != GameState.GameOver &&
+        bool showAbilities = phase != GamePhase.Night &&
+                             phase != GamePhase.GameOver &&
                              !isInInterior;
 
         abilityPanel.SetActive(showAbilities);
@@ -185,7 +185,7 @@ public class GameStateUIController : UIControllerBase
             return;
         }
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
+        if ((pauseController != null && pauseController.IsPaused))
         {
             if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
             {
@@ -194,45 +194,28 @@ public class GameStateUIController : UIControllerBase
             return;
         }
 
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
-        {
-            UIManager.Instance.CloseInventory();
-            if (HUD != null) HUD.SetActive(true);
-            return;
-        }
+        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen()) { UIManager.Instance.Inventory.ToggleInventory(); if (HUD != null) HUD.SetActive(true); return; }
 
-        OpenInventoryOptions();
-    }
+        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal) return; OpenInventoryOptions(); }
 
     private bool IsAnyGameplayUIOpen()
     {
         if (LevelManager.Instance == null) return false;
 
-        GameState currentState = LevelManager.Instance.currentGameState;
-
-        return currentState == GameState.OnCrafting ||
-               currentState == GameState.OnAltarRestoration ||
-               currentState == GameState.OnRitual;
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
+        return currentPhase == GamePhase.OnRitual;
     }
 
     private void OpenInventoryOptions()
     {
-        bool canOpen = !CraftingUIManager.isCraftingUIOpen &&
-                       !RestorationAltarUIManager.isUIOpen &&
-                       LevelManager.Instance != null &&
-                       LevelManager.Instance.currentGameState != GameState.GameOver &&
-                       LevelManager.Instance.currentGameState != GameState.OnAltarRestoration &&
-                       LevelManager.Instance.currentGameState != GameState.OnRitual;
+        bool canOpen = LevelManager.Instance != null &&
+                       GameFlowController.Instance.CurrentPhase != GamePhase.GameOver &&
+                       GameFlowController.Instance.CurrentPhase != GamePhase.OnRitual;
 
         if (!canOpen) return;
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState != GameState.Paused)
-            lastState = LevelManager.Instance.currentGameState;
-
-        UIManager.Instance?.OpenInventoryWithPage("Options");
-
-        GameManager.Instance?.PauseGame();
-        LevelManager.Instance?.SetGameState(GameState.Paused);
+        UIManager.Instance?.OpenInventoryWithPage("Options"); if (pauseController != null) pauseController.Pause();
+        
 
         if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
         {
@@ -256,34 +239,26 @@ public class GameStateUIController : UIControllerBase
     {
         if (LevelManager.Instance == null) return;
 
-        GameState currentState = LevelManager.Instance.currentGameState;
+        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 
-        bool showHUD = IsGameplayState(currentState);
+        bool showHUD = IsGameplayPhase(currentPhase);
         if (HUD != null)
             HUD.SetActive(showHUD);
 
-        bool showDayControls = IsActiveGameplayState(currentState);
+        bool showDayControls = IsActiveGameplayPhase(currentPhase);
         if (dayControlPanel != null)
             dayControlPanel.SetActive(showDayControls);
     }
 
-    private bool IsGameplayState(GameState state)
+    private bool IsGameplayPhase(GamePhase phase)
     {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing ||
-               state == GameState.Night;
+        return phase == GamePhase.Day ||
+               phase == GamePhase.Night;
     }
 
-    private bool IsActiveGameplayState(GameState state)
+    private bool IsActiveGameplayPhase(GamePhase phase)
     {
-        return state == GameState.Day ||
-               state == GameState.Digging ||
-               state == GameState.Planting ||
-               state == GameState.Harvesting ||
-               state == GameState.Removing;
+        return phase == GamePhase.Day;
     }
 
     public void RestoreFromNormalGameplay()
@@ -291,10 +266,7 @@ public class GameStateUIController : UIControllerBase
         SetUIElementsVisibility(true);
         UpdateUIElementsVisibility();
 
-        if (LevelManager.Instance != null && LevelManager.Instance.currentGameState == GameState.Paused)
-            LevelManager.Instance.SetGameState(lastState);
-
-        GameManager.Instance?.ResumeGame();
+        if (pauseController != null) pauseController.Resume();
     }
 
     public void SetUIElementsVisibility(bool visible)
@@ -316,10 +288,9 @@ public class GameStateUIController : UIControllerBase
             UIManager.Instance.CloseInventory();
         }
 
-        if (_pauseMenuController != null)
-            _pauseMenuController.Hide();
+        
 
-        GameManager.Instance?.ResumeGame();
+        if (pauseController != null) pauseController.Resume();
 
         if (SoundManager.Instance != null)
         {
@@ -328,9 +299,6 @@ public class GameStateUIController : UIControllerBase
 
         if (HUD != null)
             HUD.SetActive(true);
-
-        if (LevelManager.Instance != null && lastState != GameState.None)
-            LevelManager.Instance.SetGameState(lastState);
 
         if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
         {
@@ -358,7 +326,7 @@ public class GameStateUIController : UIControllerBase
             .SetEase(Ease.OutCubic)
              .OnComplete(() =>
              {
-                 // Ensure final value is set and update hiding state if requested.
+                 // Ensure final value is set and update hiding phase if requested.
                  if (dof != null) dof.focalLength.value = target;
                  if (setIsHidingFalseOnComplete) isHiding = false;
              });
@@ -399,3 +367,7 @@ public class GameStateUIController : UIControllerBase
         }
     }
 }
+
+
+
+

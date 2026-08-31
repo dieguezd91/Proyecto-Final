@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class PauseMenuController : UIControllerBase
 {
-    [SerializeField] private UIManager uiManager;
+    [SerializeField] private PauseController pauseController; [SerializeField] private UIManager uiManager;
 
     [Header("UI Panels")]
     [SerializeField] private PauseMenuPanel _pauseMenuPanel;
@@ -24,9 +24,7 @@ public class PauseMenuController : UIControllerBase
     private DepthOfField dof;
     private bool isHiding = false;
 
-    private void Start()
-    {
-        // Ensure the controller is properly initialized
+    private void Start() { if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); // Ensure the controller is properly initialized
         Initialize();
         Setup();
     }
@@ -54,75 +52,25 @@ public class PauseMenuController : UIControllerBase
 
     }
 
+    private void OnEnable()
+    {
+        ShowPauseMenu();
+    }
+
     public override void Show()
     {
-        if (_currentState == PanelState.Shown) return;
-        gameObject.SetActive(true);
         _currentState = PanelState.Shown;
-        ShowPauseMenu();
+        gameObject.SetActive(true);
     }
 
     public override void Hide()
     {
-        if (_currentState == PanelState.Hidden || isHiding || !gameObject.activeInHierarchy) return;
-        isHiding = true;
+        // Visibility is managed entirely by the parent OptionsPage.
+        // We only update state, but do NOT disable the gameObject.
         _currentState = PanelState.Hidden;
-        gameObject.SetActive(false);
-        isHiding = false;
     }
 
-    protected override void OnShowAnimation()
-    {
-        if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLength(maxFocalLength, showTransitionDuration));
-    }
-
-    protected override void OnHideAnimation()
-    {
-        if (blurTransition != null) StopCoroutine(blurTransition);
-        blurTransition = StartCoroutine(FadeFocalLengthAndDeactivate(0f, hideTransitionDuration));
-    }
-
-    private IEnumerator FadeFocalLength(float target, float duration)
-    {
-        if (dof == null) yield break;
-
-        float start = dof.focalLength.value;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
-            yield return null;
-        }
-
-        dof.focalLength.value = target;
-    }
-
-    private IEnumerator FadeFocalLengthAndDeactivate(float target, float duration)
-    {
-        if (dof == null)
-        {
-            gameObject.SetActive(false);
-            isHiding = false;
-            yield break;
-        }
-
-        float start = dof.focalLength.value;
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            dof.focalLength.value = Mathf.Lerp(start, target, elapsed / duration);
-            yield return null;
-        }
-
-        dof.focalLength.value = target;
-        gameObject.SetActive(false); // Deactivate after animation
-        isHiding = false;
-    }
+    
 
     protected override void SetupEventListeners()
     {
@@ -165,14 +113,14 @@ public class PauseMenuController : UIControllerBase
     // UI-only methods that handle button interactions
     public void Continue()
     {
-        if (UIManager.Instance != null && UIManager.Instance.GameState != null)
+        if (UIManager.Instance != null && UIManager.Instance.GamePhase != null)
         {
             if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
             {
                 TutorialManager.Instance.ResumeTutorial();
             }
 
-            UIManager.Instance.GameState.ResumeGame();
+            UIManager.Instance.GamePhase.ResumeGame();
         }
     }
 
@@ -228,7 +176,7 @@ public class PauseMenuController : UIControllerBase
 
     public void GoToMainMenu()
     {
-        GameManager.Instance?.ResumeGame();
+        if (pauseController != null) pauseController.Resume();
 
         if (_pauseMenuPanel != null)
             _pauseMenuPanel.Hide();
@@ -247,3 +195,6 @@ public class PauseMenuController : UIControllerBase
         Continue();
     }
 }
+
+
+
