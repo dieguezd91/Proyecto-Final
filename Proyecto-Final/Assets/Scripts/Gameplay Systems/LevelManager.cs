@@ -20,7 +20,6 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private PauseController pauseController;
     [Header("References")]
-    [SerializeField] private GameObject player;
     [SerializeField] public GameObject home;
     [SerializeField] private EnemiesSpawner waveSpawner;
     [SerializeField] private List<SpawnPointAnimator> spawnpoints = new List<SpawnPointAnimator>();
@@ -31,7 +30,7 @@ public class LevelManager : MonoBehaviour
 
     [Header("World Transition")]
 
-    public LifeController playerLife;
+    private GameResetController gameResetController;
     private HouseLifeController HomeLife;
     public AmbienceSoundManager AmbienceSoundManager => ambienceSoundManager;
     public UIManager uiManager;
@@ -40,6 +39,12 @@ public class LevelManager : MonoBehaviour
 
     private void Awake()
     {
+        gameResetController = GetComponent<GameResetController>();
+        if (gameResetController == null)
+        {
+            UnityEngine.Debug.LogError("GameResetController missing on LevelManager!");
+        }
+
         if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         if (Instance != null && Instance != this)
         {
@@ -48,16 +53,6 @@ public class LevelManager : MonoBehaviour
         }
 
         Instance = this;
-
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
-
-        if (player != null)
-        {
-            playerLife = player.GetComponent<LifeController>();
-        }
     }
 
     private void Start()
@@ -157,96 +152,18 @@ bool isNight = newPhase == GamePhase.Night;
     public void GameOverRestart()
     {
         GameFlowController.Instance.SetPhase(GamePhase.Day);
-        ResetGameData();
+        if (gameResetController != null) gameResetController.ResetGame();
         SceneLoaderManager.Instance.LoadGameScene();
     }
     
     public void GameOverMainMenu()
     {
         GameFlowController.Instance.SetPhase(GamePhase.Day);
-        ResetGameData(); 
+        if (gameResetController != null) gameResetController.ResetGame();
         SceneLoaderManager.Instance.LoadMenuScene();
     }
 
-    public void ResetGameData()
-    {
 
-        if (pauseController != null) pauseController.Resume();
-
-        if (uiManager != null)
-        {
-            uiManager.CloseInventory();
-            if (uiManager.gameOverPanel != null)
-                uiManager.gameOverPanel.SetActive(false);
-        }
-
-        uiManager?.InitializeSeedSlotsUI();
-
-        if (SeedInventory.Instance != null)
-        {
-            for (int i = 0; i < 9; i++)
-                SeedInventory.Instance.RemoveSeedFromSlot(i);
-
-            SeedInventory.Instance.SelectSlot(0);
-        }
-
-        if (InventoryManager.Instance != null)
-        {
-            InventoryManager.Instance.ClearAllMaterials();
-            InventoryManager.Instance.SetGold(0);
-        }
-        DayCycleController.Instance.ResetDayCount();
-
-        if (playerLife != null)
-        {
-            playerLife.currentHealth = playerLife.maxHealth;
-            playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
-        }
-
-        if (HomeLife != null)
-        {
-            HomeLife.ResetLife();
-        }
-
-        if (player != null)
-        {
-            var playerController = player.GetComponent<PlayerController>();
-            if (playerController != null)
-            {
-                playerController.SetMovementEnabled(true);
-                playerController.SetCanAct(true);
-            }
-
-            var lifeController = player.GetComponent<LifeController>();
-            if (lifeController != null)
-            {
-                lifeController.ResetLife();
-            }
-        }
-
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            if (enemy != null) Destroy(enemy);
-        }
-
-        BasicRangeSpell[] activeSpells = FindObjectsOfType<BasicRangeSpell>();
-        foreach (BasicRangeSpell spell in activeSpells)
-        {
-            if (spell != null) Destroy(spell.gameObject);
-        }
-
-        ManaSystem manaSystem = FindObjectOfType<ManaSystem>();
-        if (manaSystem != null)
-        {
-            manaSystem.SetMana(manaSystem.GetBaseMaxMana());
-        }
-
-        uiManager?.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-        uiManager?.UpdateHomeHealthBar(HomeLife.CurrentHealth, HomeLife.MaxHealth);
-        uiManager?.UpdateManaUI();
-
-    }
 
     public void ForceEndNight()
     {

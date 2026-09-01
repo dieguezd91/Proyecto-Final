@@ -72,10 +72,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         levelManager = LevelManager.Instance;
 
-        if (levelManager?.playerLife != null)
+        player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            playerLife = levelManager.playerLife;
-            player = playerLife.gameObject;
+            playerLife = player.GetComponent<LifeController>();
         }
 
         lightController = FindObjectOfType<DayNightLightController>();

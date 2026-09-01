@@ -1,0 +1,131 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class GameResetController : MonoBehaviour
+{
+    [SerializeField] private GameObject player;
+    [SerializeField] private PauseController pauseController;
+    [SerializeField] private GameObject home;
+    
+    private LifeController playerLife;
+    private PlayerController playerController;
+    private HouseLifeController homeLife;
+
+    private void Awake()
+    {
+        if (player == null)
+        {
+            player = GameObject.FindGameObjectWithTag("Player");
+        }
+        
+        if (player != null)
+        {
+            playerLife = player.GetComponent<LifeController>();
+            playerController = player.GetComponent<PlayerController>();
+        }
+
+        if (home == null)
+        {
+            home = GameObject.FindGameObjectWithTag("Home");
+        }
+
+        if (home != null)
+        {
+            homeLife = home.GetComponent<HouseLifeController>();
+        }
+
+        if (pauseController == null)
+        {
+            pauseController = FindObjectOfType<PauseController>();
+        }
+    }
+
+    public void ResetGame()
+    {
+        if (pauseController != null) pauseController.Resume();
+
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.CloseInventory();
+            if (UIManager.Instance.gameOverPanel != null)
+                UIManager.Instance.gameOverPanel.SetActive(false);
+            
+            UIManager.Instance.InitializeSeedSlotsUI();
+        }
+
+        if (SeedInventory.Instance != null)
+        {
+            for (int i = 0; i < 9; i++)
+                SeedInventory.Instance.RemoveSeedFromSlot(i);
+
+            SeedInventory.Instance.SelectSlot(0);
+        }
+
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.ClearAllMaterials();
+            InventoryManager.Instance.SetGold(0);
+        }
+        
+        if (DayCycleController.Instance != null)
+        {
+            DayCycleController.Instance.ResetDayCount();
+        }
+
+        if (playerLife != null)
+        {
+            playerLife.currentHealth = playerLife.maxHealth;
+            playerLife.onHealthChanged?.Invoke(playerLife.currentHealth, playerLife.maxHealth);
+        }
+
+        if (homeLife != null)
+        {
+            homeLife.ResetLife();
+        }
+
+        if (player != null)
+        {
+            if (playerController != null)
+            {
+                playerController.SetMovementEnabled(true);
+                playerController.SetCanAct(true);
+            }
+
+            if (playerLife != null)
+            {
+                playerLife.ResetLife();
+            }
+        }
+
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy != null) Destroy(enemy);
+        }
+
+        BasicRangeSpell[] activeSpells = FindObjectsOfType<BasicRangeSpell>();
+        foreach (BasicRangeSpell spell in activeSpells)
+        {
+            if (spell != null) Destroy(spell.gameObject);
+        }
+
+        ManaSystem manaSystem = FindObjectOfType<ManaSystem>();
+        if (manaSystem != null)
+        {
+            manaSystem.SetMana(manaSystem.GetBaseMaxMana());
+        }
+
+        if (UIManager.Instance != null)
+        {
+            if (playerLife != null)
+            {
+                UIManager.Instance.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
+            }
+            if (homeLife != null)
+            {
+                UIManager.Instance.UpdateHomeHealthBar(homeLife.CurrentHealth, homeLife.MaxHealth);
+            }
+            UIManager.Instance.UpdateManaUI();
+        }
+    }
+}
