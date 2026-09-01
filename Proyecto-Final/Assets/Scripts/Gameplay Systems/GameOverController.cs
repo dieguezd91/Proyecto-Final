@@ -1,6 +1,7 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(GameResetController))]
 public class GameOverController : MonoBehaviour
 {
     [SerializeField] private float gameOverDelay = 2f;
@@ -9,6 +10,10 @@ public class GameOverController : MonoBehaviour
 
     private HouseLifeController homeLife;
     private GameResetController gameResetController;
+
+    private GameOverRestartButton restartButton;
+    private GameOverMainMenuButton gameOverMainMenuButton;
+    private GameOverMainMenuButton continueMainMenuButton;
 
     private void Awake()
     {
@@ -36,43 +41,53 @@ public class GameOverController : MonoBehaviour
 
     private void Start()
     {
-
         if (homeLife != null)
         {
             homeLife.onHouseDestroyed.AddListener(HandleHomeDeath);
         }
-        // Re-bind buttons dynamically due to cross-prefab serialization issues
-        if (UIManager.Instance != null)
+        
+        CacheButtons();
+        BindButtons();
+    }
+
+    private void CacheButtons()
+    {
+        if (UIManager.Instance == null) return;
+
+        if (UIManager.Instance.gameOverPanel != null)
         {
-            if (UIManager.Instance.gameOverPanel != null)
-            {
-                UnityEngine.UI.Button[] buttons = UIManager.Instance.gameOverPanel.GetComponentsInChildren<UnityEngine.UI.Button>(true);
-                foreach (UnityEngine.UI.Button btn in buttons)
-                {
-                    TMPro.TextMeshProUGUI tmp = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
-                    if (tmp != null)
-                    {
-                        string txt = tmp.text.ToLower();
-                        if (txt.Contains("menu") || txt.Contains("menú"))
-                            btn.onClick.AddListener(GameOverMainMenu);
-                        else if (txt.Contains("restart") || txt.Contains("reiniciar") || txt.Contains("retry") || txt.Contains("reintentar"))
-                            btn.onClick.AddListener(GameOverRestart);
-                    }
-                }
-            }
-            if (UIManager.Instance.continuePanel != null)
-            {
-                UnityEngine.UI.Button[] buttons = UIManager.Instance.continuePanel.GetComponentsInChildren<UnityEngine.UI.Button>(true);
-                foreach (UnityEngine.UI.Button btn in buttons)
-                {
-                    TMPro.TextMeshProUGUI tmp = btn.GetComponentInChildren<TMPro.TextMeshProUGUI>(true);
-                    if (tmp != null && (tmp.text.ToLower().Contains("menu") || tmp.text.ToLower().Contains("menú")))
-                    {
-                        btn.onClick.AddListener(GameOverMainMenu);
-                    }
-                }
-            }
+            restartButton = UIManager.Instance.gameOverPanel.GetComponentInChildren<GameOverRestartButton>(true);
+            gameOverMainMenuButton = UIManager.Instance.gameOverPanel.GetComponentInChildren<GameOverMainMenuButton>(true);
         }
+
+        if (UIManager.Instance.continuePanel != null)
+        {
+            continueMainMenuButton = UIManager.Instance.continuePanel.GetComponentInChildren<GameOverMainMenuButton>(true);
+        }
+    }
+
+    private void BindButtons()
+    {
+        if (restartButton != null)
+            restartButton.OnClick.AddListener(GameOverRestart);
+
+        if (gameOverMainMenuButton != null)
+            gameOverMainMenuButton.OnClick.AddListener(GameOverMainMenu);
+
+        if (continueMainMenuButton != null)
+            continueMainMenuButton.OnClick.AddListener(GameOverMainMenu);
+    }
+
+    private void UnbindButtons()
+    {
+        if (restartButton != null)
+            restartButton.OnClick.RemoveListener(GameOverRestart);
+
+        if (gameOverMainMenuButton != null)
+            gameOverMainMenuButton.OnClick.RemoveListener(GameOverMainMenu);
+
+        if (continueMainMenuButton != null)
+            continueMainMenuButton.OnClick.RemoveListener(GameOverMainMenu);
     }
 
     private void OnDestroy()
@@ -81,6 +96,8 @@ public class GameOverController : MonoBehaviour
         {
             homeLife.onHouseDestroyed.RemoveListener(HandleHomeDeath);
         }
+        
+        UnbindButtons();
     }
 
     private void HandleHomeDeath()
@@ -99,8 +116,14 @@ public class GameOverController : MonoBehaviour
         {
             UIManager.Instance.gameOverPanel.SetActive(true);
 
-            if (pauseController != null) pauseController.Pause();
-            else Time.timeScale = 0f;
+            if (pauseController != null)
+            {
+                pauseController.Pause();
+            }
+            else
+            {
+                Debug.LogError("PauseController missing on GameOverController.");
+            }
         }
     }
 
@@ -112,42 +135,79 @@ public class GameOverController : MonoBehaviour
         if (UIManager.Instance != null && UIManager.Instance.continuePanel != null)
         {
             UIManager.Instance.StartCoroutine(UIManager.Instance.AnimateContinuePanel());
-            if (pauseController != null) pauseController.Pause();
-            else Time.timeScale = 0f;
+            
+            if (pauseController != null)
+            {
+                pauseController.Pause();
+            }
+            else
+            {
+                Debug.LogError("PauseController missing on GameOverController.");
+            }
         }
         else
         {
-            Debug.LogWarning("No se encontró el panel de 'Continuar' en el UIManager.");
+            Debug.LogWarning("No se encontrÃ³ el panel de 'Continuar' en el UIManager.");
         }
     }
 
     public void GameOverRestart()
     {
-        if (pauseController != null) pauseController.Resume();
-        else Time.timeScale = 1f;
+        if (pauseController != null)
+        {
+            pauseController.Resume();
+        }
+        else
+        {
+            Debug.LogError("PauseController missing on GameOverController.");
+        }
+
         if (GameFlowController.Instance != null)
             GameFlowController.Instance.SetPhase(GamePhase.Day);
             
-        try { if (gameResetController != null) gameResetController.ResetGame(); } catch (System.Exception e) { Debug.LogError("Error in ResetGame: " + e); }
+        if (gameResetController != null)
+        {
+            gameResetController.ResetGame();
+        }
+        else
+        {
+            Debug.LogError("GameResetController missing on GameOverController.");
+            return;
+        }
         
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        if (SceneLoaderManager.Instance != null)
+        {
+            SceneLoaderManager.Instance.LoadGameScene();
+        }
     }
 
     public void GameOverMainMenu()
     {
-        if (pauseController != null) pauseController.Resume();
-        else Time.timeScale = 1f;
+        if (pauseController != null)
+        {
+            pauseController.Resume();
+        }
+        else
+        {
+            Debug.LogError("PauseController missing on GameOverController.");
+        }
+
         if (GameFlowController.Instance != null)
             GameFlowController.Instance.SetPhase(GamePhase.Day);
             
-        try { if (gameResetController != null) gameResetController.ResetGame(); } catch (System.Exception e) { Debug.LogError("Error in ResetGame: " + e); }
+        if (gameResetController != null)
+        {
+            gameResetController.ResetGame();
+        }
+        else
+        {
+            Debug.LogError("GameResetController missing on GameOverController.");
+            return;
+        }
         
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        if (SceneLoaderManager.Instance != null)
+        {
+            SceneLoaderManager.Instance.LoadMenuScene();
+        }
     }
 }
-
-
-
-
-
-
