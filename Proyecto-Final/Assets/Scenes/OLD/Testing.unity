@@ -216216,16 +216216,10 @@ MonoBehaviour:
   player: {fileID: 0}
   home: {fileID: 0}
   waveSpawner: {fileID: 0}
-  houseControllers: []
   gameOverDelay: 2
   dayCount: 0
-  onNewDay:
-    m_PersistentCalls:
-      m_Calls: []
   playerRespawnTime: 0
-  playerRespawnPoint: {fileID: 0}
   uiManager: {fileID: 0}
-  currentPhase: 0
 --- !u!4 &1941896399
 Transform:
   m_ObjectHideFlags: 0

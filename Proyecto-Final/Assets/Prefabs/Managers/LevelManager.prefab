@@ -49,9 +49,6 @@ MonoBehaviour:
   player: {fileID: 0}
   home: {fileID: 0}
   waveSpawner: {fileID: 0}
-  houseControllers:
-  - {fileID: 0}
-  - {fileID: 0}
   spawnpoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -59,15 +56,9 @@ MonoBehaviour:
   - {fileID: 0}
   ambienceSoundManager: {fileID: 0}
   gameOverDelay: 2
-  onNewDay:
-    m_PersistentCalls:
-      m_Calls: []
   playerRespawnTime: 5
-  playerRespawnPoint: {fileID: 0}
-  worldAnimator: {fileID: 0}
   playerLife: {fileID: 0}
   uiManager: {fileID: 0}
-  currentPhase: 0
 --- !u!114 &1234567890123456789
 MonoBehaviour:
   m_ObjectHideFlags: 0

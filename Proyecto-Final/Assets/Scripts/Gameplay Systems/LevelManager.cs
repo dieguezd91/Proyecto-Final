@@ -31,7 +31,6 @@ public class LevelManager : MonoBehaviour
 
     [Header("Respawn")]
     [SerializeField] public float playerRespawnTime;
-    [SerializeField] private Transform playerRespawnPoint;
 
     [Header("World Transition")]
 
@@ -158,33 +157,6 @@ bool isNight = newPhase == GamePhase.Night;
         }
     }
 
-    public IEnumerator RespawnPlayer()
-    {
-        uiManager?.AnimateRespawnRecovery(playerRespawnTime);
-        
-        yield return new WaitForSeconds(playerRespawnTime);
-
-        var controller = player.GetComponent<PlayerController>();
-        controller.SetMovementEnabled(true);
-        controller.SetCanAct(false);
-
-        var life = player.GetComponent<LifeController>();
-
-        yield return StartCoroutine(life.StartInvulnerability(playerRespawnTime));
-
-        life.ResetLife();
-    }
-
-    public void OnPlayerDeathAnimationComplete()
-    {
-        StartCoroutine(RespawnPlayer());
-    }
-
-    public Transform GetPlayerRespawnPoint()
-    {
-        return playerRespawnPoint;
-    }
-
     public void GameOverRestart()
     {
         GameFlowController.Instance.SetPhase(GamePhase.Day);
@@ -290,6 +262,8 @@ bool isNight = newPhase == GamePhase.Night;
         DayCycleController.Instance.StartDay();
     }
 }
+
+
 
 
 
