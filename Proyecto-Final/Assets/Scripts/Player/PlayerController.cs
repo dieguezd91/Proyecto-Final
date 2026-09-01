@@ -13,26 +13,16 @@ public class PlayerController : MonoBehaviour
 
     
 
-    [Header("REFERENCES")]
-    [SerializeField] private EnemiesSpawner gameStateController;
-    [SerializeField] private PlayerAbilitySystem abilitySystem;
-
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
 
     
     private bool canAct = true;
-    private GamePhase lastPhase = GamePhase.None;
     private Animator animator;
-    private int lastHorizontalDirection = 0;
-    private SpriteRenderer spriteRenderer;
-    private bool isWalkingSoundPlaying = false;
-
     [SerializeField] private Animator handAnimator;
     [SerializeField] private SpriteRenderer handRenderer;
     [SerializeField] private int baseHandSortingOrder = 0;
     [SerializeField] private GameObject handObject;
-    private KnockbackReceiver knockbackReceiver;
     private LifeController lifeController;
     private PlayerRespawnController playerRespawnController;
 
@@ -62,22 +52,10 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        knockbackReceiver = GetComponent<KnockbackReceiver>();
         playerAbilitySystem = GetComponent<PlayerAbilitySystem>();
         playerMovementController = GetComponent<PlayerMovementController>();
 
         GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
-
-        if (gameStateController == null)
-        {
-            gameStateController = FindObjectOfType<EnemiesSpawner>();
-        }
-
-        if (abilitySystem == null)
-        {
-            abilitySystem = GetComponent<PlayerAbilitySystem>();
-        }
 
         if (manaSystem == null)
         {
@@ -86,8 +64,7 @@ public class PlayerController : MonoBehaviour
 
         OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
 
-        lastPhase = GameFlowController.Instance.CurrentPhase;
-    }
+        }
 
     private void OnDestroy()
     {

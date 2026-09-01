@@ -62,14 +62,14 @@ public class PlayerMovementController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (LevelManager.Instance != null && GameFlowController.Instance != null)
+        if (GameFlowController.Instance != null)
             GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
     }
 
     private void OnPhaseChanged(GamePhase newPhase)
     {
         bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning));
-        bool gameIsPaused = (GameManager.Instance != null && (pauseController != null && pauseController.IsPaused));
+        bool gameIsPaused = (pauseController != null && pauseController.IsPaused);
 
         movementEnabled = ShouldAllowMovementForPhase(newPhase) &&
                           playerIsAliveAndNotRespawning &&
@@ -92,6 +92,9 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
+            currentVelocity = Vector2.zero;
+            if (rb != null) rb.velocity = Vector2.zero;
+            if (animator != null) animator.SetBool("IsMoving", false);
             return;
         }
 
@@ -183,7 +186,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public void SetMovementEnabled(bool enabled)
     {
-        if (enabled && LevelManager.Instance != null && ((pauseController != null && pauseController.IsPaused)))
+        if (enabled && pauseController != null && pauseController.IsPaused)
         {
             return;
         }
