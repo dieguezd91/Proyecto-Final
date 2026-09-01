@@ -38,8 +38,8 @@ public class RestorationAltarUIManager : MonoBehaviour
     {
         restorationSystem = FindObjectOfType<HouseRestorationSystem>();
 
-        if (LevelManager.Instance?.home != null)
-            houseLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
+        if (GameObject.FindGameObjectWithTag("Home") != null)
+            houseLife = GameObject.FindGameObjectWithTag("Home").GetComponent<HouseLifeController>();
     }
 
     private void SubscribeToEvents()
@@ -203,4 +203,5 @@ public class RestorationAltarUIManager : MonoBehaviour
     }
 
     }
+
 

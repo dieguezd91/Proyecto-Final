@@ -172,11 +172,11 @@ public class LifeController : MonoBehaviour
         else if (isPlayer)
         {
             GetComponent<ManaSystem>()?.SetMana(0f);
-            LevelManager.Instance?.uiManager?.UpdateManaUI();
+            UIManager.Instance?.UpdateManaUI();
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
-                LevelManager.Instance?.uiManager?.SetGrayscaleGhostEffect(true);
+                UIManager.Instance?.SetGrayscaleGhostEffect(true);
                 animator.SetTrigger("Death");
                 animator.SetBool("IsDead", true);
 
@@ -341,21 +341,21 @@ public class LifeController : MonoBehaviour
         animator.SetBool("IsDead", false);
         animator.ResetTrigger("Death");
         animator.SetTrigger("Revive");
-        LevelManager.Instance?.uiManager?.SetGrayscaleGhostEffect(false);
+        UIManager.Instance?.SetGrayscaleGhostEffect(false);
 
         RefreshPlayerUI();
     }
 
     private void RefreshPlayerUI()
     {
-        if (LevelManager.Instance?.uiManager != null)
+        if (UIManager.Instance != null)
         {
-            LevelManager.Instance.uiManager.UpdateHealthBar(currentHealth, maxHealth);
+            UIManager.Instance.UpdateHealthBar(currentHealth, maxHealth);
 
             var manaSystem = GetComponent<ManaSystem>();
             if (manaSystem != null)
             {
-                LevelManager.Instance.uiManager.UpdateManaUI();
+                UIManager.Instance.UpdateManaUI();
             }
         }
 
@@ -376,3 +376,4 @@ public class LifeController : MonoBehaviour
         return !isPlayerRespawning && !isDead;
     }
 }
+

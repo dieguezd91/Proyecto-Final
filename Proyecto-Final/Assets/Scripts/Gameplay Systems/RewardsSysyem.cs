@@ -29,9 +29,9 @@ public class RewardsSystem : MonoBehaviour
         anyPlantDestroyed = false;
         playerTookDamage = false;
 
-        if (LevelManager.Instance != null && LevelManager.Instance.home != null)
+        if (LevelManager.Instance != null && GameObject.FindGameObjectWithTag("Home") != null)
         {
-            var homeLife = LevelManager.Instance.home.GetComponent<LifeController>();
+            var homeLife = GameObject.FindGameObjectWithTag("Home").GetComponent<LifeController>();
             if (homeLife != null)
                 homeHealthAtNightStart = homeLife.currentHealth;
         }
@@ -63,7 +63,7 @@ public class RewardsSystem : MonoBehaviour
             totalGold += rewardNoPlantsDestroyed;
         }
 
-        float currentHomeHealth = LevelManager.Instance.home.GetComponent<LifeController>()?.currentHealth ?? 0f;
+        float currentHomeHealth = GameObject.FindGameObjectWithTag("Home").GetComponent<LifeController>()?.currentHealth ?? 0f;
         if (Mathf.Approximately(currentHomeHealth, homeHealthAtNightStart))
         {
             rewards.Add(new FloatingTextController.GoldReward

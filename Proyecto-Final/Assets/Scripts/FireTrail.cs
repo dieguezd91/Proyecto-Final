@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class FireTrail : MonoBehaviour
@@ -20,7 +20,7 @@ public class FireTrail : MonoBehaviour
             if (life != null && life.IsAlive())
             {
                 life.TakeDamage(damagePerSecond * Time.deltaTime, LifeController.DamageType.DamageOverTime);
-                if (LevelManager.Instance.uiManager != null)
+                if (UIManager.Instance != null)
                 {
                     CameraShaker.Instance?.Shake(0.3f, 0.3f);
                 }

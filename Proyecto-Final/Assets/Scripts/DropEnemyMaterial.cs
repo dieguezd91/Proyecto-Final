@@ -50,11 +50,11 @@ public class DropEnemyMaterial : MonoBehaviour
         {
             if (LevelManager.Instance != null)
             {
-                LevelManager.Instance.ShowContinuePanel();
+                UnityEngine.Object.FindObjectOfType<GameOverController>()?.ShowContinuePanel();
             }
             else
             {
-                Debug.LogWarning("LevelManager no encontrado para activar la pantalla de CONTINUARÁ.");
+                Debug.LogWarning("LevelManager no encontrado para activar la pantalla de CONTINUARï¿½.");
             }
         }
 

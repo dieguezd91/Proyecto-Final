@@ -178,8 +178,8 @@ MonoBehaviour:
   onSpecialItemCollected:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 9182144013199346339, guid: c68f09f55d630784685d3037f66de11d, type: 3}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+      - m_Target: {fileID: 4567890123456789012, guid: c68f09f55d630784685d3037f66de11d, type: 3}
+        m_TargetAssemblyTypeName: GameOverController, Assembly-CSharp
         m_MethodName: ShowContinuePanel
         m_Mode: 1
         m_Arguments:
@@ -252,3 +252,4 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3422231911648800970, guid: 2c4ddf793d5db2e4885b15a888f8aafb, type: 3}
   m_PrefabInstance: {fileID: 3154655224512849441}
   m_PrefabAsset: {fileID: 0}
+

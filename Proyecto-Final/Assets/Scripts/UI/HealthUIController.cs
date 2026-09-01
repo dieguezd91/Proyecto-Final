@@ -32,8 +32,8 @@ public class HealthUIController : UIControllerBase
         if (player != null)
             playerLife = player.GetComponent<LifeController>();
 
-        if (LevelManager.Instance?.home != null)
-            homeLife = LevelManager.Instance.home.GetComponent<HouseLifeController>();
+        if (GameObject.FindGameObjectWithTag("Home") != null)
+            homeLife = GameObject.FindGameObjectWithTag("Home").GetComponent<HouseLifeController>();
     }
 
     protected override void SetupEventListeners()

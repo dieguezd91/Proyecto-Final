@@ -137,14 +137,14 @@ public class InventoryUIController : UIControllerBase
 
     public void CloseInventory()
     {
-        if (inventoryPanel == null) return;
+        if (inventoryPanel == null || !inventoryPanel.activeSelf) return;
 
         if (animationController != null && animationController.IsAnimating)
         {
             return;
         }
 
-        if (waitForAnimationToComplete && animationController != null)
+        if (waitForAnimationToComplete && animationController != null && animationController.gameObject.activeInHierarchy)
         {
             animationController.CloseBook();
         }
@@ -223,6 +223,7 @@ public class InventoryUIController : UIControllerBase
 
     public bool IsAnimating => animationController != null && animationController.IsAnimating;
 }
+
 
 
 

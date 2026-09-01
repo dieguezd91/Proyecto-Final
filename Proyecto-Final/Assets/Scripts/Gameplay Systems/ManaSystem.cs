@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 public class ManaSystem : MonoBehaviour
@@ -60,9 +60,9 @@ public class ManaSystem : MonoBehaviour
 
         StartCoroutine(RegenerateMana());
 
-        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && UIManager.Instance != null)
         {
-            LevelManager.Instance.uiManager.UpdateManaUI();
+            UIManager.Instance.UpdateManaUI();
         }
     }
 
@@ -90,9 +90,9 @@ public class ManaSystem : MonoBehaviour
 
                     OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-                    if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+                    if (LevelManager.Instance != null && UIManager.Instance != null)
                     {
-                        LevelManager.Instance.uiManager.UpdateManaUI();
+                        UIManager.Instance.UpdateManaUI();
                     }
                 }
             }
@@ -106,9 +106,9 @@ public class ManaSystem : MonoBehaviour
         currentMana = Mathf.Clamp(amount, 0f, modifiedMaxMana);
         OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && UIManager.Instance != null)
         {
-            LevelManager.Instance.uiManager.UpdateManaUI();
+            UIManager.Instance.UpdateManaUI();
         }
     }
 
@@ -125,9 +125,9 @@ public class ManaSystem : MonoBehaviour
                 {
                     currentMana = Mathf.Min(currentMana + manaToAdd, modifiedMaxMana);
 
-                    if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+                    if (LevelManager.Instance != null && UIManager.Instance != null)
                     {
-                        LevelManager.Instance.uiManager.UpdateManaUI();
+                        UIManager.Instance.UpdateManaUI();
                     }
                 }
             }
@@ -185,9 +185,9 @@ public class ManaSystem : MonoBehaviour
         {
             currentMana -= amount;
 
-            if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+            if (LevelManager.Instance != null && UIManager.Instance != null)
             {
-                LevelManager.Instance.uiManager.UpdateManaUI();
+                UIManager.Instance.UpdateManaUI();
             }
 
             OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
@@ -208,9 +208,9 @@ public class ManaSystem : MonoBehaviour
 
         currentMana = Mathf.Min(currentMana + amount, modifiedMaxMana);
 
-        if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+        if (LevelManager.Instance != null && UIManager.Instance != null)
         {
-            LevelManager.Instance.uiManager.UpdateManaUI();
+            UIManager.Instance.UpdateManaUI();
         }
 
         OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
@@ -236,9 +236,9 @@ public class ManaSystem : MonoBehaviour
 
             OnManaChanged?.Invoke(currentMana, modifiedMaxMana);
 
-            if (LevelManager.Instance != null && LevelManager.Instance.uiManager != null)
+            if (LevelManager.Instance != null && UIManager.Instance != null)
             {
-                LevelManager.Instance.uiManager.UpdateManaUI();
+                UIManager.Instance.UpdateManaUI();
             }
         }
     }
@@ -267,3 +267,4 @@ public class ManaSystem : MonoBehaviour
     public float GetMaxMana() => modifiedMaxMana;
     public float GetBaseMaxMana() => baseMaxMana;
 }
+

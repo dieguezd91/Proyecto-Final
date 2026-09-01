@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1234567890123456789}
   - component: {fileID: 2345678901234567890}
   - component: {fileID: 3456789012345678901}
+  - component: {fileID: 4567890123456789012}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -47,7 +48,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b1fc6d7a3475d1419968c0811267a76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  home: {fileID: 0}
   waveSpawner: {fileID: 0}
   spawnpoints:
   - {fileID: 0}
@@ -55,7 +55,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   ambienceSoundManager: {fileID: 0}
-  gameOverDelay: 2
   uiManager: {fileID: 0}
 --- !u!114 &1234567890123456789
 MonoBehaviour:
@@ -103,4 +102,21 @@ MonoBehaviour:
   player: {fileID: 0}
   pauseController: {fileID: 0}
   home: {fileID: 0}
+
+
+--- !u!114 &4567890123456789012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993218346133697943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eddf3e1fe564c139c0a708e9eae297a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverDelay: 2
+  home: {fileID: 0}
+  pauseController: {fileID: 0}
 

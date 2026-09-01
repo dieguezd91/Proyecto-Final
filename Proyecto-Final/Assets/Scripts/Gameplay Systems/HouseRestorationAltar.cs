@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 public class HouseRestorationSystem : MonoBehaviour
@@ -38,12 +38,12 @@ public class HouseRestorationSystem : MonoBehaviour
         {
             InventoryManager.Instance.UseMaterial(opt.materialRequired, 1);
 
-            var house = LevelManager.Instance.home.GetComponent<HouseLifeController>();
+            var house = GameObject.FindGameObjectWithTag("Home").GetComponent<HouseLifeController>();
             float missingHealth = house.MaxHealth - house.CurrentHealth;
             float desiredRestore = house.MaxHealth * (opt.restorePercentage / 100f);
             float finalRestore = Mathf.Min(desiredRestore, missingHealth);
             house.Restore(finalRestore);
-            LevelManager.Instance.uiManager.UpdateHomeHealthBar(house.CurrentHealth, house.MaxHealth);
+            UIManager.Instance.UpdateHomeHealthBar(house.CurrentHealth, house.MaxHealth);
 
             hasRestoredToday = true;
             return true;
@@ -69,4 +69,6 @@ public class HouseRestorationSystem : MonoBehaviour
 
     public int OptionCount => options.Length;
 }
+
+
 

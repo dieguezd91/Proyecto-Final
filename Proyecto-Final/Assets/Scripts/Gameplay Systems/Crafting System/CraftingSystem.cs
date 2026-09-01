@@ -96,20 +96,20 @@ public class CraftingSystem : MonoBehaviour
                 else
                 {
                     SeedInventory.Instance.GetPlantSlot(existingSlot).seedCount++;
-                    LevelManager.Instance.uiManager.UpdateSeedCountsUI();
+                    UIManager.Instance.UpdateSeedCountsUI();
                 }
 
 
-                if (LevelManager.Instance?.uiManager != null)
+                if (UIManager.Instance != null)
                 {
-                    LevelManager.Instance.uiManager.InitializeSeedSlotsUI();
+                    UIManager.Instance.InitializeSeedSlotsUI();
                 }
 
             }
 
-            if (LevelManager.Instance?.uiManager?.inventoryUI != null)
+            if (UIManager.Instance?.inventoryUI != null)
             {
-                LevelManager.Instance.uiManager.inventoryUI.UpdateAllSlots();
+                UIManager.Instance.inventoryUI.UpdateAllSlots();
             }
         }
     }
