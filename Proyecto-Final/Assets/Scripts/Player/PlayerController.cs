@@ -4,23 +4,14 @@ public class PlayerController : MonoBehaviour
 {
     private void Awake() { if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); lifeController = GetComponent<LifeController>(); playerRespawnController = GetComponent<PlayerRespawnController>(); }
     [SerializeField] private PauseController pauseController;
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Camera cam;
     [SerializeField] private Transform firePoint;
 
     [Header("INPUT")]
     [SerializeField] private InputReader input;
 
-    [Header("MOVEMENT ACCELERATION")]
-    [SerializeField] private float accelerationRate = 8f;
-    [SerializeField] private float decelerationRate = 10f;
-    [SerializeField] private float maxSpeed = 5f;
-    private Vector2 currentVelocity = Vector2.zero;
+    
 
-    [Header("ATTACK MOVEMENT PENALTY")]
-    [SerializeField] private float attackMovementPenalty = 0.5f;
-    [SerializeField] private float attackSlowDuration = 0.3f;
-    private float attackSlowEndTime = 0f;
+    
 
     [Header("REFERENCES")]
     [SerializeField] private EnemiesSpawner gameStateController;
@@ -29,12 +20,7 @@ public class PlayerController : MonoBehaviour
     [Header("MANA SYSTEM")]
     [SerializeField] private ManaSystem manaSystem;
 
-    private float lastFootstepTime = 0f;
-    private float footstepCooldown = 0.2f;
-    [SerializeField] private SurfaceDetector surfaceDetector;
-
-    private Vector2 moveInput;
-    private bool movementEnabled = true;
+    
     private bool canAct = true;
     private GamePhase lastPhase = GamePhase.None;
     private Animator animator;
@@ -51,7 +37,7 @@ public class PlayerController : MonoBehaviour
     private PlayerRespawnController playerRespawnController;
 
     private PlayerAbilitySystem playerAbilitySystem;
-    private bool hasMovedForTutorial = false;
+    private PlayerMovementController playerMovementController;
 
     private SpellType currentSpellType = SpellType.Range;
 
@@ -79,6 +65,7 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         knockbackReceiver = GetComponent<KnockbackReceiver>();
         playerAbilitySystem = GetComponent<PlayerAbilitySystem>();
+        playerMovementController = GetComponent<PlayerMovementController>();
 
         GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
 
@@ -120,9 +107,7 @@ public class PlayerController : MonoBehaviour
         bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning));
         bool gameIsPaused = (GameManager.Instance != null && (pauseController != null && pauseController.IsPaused));
 
-        movementEnabled = ShouldAllowMovementForPhase(newPhase) &&
-                          playerIsAliveAndNotRespawning &&
-                          !gameIsPaused;
+        
 
         canAct = playerIsAliveAndNotRespawning &&
                  !gameIsPaused &&
@@ -145,19 +130,10 @@ public class PlayerController : MonoBehaviour
         if (handObject != null)
             handObject.SetActive(isNight);
 
-        if (!movementEnabled)
-        {
-            currentVelocity = Vector2.zero;
-            rb.velocity = Vector2.zero;
-            animator.SetBool("IsMoving", false);
-        }
+        
     }
 
-    private bool ShouldAllowMovementForPhase(GamePhase phase)
-    {
-        return phase == GamePhase.Day ||
-               phase == GamePhase.Night;
-    }
+    
 
     void Update()
     {
@@ -168,9 +144,7 @@ public class PlayerController : MonoBehaviour
 
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
-            rb.velocity = Vector2.zero;
-            currentVelocity = Vector2.zero;
-            animator.SetBool("IsMoving", false);
+            
             return;
         }
 
@@ -182,112 +156,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        GamePhase phase = GameFlowController.Instance.CurrentPhase;
-
-        if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
-        {
-            return;
-        }
-        if (lifeController != null && !lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning))
-        {
-            currentVelocity = Vector2.zero;
-            rb.velocity = Vector2.zero;
-            animator.SetBool("IsMoving", false);
-            return;
-        }
-
-        if (!movementEnabled)
-        {
-            currentVelocity = Vector2.Lerp(currentVelocity, Vector2.zero, decelerationRate * Time.fixedDeltaTime);
-            rb.velocity = currentVelocity;
-            animator.SetBool("IsMoving", false);
-            return;
-        }
-
-        if (knockbackReceiver != null && knockbackReceiver.IsBeingKnockedBack())
-        {
-            animator.SetBool("IsMoving", false);
-            return;
-        }
-
-        moveInput = input != null ? input.MoveInput : Vector2.zero;
-
-        // Tutorial movement trigger: only fire the tutorial move event the first time the player moves
-        // after the tutorial step has armed it (hasMovedForTutorial == false). External systems (e.g.,
-        // TutorialManager) can call ResetHasMovedForTutorial() to re-arm this trigger when showing a
-        // Move tutorial step.
-        if (!hasMovedForTutorial && moveInput.sqrMagnitude > 0.01f)
-        {
-            hasMovedForTutorial = true;
-            TutorialEvents.InvokePlayerMoved();
-        }
-
-        Vector2 targetVelocity = moveInput * maxSpeed;
-
-        if (Time.time < attackSlowEndTime)
-        {
-            float remainingTime = attackSlowEndTime - Time.time;
-            float lerpFactor = remainingTime / attackSlowDuration;
-            float speedMultiplier = Mathf.Lerp(1f, attackMovementPenalty, lerpFactor);
-            targetVelocity *= speedMultiplier;
-        }
-
-        if (moveInput.sqrMagnitude > 0.01f)
-        {
-            currentVelocity = Vector2.Lerp(currentVelocity, targetVelocity, accelerationRate * Time.fixedDeltaTime);
-        }
-        else
-        {
-            currentVelocity = Vector2.Lerp(currentVelocity, Vector2.zero, decelerationRate * Time.fixedDeltaTime);
-        }
-
-        rb.velocity = currentVelocity;
-
-        bool isMoving = currentVelocity.sqrMagnitude > 0.01f;
-
-        if (animator != null && spriteRenderer != null)
-        {
-            if (moveInput != Vector2.zero)
-            {
-                float animAimX = moveInput.x;
-                float animAimY = moveInput.y;
-
-                if (moveInput.x > 0.01f)
-                {
-                    spriteRenderer.flipX = true;
-                    animAimX = -moveInput.x;
-                }
-                else if (moveInput.x < -0.01f)
-                {
-                    spriteRenderer.flipX = false;
-                }
-
-                animator.SetBool("IsMoving", true);
-                animator.SetFloat("aimX", animAimX);
-                animator.SetFloat("aimY", animAimY);
-            }
-            else
-            {
-                animator.SetBool("IsMoving", isMoving);
-            }
-        }
-
         if (animator != null && handRenderer != null)
         {
             float aimY = animator.GetFloat("aimY");
-
-            if (aimY > 0.1f)
-            {
-                handRenderer.sortingOrder = baseHandSortingOrder - 1;
-            }
-            else if (aimY < -0.1f)
-            {
-                handRenderer.sortingOrder = baseHandSortingOrder + 1;
-            }
-            else
-            {
-                handRenderer.sortingOrder = baseHandSortingOrder;
-            }
+            if (aimY > 0.1f) handRenderer.sortingOrder = baseHandSortingOrder - 1;
+            else if (aimY < -0.1f) handRenderer.sortingOrder = baseHandSortingOrder + 1;
+            else handRenderer.sortingOrder = baseHandSortingOrder;
         }
     }
 
@@ -354,7 +228,7 @@ public class PlayerController : MonoBehaviour
         }
 
         SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
-        attackSlowEndTime = Time.time + attackSlowDuration;
+        if (playerMovementController != null) playerMovementController.ApplyAttackMovementPenalty();
 
         SpellInventory.Instance.StartCooldown(selectedSlotIndex);
 
@@ -433,34 +307,9 @@ public class PlayerController : MonoBehaviour
         handAnimator.SetBool("AreaSpell", false);
     }
 
-    public void SetMovementEnabled(bool enabled)
-    {
-        if (enabled && LevelManager.Instance != null && ((pauseController != null && pauseController.IsPaused)))
-        {
-            return;
-        }
+    
 
-        movementEnabled = enabled;
-
-        if (!enabled)
-        {
-            canAct = false;
-            if (rb != null)
-            {
-                rb.velocity = Vector2.zero;
-                currentVelocity = Vector2.zero;
-            }
-        }
-        else
-        {
-            canAct = true;
-        }
-    }
-
-    public bool IsMovementEnabled()
-    {
-        return movementEnabled;
-    }
+    
 
     public void SetCanAct(bool value)
     {
@@ -472,45 +321,9 @@ public class PlayerController : MonoBehaviour
         return canAct;
     }
 
-    public void PlayFootstep()
-    {
-        if (Time.time - lastFootstepTime >= footstepCooldown)
-        {
-            string surface = surfaceDetector != null ? surfaceDetector.DetectSurfaceTag() : "Default";
+    
 
-            string soundName;
-
-            switch (surface)
-            {
-                case "Grass":
-                    soundName = "Step_Grass";
-                    break;
-                case "Land":
-                    soundName = "Step_Land";
-                    break;
-                case "Wood":
-                    soundName = "Step_Wood";
-                    break;
-                default:
-                    soundName = "Default";
-                    break;
-            }
-
-            SoundManager.Instance.Play(soundName, SoundSourceType.Localized, transform);
-            lastFootstepTime = Time.time;
-        }
-    }
-
-    public void ResetAnimator()
-    {
-        if (animator != null)
-        {
-            animator.SetBool("IsMoving", false);
-            animator.SetFloat("aimX", 0f);
-            animator.SetFloat("aimY", -1f);
-            animator.Play("Idle");
-        }
-    }
+    
 
     public void RefreshHandNightness()
     {
@@ -534,7 +347,7 @@ public class PlayerController : MonoBehaviour
     private void HandleTeleport()
     {
         if (!canAct) return;
-        if (!movementEnabled) return;
+        if (playerMovementController != null && !playerMovementController.IsMovementEnabled) return;
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy()) return;
 
         TryTeleport();
@@ -545,9 +358,9 @@ public class PlayerController : MonoBehaviour
         if (playerAbilitySystem == null) return;
 
         Vector2 castDirection;
-        if (moveInput.sqrMagnitude > 0.01f)
+        if (playerMovementController.MoveInput.sqrMagnitude > 0.01f)
         {
-            castDirection = moveInput.normalized;
+            castDirection = playerMovementController.MoveInput.normalized;
         }
         else
         {
@@ -559,17 +372,9 @@ public class PlayerController : MonoBehaviour
         playerAbilitySystem.TryUseTeleport(castDirection);
     }
 
-    // Public API used by tutorial systems ---------------------------------
-    // Reset the internal flag so the next player movement will invoke the tutorial move event.
-    public void ResetHasMovedForTutorial()
-    {
-        hasMovedForTutorial = false;
-    }
+    
 
-    public bool IsCurrentlyMoving()
-    {
-        return rb != null && rb.velocity.sqrMagnitude > 0.01f;
-    }
+    
 
     private void HandleSpellSwitchInput(int direction)
     {

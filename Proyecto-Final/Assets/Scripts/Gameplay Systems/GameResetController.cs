@@ -9,6 +9,7 @@ public class GameResetController : MonoBehaviour
     
     private LifeController playerLife;
     private PlayerController playerController;
+    private PlayerMovementController playerMovementController;
     private HouseLifeController homeLife;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class GameResetController : MonoBehaviour
         {
             playerLife = player.GetComponent<LifeController>();
             playerController = player.GetComponent<PlayerController>();
+            playerMovementController = player.GetComponent<PlayerMovementController>();
         }
 
         if (home == null)
@@ -85,9 +87,12 @@ public class GameResetController : MonoBehaviour
 
         if (player != null)
         {
+            if (playerMovementController != null)
+            {
+                playerMovementController.SetMovementEnabled(true);
+            }
             if (playerController != null)
             {
-                playerController.SetMovementEnabled(true);
                 playerController.SetCanAct(true);
             }
 

@@ -144,9 +144,13 @@ public class LifeController : MonoBehaviour
         if (isPlayer)
         {
             var playerController = GetComponent<PlayerController>();
+            var playerMovementController = GetComponent<PlayerMovementController>();
+            if (playerMovementController != null)
+            {
+                playerMovementController.SetMovementEnabled(false);
+            }
             if (playerController != null)
             {
-                playerController.SetMovementEnabled(false);
                 playerController.SetCanAct(false);
             }
         }
@@ -181,9 +185,13 @@ public class LifeController : MonoBehaviour
                 animator.SetBool("IsDead", true);
 
                 var playerController = GetComponent<PlayerController>();
+                var playerMovementController = GetComponent<PlayerMovementController>();
+                if (playerMovementController != null)
+                {
+                    playerMovementController.SetMovementEnabled(false);
+                }
                 if (playerController != null)
                 {
-                    playerController.SetMovementEnabled(false);
                     playerController.SetCanAct(false);
 
                     var rb = GetComponent<Rigidbody2D>();
@@ -196,9 +204,13 @@ public class LifeController : MonoBehaviour
             else
             {
                 var playerController = GetComponent<PlayerController>();
+                var playerMovementController = GetComponent<PlayerMovementController>();
+                if (playerMovementController != null)
+                {
+                    playerMovementController.SetMovementEnabled(false);
+                }
                 if (playerController != null)
                 {
-                    playerController.SetMovementEnabled(false);
                     playerController.SetCanAct(false);
                 }
             }

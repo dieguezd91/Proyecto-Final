@@ -12,11 +12,13 @@ public class KnockbackReceiver : MonoBehaviour
     private Rigidbody2D rb;
     private bool isKnockedBack = false;
     private PlayerController playerController;
+    private PlayerMovementController playerMovementController;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         playerController = GetComponent<PlayerController>();
+        playerMovementController = GetComponent<PlayerMovementController>();
     }
 
     public void ApplyKnockback(Vector2 direction, float force)
@@ -28,9 +30,13 @@ public class KnockbackReceiver : MonoBehaviour
         Vector2 knockback = direction.normalized * force * (1f - knockbackResistance);
         rb.velocity = knockback;
 
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetMovementEnabled(false);
+        }
         if (playerController != null)
         {
-            playerController.SetMovementEnabled(false);
+            playerController.SetCanAct(false);
         }
 
         StartCoroutine(RecoverFromKnockback());
@@ -56,9 +62,13 @@ public class KnockbackReceiver : MonoBehaviour
 
         rb.velocity = Vector2.zero;
 
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetMovementEnabled(true);
+        }
         if (playerController != null)
         {
-            playerController.SetMovementEnabled(true);
+            playerController.SetCanAct(true);
         }
 
         isKnockedBack = false;
@@ -76,9 +86,13 @@ public class KnockbackReceiver : MonoBehaviour
             StopAllCoroutines();
             rb.velocity = Vector2.zero;
 
+            if (playerMovementController != null)
+            {
+                playerMovementController.SetMovementEnabled(true);
+            }
             if (playerController != null)
             {
-                playerController.SetMovementEnabled(true);
+                playerController.SetCanAct(true);
             }
 
             isKnockedBack = false;

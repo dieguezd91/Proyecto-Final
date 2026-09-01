@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -30,6 +30,7 @@ public class TutorialManager : MonoBehaviour
 
     private Queue<TutorialObjectiveType> eventBuffer = new Queue<TutorialObjectiveType>();
     private PlayerController playerController;
+    private PlayerMovementController playerMovementController;
 
     public bool IsTutorialActive() => tutorialActive;
     public bool CanAcceptPlayerInput()
@@ -46,35 +47,35 @@ public class TutorialManager : MonoBehaviour
     
     private void ApplyInputGatingForStep(TutorialStep step)
     {
-        if (playerController == null || step == null) return;
+        if (step == null) return;
 
         if (step.objectiveType == TutorialObjectiveType.Move)
         {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(true);
+            if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
+            if (playerController != null) playerController.SetCanAct(true);
             return;
         }
 
         if (step.isGatedStep)
         {
-            playerController.SetMovementEnabled(false);
-            playerController.SetCanAct(false);
+            if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
+            if (playerController != null) playerController.SetCanAct(false);
         }
         else
         {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(true);
+            if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
+            if (playerController != null) playerController.SetCanAct(true);
         }
     }
     
     private void ArmMoveTriggerIfNeeded(TutorialStep step)
     {
-        if (step == null || playerController == null) return;
+        if (step == null) return;
 
         if (step.objectiveType != TutorialObjectiveType.Move) return;
 
-        playerController.ResetHasMovedForTutorial();
-        if (playerController.IsCurrentlyMoving())
+        if (playerMovementController != null) playerMovementController.ResetHasMovedForTutorial();
+        if (playerMovementController != null && playerMovementController.IsMoving)
         {
             TutorialEvents.InvokePlayerMoved();
         }
@@ -92,8 +93,8 @@ public class TutorialManager : MonoBehaviour
         {
             if (playerController != null)
             {
-                playerController.SetMovementEnabled(false);
-                playerController.SetCanAct(false);
+                if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
+                if (playerController != null) playerController.SetCanAct(false);
             }
             
             canAcceptInput = false;
@@ -131,7 +132,7 @@ public class TutorialManager : MonoBehaviour
             // Ensure input is gated until typing finishes
             canAcceptInput = false;
             if (playerController != null)
-                playerController.SetCanAct(false);
+                if (playerController != null) playerController.SetCanAct(false);
             
             // Cancel any scheduled buffer processing that might re-enable input prematurely
             CancelInvoke(nameof(ProcessBufferAndEnableInput));
@@ -700,7 +701,7 @@ public class TutorialManager : MonoBehaviour
 
                 canAcceptInput = false;
                 if (playerController != null)
-                    playerController.SetCanAct(false);
+                    if (playerController != null) playerController.SetCanAct(false);
                 // Cancel any scheduled buffer processing that might re-enable input prematurely
                 CancelInvoke(nameof(ProcessBufferAndEnableInput));
                 return;
@@ -775,5 +776,6 @@ public class TutorialManager : MonoBehaviour
     private void InitializePlayerController()
     {
         playerController = FindObjectOfType<PlayerController>();
+        playerMovementController = FindObjectOfType<PlayerMovementController>();
     }
 }

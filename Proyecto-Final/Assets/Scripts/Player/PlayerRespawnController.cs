@@ -7,6 +7,7 @@ public class PlayerRespawnController : MonoBehaviour
 
     private LifeController lifeController;
     private PlayerController playerController;
+    private PlayerMovementController playerMovementController;
 
     public bool IsRespawning { get; private set; }
     public float RespawnDelay => respawnDelay;
@@ -15,6 +16,7 @@ public class PlayerRespawnController : MonoBehaviour
     {
         lifeController = GetComponent<LifeController>();
         playerController = GetComponent<PlayerController>();
+        playerMovementController = GetComponent<PlayerMovementController>();
     }
 
     public void BeginRespawn()
@@ -32,9 +34,12 @@ public class PlayerRespawnController : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         IsRespawning = true;
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetMovementEnabled(true);
+        }
         if (playerController != null)
         {
-            playerController.SetMovementEnabled(true);
             playerController.SetCanAct(false);
         }
 
@@ -47,9 +52,12 @@ public class PlayerRespawnController : MonoBehaviour
             lifeController.ResetLife();
         }
 
+        if (playerMovementController != null)
+        {
+            playerMovementController.SetMovementEnabled(true);
+        }
         if (playerController != null)
         {
-            playerController.SetMovementEnabled(true);
             playerController.SetCanAct(true);
         }
     }

@@ -5470,6 +5470,7 @@ GameObject:
   - component: {fileID: 1333776624667747220}
   - component: {fileID: 2515656490907509096}
   - component: {fileID: 3456789012345678901}
+  - component: {fileID: 9876543210123456789}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -5566,19 +5567,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a34d0be1b9cb746bf4ec15035781ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 1774628585642013327}
-  cam: {fileID: 0}
   firePoint: {fileID: 7145714007259786806}
   input: {fileID: 0}
-  accelerationRate: 6
-  decelerationRate: 8
-  maxSpeed: 5
-  attackMovementPenalty: 0.5
-  attackSlowDuration: 0.3
   gameStateController: {fileID: 0}
   abilitySystem: {fileID: 0}
   manaSystem: {fileID: 0}
-  surfaceDetector: {fileID: 4856583932368232146}
   handAnimator: {fileID: 1463363302880399508}
   handRenderer: {fileID: 7503550939136486912}
   baseHandSortingOrder: 5
@@ -11358,3 +11351,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnDelay: 5
+
+--- !u!114 &9876543210123456789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f82d7bc3c1ea1b46a51f931329fcbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 0}
+  accelerationRate: 6
+  decelerationRate: 8
+  maxSpeed: 5
+  attackMovementPenalty: 0.5
+  attackSlowDuration: 0.3
