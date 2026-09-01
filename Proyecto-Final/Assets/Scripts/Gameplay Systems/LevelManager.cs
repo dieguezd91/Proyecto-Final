@@ -29,9 +29,6 @@ public class LevelManager : MonoBehaviour
     [Header("Game Settings")]
     [SerializeField] private float gameOverDelay = 2f;
 
-    [Header("Respawn")]
-    [SerializeField] public float playerRespawnTime;
-
     [Header("World Transition")]
 
     public LifeController playerLife;
@@ -262,6 +259,7 @@ bool isNight = newPhase == GamePhase.Night;
         DayCycleController.Instance.StartDay();
     }
 }
+
 
 
 

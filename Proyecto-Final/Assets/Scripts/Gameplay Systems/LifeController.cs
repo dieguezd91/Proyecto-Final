@@ -56,7 +56,6 @@ public class LifeController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isDead = false;
-    public bool isRespawning = false;
     [SerializeField] private bool isEnemy;
     [SerializeField] private bool isPlayer;
     [SerializeField] private bool isPlant;
@@ -254,7 +253,15 @@ public class LifeController : MonoBehaviour
         }
         else if (isPlayer)
         {
-            StartCoroutine(DelayedRevive());
+            var playerRespawnController = GetComponent<PlayerRespawnController>();
+            if (playerRespawnController != null)
+            {
+                playerRespawnController.BeginRespawn();
+            }
+            else
+            {
+                Debug.LogError("PlayerRespawnController missing on player!");
+            }
         }
         else if (isPlant)
         {
@@ -283,30 +290,6 @@ public class LifeController : MonoBehaviour
     {
         Drop();
         Destroy(gameObject);
-    }
-
-    private IEnumerator DelayedRevive()
-    {
-        float delay = LevelManager.Instance != null ?
-            LevelManager.Instance.playerRespawnTime : 2f;
-
-        LevelManager.Instance?.uiManager?.AnimateRespawnRecovery(delay);
-
-        yield return new WaitForSeconds(0.5f);
-
-        isRespawning = true;
-        var playerController = GetComponent<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.SetMovementEnabled(true);
-            playerController.SetCanAct(false);
-        }
-
-        yield return new WaitForSeconds(delay - 0.5f);
-
-        ResetLife();
-        GetComponent<PlayerController>()?.SetMovementEnabled(true);
-        GetComponent<PlayerController>()?.SetCanAct(true);
     }
 
     public void Drop()
@@ -347,7 +330,6 @@ public class LifeController : MonoBehaviour
 
     public void ResetLife()
     {
-        isRespawning = false;
         isDead = false;
 
         currentHealth = maxHealth;
@@ -380,27 +362,17 @@ public class LifeController : MonoBehaviour
         
     }
 
-    public IEnumerator StartInvulnerability(float duration)
-    {
-        isRespawning = true;
-
-        yield return new WaitForSeconds(duration);
-
-        isRespawning = false;
-    }
-
     public bool IsTargetable()
     {
-        return !isRespawning && !isDead;
-    }
-
-    public void OnReviveAnimationEnd()
-    {
-        var pc = GetComponent<PlayerController>();
-        if (pc != null)
+        bool isPlayerRespawning = false;
+        if (isPlayer)
         {
-            pc.SetCanAct(true);
-            pc.RefreshHandNightness();
+            var prc = GetComponent<PlayerRespawnController>();
+            if (prc != null && prc.IsRespawning)
+            {
+                isPlayerRespawning = true;
+            }
         }
+        return !isPlayerRespawning && !isDead;
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private void Awake() { if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); }
+    private void Awake() { if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); lifeController = GetComponent<LifeController>(); playerRespawnController = GetComponent<PlayerRespawnController>(); }
     [SerializeField] private PauseController pauseController;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Camera cam;
@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int baseHandSortingOrder = 0;
     [SerializeField] private GameObject handObject;
     private KnockbackReceiver knockbackReceiver;
+    private LifeController lifeController;
+    private PlayerRespawnController playerRespawnController;
 
     private PlayerAbilitySystem playerAbilitySystem;
     private bool hasMovedForTutorial = false;
@@ -115,8 +117,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnPhaseChanged(GamePhase newPhase)
     {
-        var lifeController = GetComponent<LifeController>();
-        bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !lifeController.isRespawning);
+        bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning));
         bool gameIsPaused = (GameManager.Instance != null && (pauseController != null && pauseController.IsPaused));
 
         movementEnabled = ShouldAllowMovementForPhase(newPhase) &&
@@ -160,8 +161,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        var lifeController = GetComponent<LifeController>();
-        if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
+        if (lifeController != null && !lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning))
         {
             return;
         }
@@ -188,9 +188,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-
-        var lifeController = GetComponent<LifeController>();
-        if (lifeController != null && !lifeController.IsAlive() && !lifeController.isRespawning)
+        if (lifeController != null && !lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning))
         {
             currentVelocity = Vector2.zero;
             rb.velocity = Vector2.zero;
@@ -583,3 +581,4 @@ public class PlayerController : MonoBehaviour
     }
 
 }
+
