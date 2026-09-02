@@ -17,7 +17,6 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject abilityPanel;
 
     private bool openedFromPauseMenu = false;
-    private GamePhase lastPhase = GamePhase.None;
     [SerializeField] private PauseMenuController _pauseMenuController;
 
     [Header("Blur Settings")]
@@ -51,6 +50,9 @@ public class GameStateUIController : UIControllerBase
         {
             worldTransition.OnStateChanged += OnWorldStateChanged;
         }
+
+        if (GameFlowController.Instance != null)
+            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
     }
 
     protected override void CleanupEventListeners()
@@ -62,6 +64,9 @@ public class GameStateUIController : UIControllerBase
         {
             worldTransition.OnStateChanged -= OnWorldStateChanged;
         }
+
+        if (GameFlowController.Instance != null)
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
     }
 
     private void OnWorldStateChanged(WorldState newWorldState)
@@ -80,18 +85,19 @@ public class GameStateUIController : UIControllerBase
             dof.focalLength.value = 0f;
         }
 
-        if (LevelManager.Instance != null)
+        if (GameFlowController.Instance != null)
         {
-            lastPhase = GameFlowController.Instance.CurrentPhase;
+            OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
         }
-        UpdateUIElementsVisibility();
-
-        UpdateAbilityUIVisibility();
+        else
+        {
+            UpdateUIElementsVisibility();
+            UpdateAbilityUIVisibility();
+        }
     }
 
     public override void HandleUpdate()
     {
-        CheckPhaseChanges();
         HandleGameOverState();
         HandlePauseInput();
         CheckInventoryOpenState();
@@ -125,32 +131,15 @@ public class GameStateUIController : UIControllerBase
         wasInventoryOpen = isOpen;
     }
 
-    private void CheckPhaseChanges()
-    {
-        if (LevelManager.Instance == null) return;
-
-        if (GameFlowController.Instance.CurrentPhase != lastPhase)
-        {
-            if ((pauseController != null && pauseController.IsPaused) &&
-                (pauseController == null || !pauseController.IsPaused) &&
-                lastPhase != GamePhase.None)
-            {
-            }
-
-            OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
-        }
-    }
-
     public void OnPhaseChanged(GamePhase newPhase)
     {
         UpdateUIElementsVisibility();
         UpdateAbilityUIVisibility();
-        lastPhase = newPhase;
     }
 
     private void UpdateAbilityUIVisibility()
     {
-        if (abilityPanel == null || LevelManager.Instance == null)
+        if (abilityPanel == null || GameFlowController.Instance == null)
         {
             return;
         }
@@ -200,7 +189,7 @@ public class GameStateUIController : UIControllerBase
 
     private bool IsAnyGameplayUIOpen()
     {
-        if (LevelManager.Instance == null) return false;
+        if (GameFlowController.Instance == null) return false;
 
         GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
         return currentPhase == GamePhase.OnRitual;
@@ -208,7 +197,7 @@ public class GameStateUIController : UIControllerBase
 
     private void OpenInventoryOptions()
     {
-        bool canOpen = LevelManager.Instance != null &&
+        bool canOpen = GameFlowController.Instance != null &&
                        GameFlowController.Instance.CurrentPhase != GamePhase.GameOver &&
                        GameFlowController.Instance.CurrentPhase != GamePhase.OnRitual;
 
@@ -237,7 +226,7 @@ public class GameStateUIController : UIControllerBase
 
     private void UpdateUIElementsVisibility()
     {
-        if (LevelManager.Instance == null) return;
+        if (GameFlowController.Instance == null) return;
 
         GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
 

@@ -140,9 +140,6 @@ public class UIManager : MonoBehaviour
 
         UIEvents.OnManaChanged += Mana.UpdateMana;
 
-
-        UIEvents.OnPhaseChanged += GamePhase.OnPhaseChanged;
-
         UIEvents.OnPlayerDamaged += Feedback.ShowDamageEffect;
 
     }
@@ -152,7 +149,6 @@ public class UIManager : MonoBehaviour
         if (Health != null) UIEvents.OnPlayerHealthChanged -= Health.UpdatePlayerHealth;
         if (Health != null) UIEvents.OnHomeHealthChanged -= Health.UpdateHomeHealth;
         if (Mana != null) UIEvents.OnManaChanged -= Mana.UpdateMana;
-        if (GamePhase != null) UIEvents.OnPhaseChanged -= GamePhase.OnPhaseChanged;
         if (Feedback != null) UIEvents.OnPlayerDamaged -= Feedback.ShowDamageEffect;
     }
 
