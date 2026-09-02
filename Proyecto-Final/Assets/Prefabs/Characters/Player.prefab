@@ -5472,6 +5472,7 @@ GameObject:
   - component: {fileID: 3456789012345678901}
   - component: {fileID: 9876543210123456789}
   - component: {fileID: 7777777777777777777}
+  - component: {fileID: 8364719283748192837}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -5598,9 +5599,6 @@ MonoBehaviour:
   interactionAnimationDuration: 0.5
   plantingParticlesPrefab: {fileID: 491567316690014037, guid: b4718f9f977adb740a54a6ea904ae4f7, type: 3}
   input: {fileID: 0}
-  teleportPrefab: {fileID: 5912720115365117075, guid: 70508e1f9da1bc3429c418f3d13312a9, type: 3}
-  teleportManaCost: 10
-  teleportCooldown: 2
   digAnimationPrefab: {fileID: 1522577013364806030, guid: 330e16aa371d76f47b21ff7817d79261, type: 3}
 --- !u!114 &477447474750530567
 MonoBehaviour:
@@ -11380,3 +11378,19 @@ MonoBehaviour:
   handRenderer: {fileID: 7503550939136486912}
   baseHandSortingOrder: 5
   handObject: {fileID: 3607987250942176149}
+
+--- !u!114 &8364719283748192837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d35d32229cbcb0c4eb9a705c7aadd3cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportPrefab: {fileID: 5912720115365117075, guid: 70508e1f9da1bc3429c418f3d13312a9, type: 3}
+  teleportManaCost: 10
+  teleportCooldown: 2

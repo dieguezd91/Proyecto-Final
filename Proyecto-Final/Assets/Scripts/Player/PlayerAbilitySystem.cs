@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -51,20 +50,9 @@ public class PlayerAbilitySystem : MonoBehaviour
     [Header("INPUT")]
     [SerializeField] private InputReader input;
 
-    [Header("TELEPORT")]
-    [SerializeField] private GameObject teleportPrefab;
-    [SerializeField] private int teleportManaCost = 10;
-    [SerializeField] private float teleportCooldown = 2f;
-    private Transform playerTransform;
-    private float currentTeleportCooldown = 0f;
-    public event Action<float, float> OnTeleportCooldownChanged;
-    public event Action<bool> OnTeleportAvailabilityChanged;
-    public float TeleportManaCost => teleportManaCost;
-    public float TeleportCooldown => teleportCooldown;
-    public float CurrentTeleportCooldown => currentTeleportCooldown;
+
 
     private PlayerAbility currentAbility = PlayerAbility.Digging;
-    private PlayerController playerController;
     private bool isDigging = false;
     private Vector3 digPosition;
 
@@ -93,7 +81,6 @@ public class PlayerAbilitySystem : MonoBehaviour
         input.OnCycleInput     += HandleCycleInput;
         input.OnScrollInput    += HandleScrollInput;
         input.OnPrimaryPressed += HandlePrimaryInput;
-        input.OnTeleportPressed += HandleTeleport;
     }
 
     private void OnDisable()
@@ -104,21 +91,16 @@ public class PlayerAbilitySystem : MonoBehaviour
         input.OnCycleInput     -= HandleCycleInput;
         input.OnScrollInput    -= HandleScrollInput;
         input.OnPrimaryPressed -= HandlePrimaryInput;
-        input.OnTeleportPressed -= HandleTeleport;
     }
-    private PlayerMovementController playerMovementController;
 
     private void Awake()
     {
         if (input == null) input = FindObjectOfType<InputReader>();
         if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
-        playerController = GetComponent<PlayerController>();
-        playerMovementController = GetComponent<PlayerMovementController>();
         manaSystem = GetComponent<ManaSystem>();
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         seedInventory ??= FindObjectOfType<SeedInventory>();
-        playerTransform = transform;
 
         if (handAnimator == null)
         {
@@ -153,8 +135,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private void Update()
     {
-        UpdateTeleportCooldown();
-
         if ((isDigging || isHarvesting) && progressBar != null && progressBarTarget != null)
         {
             progressBar.transform.position = Camera.main.WorldToScreenPoint(
@@ -703,119 +683,11 @@ public class PlayerAbilitySystem : MonoBehaviour
         return isDigging || isHarvesting || isPlayingInteractionAnimation;
     }
 
-    private bool IsDaytime()
-    {
-        if (LevelManager.Instance == null) return false;
-
-        var phase = GameFlowController.Instance.CurrentPhase;
-
-        return phase == GamePhase.Day;
-    }
-
-    private bool IsInsideHouseLayer()
-    {
-        int houseLayer = LayerMask.NameToLayer("House");
-
-        Collider2D hit = Physics2D.OverlapPoint(
-            transform.position,
-            1 << houseLayer
-        );
-
-        return hit != null;
-    }
-
-    private void UpdateTeleportCooldown()
-    {
-        if (currentTeleportCooldown > 0f)
-        {
-            currentTeleportCooldown -= Time.deltaTime;
-
-            if (currentTeleportCooldown <= 0f)
-            {
-                currentTeleportCooldown = 0f;
-                OnTeleportAvailabilityChanged?.Invoke(CanUseTeleport());
-            }
-
-            OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
-        }
-    }
-
-    public bool CanUseTeleport()
-    {
-        if (currentTeleportCooldown > 0f) return false;
-        if (IsInsideHouseLayer()) return false;
-        if (!IsDaytime() && manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
-
-        WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
-        if (worldTransition != null && worldTransition.IsInInterior) return false;
-
-        return true;
-    }
-
-    public bool TryUseTeleport(Vector2 direction)
-    {
-        if (!CanUseTeleport()) return false;
-
-        if (manaSystem != null && !IsDaytime())
-        {
-            manaSystem.UseMana(teleportManaCost);
-        }
-
-        if (teleportPrefab != null && playerTransform != null)
-        {
-            GameObject spellObject = Instantiate(teleportPrefab, playerTransform.position, Quaternion.identity);
-            Spell spellComponent = spellObject.GetComponent<Spell>();
-
-            if (spellComponent != null)
-            {
-                spellComponent.Cast(direction, playerTransform.position);
-            }
-            else
-            {
-                Destroy(spellObject);
-            }
-        }
-
-        currentTeleportCooldown = teleportCooldown;
-        OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
-        OnTeleportAvailabilityChanged?.Invoke(false);
-
-        TutorialEvents.InvokeTeleportCasted();
-
-        return true;
-    }
-
-    public float GetCooldownProgress()
-    {
-        if (teleportCooldown <= 0f) return 0f;
-        return currentTeleportCooldown / teleportCooldown;
-    }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, interactionDistance);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, digDistance);
-    }
-    private void HandleTeleport()
-    {
-        if (playerController != null && !playerController.CanAct()) return;
-        if (playerMovementController != null && !playerMovementController.IsMovementEnabled) return;
-        if (IsBusy()) return;
-
-        Vector2 castDirection;
-        if (playerMovementController != null && playerMovementController.MoveInput.sqrMagnitude > 0.01f)
-        {
-            castDirection = playerMovementController.MoveInput.normalized;
-        }
-        else
-        {
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(input != null ? (Vector3)input.MouseScreenPosition : Input.mousePosition);
-            mousePos.z = 0f;
-            castDirection = (mousePos - transform.position).normalized;
-        }
-
-        TryUseTeleport(castDirection);
     }
 }

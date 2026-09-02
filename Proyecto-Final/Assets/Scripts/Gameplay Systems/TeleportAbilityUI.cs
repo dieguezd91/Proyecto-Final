@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,28 +9,26 @@ public class TeleportAbilityUI : UIControllerBase
     [SerializeField] private Image cooldownFillImage;
     [SerializeField] private TextMeshProUGUI cooldownText;
 
-    private PlayerAbilitySystem abilitySystem;
-    private ManaSystem manaSystem;
+    private PlayerTeleportController teleportController;
 
     protected override void CacheReferences()
     {
-        abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
-        manaSystem = FindObjectOfType<ManaSystem>();
+        teleportController = FindObjectOfType<PlayerTeleportController>();
     }
 
     protected override void SetupEventListeners()
     {
-        if (abilitySystem != null)
+        if (teleportController != null)
         {
-            abilitySystem.OnTeleportCooldownChanged += UpdateCooldownDisplay;
+            teleportController.OnTeleportCooldownChanged += UpdateCooldownDisplay;
         }
     }
 
     protected override void CleanupEventListeners()
     {
-        if (abilitySystem != null)
+        if (teleportController != null)
         {
-            abilitySystem.OnTeleportCooldownChanged -= UpdateCooldownDisplay;
+            teleportController.OnTeleportCooldownChanged -= UpdateCooldownDisplay;
         }
     }
 
@@ -41,9 +39,9 @@ public class TeleportAbilityUI : UIControllerBase
 
     private void UpdateUI()
     {
-        if (abilitySystem == null) return;
+        if (teleportController == null) return;
 
-        UpdateCooldownDisplay(abilitySystem.CurrentTeleportCooldown, abilitySystem.TeleportCooldown);
+        UpdateCooldownDisplay(teleportController.CurrentTeleportCooldown, teleportController.TeleportCooldown);
     }
 
     private void UpdateCooldownDisplay(float current, float max)
@@ -65,14 +63,6 @@ public class TeleportAbilityUI : UIControllerBase
             {
                 cooldownText.gameObject.SetActive(false);
             }
-        }
-    }
-
-    public override void HandleUpdate()
-    {
-        if (abilitySystem != null && manaSystem != null)
-        {
-            bool canUse = abilitySystem.CanUseTeleport();
         }
     }
 }
