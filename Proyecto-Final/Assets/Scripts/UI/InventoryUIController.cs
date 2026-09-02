@@ -12,15 +12,11 @@ public class InventoryUIController : UIControllerBase
     [SerializeField] private KeyCode toggleInventoryKey = KeyCode.I;
     [SerializeField] private KeyCode alternateToggleKey = KeyCode.Tab;
     [SerializeField] private bool closeInventoryOnEscape = true;
-    [SerializeField] private bool disablePlayerMovementWhenOpen = true;
     [SerializeField] private InventoryUI inventoryUI;
 
     [Header("Animation")]
     [SerializeField] private InventoryAnimationController animationController;
     [SerializeField] private bool waitForAnimationToComplete = true;
-
-    [Header("Page Management")]
-    [SerializeField] private bool animationControllerManagesPages = true;
 
     public bool IsInventoryOpen => UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Inventory);
 
@@ -62,7 +58,6 @@ public class InventoryUIController : UIControllerBase
 
         if (animationController != null)
         {
-            animationController.OnOpenAnimationComplete += OnInventoryOpenAnimationComplete;
             animationController.OnCloseAnimationComplete += OnInventoryCloseAnimationComplete;
             animationController.OnPageReadyToShow += OnPageReadyToShow;
         }
@@ -75,7 +70,7 @@ public class InventoryUIController : UIControllerBase
 
     private void HandleInventoryInput()
     {
-        if (LevelManager.Instance != null && (pauseController != null && pauseController.IsPaused))
+        if (pauseController != null && pauseController.IsPaused)
             return;
 
         if (Input.GetKeyDown(toggleInventoryKey) || Input.GetKeyDown(alternateToggleKey))
@@ -109,7 +104,7 @@ public class InventoryUIController : UIControllerBase
     {
         if (inventoryPanel == null) return;
 
-        if (LevelManager.Instance != null && !CanOpenInventory())
+        if (!CanOpenInventory())
             return;
 
         if (animationController != null && animationController.IsAnimating)
@@ -117,12 +112,14 @@ public class InventoryUIController : UIControllerBase
             return;
         }
 
+        if (UIManager.Instance != null && UIManager.Instance.Flow != null)
+        {
+            if (!UIManager.Instance.Flow.Open(UIModal.Inventory))
+                return;
+        }
+
         inventoryPanel.SetActive(true);
         TutorialEvents.InvokeInventoryOpened();
-        
-
-        UIManager.Instance?.Flow?.Open(UIModal.Inventory);
-
         UIEvents.TriggerInventoryOpened();
     }
 
@@ -163,9 +160,6 @@ public class InventoryUIController : UIControllerBase
 
         inventoryPanel.SetActive(false);
         
-
-        if (pauseController != null) pauseController.Resume();
-
         UIManager.Instance?.Flow?.Close(UIModal.Inventory);
 
         if (UIManager.Instance != null && UIManager.Instance.HUD != null) UIManager.Instance.HUD.SetActive(true);
@@ -174,18 +168,23 @@ public class InventoryUIController : UIControllerBase
         UIEvents.TriggerInventoryClosed();
     }
 
-    private bool CanOpenInventory()
+    private bool CanOpenInventory(bool isOptions = false)
     {
+        if (GameFlowController.Instance == null)
+            return false;
+
         var state = GameFlowController.Instance.CurrentPhase;
+        
+        if (state == GamePhase.GameOver || state == GamePhase.OnRitual)
+            return false;
+
+        if (isOptions)
+            return true;
+
         return state != GamePhase.Night &&
-               (pauseController == null || !pauseController.IsPaused) &&
-               state != GamePhase.GameOver ;
+               (pauseController == null || !pauseController.IsPaused);
     }
 
-    private void OnInventoryOpenAnimationComplete()
-    {
-
-    }
 
     private void OnInventoryCloseAnimationComplete()
     {
@@ -198,7 +197,6 @@ public class InventoryUIController : UIControllerBase
 
         if (animationController != null)
         {
-            animationController.OnOpenAnimationComplete -= OnInventoryOpenAnimationComplete;
             animationController.OnCloseAnimationComplete -= OnInventoryCloseAnimationComplete;
             animationController.OnPageReadyToShow -= OnPageReadyToShow;
         }
@@ -208,12 +206,23 @@ public class InventoryUIController : UIControllerBase
     {
         if (inventoryPanel == null) return;
 
+        if (!CanOpenInventory(pageName == "Options"))
+            return;
+
         if (animationController != null && animationController.IsAnimating)
         {
             return;
         }
 
-        inventoryPanel.SetActive(true); UIManager.Instance?.Flow?.Open(UIModal.Inventory); if (animationController != null)
+        if (UIManager.Instance != null && UIManager.Instance.Flow != null)
+        {
+            if (!UIManager.Instance.Flow.Open(UIModal.Inventory))
+                return;
+        }
+
+        inventoryPanel.SetActive(true); 
+        
+        if (animationController != null)
         {
             animationController.OpenWithPage(pageName);
         }
