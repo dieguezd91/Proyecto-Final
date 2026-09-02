@@ -816,10 +816,6 @@ public class PlayerAbilitySystem : MonoBehaviour
             castDirection = (mousePos - transform.position).normalized;
         }
 
-        if (TryUseTeleport(castDirection))
-        {
-            if (playerMovementController != null)
-                playerMovementController.ApplyAttackMovementPenalty();
-        }
+        TryUseTeleport(castDirection);
     }
 }
