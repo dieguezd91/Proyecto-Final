@@ -93,6 +93,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         input.OnCycleInput     += HandleCycleInput;
         input.OnScrollInput    += HandleScrollInput;
         input.OnPrimaryPressed += HandlePrimaryInput;
+        input.OnTeleportPressed += HandleTeleport;
     }
 
     private void OnDisable()
@@ -103,12 +104,16 @@ public class PlayerAbilitySystem : MonoBehaviour
         input.OnCycleInput     -= HandleCycleInput;
         input.OnScrollInput    -= HandleScrollInput;
         input.OnPrimaryPressed -= HandlePrimaryInput;
+        input.OnTeleportPressed -= HandleTeleport;
     }
+    private PlayerMovementController playerMovementController;
 
     private void Awake()
     {
+        if (input == null) input = FindObjectOfType<InputReader>();
         if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
         playerController = GetComponent<PlayerController>();
+        playerMovementController = GetComponent<PlayerMovementController>();
         manaSystem = GetComponent<ManaSystem>();
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
@@ -792,5 +797,29 @@ public class PlayerAbilitySystem : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, interactionDistance);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, digDistance);
+    }
+    private void HandleTeleport()
+    {
+        if (playerController != null && !playerController.CanAct()) return;
+        if (playerMovementController != null && !playerMovementController.IsMovementEnabled) return;
+        if (IsBusy()) return;
+
+        Vector2 castDirection;
+        if (playerMovementController != null && playerMovementController.MoveInput.sqrMagnitude > 0.01f)
+        {
+            castDirection = playerMovementController.MoveInput.normalized;
+        }
+        else
+        {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(input != null ? (Vector3)input.MouseScreenPosition : Input.mousePosition);
+            mousePos.z = 0f;
+            castDirection = (mousePos - transform.position).normalized;
+        }
+
+        if (TryUseTeleport(castDirection))
+        {
+            if (playerMovementController != null)
+                playerMovementController.ApplyAttackMovementPenalty();
+        }
     }
 }
