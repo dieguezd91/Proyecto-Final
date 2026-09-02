@@ -46,6 +46,7 @@ public class PlayerMovementController : MonoBehaviour
     private Vector2 moveInput;
     private bool movementEnabled = true;
     private bool hasMovedForTutorial = false;
+    private bool tutorialBlocksMovement;
 
     public bool IsMovementEnabled => movementEnabled;
     public bool IsMoving => currentVelocity.sqrMagnitude > 0.01f;
@@ -90,6 +91,14 @@ public class PlayerMovementController : MonoBehaviour
     void FixedUpdate()
     {
         if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal)
+        {
+            currentVelocity = Vector2.zero;
+            if (rb != null) rb.velocity = Vector2.zero;
+            if (animator != null) animator.SetBool("IsMoving", false);
+            return;
+        }
+
+        if (tutorialBlocksMovement)
         {
             currentVelocity = Vector2.zero;
             if (rb != null) rb.velocity = Vector2.zero;
@@ -189,6 +198,22 @@ public class PlayerMovementController : MonoBehaviour
     public void ApplyAttackMovementPenalty()
     {
         attackSlowEndTime = Time.time + attackSlowDuration;
+    }
+
+    public void SetTutorialMovementBlocked(bool blocked)
+    {
+        tutorialBlocksMovement = blocked;
+
+        if (blocked)
+        {
+            currentVelocity = Vector2.zero;
+
+            if (rb != null)
+                rb.velocity = Vector2.zero;
+
+            if (animator != null)
+                animator.SetBool("IsMoving", false);
+        }
     }
 
     public void SetMovementEnabled(bool enabled)

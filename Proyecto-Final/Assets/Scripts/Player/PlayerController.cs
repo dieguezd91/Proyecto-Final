@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
 
     public bool CanAct()
     {
-        if (lifeController != null && !lifeController.IsAlive())
+        if (lifeController == null || !lifeController.IsAlive())
             return false;
 
         if (playerRespawnController != null && playerRespawnController.IsRespawning)

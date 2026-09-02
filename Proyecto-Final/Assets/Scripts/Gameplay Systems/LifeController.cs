@@ -143,7 +143,6 @@ public class LifeController : MonoBehaviour
 
         if (isPlayer)
         {
-            var playerController = GetComponent<PlayerController>();
             var playerMovementController = GetComponent<PlayerMovementController>();
             if (playerMovementController != null)
             {
@@ -180,25 +179,20 @@ public class LifeController : MonoBehaviour
                 animator.SetTrigger("Death");
                 animator.SetBool("IsDead", true);
 
-                var playerController = GetComponent<PlayerController>();
                 var playerMovementController = GetComponent<PlayerMovementController>();
                 if (playerMovementController != null)
                 {
                     playerMovementController.SetMovementEnabled(false);
                 }
-                if (playerController != null)
+                
+                var rb = GetComponent<Rigidbody2D>();
+                if (rb != null)
                 {
-
-                    var rb = GetComponent<Rigidbody2D>();
-                    if (rb != null)
-                    {
-                        rb.velocity = Vector2.zero;
-                    }
+                    rb.velocity = Vector2.zero;
                 }
             }
             else
             {
-                var playerController = GetComponent<PlayerController>();
                 var playerMovementController = GetComponent<PlayerMovementController>();
                 if (playerMovementController != null)
                 {

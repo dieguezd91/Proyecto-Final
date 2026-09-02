@@ -51,19 +51,19 @@ public class TutorialManager : MonoBehaviour
 
         if (step.objectiveType == TutorialObjectiveType.Move)
         {
-            if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
+            if (playerMovementController != null) playerMovementController.SetTutorialMovementBlocked(false);
             if (playerController != null) playerController.SetTutorialActionBlocked(false);
             return;
         }
 
         if (step.isGatedStep)
         {
-            if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
+            if (playerMovementController != null) playerMovementController.SetTutorialMovementBlocked(true);
             if (playerController != null) playerController.SetTutorialActionBlocked(true);
         }
         else
         {
-            if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
+            if (playerMovementController != null) playerMovementController.SetTutorialMovementBlocked(false);
             if (playerController != null) playerController.SetTutorialActionBlocked(false);
         }
     }
@@ -93,7 +93,7 @@ public class TutorialManager : MonoBehaviour
         {
             if (playerController != null)
             {
-                if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
+                if (playerMovementController != null) playerMovementController.SetTutorialMovementBlocked(true);
                 if (playerController != null) playerController.SetTutorialActionBlocked(true);
             }
             
@@ -563,6 +563,12 @@ public class TutorialManager : MonoBehaviour
         {
             tutorialUI.HideStep();
         }
+
+        if (playerController != null)
+            playerController.SetTutorialActionBlocked(false);
+
+        if (playerMovementController != null)
+            playerMovementController.SetTutorialMovementBlocked(false);
 
         TutorialEvents.InvokeTutorialCompleted();
     }
