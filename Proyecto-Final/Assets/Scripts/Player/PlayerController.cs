@@ -1,53 +1,51 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PauseController pauseController;
 
-    private bool canAct = true;
     private LifeController lifeController;
     private PlayerRespawnController playerRespawnController;
+    private KnockbackReceiver knockbackReceiver;
+
+    private bool tutorialBlocksActions;
 
     private void Awake() 
     { 
         if (pauseController == null) pauseController = FindObjectOfType<PauseController>(); 
         lifeController = GetComponent<LifeController>(); 
         playerRespawnController = GetComponent<PlayerRespawnController>(); 
+        knockbackReceiver = GetComponent<KnockbackReceiver>();
     }
 
-    private void Start()
+    public void SetTutorialActionBlocked(bool blocked)
     {
-        if (GameFlowController.Instance != null)
-        {
-            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
-            OnPhaseChanged(GameFlowController.Instance.CurrentPhase);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (GameFlowController.Instance != null)
-            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
-    }
-
-    private void OnPhaseChanged(GamePhase newPhase)
-    {
-        bool playerIsAliveAndNotRespawning = (lifeController != null && lifeController.IsAlive() && !(playerRespawnController != null && playerRespawnController.IsRespawning));
-        bool gameIsPaused = (pauseController != null && pauseController.IsPaused);
-
-        canAct = playerIsAliveAndNotRespawning &&
-                 !gameIsPaused &&
-                 !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal) &&
-                 newPhase != GamePhase.OnRitual;
-    }
-
-    public void SetCanAct(bool value)
-    {
-        canAct = value;
+        tutorialBlocksActions = blocked;
     }
 
     public bool CanAct()
     {
-        return canAct;
+        if (lifeController != null && !lifeController.IsAlive())
+            return false;
+
+        if (playerRespawnController != null && playerRespawnController.IsRespawning)
+            return false;
+
+        if (pauseController != null && pauseController.IsPaused)
+            return false;
+
+        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal)
+            return false;
+
+        if (GameFlowController.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.OnRitual)
+            return false;
+
+        if (knockbackReceiver != null && knockbackReceiver.IsBeingKnockedBack())
+            return false;
+
+        if (tutorialBlocksActions)
+            return false;
+
+        return true;
     }
 }

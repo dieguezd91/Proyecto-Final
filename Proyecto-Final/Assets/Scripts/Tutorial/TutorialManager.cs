@@ -52,19 +52,19 @@ public class TutorialManager : MonoBehaviour
         if (step.objectiveType == TutorialObjectiveType.Move)
         {
             if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
-            if (playerController != null) playerController.SetCanAct(true);
+            if (playerController != null) playerController.SetTutorialActionBlocked(false);
             return;
         }
 
         if (step.isGatedStep)
         {
             if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
-            if (playerController != null) playerController.SetCanAct(false);
+            if (playerController != null) playerController.SetTutorialActionBlocked(true);
         }
         else
         {
             if (playerMovementController != null) playerMovementController.SetMovementEnabled(true);
-            if (playerController != null) playerController.SetCanAct(true);
+            if (playerController != null) playerController.SetTutorialActionBlocked(false);
         }
     }
     
@@ -94,7 +94,7 @@ public class TutorialManager : MonoBehaviour
             if (playerController != null)
             {
                 if (playerMovementController != null) playerMovementController.SetMovementEnabled(false);
-                if (playerController != null) playerController.SetCanAct(false);
+                if (playerController != null) playerController.SetTutorialActionBlocked(true);
             }
             
             canAcceptInput = false;
@@ -132,7 +132,7 @@ public class TutorialManager : MonoBehaviour
             // Ensure input is gated until typing finishes
             canAcceptInput = false;
             if (playerController != null)
-                if (playerController != null) playerController.SetCanAct(false);
+                if (playerController != null) playerController.SetTutorialActionBlocked(true);
             
             // Cancel any scheduled buffer processing that might re-enable input prematurely
             CancelInvoke(nameof(ProcessBufferAndEnableInput));
@@ -701,7 +701,7 @@ public class TutorialManager : MonoBehaviour
 
                 canAcceptInput = false;
                 if (playerController != null)
-                    if (playerController != null) playerController.SetCanAct(false);
+                    if (playerController != null) playerController.SetTutorialActionBlocked(true);
                 // Cancel any scheduled buffer processing that might re-enable input prematurely
                 CancelInvoke(nameof(ProcessBufferAndEnableInput));
                 return;

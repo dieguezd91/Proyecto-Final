@@ -149,10 +149,6 @@ public class LifeController : MonoBehaviour
             {
                 playerMovementController.SetMovementEnabled(false);
             }
-            if (playerController != null)
-            {
-                playerController.SetCanAct(false);
-            }
         }
 
         foreach (var col in GetComponents<Collider2D>())
@@ -192,7 +188,6 @@ public class LifeController : MonoBehaviour
                 }
                 if (playerController != null)
                 {
-                    playerController.SetCanAct(false);
 
                     var rb = GetComponent<Rigidbody2D>();
                     if (rb != null)
@@ -208,10 +203,6 @@ public class LifeController : MonoBehaviour
                 if (playerMovementController != null)
                 {
                     playerMovementController.SetMovementEnabled(false);
-                }
-                if (playerController != null)
-                {
-                    playerController.SetCanAct(false);
                 }
             }
         }

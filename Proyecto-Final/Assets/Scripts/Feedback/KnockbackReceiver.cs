@@ -11,13 +11,11 @@ public class KnockbackReceiver : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isKnockedBack = false;
-    private PlayerController playerController;
     private PlayerMovementController playerMovementController;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        playerController = GetComponent<PlayerController>();
         playerMovementController = GetComponent<PlayerMovementController>();
     }
 
@@ -33,10 +31,6 @@ public class KnockbackReceiver : MonoBehaviour
         if (playerMovementController != null)
         {
             playerMovementController.SetMovementEnabled(false);
-        }
-        if (playerController != null)
-        {
-            playerController.SetCanAct(false);
         }
 
         StartCoroutine(RecoverFromKnockback());
@@ -66,10 +60,6 @@ public class KnockbackReceiver : MonoBehaviour
         {
             playerMovementController.SetMovementEnabled(true);
         }
-        if (playerController != null)
-        {
-            playerController.SetCanAct(true);
-        }
 
         isKnockedBack = false;
     }
@@ -89,10 +79,6 @@ public class KnockbackReceiver : MonoBehaviour
             if (playerMovementController != null)
             {
                 playerMovementController.SetMovementEnabled(true);
-            }
-            if (playerController != null)
-            {
-                playerController.SetCanAct(true);
             }
 
             isKnockedBack = false;

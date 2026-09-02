@@ -6,7 +6,6 @@ public class PlayerRespawnController : MonoBehaviour
     [SerializeField] private float respawnDelay = 5f;
 
     private LifeController lifeController;
-    private PlayerController playerController;
     private PlayerSpellController playerSpellController;
     private PlayerMovementController playerMovementController;
 
@@ -16,7 +15,6 @@ public class PlayerRespawnController : MonoBehaviour
     private void Awake()
     {
         lifeController = GetComponent<LifeController>();
-        playerController = GetComponent<PlayerController>();
         playerSpellController = GetComponent<PlayerSpellController>();
         playerMovementController = GetComponent<PlayerMovementController>();
     }
@@ -40,10 +38,6 @@ public class PlayerRespawnController : MonoBehaviour
         {
             playerMovementController.SetMovementEnabled(true);
         }
-        if (playerController != null)
-        {
-            playerController.SetCanAct(false);
-        }
 
         yield return new WaitForSeconds(respawnDelay - 0.5f);
 
@@ -58,18 +52,9 @@ public class PlayerRespawnController : MonoBehaviour
         {
             playerMovementController.SetMovementEnabled(true);
         }
-        if (playerController != null)
-        {
-            playerController.SetCanAct(true);
-        }
     }
-
     public void OnReviveAnimationEnd()
     {
-        if (playerController != null)
-        {
-            playerController.SetCanAct(true);
-            if (playerSpellController != null) playerSpellController.RefreshHandNightness();
-        }
+        if (playerSpellController != null) playerSpellController.RefreshHandNightness();
     }
 }

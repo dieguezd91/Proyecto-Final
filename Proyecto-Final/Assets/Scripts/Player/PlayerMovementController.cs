@@ -87,9 +87,16 @@ public class PlayerMovementController : MonoBehaviour
     {
         return phase == GamePhase.Day || phase == GamePhase.Night;
     }
-
     void FixedUpdate()
     {
+        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal)
+        {
+            currentVelocity = Vector2.zero;
+            if (rb != null) rb.velocity = Vector2.zero;
+            if (animator != null) animator.SetBool("IsMoving", false);
+            return;
+        }
+
         if (playerAbilitySystem != null && playerAbilitySystem.IsBusy())
         {
             currentVelocity = Vector2.zero;

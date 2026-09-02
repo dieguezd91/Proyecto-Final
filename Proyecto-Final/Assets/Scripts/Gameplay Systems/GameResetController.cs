@@ -8,7 +8,6 @@ public class GameResetController : MonoBehaviour
     [SerializeField] private GameObject home;
     
     private LifeController playerLife;
-    private PlayerController playerController;
     private PlayerMovementController playerMovementController;
     private HouseLifeController homeLife;
 
@@ -22,7 +21,6 @@ public class GameResetController : MonoBehaviour
         if (player != null)
         {
             playerLife = player.GetComponent<LifeController>();
-            playerController = player.GetComponent<PlayerController>();
             playerMovementController = player.GetComponent<PlayerMovementController>();
         }
 
@@ -90,10 +88,6 @@ public class GameResetController : MonoBehaviour
             if (playerMovementController != null)
             {
                 playerMovementController.SetMovementEnabled(true);
-            }
-            if (playerController != null)
-            {
-                playerController.SetCanAct(true);
             }
 
             if (playerLife != null)
