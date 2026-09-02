@@ -4,11 +4,7 @@ using DG.Tweening;
 public class GameStateUIController : UIControllerBase
 {
 
-    private void Awake()
-    {
-        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
-    }
-    [SerializeField] private PauseController pauseController;
+
     [Header("UI Elements")]
     [SerializeField] private GameObject HUD;
     [SerializeField] private GameObject gameOverPanel;
@@ -182,14 +178,6 @@ public class GameStateUIController : UIControllerBase
     private bool IsActiveGameplayPhase(GamePhase phase)
     {
         return phase == GamePhase.Day;
-    }
-
-    public void RestoreFromNormalGameplay()
-    {
-        SetUIElementsVisibility(true);
-        UpdateUIElementsVisibility();
-
-        if (pauseController != null) pauseController.Resume();
     }
 
     public void SetUIElementsVisibility(bool visible)

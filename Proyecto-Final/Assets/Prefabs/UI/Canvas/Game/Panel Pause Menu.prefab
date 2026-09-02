@@ -65,11 +65,6 @@ MonoBehaviour:
   uiManager: {fileID: 0}
   _pauseMenuPanel: {fileID: 3402249047967661709}
   _optionsMenuPanel: {fileID: 5546816687010688779}
-  _instructionsPanel: {fileID: 7142959132510743012}
-  blurVolume: {fileID: 5345246763945271042}
-  showTransitionDuration: 0.5
-  hideTransitionDuration: 0.8
-  maxFocalLength: 200
 --- !u!1001 &1952250833446150861
 PrefabInstance:
   m_ObjectHideFlags: 0

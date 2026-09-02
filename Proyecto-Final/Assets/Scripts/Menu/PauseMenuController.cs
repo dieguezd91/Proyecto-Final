@@ -1,7 +1,6 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+
 
 public class PauseMenuController : UIControllerBase
 {
@@ -11,7 +10,6 @@ public class PauseMenuController : UIControllerBase
     [Header("UI Panels")]
     [SerializeField] private PauseMenuPanel _pauseMenuPanel;
     [SerializeField] private OptionsMenuPanel _optionsMenuPanel;
-    [SerializeField] private InstructionsPanel _instructionsPanel;
 
     protected override void CacheReferences()
     {

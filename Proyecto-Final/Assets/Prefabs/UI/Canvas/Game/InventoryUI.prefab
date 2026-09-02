@@ -6081,24 +6081,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4088868228027375966, guid: 2663980d92084004c97afc0674369113, type: 3}
-      propertyPath: blurVolume
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4088868228027375966, guid: 2663980d92084004c97afc0674369113, type: 3}
       propertyPath: _currentState
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4088868228027375966, guid: 2663980d92084004c97afc0674369113, type: 3}
       propertyPath: _defaultState
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4088868228027375966, guid: 2663980d92084004c97afc0674369113, type: 3}
-      propertyPath: hideTransitionDuration
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4088868228027375966, guid: 2663980d92084004c97afc0674369113, type: 3}
-      propertyPath: showTransitionDuration
-      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 4718424000679889583, guid: 2663980d92084004c97afc0674369113, type: 3}
       propertyPath: m_SizeDelta.y
