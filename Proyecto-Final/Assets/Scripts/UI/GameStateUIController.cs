@@ -16,9 +16,6 @@ public class GameStateUIController : UIControllerBase
     [SerializeField] private GameObject dayControlPanel;
     [SerializeField] private GameObject abilityPanel;
 
-    private bool openedFromPauseMenu = false;
-    [SerializeField] private PauseMenuController _pauseMenuController;
-
     [Header("Blur Settings")]
     [SerializeField] private UnityEngine.Rendering.Volume blurVolume;
     [SerializeField] private float showTransitionDuration = 0.08f;
@@ -99,7 +96,6 @@ public class GameStateUIController : UIControllerBase
     public override void HandleUpdate()
     {
         HandleGameOverState();
-        HandlePauseInput();
         CheckInventoryOpenState();
     }
 
@@ -155,68 +151,6 @@ public class GameStateUIController : UIControllerBase
         abilityPanel.SetActive(showAbilities);
     }
 
-    private void HandlePauseInput()
-    {
-        if (!Input.GetKeyDown(KeyCode.Escape) || InputConsumptionManager.IsEscapeConsumed) return;
-
-        UIManager.Instance?.Tooltip?.ForceHide();
-
-        if (UIManager.Instance != null && UIManager.Instance.Inventory != null)
-        {
-            if (UIManager.Instance.Inventory.IsAnimating)
-            {
-                return;
-            }
-        }
-
-        if (IsAnyGameplayUIOpen())
-        {
-            return;
-        }
-
-        if ((pauseController != null && pauseController.IsPaused))
-        {
-            if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
-            {
-                ResumeGame();
-            }
-            return;
-        }
-
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen()) { UIManager.Instance.Inventory.ToggleInventory(); if (HUD != null) HUD.SetActive(true); return; }
-
-        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal) return; OpenInventoryOptions(); }
-
-    private bool IsAnyGameplayUIOpen()
-    {
-        if (GameFlowController.Instance == null) return false;
-
-        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
-        return currentPhase == GamePhase.OnRitual;
-    }
-
-    private void OpenInventoryOptions()
-    {
-        bool canOpen = GameFlowController.Instance != null &&
-                       GameFlowController.Instance.CurrentPhase != GamePhase.GameOver &&
-                       GameFlowController.Instance.CurrentPhase != GamePhase.OnRitual;
-
-        if (!canOpen) return;
-
-        UIManager.Instance?.OpenInventoryWithPage("Options"); if (pauseController != null) pauseController.Pause();
-        
-
-        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
-        {
-            TutorialManager.Instance.PauseTutorial();
-        }
-
-        if (blurTween != null) { blurTween.Kill(); blurTween = null; }
-        if (dof != null)
-            blurTween = CreateFocalLengthTween(maxFocalLength, showTransitionDuration, false);
-
-        if (HUD != null) HUD.SetActive(false);
-    }
 
     private void HandleGameOverState()
     {
@@ -270,37 +204,7 @@ public class GameStateUIController : UIControllerBase
         }
     }
 
-    public void ResumeGame()
-    {
-        if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
-        {
-            UIManager.Instance.CloseInventory();
-        }
 
-        
-
-        if (pauseController != null) pauseController.Resume();
-
-        if (SoundManager.Instance != null)
-        {
-            SoundManager.Instance.ResumeAll();
-        }
-
-        if (HUD != null)
-            HUD.SetActive(true);
-
-        if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
-        {
-            TutorialManager.Instance.ResumeTutorial();
-        }
-
-        if (blurTween != null) { blurTween.Kill(); blurTween = null; }
-        if (dof != null)
-        {
-            isHiding = true;
-            blurTween = CreateFocalLengthTween(0f, hideTransitionDuration, true);
-        }
-    }
 
     // Creates and returns a DOTween Tween that animates the DOF focal length using unscaled time.
     // If setIsHidingFalseOnComplete is true, isHiding will be set to false when the tween completes.
