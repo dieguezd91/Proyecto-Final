@@ -5471,6 +5471,7 @@ GameObject:
   - component: {fileID: 2515656490907509096}
   - component: {fileID: 3456789012345678901}
   - component: {fileID: 9876543210123456789}
+  - component: {fileID: 7777777777777777777}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -5567,13 +5568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a34d0be1b9cb746bf4ec15035781ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firePoint: {fileID: 7145714007259786806}
   input: {fileID: 0}
-  manaSystem: {fileID: 0}
-  handAnimator: {fileID: 1463363302880399508}
-  handRenderer: {fileID: 7503550939136486912}
-  baseHandSortingOrder: 5
-  handObject: {fileID: 3607987250942176149}
 --- !u!114 &1099973671300293658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5601,7 +5596,6 @@ MonoBehaviour:
   progressBarOffset: {x: 0, y: 1.5, z: 0}
   seedInventory: {fileID: 0}
   tilledSoilTile: {fileID: 11400000, guid: 6fe5399363251bb4790dbfb115ea0ca7, type: 2}
-  handAnimator: {fileID: 0}
   interactionAnimationDuration: 0.5
   plantingParticlesPrefab: {fileID: 491567316690014037, guid: b4718f9f977adb740a54a6ea904ae4f7, type: 3}
   input: {fileID: 0}
@@ -11369,3 +11363,21 @@ MonoBehaviour:
   attackMovementPenalty: 0.5
   attackSlowDuration: 0.3
   surfaceDetector: {fileID: 4856583932368232146}
+--- !u!114 &7777777777777777777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429872126492704177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b07cd82e164483a9926d15a9ff57930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePoint: {fileID: 7145714007259786806}
+  manaSystem: {fileID: 0}
+  handAnimator: {fileID: 1463363302880399508}
+  handRenderer: {fileID: 7503550939136486912}
+  baseHandSortingOrder: 5
+  handObject: {fileID: 3607987250942176149}

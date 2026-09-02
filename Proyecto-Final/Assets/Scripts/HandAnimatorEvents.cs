@@ -1,27 +1,27 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class HandAnimatorEvents : MonoBehaviour
 {
-    private PlayerController playerController;
+    private PlayerSpellController playerSpellController;
 
     void Start()
     {
-        playerController = GetComponentInParent<PlayerController>();
+        playerSpellController = GetComponentInParent<PlayerSpellController>();
     }
 
     public void OnAttackAnimationEnd()
     {
-        if (playerController != null)
+        if (playerSpellController != null)
         {
-            playerController.OnAttackAnimationEnd();
+            playerSpellController.OnAttackAnimationEnd();
         }
     }
 
     public void CallShoot()
     {
-        if (playerController != null)
+        if (playerSpellController != null)
         {
-            playerController.ShootFromHand();
+            playerSpellController.ShootFromHand();
         }
     }
 }

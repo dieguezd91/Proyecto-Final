@@ -7,6 +7,7 @@ public class PlayerRespawnController : MonoBehaviour
 
     private LifeController lifeController;
     private PlayerController playerController;
+    private PlayerSpellController playerSpellController;
     private PlayerMovementController playerMovementController;
 
     public bool IsRespawning { get; private set; }
@@ -16,6 +17,7 @@ public class PlayerRespawnController : MonoBehaviour
     {
         lifeController = GetComponent<LifeController>();
         playerController = GetComponent<PlayerController>();
+        playerSpellController = GetComponent<PlayerSpellController>();
         playerMovementController = GetComponent<PlayerMovementController>();
     }
 
@@ -67,7 +69,7 @@ public class PlayerRespawnController : MonoBehaviour
         if (playerController != null)
         {
             playerController.SetCanAct(true);
-            playerController.RefreshHandNightness();
+            if (playerSpellController != null) playerSpellController.RefreshHandNightness();
         }
     }
 }
