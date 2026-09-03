@@ -55,6 +55,7 @@ public class PauseMenuController : UIControllerBase
         {
             _pauseMenuPanel.OnContinueClicked.AddListener(Continue);
             _pauseMenuPanel.OnOptionsClicked.AddListener(ShowOptions);
+            _pauseMenuPanel.OnInstructionsClicked.AddListener(ShowInstructions);
             _pauseMenuPanel.OnMainMenuClicked.AddListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.AddListener(HandleExitClicked);
             _pauseMenuPanel.OnSkipButtonClicked.AddListener(HandleSkipTutorialClicked);
@@ -74,6 +75,7 @@ public class PauseMenuController : UIControllerBase
         {
             _pauseMenuPanel.OnContinueClicked.RemoveListener(Continue);
             _pauseMenuPanel.OnOptionsClicked.RemoveListener(ShowOptions);
+            _pauseMenuPanel.OnInstructionsClicked.RemoveListener(ShowInstructions);
             _pauseMenuPanel.OnMainMenuClicked.RemoveListener(GoToMainMenu);
             _pauseMenuPanel.OnExitClicked.RemoveListener(HandleExitClicked);
             _pauseMenuPanel.OnSkipButtonClicked.RemoveListener(HandleSkipTutorialClicked);
@@ -245,6 +247,24 @@ public class PauseMenuController : UIControllerBase
             _optionsMenuPanel.Hide();
         ShowPauseMenu();
         SoundManager.Instance.PlayOneShot("ButtonClick");
+    }
+
+    public void ShowInstructions()
+    {
+        var animController = GetComponentInParent<InventoryAnimationController>();
+        if (animController == null && UIManager.Instance?.Inventory != null)
+        {
+            animController = UIManager.Instance.Inventory.GetComponentInChildren<InventoryAnimationController>(true);
+        }
+
+        if (animController != null)
+        {
+            animController.ChangePage("Controls");
+        }
+        else
+        {
+            SoundManager.Instance?.PlayOneShot("ButtonClick");
+        }
     }
 
     public void GoToMainMenu()

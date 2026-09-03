@@ -18,6 +18,7 @@ public class InventoryAnimationController : MonoBehaviour
     [SerializeField] private GameObject calendarPage;
     [SerializeField] private GameObject glosaryPage;
     [SerializeField] private GameObject placeholderPage;
+    [SerializeField] private GameObject controlsPage;
 
     [Header("UI Elements")]
     [SerializeField] private GameObject[] bookButtons;
@@ -193,6 +194,7 @@ public class InventoryAnimationController : MonoBehaviour
         if (calendarPage != null) calendarPage.SetActive(false);
         if (glosaryPage != null) glosaryPage.SetActive(false);
         if (placeholderPage != null) placeholderPage.SetActive(false);
+        if (controlsPage != null) controlsPage.SetActive(false);
     }
 
     private void ShowPage(string pageName)
@@ -218,6 +220,10 @@ public class InventoryAnimationController : MonoBehaviour
 
             case "Placeholder":
                 if (placeholderPage != null) placeholderPage.SetActive(true);
+                break;
+
+            case "Controls":
+                if (controlsPage != null) controlsPage.SetActive(true);
                 break;
         }
     }
