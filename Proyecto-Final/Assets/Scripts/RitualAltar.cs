@@ -56,12 +56,18 @@ public class RitualAltar : MonoBehaviour, IInteractable
     // Whether we already fired the ritual-used tutorial event at interaction time
     private bool tutorialEventFiredOnInteract = false;
 
+    private HouseRestorationSystem restorationSystem;
+    private HouseLifeController houseLife;
+    [SerializeField, Range(0f, 100f)] private float houseMissingHealthRestorePercent = 25f;
+
     private void Start()
     {
         CacheReferences();
         InitializeComponents();
         SubscribeToEvents();
     }
+
+    
 
     private void OnDisable()
     {
@@ -71,6 +77,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void CacheReferences()
     {
         levelManager = LevelManager.Instance;
+        restorationSystem = FindObjectOfType<HouseRestorationSystem>();
+
+        if (GameObject.FindGameObjectWithTag("Home") != null)
+            houseLife = GameObject.FindGameObjectWithTag("Home").GetComponent<HouseLifeController>();
 
         player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -81,6 +91,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
         lightController = FindObjectOfType<DayNightLightController>();
         worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         mainCamera = Camera.main;
+
 
         if (DoorLight != null)
         {
@@ -333,6 +344,7 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void BeginRitual()
     {
         isPerformingRitual = true;
+        HandleRestorationAttempt();
         GameFlowController.Instance.SetPhase(GamePhase.OnRitual);
 
         if (canTransitionToNight && LunarCycleManager.Instance != null)
@@ -723,6 +735,28 @@ public class RitualAltar : MonoBehaviour, IInteractable
             altarSpriteRenderer.sprite = defaultSprite;
         }
     }
+
+    private void RestoreHealth()
+    {
+        if (houseLife == null) return;
+
+        float missingHealth = houseLife.maxHealth - houseLife.currentHealth;
+        float healthToRestore = missingHealth * (houseMissingHealthRestorePercent / 100f);
+
+        houseLife.currentHealth = Mathf.Min(houseLife.currentHealth + healthToRestore, houseLife.maxHealth);
+
+        houseLife.onHealthChanged?.Invoke(houseLife.currentHealth, houseLife.maxHealth);
+    }
+
+
+    private void HandleRestorationAttempt()
+    {
+        if (houseLife == null) return;
+        RestoreHealth();
+    }
+
+    
+   
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
