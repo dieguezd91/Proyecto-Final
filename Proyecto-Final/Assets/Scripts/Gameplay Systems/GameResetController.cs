@@ -113,18 +113,5 @@ public class GameResetController : MonoBehaviour
         {
             manaSystem.SetMana(manaSystem.GetBaseMaxMana());
         }
-
-        if (UIManager.Instance != null)
-        {
-            if (playerLife != null)
-            {
-                UIManager.Instance.UpdateHealthBar(playerLife.currentHealth, playerLife.maxHealth);
-            }
-            if (homeLife != null)
-            {
-                UIManager.Instance.UpdateHomeHealthBar(homeLife.CurrentHealth, homeLife.MaxHealth);
-            }
-            UIManager.Instance.UpdateManaUI();
-        }
     }
 }

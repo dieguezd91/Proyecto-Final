@@ -171,7 +171,6 @@ public class LifeController : MonoBehaviour
         else if (isPlayer)
         {
             GetComponent<ManaSystem>()?.SetMana(0f);
-            UIManager.Instance?.UpdateManaUI();
 
             if (animator != null && animator.runtimeAnimatorController != null)
             {
@@ -339,24 +338,6 @@ public class LifeController : MonoBehaviour
         animator.ResetTrigger("Death");
         animator.SetTrigger("Revive");
         UIManager.Instance?.SetGrayscaleGhostEffect(false);
-
-        RefreshPlayerUI();
-    }
-
-    private void RefreshPlayerUI()
-    {
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateHealthBar(currentHealth, maxHealth);
-
-            var manaSystem = GetComponent<ManaSystem>();
-            if (manaSystem != null)
-            {
-                UIManager.Instance.UpdateManaUI();
-            }
-        }
-
-        
     }
 
     public bool IsTargetable()

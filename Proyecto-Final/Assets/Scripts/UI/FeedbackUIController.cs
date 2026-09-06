@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -21,22 +21,44 @@ public class FeedbackUIController : UIControllerBase
     private CanvasGroup damagedScreenCanvasGroup;
     private float targetDamageAlpha = 0f;
     private float lastDamageTime = 0f;
-    private float lastPlayerHealth;
     private Coroutine ritualOverlayCoroutine;
 
     private Bloom bloom;
     private ColorAdjustments colorAdjustments;
     private GameObject player;
+    private LifeController playerLife;
 
     protected override void CacheReferences()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
-            var playerLife = player.GetComponent<LifeController>();
-            if (playerLife != null)
-                lastPlayerHealth = playerLife.currentHealth;
+            playerLife = player.GetComponent<LifeController>();
         }
+    }
+
+    protected override void SetupEventListeners()
+    {
+        if (playerLife != null)
+        {
+            playerLife.onDamaged.AddListener(HandlePlayerDamaged);
+        }
+    }
+
+    protected override void CleanupEventListeners()
+    {
+        if (playerLife != null)
+        {
+            playerLife.onDamaged.RemoveListener(HandlePlayerDamaged);
+        }
+    }
+
+    private void HandlePlayerDamaged(float damage, LifeController.DamageType damageType)
+    {
+        if (player == null)
+            return;
+
+        ShowDamageEffect(damage, player.transform.position);
     }
 
     protected override void ConfigureInitialState()
@@ -72,7 +94,6 @@ public class FeedbackUIController : UIControllerBase
     public override void HandleUpdate()
     {
         UpdateDamageScreen();
-        CheckPlayerHealthForDamage();
     }
 
     private void UpdateDamageScreen()
@@ -87,24 +108,6 @@ public class FeedbackUIController : UIControllerBase
             targetDamageAlpha,
             damageFadeSpeed * Time.deltaTime
         );
-    }
-
-    private void CheckPlayerHealthForDamage()
-    {
-        if (player == null) return;
-
-        var playerLife = player.GetComponent<LifeController>();
-        if (playerLife == null) return;
-
-        float currentHealth = playerLife.currentHealth;
-
-        if (currentHealth < lastPlayerHealth)
-        {
-            float damage = lastPlayerHealth - currentHealth;
-            ShowDamageEffect(damage, player.transform.position);
-        }
-
-        lastPlayerHealth = currentHealth;
     }
 
     public void ShowDamageEffect(float damage, Vector3 worldPosition)

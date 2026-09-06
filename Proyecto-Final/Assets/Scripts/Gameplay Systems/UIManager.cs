@@ -67,7 +67,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         SetupModules();
-        RegisterGlobalEvents();
     }
 
     private void Update()
@@ -131,43 +130,6 @@ public class UIManager : MonoBehaviour
         ritualUI?.Setup();
         teleportAbilityUI?.Setup();
 
-    }
-
-    private void RegisterGlobalEvents()
-    {
-        UIEvents.OnPlayerHealthChanged += Health.UpdatePlayerHealth;
-        UIEvents.OnHomeHealthChanged += Health.UpdateHomeHealth;
-
-        UIEvents.OnManaChanged += Mana.UpdateMana;
-
-        UIEvents.OnPlayerDamaged += Feedback.ShowDamageEffect;
-
-    }
-
-    private void OnDestroy()
-    {
-        if (Health != null) UIEvents.OnPlayerHealthChanged -= Health.UpdatePlayerHealth;
-        if (Health != null) UIEvents.OnHomeHealthChanged -= Health.UpdateHomeHealth;
-        if (Mana != null) UIEvents.OnManaChanged -= Mana.UpdateMana;
-        if (Feedback != null) UIEvents.OnPlayerDamaged -= Feedback.ShowDamageEffect;
-    }
-
-    public void UpdateHealthBar(float currentHealth, float maxHealth)
-    {
-        if (Health != null)
-            Health.UpdatePlayerHealth(currentHealth, maxHealth);
-    }
-
-    public void UpdateHomeHealthBar(float currentHealth, float maxHealth)
-    {
-        if (Health != null)
-            Health.UpdateHomeHealth(currentHealth, maxHealth);
-    }
-
-    public void UpdateManaUI()
-    {
-        if (Mana != null)
-            Mana.UpdateMana();
     }
 
     public void OpenInventory()

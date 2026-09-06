@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 public class HouseRestorationSystem : MonoBehaviour
@@ -43,7 +43,6 @@ public class HouseRestorationSystem : MonoBehaviour
             float desiredRestore = house.MaxHealth * (opt.restorePercentage / 100f);
             float finalRestore = Mathf.Min(desiredRestore, missingHealth);
             house.Restore(finalRestore);
-            UIManager.Instance.UpdateHomeHealthBar(house.CurrentHealth, house.MaxHealth);
 
             hasRestoredToday = true;
             return true;
