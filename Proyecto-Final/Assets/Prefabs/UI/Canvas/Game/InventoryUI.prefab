@@ -10371,13 +10371,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bookButtons:
   - button: {fileID: 257395689633964841}
-    pageName: Inventory
+    page: 0
     buttonName: Inventory
   - button: {fileID: 8414518474029589937}
-    pageName: Options
+    page: 1
     buttonName: Options
   - button: {fileID: 4224532670055927181}
-    pageName: Controls
+    page: 2
     buttonName: Controls
   animationController: {fileID: 2799865558235557274}
   playClickSound: 1

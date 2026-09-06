@@ -202,11 +202,11 @@ public class InventoryUIController : UIControllerBase
         }
     }
 
-    public void OpenInventoryWithPage(string pageName)
+    public void OpenInventoryWithPage(InventoryPage page)
     {
         if (inventoryPanel == null) return;
 
-        if (!CanOpenInventory(pageName == "Options"))
+        if (!CanOpenInventory(page == InventoryPage.Options))
             return;
 
         if (animationController != null && animationController.IsAnimating)
@@ -224,10 +224,18 @@ public class InventoryUIController : UIControllerBase
         
         if (animationController != null)
         {
-            animationController.OpenWithPage(pageName);
+            animationController.OpenWithPage(page);
         }
 
         UIEvents.TriggerInventoryOpened();
+    }
+
+    public void ChangePage(InventoryPage page)
+    {
+        if (!IsInventoryOpen || animationController == null)
+            return;
+
+        animationController.ChangePage(page);
     }
 
     public bool IsAnimating => animationController != null && animationController.IsAnimating;

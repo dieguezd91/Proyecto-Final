@@ -110,10 +110,10 @@ public class UIManager : MonoBehaviour
         teleportAbilityUI?.Initialize();
     }
 
-    public void OpenInventoryWithPage(string pageName)
+    public void OpenInventoryWithPage(InventoryPage page)
     {
         if (Inventory != null)
-            Inventory.OpenInventoryWithPage(pageName);
+            Inventory.OpenInventoryWithPage(page);
     }
 
     private void SetupModules()
