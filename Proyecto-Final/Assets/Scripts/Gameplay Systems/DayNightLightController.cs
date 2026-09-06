@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 public class DayNightLightController : MonoBehaviour
 {
     [SerializeField] private PauseController pauseController;
+    private GameFlowController gameFlowController;
     [Header("REFERENCES")]
     public Light2D globalLight;
     public Volume globalVolume;
@@ -32,12 +33,18 @@ public class DayNightLightController : MonoBehaviour
     public bool useSmoothTransition = true;
 
     private Coroutine transitionCoroutine;
-    private GamePhase lastPhase = GamePhase.None;
     private bool isTransitioning = false;
 
     void Start()
     {
         if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
+
+        gameFlowController = GameFlowController.Instance;
+        if (gameFlowController == null)
+        {
+            gameFlowController = FindObjectOfType<GameFlowController>();
+        }
+
         if (globalLight == null)
         {
             globalLight = GetComponent<Light2D>();
@@ -50,9 +57,12 @@ public class DayNightLightController : MonoBehaviour
 
         if (globalVolume.profile.TryGet<Bloom>(out bloomComponent))
         {
-            bloomComponent.intensity.value = (GameFlowController.Instance.CurrentPhase != GamePhase.Night)
-                ? dayGlobalVolumeIntensity
-                : nightGlobalVolumeIntensity;
+            if (gameFlowController != null)
+            {
+                bloomComponent.intensity.value = (gameFlowController.CurrentPhase != GamePhase.Night)
+                    ? dayGlobalVolumeIntensity
+                    : nightGlobalVolumeIntensity;
+            }
         }
 
         if (globalVolume.profile.TryGet<Vignette>(out vignetteComponent))
@@ -66,25 +76,24 @@ public class DayNightLightController : MonoBehaviour
             colorAdjustmentsComponent.postExposure.overrideState = true;
         }
 
-        UpdateLightBasedOnGameState(GameFlowController.Instance.CurrentPhase, false);
-        lastPhase = GameFlowController.Instance.CurrentPhase;
-
-        
+        if (gameFlowController != null)
+        {
+            UpdateLightBasedOnGameState(gameFlowController.CurrentPhase, false);
+            gameFlowController.OnPhaseChanged += OnPhaseChanged;
+        }
     }
 
-    void Update()
+    private void OnDestroy()
     {
-        GamePhase currentPhase = GameFlowController.Instance.CurrentPhase;
-        if (currentPhase == GamePhase.GameOver) return;
-
-        if (!isTransitioning && currentPhase != lastPhase)
+        if (gameFlowController != null)
         {
-            bool isPauseTransition = ((pauseController != null && pauseController.IsPaused) || (pauseController != null && pauseController.IsPaused));
-            if (!isPauseTransition)
-                UpdateLightBasedOnGameState(currentPhase, useSmoothTransition);
-
-            lastPhase = currentPhase;
+            gameFlowController.OnPhaseChanged -= OnPhaseChanged;
         }
+    }
+
+    private void OnPhaseChanged(GamePhase newPhase)
+    {
+        UpdateLightBasedOnGameState(newPhase, useSmoothTransition);
     }
 
     void UpdateLightBasedOnGameState(GamePhase gameState, bool useTransition)
@@ -163,7 +172,7 @@ public class DayNightLightController : MonoBehaviour
 
     public void OnHordeCompleted()
     {
-        if (GameFlowController.Instance.CurrentPhase == GamePhase.Night)
+        if (gameFlowController != null && gameFlowController.CurrentPhase == GamePhase.Night)
         {
             if (transitionCoroutine != null)
             {
