@@ -25,23 +25,14 @@ public class TooltipUIController : UIControllerBase
     private PlayerAbility currentAbilityData;
 
     private SpellSlot currentSpellData;
-
-
-    private void Awake()
-    {
-        Initialize();
-    }
-
-    private void Start()
-    {
-        Setup();
-    }
+    private PlayerAbilitySystem abilitySystem;
 
     protected override void CacheReferences()
     {
         if (rootCanvas == null) rootCanvas = GetComponentInParent<Canvas>(true);
         if (tooltipPanel != null) tooltipRect = tooltipPanel.GetComponent<RectTransform>();
         if (rootCanvas != null) canvasRect = rootCanvas.GetComponent<RectTransform>();
+        abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
     }
 
     protected override void SetupEventListeners()
@@ -52,7 +43,10 @@ public class TooltipUIController : UIControllerBase
         UIEvents.OnAbilityTooltipRequested += OnAbilityTooltipRequested;
         UIEvents.OnAbilityTooltipHideRequested += OnTooltipHideRequested;
 
-        UIEvents.OnPhaseChanged += OnPhaseChanged;
+        if (GameFlowController.Instance != null)
+        {
+            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
+        }
 
         UIEvents.OnSpellTooltipRequested += OnSpellTooltipRequested;
         UIEvents.OnSpellTooltipHideRequested += OnTooltipHideRequested;
@@ -81,10 +75,6 @@ public class TooltipUIController : UIControllerBase
         return phase == GamePhase.Day || phase == GamePhase.Night;
     }
 
-    void Update()
-    {
-        HandleUpdate();
-    }
 
     public override void HandleUpdate()
     {
@@ -119,7 +109,6 @@ public class TooltipUIController : UIControllerBase
 
     private void OnTooltipRequested(int slotIndex)
     {
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Planting)
         {
             return;
@@ -213,7 +202,8 @@ public class TooltipUIController : UIControllerBase
     {
         if (!ValidateTooltipComponents()) return;
 
-        if (!CanShowTooltipInPhase(GameFlowController.Instance.CurrentPhase))
+        if (GameFlowController.Instance == null ||
+            !CanShowTooltipInPhase(GameFlowController.Instance.CurrentPhase))
         {
             return;
         }
@@ -240,7 +230,6 @@ public class TooltipUIController : UIControllerBase
 
     public void ShowSlotTooltip(int slotIndex)
     {
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Planting)
         {
             HideTooltip();
@@ -513,7 +502,10 @@ public class TooltipUIController : UIControllerBase
         UIEvents.OnTooltipHideRequested -= OnTooltipHideRequested;
         UIEvents.OnAbilityTooltipRequested -= OnAbilityTooltipRequested;
         UIEvents.OnAbilityTooltipHideRequested -= OnTooltipHideRequested;
-        UIEvents.OnPhaseChanged -= OnPhaseChanged;
+        if (GameFlowController.Instance != null)
+        {
+            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
+        }
         UIEvents.OnSpellTooltipRequested -= OnSpellTooltipRequested;
         UIEvents.OnSpellTooltipHideRequested -= OnTooltipHideRequested;
 

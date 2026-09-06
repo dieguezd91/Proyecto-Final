@@ -56,7 +56,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
     // Whether we already fired the ritual-used tutorial event at interaction time
     private bool tutorialEventFiredOnInteract = false;
 
-    private HouseRestorationSystem restorationSystem;
     private HouseLifeController houseLife;
     [SerializeField, Range(0f, 100f)] private float houseMissingHealthRestorePercent = 25f;
 
@@ -77,7 +76,6 @@ public class RitualAltar : MonoBehaviour, IInteractable
     private void CacheReferences()
     {
         levelManager = LevelManager.Instance;
-        restorationSystem = FindObjectOfType<HouseRestorationSystem>();
 
         if (GameObject.FindGameObjectWithTag("Home") != null)
             houseLife = GameObject.FindGameObjectWithTag("Home").GetComponent<HouseLifeController>();
@@ -740,12 +738,10 @@ public class RitualAltar : MonoBehaviour, IInteractable
     {
         if (houseLife == null) return;
 
-        float missingHealth = houseLife.maxHealth - houseLife.currentHealth;
+        float missingHealth = houseLife.MaxHealth - houseLife.CurrentHealth;
         float healthToRestore = missingHealth * (houseMissingHealthRestorePercent / 100f);
 
-        houseLife.currentHealth = Mathf.Min(houseLife.currentHealth + healthToRestore, houseLife.maxHealth);
-
-        houseLife.onHealthChanged?.Invoke(houseLife.currentHealth, houseLife.maxHealth);
+        houseLife.Restore(healthToRestore);
     }
 
 
