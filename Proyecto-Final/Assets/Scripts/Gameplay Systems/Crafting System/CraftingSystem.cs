@@ -87,24 +87,18 @@ public class CraftingSystem : MonoBehaviour
                             plantData.plantIcon,
                             slotIndex,
                             plantData.daysToGrow,
+                            1,
                             plantData.description,
                             plantData
                         );
-                        SeedInventory.Instance.GetPlantSlot(slotIndex).seedCount = 1;
+                        SeedInventory.Instance.SelectSlot(slotIndex);
                     }
                 }
                 else
                 {
-                    SeedInventory.Instance.GetPlantSlot(existingSlot).seedCount++;
-                    UIManager.Instance.UpdateSeedCountsUI();
+                    SeedInventory.Instance.AddSeedsToSlot(existingSlot, 1);
+                    SeedInventory.Instance.SelectSlot(existingSlot);
                 }
-
-
-                if (UIManager.Instance != null)
-                {
-                    UIManager.Instance.InitializeSeedSlotsUI();
-                }
-
             }
 
             if (UIManager.Instance?.inventoryUI != null)
@@ -116,10 +110,11 @@ public class CraftingSystem : MonoBehaviour
 
     private int FindFreeSlotOrSpecific(PlantDataSO plantData)
     {
-        for (int i = 0; i < 5; i++)
+        int slotCount = SeedInventory.Instance != null ? SeedInventory.Instance.PlantSlotsCount : 0;
+        for (int i = 0; i < slotCount; i++)
         {
             PlantSlot slot = SeedInventory.Instance.GetPlantSlot(i);
-            if (slot.plantPrefab == null && string.IsNullOrEmpty(slot.plantName))
+            if (slot != null && slot.plantPrefab == null && string.IsNullOrEmpty(slot.plantName))
             {
                 return i;
             }
@@ -181,7 +176,8 @@ public class CraftingSystem : MonoBehaviour
 
     private int FindSlotBySeed(SeedsEnum seed)
     {
-        for (int i = 0; i < 5; i++)
+        int slotCount = SeedInventory.Instance != null ? SeedInventory.Instance.PlantSlotsCount : 0;
+        for (int i = 0; i < slotCount; i++)
         {
             var slot = SeedInventory.Instance.GetPlantSlot(i);
             if (slot != null && slot.seedType == seed && slot.plantPrefab != null)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -28,6 +28,14 @@ public class SeedInventory : MonoBehaviour
 
     [Header("UI EVENTS")]
     public Action<int> onSlotSelected;
+    public Action onInventoryChanged;
+
+    public int PlantSlotsCount => plantSlots != null ? plantSlots.Length : 0;
+
+    private void NotifyInventoryChanged()
+    {
+        onInventoryChanged?.Invoke();
+    }
 
     private void Awake()
     {
@@ -81,6 +89,7 @@ public class SeedInventory : MonoBehaviour
             plantSlots[slotIndex].seedCount = 0;
 
             Debug.Log($"Slot {slotIndex + 1} vaciado");
+            NotifyInventoryChanged();
         }
     }
 
@@ -91,7 +100,6 @@ public class SeedInventory : MonoBehaviour
             selectedSlotIndex = slotIndex;
             onSlotSelected?.Invoke(selectedSlotIndex);
         }
-        UIManager.Instance.UpdateSeedCountsUI();
     }
 
     public GameObject GetSelectedPlantPrefab()
@@ -147,10 +155,28 @@ public class SeedInventory : MonoBehaviour
                 int index = selectedSlotIndex;
                 RemoveSeedFromSlot(index);
             }
-
-            UIManager.Instance.UpdateSeedCountsUI();
-            UIManager.Instance.InitializeSeedSlotsUI();
+            else
+            {
+                NotifyInventoryChanged();
+            }
         }
+    }
+
+    public bool AddSeedsToSlot(int slotIndex, int amount)
+    {
+        if (slotIndex < 0 || slotIndex >= plantSlots.Length)
+            return false;
+
+        if (amount <= 0)
+            return false;
+
+        PlantSlot slot = plantSlots[slotIndex];
+        if (slot == null)
+            return false;
+
+        slot.seedCount += amount;
+        NotifyInventoryChanged();
+        return true;
     }
 
     public int GetSeedCountInSlot(int index)
@@ -166,6 +192,7 @@ public class SeedInventory : MonoBehaviour
         Sprite plantIcon,
         int slotIndex,
         int daysToGrow,
+        int initialSeedCount,
         string description = "",
         PlantDataSO data = null)
     {
@@ -178,9 +205,26 @@ public class SeedInventory : MonoBehaviour
             plantSlots[slotIndex].daysToGrow = daysToGrow;
             plantSlots[slotIndex].description = description;
             plantSlots[slotIndex].data = data;
+            plantSlots[slotIndex].seedCount = initialSeedCount;
 
             Debug.Log($"Unlocked new plant: {plantName} (Seed: {seedType}) in slot {slotIndex + 1}");
+            NotifyInventoryChanged();
         }
-        UIManager.Instance.UpdateSeedCountsUI();
+    }
+
+    public bool SwapSlots(int a, int b)
+    {
+        if (a < 0 || a >= plantSlots.Length || b < 0 || b >= plantSlots.Length)
+            return false;
+
+        if (a == b)
+            return false;
+
+        if (plantSlots[a] == null || plantSlots[b] == null)
+            return false;
+
+        (plantSlots[a], plantSlots[b]) = (plantSlots[b], plantSlots[a]);
+        NotifyInventoryChanged();
+        return true;
     }
 }

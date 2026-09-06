@@ -49,13 +49,11 @@ public class GameResetController : MonoBehaviour
             UIManager.Instance.CloseInventory();
             if (UIManager.Instance.gameOverPanel != null)
                 UIManager.Instance.gameOverPanel.SetActive(false);
-            
-            UIManager.Instance.InitializeSeedSlotsUI();
         }
 
         if (SeedInventory.Instance != null)
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < SeedInventory.Instance.PlantSlotsCount; i++)
                 SeedInventory.Instance.RemoveSeedFromSlot(i);
 
             SeedInventory.Instance.SelectSlot(0);

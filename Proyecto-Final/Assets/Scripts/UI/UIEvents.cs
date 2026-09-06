@@ -13,10 +13,6 @@ public static class UIEvents
     public static event Action<GamePhase> OnPhaseChanged;
     public static event Action OnInstructionsRequested;
 
-    // Seed Slots Events
-    public static event Action<int> OnSlotSelected;
-    public static event Action OnSeedCountsUpdated;
-
     // Feedback Events
     public static event Action<bool> OnGrayscaleRequested;
 
@@ -56,12 +52,6 @@ public static class UIEvents
 
     public static void TriggerInstructionsRequested()
         => OnInstructionsRequested?.Invoke();
-
-    public static void TriggerSlotSelected(int slotIndex)
-        => OnSlotSelected?.Invoke(slotIndex);
-
-    public static void TriggerSeedCountsUpdated()
-        => OnSeedCountsUpdated?.Invoke();
 
     public static void TriggerTooltipRequested(int slotIndex)
         => OnTooltipRequested?.Invoke(slotIndex);

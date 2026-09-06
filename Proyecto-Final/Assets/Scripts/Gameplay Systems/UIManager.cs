@@ -155,18 +155,6 @@ public class UIManager : MonoBehaviour
         return Inventory != null ? Inventory.IsInventoryOpen : false;
     }
 
-    public void InitializeSeedSlotsUI()
-    {
-        if (SeedSlots != null)
-            SeedSlots.InitializeSlots();
-    }
-
-    public void UpdateSeedCountsUI()
-    {
-        if (SeedSlots != null)
-            SeedSlots.UpdateSeedCounts();
-    }
-
     public void InitializeSpellSlotsUI()
     {
         if (SpellSlots != null)

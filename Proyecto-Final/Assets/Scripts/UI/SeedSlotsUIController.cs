@@ -27,16 +27,16 @@ public class SeedSlotsUIController : UIControllerBase
     protected override void SetupEventListeners()
     {
         if (SeedInventory.Instance != null)
+        {
             SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
+            SeedInventory.Instance.onInventoryChanged += UpdateSeedCounts;
+        }
 
         if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
 
         if (LevelManager.Instance != null)
             GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
-
-        UIEvents.OnSlotSelected += UpdateSelectedSlotUI;
-        UIEvents.OnSeedCountsUpdated += UpdateSeedCounts;
 
         SetupSlotEventListeners();
     }
@@ -57,6 +57,39 @@ public class SeedSlotsUIController : UIControllerBase
             {
                 seedSlotsCanvasGroup.alpha = 0.1f;
             }
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (!isSetup) return;
+
+        UpdateSeedCounts();
+
+        if (LevelManager.Instance != null)
+        {
+            lastPhase = GameFlowController.Instance.CurrentPhase;
+            UpdateVisibilityBasedOnPhase(lastPhase);
+        }
+        else
+        {
+            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+            bool shouldShow = abilitySystem?.CurrentAbility == PlayerAbility.Planting;
+            if (seedSlotsCanvasGroup != null)
+            {
+                seedSlotsCanvasGroup.alpha = shouldShow ? 1f : 0.1f;
+                seedSlotsCanvasGroup.interactable = shouldShow;
+                seedSlotsCanvasGroup.blocksRaycasts = shouldShow;
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+            fadeCoroutine = null;
         }
     }
 
@@ -155,6 +188,11 @@ public class SeedSlotsUIController : UIControllerBase
         for (int i = 0; i < seedSlots.Length; i++)
         {
             UpdateSlotDisplay(i);
+        }
+
+        if (SeedInventory.Instance != null)
+        {
+            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
         }
     }
 
@@ -344,14 +382,15 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void ExecuteDragSwap(int targetIndex)
     {
-        SwapSeedSlots(dragSourceIndex, targetIndex);
-        RefreshSlotsAfterSwap(targetIndex);
+        if (SeedInventory.Instance != null && SeedInventory.Instance.SwapSlots(dragSourceIndex, targetIndex))
+        {
+            RefreshSlotsAfterSwap(targetIndex);
+        }
     }
 
     private void RefreshSlotsAfterSwap(int newSelectedSlot)
     {
         ForceLayoutRebuild();
-        InitializeSlots();
         SelectNewSlotAfterSwap(newSelectedSlot);
     }
 
@@ -365,35 +404,12 @@ public class SeedSlotsUIController : UIControllerBase
     private void SelectNewSlotAfterSwap(int slotIndex)
     {
         SeedInventory.Instance?.SelectSlot(slotIndex);
-        UpdateSelectedSlotUI(slotIndex);
     }
 
     private void CleanupDrag()
     {
         ClearSlotHighlight();
         dragSourceIndex = -1;
-    }
-
-    private void SwapSeedSlots(int a, int b)
-    {
-        PlantSlot slotA = SeedInventory.Instance?.GetPlantSlot(a);
-        PlantSlot slotB = SeedInventory.Instance?.GetPlantSlot(b);
-
-        if (slotA == null || slotB == null) return;
-
-        SwapSlotProperties(slotA, slotB);
-    }
-
-    private void SwapSlotProperties(PlantSlot slotA, PlantSlot slotB)
-    {
-        (slotA.seedType, slotB.seedType) = (slotB.seedType, slotA.seedType);
-        (slotA.plantPrefab, slotB.plantPrefab) = (slotB.plantPrefab, slotA.plantPrefab);
-        (slotA.plantIcon, slotB.plantIcon) = (slotB.plantIcon, slotA.plantIcon);
-        (slotA.seedCount, slotB.seedCount) = (slotB.seedCount, slotA.seedCount);
-        (slotA.daysToGrow, slotB.daysToGrow) = (slotB.daysToGrow, slotA.daysToGrow);
-        (slotA.description, slotB.description) = (slotB.description, slotA.description);
-        (slotA.data, slotB.data) = (slotB.data, slotA.data);
-        (slotA.plantName, slotB.plantName) = (slotB.plantName, slotA.plantName);
     }
 
     private void HighlightSlot(int slotIndex, bool highlight)
@@ -486,7 +502,6 @@ public class SeedSlotsUIController : UIControllerBase
     {
         SeedInventory.Instance?.SelectSlot(slotIndex);
         UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.OnSeedSelect);
-        UpdateSelectedSlotUI(slotIndex);
     }
 
     private void UpdatePressHistory(int slotIndex, float time)
@@ -503,18 +518,9 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void ExecuteSwap(int slotA, int slotB)
     {
-        SwapSeedSlots(slotA, slotB);
+        SeedInventory.Instance?.SwapSlots(slotA, slotB);
         HighlightSlot(slotA, false);
         pendingSwapSlot = -1;
-
-        RefreshAfterSwap();
-    }
-
-    private void RefreshAfterSwap()
-    {
-        InitializeSlots();
-        if (SeedInventory.Instance != null)
-            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
     }
 
     public void SelectSlot(int slotIndex)
@@ -522,7 +528,6 @@ public class SeedSlotsUIController : UIControllerBase
         if (SeedInventory.Instance != null)
         {
             SeedInventory.Instance.SelectSlot(slotIndex);
-            UpdateSelectedSlotUI(slotIndex);
         }
     }
 
@@ -557,7 +562,10 @@ public class SeedSlotsUIController : UIControllerBase
     protected override void CleanupEventListeners()
     {
         if (SeedInventory.Instance != null)
+        {
             SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
+            SeedInventory.Instance.onInventoryChanged -= UpdateSeedCounts;
+        }
 
         var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         if (abilitySystem != null)
@@ -565,9 +573,6 @@ public class SeedSlotsUIController : UIControllerBase
 
         if (LevelManager.Instance != null)
             GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
-
-        UIEvents.OnSlotSelected -= UpdateSelectedSlotUI;
-        UIEvents.OnSeedCountsUpdated -= UpdateSeedCounts;
 
         for (int i = 0; i < seedSlots.Length; i++)
         {
