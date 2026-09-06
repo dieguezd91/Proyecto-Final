@@ -20,6 +20,22 @@ public class ManaUIController : UIControllerBase
             manaSystem = player.GetComponent<ManaSystem>();
     }
 
+    protected override void SetupEventListeners()
+    {
+        if (manaSystem != null)
+        {
+            manaSystem.OnManaChanged += HandleManaChanged;
+        }
+    }
+
+    protected override void CleanupEventListeners()
+    {
+        if (manaSystem != null)
+        {
+            manaSystem.OnManaChanged -= HandleManaChanged;
+        }
+    }
+
     protected override void ConfigureInitialState()
     {
         if (manaSystem != null && manaBar != null)
@@ -28,6 +44,19 @@ public class ManaUIController : UIControllerBase
             manaBar.value = manaSystem.GetCurrentMana();
             UpdateManaDisplay();
         }
+    }
+
+    private void HandleManaChanged(float current, float max)
+    {
+        if (manaBar != null)
+        {
+            manaBar.maxValue = max;
+            manaBar.value = current;
+        }
+
+        float percentage = max > 0f ? Mathf.Clamp01(current / max) : 0f;
+        UpdateManaFillColor(percentage);
+        UpdateManaText(current, max);
     }
 
     public void UpdateMana()
@@ -76,14 +105,12 @@ public class ManaUIController : UIControllerBase
             float currentMana = Mathf.Lerp(startMana, endMana, t);
 
             manaSystem.SetMana(currentMana);
-            UpdateMana();
 
             time += Time.deltaTime;
             yield return null;
         }
 
         manaSystem.SetMana(endMana);
-        UpdateMana();
     }
 }
 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7938343660367704894}
   - component: {fileID: 4310176999773235429}
   m_Layer: 5
-  m_Name: HUD Health Bars
+  m_Name: HUD Bars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -595,6 +595,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7938343660367704894}
     m_Modifications:
+    - target: {fileID: 809712381765820871, guid: 447c144a81beb40478751597af5e3850, type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4311148320990379696, guid: 447c144a81beb40478751597af5e3850, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
