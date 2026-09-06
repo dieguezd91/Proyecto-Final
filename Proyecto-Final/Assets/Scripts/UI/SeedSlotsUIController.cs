@@ -22,21 +22,28 @@ public class SeedSlotsUIController : UIControllerBase
 
     private GameObject dragIcon;
     private int dragSourceIndex = -1;
-    private GamePhase lastPhase;
+
+    private SeedInventory seedInventory;
+    private PlayerAbilitySystem abilitySystem;
+    private GameFlowController gameFlowController;
 
     protected override void SetupEventListeners()
     {
-        if (SeedInventory.Instance != null)
+        if (seedInventory != null)
         {
-            SeedInventory.Instance.onSlotSelected += UpdateSelectedSlotUI;
-            SeedInventory.Instance.onInventoryChanged += UpdateSeedCounts;
+            seedInventory.onSlotSelected += UpdateSelectedSlotUI;
+            seedInventory.onInventoryChanged += UpdateSeedCounts;
         }
 
-        if (FindObjectOfType<PlayerAbilitySystem>() is PlayerAbilitySystem abilitySystem)
+        if (abilitySystem != null)
+        {
             abilitySystem.OnAbilityChanged += OnAbilityChanged;
+        }
 
-        if (LevelManager.Instance != null)
-            GameFlowController.Instance.OnPhaseChanged += OnPhaseChanged;
+        if (gameFlowController != null)
+        {
+            gameFlowController.OnPhaseChanged += OnPhaseChanged;
+        }
 
         SetupSlotEventListeners();
     }
@@ -45,14 +52,12 @@ public class SeedSlotsUIController : UIControllerBase
     {
         InitializeSlots();
 
-        if (LevelManager.Instance != null)
+        if (gameFlowController != null)
         {
-            lastPhase = GameFlowController.Instance.CurrentPhase;
-            UpdateVisibilityBasedOnPhase(lastPhase);
+            UpdateVisibilityBasedOnPhase(gameFlowController.CurrentPhase);
         }
         else
         {
-            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
             if (abilitySystem?.CurrentAbility != PlayerAbility.Planting && seedSlotsCanvasGroup != null)
             {
                 seedSlotsCanvasGroup.alpha = 0.1f;
@@ -67,10 +72,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void OnPhaseChanged(GamePhase newPhase)
     {
-        if (lastPhase == newPhase) return;
-
         UpdateVisibilityBasedOnPhase(newPhase);
-        lastPhase = newPhase;
     }
 
     private void UpdateVisibilityBasedOnPhase(GamePhase phase)
@@ -87,7 +89,6 @@ public class SeedSlotsUIController : UIControllerBase
         }
         else if (IsDayPhase(phase))
         {
-            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
             bool shouldShow = abilitySystem?.CurrentAbility == PlayerAbility.Planting;
 
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
@@ -138,15 +139,15 @@ public class SeedSlotsUIController : UIControllerBase
             UpdateSlotDisplay(i);
         }
 
-        if (SeedInventory.Instance != null)
-            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
+        if (seedInventory != null)
+            UpdateSelectedSlotUI(seedInventory.GetSelectedSlotIndex());
     }
 
     private void UpdateSlotDisplay(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= seedSlots.Length || seedSlots[slotIndex] == null) return;
 
-        PlantSlot plantSlot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
+        PlantSlot plantSlot = seedInventory?.GetPlantSlot(slotIndex);
         seedSlots[slotIndex].UpdateSlotDisplay(plantSlot);
     }
 
@@ -173,7 +174,7 @@ public class SeedSlotsUIController : UIControllerBase
     {
         if (seedSlotsCanvasGroup == null || !isActiveAndEnabled) return;
 
-        if (LevelManager.Instance != null && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
+        if (gameFlowController != null && gameFlowController.CurrentPhase == GamePhase.Night)
         {
             return;
         }
@@ -210,7 +211,6 @@ public class SeedSlotsUIController : UIControllerBase
     {
         SelectSlotInternal(slotIndex);
 
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         abilitySystem?.SetAbility(PlayerAbility.Planting);
 
         UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.MenuButtonHover);
@@ -243,7 +243,6 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void ActivatePlantingAbility()
     {
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         abilitySystem?.SetAbility(PlayerAbility.Planting);
     }
 
@@ -344,7 +343,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void ExecuteDragSwap(int targetIndex)
     {
-        if (SeedInventory.Instance != null && SeedInventory.Instance.SwapSlots(dragSourceIndex, targetIndex))
+        if (seedInventory != null && seedInventory.SwapSlots(dragSourceIndex, targetIndex))
         {
             RefreshSlotsAfterSwap(targetIndex);
         }
@@ -365,7 +364,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void SelectNewSlotAfterSwap(int slotIndex)
     {
-        SeedInventory.Instance?.SelectSlot(slotIndex);
+        seedInventory?.SelectSlot(slotIndex);
     }
 
     private void CleanupDrag()
@@ -406,10 +405,8 @@ public class SeedSlotsUIController : UIControllerBase
 
     private bool CanHandleInput()
     {
-        if (LevelManager.Instance == null) return false;
-
-        var phase = GameFlowController.Instance.CurrentPhase;
-        return phase == GamePhase.Day;
+        return gameFlowController != null &&
+               gameFlowController.CurrentPhase == GamePhase.Day;
     }
 
     private void OnSlotKeyPressed(int slotIndex)
@@ -462,7 +459,7 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void SelectSlotInternal(int slotIndex)
     {
-        SeedInventory.Instance?.SelectSlot(slotIndex);
+        seedInventory?.SelectSlot(slotIndex);
         UIManager.Instance.InterfaceSounds?.PlaySound(InterfaceSoundType.OnSeedSelect);
     }
 
@@ -480,22 +477,22 @@ public class SeedSlotsUIController : UIControllerBase
 
     private void ExecuteSwap(int slotA, int slotB)
     {
-        SeedInventory.Instance?.SwapSlots(slotA, slotB);
+        seedInventory?.SwapSlots(slotA, slotB);
         HighlightSlot(slotA, false);
         pendingSwapSlot = -1;
     }
 
     public void SelectSlot(int slotIndex)
     {
-        if (SeedInventory.Instance != null)
+        if (seedInventory != null)
         {
-            SeedInventory.Instance.SelectSlot(slotIndex);
+            seedInventory.SelectSlot(slotIndex);
         }
     }
 
     public int GetSelectedSlotIndex()
     {
-        return SeedInventory.Instance?.GetSelectedSlotIndex() ?? 0;
+        return seedInventory?.GetSelectedSlotIndex() ?? 0;
     }
 
     public void RefreshSlotDisplay(int slotIndex)
@@ -512,29 +509,32 @@ public class SeedSlotsUIController : UIControllerBase
     {
         if (slotIndex < 0 || slotIndex >= seedSlots.Length) return true;
 
-        PlantSlot slot = SeedInventory.Instance?.GetPlantSlot(slotIndex);
+        PlantSlot slot = seedInventory?.GetPlantSlot(slotIndex);
         return slot == null || slot.seedCount <= 0;
     }
 
     public PlantSlot GetSlotData(int slotIndex)
     {
-        return SeedInventory.Instance?.GetPlantSlot(slotIndex);
+        return seedInventory?.GetPlantSlot(slotIndex);
     }
 
     protected override void CleanupEventListeners()
     {
-        if (SeedInventory.Instance != null)
+        if (seedInventory != null)
         {
-            SeedInventory.Instance.onSlotSelected -= UpdateSelectedSlotUI;
-            SeedInventory.Instance.onInventoryChanged -= UpdateSeedCounts;
+            seedInventory.onSlotSelected -= UpdateSelectedSlotUI;
+            seedInventory.onInventoryChanged -= UpdateSeedCounts;
         }
 
-        var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
         if (abilitySystem != null)
+        {
             abilitySystem.OnAbilityChanged -= OnAbilityChanged;
+        }
 
-        if (LevelManager.Instance != null)
-            GameFlowController.Instance.OnPhaseChanged -= OnPhaseChanged;
+        if (gameFlowController != null)
+        {
+            gameFlowController.OnPhaseChanged -= OnPhaseChanged;
+        }
 
         for (int i = 0; i < seedSlots.Length; i++)
         {
@@ -562,14 +562,18 @@ public class SeedSlotsUIController : UIControllerBase
         }
     }
 
-    protected override void OnDestroy()
-    {
-        CleanupEventListeners();
-        base.OnDestroy();
-    }
-
     protected override void CacheReferences()
     {
+        seedInventory = SeedInventory.Instance;
 
+        if (seedInventory == null)
+            seedInventory = FindObjectOfType<SeedInventory>();
+
+        abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
+
+        gameFlowController = GameFlowController.Instance;
+
+        if (gameFlowController == null)
+            gameFlowController = FindObjectOfType<GameFlowController>();
     }
 }
