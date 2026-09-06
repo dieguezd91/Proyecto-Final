@@ -394,13 +394,21 @@ public class SeedSlotsUIController : UIControllerBase
 
         for (int i = 0; i < seedSlots.Length; i++)
         {
-            KeyCode key = KeyCode.Alpha1 + i;
+            KeyCode key = GetSlotKey(i);
             if (Input.GetKeyDown(key))
             {
                 OnSlotKeyPressed(i);
                 break;
             }
         }
+    }
+
+    private KeyCode GetSlotKey(int slotIndex)
+    {
+        if (slotIndex == 9)
+            return KeyCode.Alpha0;
+
+        return KeyCode.Alpha1 + slotIndex;
     }
 
     private bool CanHandleInput()
