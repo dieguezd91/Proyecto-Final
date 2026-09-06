@@ -91,13 +91,11 @@ public class CraftingSystem : MonoBehaviour
                             plantData.description,
                             plantData
                         );
-                        SeedInventory.Instance.SelectSlot(slotIndex);
                     }
                 }
                 else
                 {
                     SeedInventory.Instance.AddSeedsToSlot(existingSlot, 1);
-                    SeedInventory.Instance.SelectSlot(existingSlot);
                 }
             }
 

@@ -60,39 +60,6 @@ public class SeedSlotsUIController : UIControllerBase
         }
     }
 
-    private void OnEnable()
-    {
-        if (!isSetup) return;
-
-        UpdateSeedCounts();
-
-        if (LevelManager.Instance != null)
-        {
-            lastPhase = GameFlowController.Instance.CurrentPhase;
-            UpdateVisibilityBasedOnPhase(lastPhase);
-        }
-        else
-        {
-            var abilitySystem = FindObjectOfType<PlayerAbilitySystem>();
-            bool shouldShow = abilitySystem?.CurrentAbility == PlayerAbility.Planting;
-            if (seedSlotsCanvasGroup != null)
-            {
-                seedSlotsCanvasGroup.alpha = shouldShow ? 1f : 0.1f;
-                seedSlotsCanvasGroup.interactable = shouldShow;
-                seedSlotsCanvasGroup.blocksRaycasts = shouldShow;
-            }
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (fadeCoroutine != null)
-        {
-            StopCoroutine(fadeCoroutine);
-            fadeCoroutine = null;
-        }
-    }
-
     public override void HandleUpdate()
     {
         HandleSeedSlotInput();
@@ -188,11 +155,6 @@ public class SeedSlotsUIController : UIControllerBase
         for (int i = 0; i < seedSlots.Length; i++)
         {
             UpdateSlotDisplay(i);
-        }
-
-        if (SeedInventory.Instance != null)
-        {
-            UpdateSelectedSlotUI(SeedInventory.Instance.GetSelectedSlotIndex());
         }
     }
 
