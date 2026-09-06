@@ -33,7 +33,6 @@ public class DayNightLightController : MonoBehaviour
     public bool useSmoothTransition = true;
 
     private Coroutine transitionCoroutine;
-    private bool isTransitioning = false;
 
     void Start()
     {
@@ -135,8 +134,6 @@ public class DayNightLightController : MonoBehaviour
 
     IEnumerator TransitionVisuals(float targetLight, float targetBloom, float targetExposure, float targetVignette, float duration)
     {
-        isTransitioning = true;
-
         float startLight = globalLight.intensity;
         float startBloom = bloomComponent != null ? bloomComponent.intensity.value : 0f;
         float startExposure = colorAdjustmentsComponent != null ? colorAdjustmentsComponent.postExposure.value : 0f;
@@ -166,8 +163,6 @@ public class DayNightLightController : MonoBehaviour
 
             yield return null;
         }
-
-        isTransitioning = false;
     }
 
     public void OnHordeCompleted()
