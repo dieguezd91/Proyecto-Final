@@ -3,82 +3,104 @@ using UnityEngine;
 
 public class DayTimerController : MonoBehaviour
 {
-    [SerializeField] private PauseController pauseController;
-    [Header("Timer Settings")]
-    [SerializeField] private float dayDuration = 180f;
-    [SerializeField] private TMP_Text timerText;
+    public enum DayActionType
+    {
+        Dig,
+        Plant,
+        Water,
+        Harvest
+    }
+
+    [Header("Action Settings")]
+    [SerializeField] private int maxActionsPerDay = 10;
 
     [Header("UI")]
+    [SerializeField] private TMP_Text timerText;
     [SerializeField] private GameObject timerPanel;
     [SerializeField] private Animator timerAnimator;
     [SerializeField] private string visibleBoolName = "IsVisible";
 
-    private float remainingTime;
-    private bool countdownActive = true;
+    private int remainingActions;
+    private bool actionsActive = true;
     private bool resetWhenDayStarts = true;
+
+    // Se mantiene este nombre para no romper otros scripts que ya lo usan
     public bool NightStartedByTimer { get; private set; }
+
+    public int RemainingActions => remainingActions;
+    public int MaxActions => maxActionsPerDay;
 
     private void Awake()
     {
-        if (pauseController == null) pauseController = FindObjectOfType<PauseController>();
-        remainingTime = dayDuration;
-        UpdateTimerText();
+        remainingActions = maxActionsPerDay;
+        UpdateActionsText();
     }
 
     private void Start()
     {
-        if (LevelManager.Instance != null)
+        if (LevelManager.Instance != null &&
+            GameFlowController.Instance != null)
         {
             GameFlowController.Instance.OnPhaseChanged += HandleGameStateChanged;
             HandleGameStateChanged(GameFlowController.Instance.CurrentPhase);
         }
-        
-    }
-    private void OnEnable()
-    {
-        
     }
 
     private void OnDisable()
     {
-        if (LevelManager.Instance != null)
+        if (GameFlowController.Instance != null)
             GameFlowController.Instance.OnPhaseChanged -= HandleGameStateChanged;
     }
 
-    private void Update()
+    /// <summary>
+    /// Consume 1 acción del día.
+    /// Devuelve true si la acción pudo ser consumida.
+    /// </summary>
+    public bool ConsumeAction(DayActionType actionType)
     {
-        if (!countdownActive)
-            return;
+        if (!actionsActive)
+            return false;
 
-        remainingTime -= Time.deltaTime;
-
-        if (remainingTime <= 0f)
+        if (GameFlowController.Instance == null ||
+            GameFlowController.Instance.CurrentPhase != GamePhase.Day)
         {
-            remainingTime = 0f;
-            UpdateTimerText();
-
-            countdownActive = false;
-            resetWhenDayStarts = true;
-            NightStartedByTimer = true;
-            DayCycleController.Instance?.StartNight();
-
-            return;
+            return false;
         }
 
-        UpdateTimerText();
+        if (remainingActions <= 0)
+            return false;
+
+        remainingActions--;
+
+        UpdateActionsText();
+
+        Debug.Log($"[DayTimerController] Acción utilizada: {actionType}. " +
+                  $"Acciones restantes: {remainingActions}");
+
+        if (remainingActions <= 0)
+        {
+            remainingActions = 0;
+            actionsActive = false;
+            resetWhenDayStarts = true;
+            NightStartedByTimer = true;
+
+            Debug.Log("[DayTimerController] No quedan acciones. Comienza la noche.");
+
+            DayCycleController.Instance?.StartNight();
+        }
+
+        return true;
     }
 
     private void HandleGameStateChanged(GamePhase newPhase)
     {
-
-        
         bool isDayState = IsDayGameplayPhase(newPhase);
-        
+
         SetVisible(isDayState);
 
         if (newPhase == GamePhase.Night)
         {
-            countdownActive = false;
+            actionsActive = false;
             resetWhenDayStarts = true;
             return;
         }
@@ -87,24 +109,23 @@ public class DayTimerController : MonoBehaviour
         {
             if (resetWhenDayStarts)
             {
-                ResetTimer();
+                ResetActions();
                 resetWhenDayStarts = false;
                 NightStartedByTimer = false;
             }
 
-            countdownActive = true;
+            actionsActive = true;
         }
         else
         {
-            countdownActive = false;
+            actionsActive = false;
         }
     }
 
     private bool IsDayGameplayPhase(GamePhase phase)
     {
         return phase == GamePhase.Day ||
-               phase == GamePhase.None ||
-               (pauseController != null && pauseController.IsPaused);
+               phase == GamePhase.None;
     }
 
     private void SetVisible(bool visible)
@@ -119,20 +140,17 @@ public class DayTimerController : MonoBehaviour
         }
     }
 
-    private void ResetTimer()
+    private void ResetActions()
     {
-        remainingTime = dayDuration;
-        UpdateTimerText();
+        remainingActions = maxActionsPerDay;
+        UpdateActionsText();
     }
 
-    private void UpdateTimerText()
+    private void UpdateActionsText()
     {
         if (timerText == null)
             return;
 
-        int minutes = Mathf.FloorToInt(remainingTime / 60f);
-        int seconds = Mathf.FloorToInt(remainingTime % 60f);
-        timerText.text = $"{minutes:00}:{seconds:00}";
+        timerText.text = $"Remainig Actions: {remainingActions}";
     }
 }
-

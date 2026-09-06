@@ -40,6 +40,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] private SeedInventory seedInventory;
     [SerializeField] public TileBase tilledSoilTile;
     private ManaSystem manaSystem;
+    private DayTimerController dayTimerController;
 
     [Header("ANIMATION")]
     [SerializeField] private Animator handAnimator;
@@ -101,6 +102,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBar ??= FindObjectOfType<ProgressBar>();
         progressBarTarget ??= transform;
         seedInventory ??= FindObjectOfType<SeedInventory>();
+        dayTimerController = FindObjectOfType<DayTimerController>();
 
         if (handAnimator == null)
         {
@@ -318,6 +320,8 @@ public class PlayerAbilitySystem : MonoBehaviour
             seedInventory.ConsumeSeedInSelectedSlot();
             SoundManager.Instance.Play("Plant");
 
+            dayTimerController?.ConsumeAction(DayTimerController.DayActionType.Plant);
+
             if (plantingParticlesPrefab != null)
             {
                 Vector3 particlePosition = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
@@ -510,6 +514,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         {
             floatingTextController?.ShowPickup(reward.materialName, reward.amount, reward.icon);
             TutorialEvents.InvokePlantHarvested();
+
+            dayTimerController?.ConsumeAction(DayTimerController.DayActionType.Harvest);
         }
         currentHarvestPlant = null;
     }
@@ -642,6 +648,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBar?.Hide();
 
         StopInteractionAnimation();
+
+        dayTimerController?.ConsumeAction(DayTimerController.DayActionType.Dig);
 
         TutorialEvents.InvokeGroundDug();
     }
