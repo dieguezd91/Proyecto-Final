@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class BookButton
 {
     public Button button;
-    public string pageName;
+    public InventoryPage page;
     public string buttonName;
 }
 
@@ -23,7 +23,6 @@ public class BookInventoryAnimations : MonoBehaviour
     [SerializeField] private bool playClickSound = true;
     [SerializeField] private InterfaceSoundType buttonClickSound = InterfaceSoundType.MenuButtonClick;
 
-    private string currentPage = "";
     private bool listenersSetup = false;
 
     private void Awake()
@@ -70,14 +69,9 @@ public class BookInventoryAnimations : MonoBehaviour
                 continue;
             }
 
-            if (string.IsNullOrEmpty(bookButton.pageName))
-            {
-                continue;
-            }
-
             bookButton.button.onClick.RemoveAllListeners();
 
-            string page = bookButton.pageName;
+            InventoryPage page = bookButton.page;
             string name = bookButton.buttonName;
 
             bookButton.button.onClick.AddListener(() => OnButtonClicked(page, name));
@@ -87,7 +81,7 @@ public class BookInventoryAnimations : MonoBehaviour
         listenersSetup = true;
     }
 
-    private void OnButtonClicked(string pageName, string buttonName)
+    private void OnButtonClicked(InventoryPage page, string buttonName)
     {
         if (animationController == null)
         {
@@ -104,31 +98,25 @@ public class BookInventoryAnimations : MonoBehaviour
             UIManager.Instance.InterfaceSounds.PlaySound(buttonClickSound);
         }
 
-        ChangePage(pageName);
+        ChangePage(page);
     }
 
-    public void ChangePage(string pageName)
+    public void ChangePage(InventoryPage page)
     {
         if (animationController == null)
         {
             return;
         }
 
-        if (currentPage == pageName)
-        {
-            return;
-        }
-
-        animationController.ChangePage(pageName);
-        currentPage = pageName;
+        animationController.ChangePage(page);
     }
 
-    public string GetCurrentPage()
+    public InventoryPage? GetCurrentPage()
     {
-        return animationController != null ? animationController.CurrentPage : currentPage;
+        return animationController != null ? animationController.CurrentPage : null;
     }
 
-    public void AddButton(Button button, string pageName, string buttonName = "")
+    public void AddButton(Button button, InventoryPage page, string buttonName = "")
     {
         if (button == null)
         {
@@ -138,14 +126,14 @@ public class BookInventoryAnimations : MonoBehaviour
         var bookButton = new BookButton
         {
             button = button,
-            pageName = pageName,
+            page = page,
             buttonName = string.IsNullOrEmpty(buttonName) ? button.name : buttonName
         };
 
         bookButtons.Add(bookButton);
 
         button.onClick.RemoveAllListeners();
-        button.onClick.AddListener(() => OnButtonClicked(pageName, bookButton.buttonName));
+        button.onClick.AddListener(() => OnButtonClicked(page, bookButton.buttonName));
     }
 
     private void OnDestroy()
@@ -159,9 +147,9 @@ public class BookInventoryAnimations : MonoBehaviour
         }
     }
 
-    public void ShowInventory() => ChangePage("Inventory");
-    public void ShowOptions() => ChangePage("Options");
-    public void ShowGlosary() => ChangePage("Glosary");
-    public void ShowCalendar() => ChangePage("Calendar");
-    public void ShowPlaceholder() => ChangePage("Placeholder");
+    public void ShowInventory() => ChangePage(InventoryPage.Inventory);
+    public void ShowOptions() => ChangePage(InventoryPage.Options);
+    public void ShowGlossary() => ChangePage(InventoryPage.Glossary);
+    public void ShowCalendar() => ChangePage(InventoryPage.Calendar);
+    public void ShowPlaceholder() => ChangePage(InventoryPage.Placeholder);
 }

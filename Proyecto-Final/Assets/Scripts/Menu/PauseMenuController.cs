@@ -154,7 +154,7 @@ public class PauseMenuController : UIControllerBase
 
         if (!canOpen) return;
 
-        UIManager.Instance?.OpenInventoryWithPage("Options"); 
+        UIManager.Instance?.OpenInventoryWithPage(InventoryPage.Options); 
         
         if (UIManager.Instance != null && UIManager.Instance.IsInventoryOpen())
         {
@@ -251,15 +251,9 @@ public class PauseMenuController : UIControllerBase
 
     public void ShowInstructions()
     {
-        var animController = GetComponentInParent<InventoryAnimationController>();
-        if (animController == null && UIManager.Instance?.Inventory != null)
+        if (UIManager.Instance?.Inventory != null)
         {
-            animController = UIManager.Instance.Inventory.GetComponentInChildren<InventoryAnimationController>(true);
-        }
-
-        if (animController != null)
-        {
-            animController.ChangePage("Controls");
+            UIManager.Instance.Inventory.ChangePage(InventoryPage.Controls);
         }
         else
         {

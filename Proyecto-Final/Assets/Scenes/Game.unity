@@ -412253,7 +412253,7 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: 6952376027871709096, guid: 9432887a9b0deb44e8d27383f8bea4c8, type: 3}
+    - target: {fileID: 6952376027871709097, guid: 9432887a9b0deb44e8d27383f8bea4c8, type: 3}
       propertyPath: DoorLight
       value: 
       objectReference: {fileID: 1513868775}

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1682724339635525393}
   - component: {fileID: 8459815876198244850}
   - component: {fileID: 6952376027871709096}
+  - component: {fileID: 6952376027871709097}
   - component: {fileID: 3545336908044564782}
   - component: {fileID: 1495986452467227360}
   m_Layer: 0
@@ -153,6 +154,22 @@ MonoBehaviour:
   ritualDuration: 3
   canTransitionToNight: 1
   canRestoreHealth: 1
+  altarSpriteRenderer: {fileID: 1682724339635525393}
+  defaultSprite: {fileID: 1845753906, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
+  nearSprite: {fileID: -593795343, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
+  ritualVisualController: {fileID: 6952376027871709097}
+--- !u!114 &6952376027871709097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911321804086649782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4c44819dad647b583998e23d7509d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   candleLights:
   - {fileID: 4922927767286658229}
   - {fileID: 724081456883087910}
@@ -167,9 +184,6 @@ MonoBehaviour:
   ritualVignetteIntensity: 0.6
   centerVignetteOnPlayer: 1
   vignetteFadeDuration: 1.5
-  altarSpriteRenderer: {fileID: 1682724339635525393}
-  defaultSprite: {fileID: 1845753906, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
-  nearSprite: {fileID: -593795343, guid: d5879276d50f47440a06b03dcf0a46db, type: 3}
 --- !u!114 &3545336908044564782
 MonoBehaviour:
   m_ObjectHideFlags: 0

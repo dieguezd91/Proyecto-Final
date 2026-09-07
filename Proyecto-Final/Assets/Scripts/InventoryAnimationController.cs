@@ -24,15 +24,15 @@ public class InventoryAnimationController : MonoBehaviour
     [SerializeField] private GameObject[] bookButtons;
 
     private bool isAnimating = false;
-    private string currentPageName = "";
-    private string pendingPageName = "";
+    private InventoryPage? currentPage = null;
+    private InventoryPage? pendingPage = null;
 
     public event Action OnOpenAnimationComplete;
     public event Action OnCloseAnimationComplete;
     public event Action OnPageReadyToShow;
 
     public bool IsAnimating => isAnimating;
-    public string CurrentPage => currentPageName;
+    public InventoryPage? CurrentPage => currentPage;
 
     private void Awake()
     {
@@ -55,7 +55,7 @@ public class InventoryAnimationController : MonoBehaviour
 
     private void HandleInventoryOpened()
     {
-        OpenWithPage("Inventory");
+        OpenWithPage(InventoryPage.Inventory);
     }
 
     private void HandleInventoryClosed()
@@ -63,14 +63,14 @@ public class InventoryAnimationController : MonoBehaviour
         CloseBook();
     }
 
-    public void OpenWithPage(string pageName)
+    public void OpenWithPage(InventoryPage page)
     {
         if (bookAnimator == null || isAnimating)
         {
             return;
         }
 
-        StartCoroutine(OpenAnimationRoutine(pageName));
+        StartCoroutine(OpenAnimationRoutine(page));
     }
 
     public void CloseBook()
@@ -81,20 +81,20 @@ public class InventoryAnimationController : MonoBehaviour
         StartCoroutine(CloseAnimationRoutine());
     }
 
-    public void ChangePage(string pageName)
+    public void ChangePage(InventoryPage page)
     {
-        if (isAnimating || currentPageName == pageName)
+        if (isAnimating || currentPage == page)
         {
             return;
         }
 
-        StartCoroutine(PageFlipAnimationRoutine(pageName));
+        StartCoroutine(PageFlipAnimationRoutine(page));
     }
 
-    private IEnumerator OpenAnimationRoutine(string pageName)
+    private IEnumerator OpenAnimationRoutine(InventoryPage page)
     {
         isAnimating = true;
-        pendingPageName = pageName;
+        pendingPage = page;
 
         SetUIElementsVisibility(false);
         HideAllPages();
@@ -108,7 +108,7 @@ public class InventoryAnimationController : MonoBehaviour
         SetUIElementsVisibility(true);
 
         isAnimating = false;
-        pendingPageName = "";
+        pendingPage = null;
         OnOpenAnimationComplete?.Invoke();
     }
 
@@ -118,7 +118,7 @@ public class InventoryAnimationController : MonoBehaviour
 
         SetUIElementsVisibility(false);
         HideAllPages();
-        currentPageName = "";
+        currentPage = null;
 
         UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.GameInventoryBookClose);
 
@@ -130,10 +130,10 @@ public class InventoryAnimationController : MonoBehaviour
         OnCloseAnimationComplete?.Invoke();
     }
 
-    private IEnumerator PageFlipAnimationRoutine(string newPageName)
+    private IEnumerator PageFlipAnimationRoutine(InventoryPage newPage)
     {
         isAnimating = true;
-        pendingPageName = newPageName;
+        pendingPage = newPage;
 
         UIManager.Instance?.InterfaceSounds?.PlaySound(InterfaceSoundType.MenuButtonClick);
 
@@ -142,7 +142,7 @@ public class InventoryAnimationController : MonoBehaviour
         yield return WaitForAnimationToComplete(pageFlipStateName);
 
         isAnimating = false;
-        pendingPageName = "";
+        pendingPage = null;
     }
 
     private IEnumerator WaitForAnimationToComplete(string animationStateName)
@@ -167,9 +167,9 @@ public class InventoryAnimationController : MonoBehaviour
 
     public void OnBookOpenShowContent()
     {
-        if (!string.IsNullOrEmpty(pendingPageName))
+        if (pendingPage.HasValue)
         {
-            ShowPage(pendingPageName);
+            ShowPage(pendingPage.Value);
             OnPageReadyToShow?.Invoke();
         }
     }
@@ -181,9 +181,9 @@ public class InventoryAnimationController : MonoBehaviour
 
     public void OnPageFlipShowNewPage()
     {
-        if (!string.IsNullOrEmpty(pendingPageName))
+        if (pendingPage.HasValue)
         {
-            ShowPage(pendingPageName);
+            ShowPage(pendingPage.Value);
         }
     }
 
@@ -197,34 +197,37 @@ public class InventoryAnimationController : MonoBehaviour
         if (controlsPage != null) controlsPage.SetActive(false);
     }
 
-    private void ShowPage(string pageName)
+    private GameObject GetPageObject(InventoryPage page)
     {
-        currentPageName = pageName;
+        return page switch
+        {
+            InventoryPage.Inventory => inventoryPage,
+            InventoryPage.Options => optionsPage,
+            InventoryPage.Controls => controlsPage,
+            InventoryPage.Calendar => calendarPage,
+            InventoryPage.Glossary => glosaryPage,
+            InventoryPage.Placeholder => placeholderPage,
+            _ => null
+        };
+    }
+
+    private void ShowPage(InventoryPage page)
+    {
+        currentPage = page;
         HideAllPages();
 
-        switch (pageName)
+        GameObject pageObj = GetPageObject(page);
+        if (pageObj != null)
         {
-            case "Inventory":
-                if (inventoryPage != null) inventoryPage.SetActive(true);
-                break;
-
-            case "Options": if (optionsPage != null) { optionsPage.SetActive(true); var pauseMenu = optionsPage.GetComponentInChildren<PauseMenuController>(true); if (pauseMenu != null) pauseMenu.gameObject.SetActive(true); } break;
-
-            case "Calendar":
-                if (calendarPage != null) calendarPage.SetActive(true);
-                break;
-
-            case "Glosary":
-                if (glosaryPage != null) glosaryPage.SetActive(true);
-                break;
-
-            case "Placeholder":
-                if (placeholderPage != null) placeholderPage.SetActive(true);
-                break;
-
-            case "Controls":
-                if (controlsPage != null) controlsPage.SetActive(true);
-                break;
+            pageObj.SetActive(true);
+            if (page == InventoryPage.Options)
+            {
+                var pauseMenu = pageObj.GetComponentInChildren<PauseMenuController>(true);
+                if (pauseMenu != null)
+                {
+                    pauseMenu.gameObject.SetActive(true);
+                }
+            }
         }
     }
 
@@ -244,7 +247,7 @@ public class InventoryAnimationController : MonoBehaviour
 
     private void HandlePauseMenuRequested()
     {
-        OpenWithPage("Options");
+        OpenWithPage(InventoryPage.Options);
     }
 
     private void HandlePauseMenuClosed()
