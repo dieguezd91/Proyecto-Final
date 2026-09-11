@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,31 +5,51 @@ public class BulletPool : MonoBehaviour
 {
     public static BulletPool Instance;
 
+    [Header("Fire Bullet")]
     [SerializeField] private FireBullet bulletPrefab;
-    [SerializeField] private int initialSize = 10;
+    [SerializeField] private int initialFireBulletSize = 10;
 
-    private Queue<FireBullet> pool = new Queue<FireBullet>();
+    [Header("Ice Ball")]
+    [SerializeField] private FireBullet iceBallPrefab;
+    [SerializeField] private int initialIceBallSize = 10;
 
-    void Awake()
+    private Queue<FireBullet> fireBulletPool = new Queue<FireBullet>();
+    private Queue<FireBullet> iceBallPool = new Queue<FireBullet>();
+
+    private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+            Instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
 
-        // Inicializar pool
-        for (int i = 0; i < initialSize; i++)
+        // Inicializar Fire Bullets
+        for (int i = 0; i < initialFireBulletSize; i++)
         {
             var b = Instantiate(bulletPrefab, transform);
             b.gameObject.SetActive(false);
-            pool.Enqueue(b);
+            fireBulletPool.Enqueue(b);
+        }
+
+        // Inicializar Ice Balls
+        for (int i = 0; i < initialIceBallSize; i++)
+        {
+            var ice = Instantiate(iceBallPrefab, transform);
+            ice.gameObject.SetActive(false);
+            iceBallPool.Enqueue(ice);
         }
     }
 
     public FireBullet GetBullet()
     {
         FireBullet b;
-        if (pool.Count > 0)
+
+        if (fireBulletPool.Count > 0)
         {
-            b = pool.Dequeue();
+            b = fireBulletPool.Dequeue();
         }
         else
         {
@@ -41,11 +60,38 @@ public class BulletPool : MonoBehaviour
         return b;
     }
 
-
     public void ReturnBullet(FireBullet b)
     {
+        if (b == null)
+            return;
+
         b.gameObject.SetActive(false);
-        pool.Enqueue(b);
+        fireBulletPool.Enqueue(b);
+    }
+
+    public FireBullet GetIceBall()
+    {
+        FireBullet ice;
+
+        if (iceBallPool.Count > 0)
+        {
+            ice = iceBallPool.Dequeue();
+        }
+        else
+        {
+            ice = Instantiate(iceBallPrefab, transform);
+        }
+
+        ice.gameObject.SetActive(true);
+        return ice;
+    }
+
+    public void ReturnIceBall(FireBullet ice)
+    {
+        if (ice == null)
+            return;
+
+        ice.gameObject.SetActive(false);
+        iceBallPool.Enqueue(ice);
     }
 }
-

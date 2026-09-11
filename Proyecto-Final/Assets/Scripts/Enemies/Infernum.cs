@@ -5,6 +5,9 @@ public class Infernum : EnemyBase
     [Header("Ranged Data")]
     [SerializeField] private RangedEnemyDataSO rangedData;
 
+    [Header("Elemental Type")]
+    [SerializeField] private bool isIceEnemy;
+
     [Header("Combat References")]
     [SerializeField] private Transform firingPoint;
 
@@ -44,15 +47,17 @@ public class Infernum : EnemyBase
 
     private void Shoot()
     {
-        FireBullet bullet = BulletPool.Instance.GetBullet();
-        bullet.transform.position = firingPoint.position;
-        bullet.transform.rotation = firingPoint.rotation;
-
         Vector2 adjustedTargetPos = (Vector2)currentTarget.position + Vector2.down * aimYOffset;
         Vector2 direction = (adjustedTargetPos - (Vector2)transform.position).normalized;
 
+       
+        FireBullet projectile = isIceEnemy ? BulletPool.Instance.GetIceBall() : BulletPool.Instance.GetBullet();
+
+        projectile.transform.position = firingPoint.position;
+        projectile.transform.rotation = firingPoint.rotation;
+        projectile.SetDirection(direction);
+
         PlayEnemySound(EnemySoundType.Attack, SoundSourceType.Localized, transform);
-        bullet.SetDirection(direction);
     }
 
     protected override void OnDrawGizmosSelected()

@@ -3,6 +3,11 @@ using System.Collections;
 
 public class FireBullet : MonoBehaviour
 {
+    public enum BulletType { Fire, Ice }
+
+    [Header("Elemental Settings")]
+    public BulletType bulletType;
+
     [Header("FireBall Settings")]
     public float minDamage = 20f;
     public float maxDamage = 30f;
@@ -12,7 +17,7 @@ public class FireBullet : MonoBehaviour
     private Rigidbody2D rb;
     private float lifeTimer;
 
-    [Header("FireTrail Settings")]
+    [Header("Trail Settings")]
     public GameObject fireTrailPrefab;
     public float trailSpawnRate = 0.01f;
     private float trailTimer;
@@ -51,7 +56,7 @@ public class FireBullet : MonoBehaviour
         lifeTimer -= Time.deltaTime;
         if (lifeTimer <= 0f)
         {
-            BulletPool.Instance.ReturnBullet(this);
+            DeactivateBullet();
         }
     }
 
@@ -65,7 +70,9 @@ public class FireBullet : MonoBehaviour
             var life = collision.GetComponent<LifeController>();
             if (life != null)
             {
-                life.TakeDamage(dmg, damageElement: LifeController.DamageElement.Fire);
+                LifeController.DamageElement element = (bulletType == BulletType.Ice) ? LifeController.DamageElement.Ice : LifeController.DamageElement.Fire;
+
+                life.TakeDamage(dmg, damageElement: element);
             }
             else
             {
@@ -78,7 +85,7 @@ public class FireBullet : MonoBehaviour
 
             SpawnImpactEffects(collision.transform.position, hitPlayer);
 
-            BulletPool.Instance.ReturnBullet(this);
+            DeactivateBullet();
         }
     }
 
@@ -88,12 +95,18 @@ public class FireBullet : MonoBehaviour
         if (rb != null)
         {
             rb.velocity = direction * speed;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            transform.rotation = Quaternion.Euler(0, 0, angle);
         }
     }
 
     void SpawnTrail()
     {
-        Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
+        if (fireTrailPrefab != null)
+        {
+            Instantiate(fireTrailPrefab, transform.position, Quaternion.identity);
+        }
     }
 
     void SpawnImpactEffects(Vector3 impactPosition, bool isPlayerHit)
@@ -112,6 +125,18 @@ public class FireBullet : MonoBehaviour
         if (isPlayerHit && Time.timeScale > 0f && CameraShaker.Instance != null)
         {
             CameraShaker.Instance.Shake(cameraShakeIntensity, cameraShakeDuration);
+        }
+    }
+
+    private void DeactivateBullet()
+    {
+        if (bulletType == BulletType.Ice)
+        {
+            BulletPool.Instance.ReturnIceBall(this);
+        }
+        else
+        {
+            BulletPool.Instance.ReturnBullet(this);
         }
     }
 }

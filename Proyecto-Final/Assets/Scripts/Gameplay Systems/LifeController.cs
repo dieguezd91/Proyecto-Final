@@ -24,6 +24,7 @@ public class LifeController : MonoBehaviour
     {
         Normal,
         Fire,
+        Ice,
     }
 
     [Header("HEALTH SETTINGS")]
@@ -104,7 +105,11 @@ public class LifeController : MonoBehaviour
                         case DamageElement.Fire:
                             SoundManager.Instance.Play("PlayerHitBurn");
                             break;
-                        
+
+                        case DamageElement.Ice:
+                            SoundManager.Instance.Play("PlayerHitBurn");
+                            break;
+
                         default:
                             SoundManager.Instance.Play("PlayerHit");
                             break;
