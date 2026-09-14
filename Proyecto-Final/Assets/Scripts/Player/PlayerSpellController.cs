@@ -12,6 +12,7 @@ public class PlayerSpellController : MonoBehaviour
 
     private SpellType currentSpellType = SpellType.Range;
     private InputReader input;
+    private bool fireSpellActive = false;
 
     private PlayerController playerController;
     private PlayerMovementController playerMovementController;
@@ -149,7 +150,16 @@ public class PlayerSpellController : MonoBehaviour
         SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
         if (playerMovementController != null) playerMovementController.ApplyAttackMovementPenalty();
 
-        SpellInventory.Instance.StartCooldown(selectedSlotIndex);
+        FireSpell fireSpell = spellComponent as FireSpell;
+
+        if (fireSpell != null)
+        {
+            fireSpell.SetSpellSlotIndex(selectedSlotIndex);
+        }
+        else
+        {
+            SpellInventory.Instance.StartCooldown(selectedSlotIndex);
+        }
 
         TutorialEvents.InvokeSpellCasted();
     }
@@ -164,6 +174,11 @@ public class PlayerSpellController : MonoBehaviour
 
     private bool CanCastSpell()
     {
+
+        if (fireSpellActive)
+            return false;
+
+
         WorldTransitionAnimator worldTransition = FindObjectOfType<WorldTransitionAnimator>();
         if (worldTransition != null && worldTransition.IsInInterior)
             return false;
@@ -248,5 +263,10 @@ public class PlayerSpellController : MonoBehaviour
         if (playerController != null && !playerController.CanAct()) return;
 
         SpellInventory.Instance.CycleSpell(direction);
+    }
+
+    public void SetFireSpellActive(bool active)
+    {
+        fireSpellActive = active;
     }
 }
