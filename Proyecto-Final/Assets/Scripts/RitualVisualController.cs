@@ -20,8 +20,8 @@ public class RitualVisualController : MonoBehaviour
     [SerializeField] private bool centerVignetteOnPlayer = true;
     [SerializeField] private float vignetteFadeDuration = 1.5f;
 
-    private const float DAY_VIGNETTE_INTENSITY = 0.15f;
-    private const float NIGHT_VIGNETTE_INTENSITY = 0.45f;
+    private const float DAY_VIGNETTE_INTENSITY = 0.0f;
+    private const float NIGHT_VIGNETTE_INTENSITY = 0.1f;
     private const float RITUAL_LIGHT_DIM = 0.05f;
     private const float RITUAL_PULSE_SPEED = 1.5f;
 

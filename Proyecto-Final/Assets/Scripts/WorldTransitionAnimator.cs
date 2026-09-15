@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -58,7 +58,7 @@ public class WorldTransitionAnimator : MonoBehaviour
             stateBeforeInterior = WorldState.Day;
             return;
         }
-        ChangeState(WorldState.Day, true);
+        ChangeState(WorldState.Day, false);
     }
 
     public void TransitionToNight()
@@ -68,7 +68,7 @@ public class WorldTransitionAnimator : MonoBehaviour
             stateBeforeInterior = WorldState.Night;
             return;
         }
-        ChangeState(WorldState.Night, true);
+        ChangeState(WorldState.Night, false);
     }
 
     public void EnterHouse()
@@ -137,7 +137,7 @@ public class WorldTransitionAnimator : MonoBehaviour
         switch (state)
         {
             case WorldState.Day: return dayStateName;
-            case WorldState.Night: return nightStateName;
+            case WorldState.Night: return dayStateName;
             case WorldState.Interior: return interiorStateName;
             default: return dayStateName;
         }

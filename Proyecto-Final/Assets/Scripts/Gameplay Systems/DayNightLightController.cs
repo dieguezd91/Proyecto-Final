@@ -16,20 +16,22 @@ public class DayNightLightController : MonoBehaviour
 
     [Header("LIGHT INTENSITY")]
     public float dayLightIntensity = 1.0f;
-    public float nightLightIntensity = 0.5f;
+    public float nightLightIntensity = 0.3f;
+    public Color dayLightColor = Color.white;
+    public Color nightLightColor = new Color(0.05f, 0.05f, 0.2f, 1f);
     public float dayGlobalVolumeIntensity = 0f;
     public float nightGlobalVolumeIntensity = 5f;
 
     [Header("VIGNETTE")]
     public float dayVignetteIntensity = 0f;
-    public float nightVignetteIntensity = 0.4f;
+    public float nightVignetteIntensity = 0.1f;
 
     [Header("COLOR ADJUSTMENTS")]
     public float dayExposure = 0f;
-    public float nightExposure = -0.5f;
+    public float nightExposure = -0.1f;
 
     [Header("TRANSITION")]
-    public float transitionDuration = 2.0f;
+    public float transitionDuration = 5.0f;
     public bool useSmoothTransition = true;
 
     private Coroutine transitionCoroutine;
@@ -103,6 +105,7 @@ public class DayNightLightController : MonoBehaviour
         bool isDayState = gameState != GamePhase.Night;
 
         float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
+        Color targetColor = isDayState ? dayLightColor : nightLightColor;
         float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
         float targetExposure = isDayState ? dayExposure : nightExposure;
         float targetVignette = isDayState ? dayVignetteIntensity : nightVignetteIntensity;
@@ -113,11 +116,12 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetVignette, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetColor, targetBloom, targetExposure, targetVignette, transitionDuration));
         }
         else
         {
             globalLight.intensity = targetLight;
+            globalLight.color = targetColor;
 
             if (bloomComponent != null)
                 bloomComponent.intensity.value = targetBloom;
@@ -132,9 +136,10 @@ public class DayNightLightController : MonoBehaviour
         }
     }
 
-    IEnumerator TransitionVisuals(float targetLight, float targetBloom, float targetExposure, float targetVignette, float duration)
+    IEnumerator TransitionVisuals(float targetLight, Color targetColor, float targetBloom, float targetExposure, float targetVignette, float duration)
     {
         float startLight = globalLight.intensity;
+        Color startLightColor = globalLight.color;
         float startBloom = bloomComponent != null ? bloomComponent.intensity.value : 0f;
         float startExposure = colorAdjustmentsComponent != null ? colorAdjustmentsComponent.postExposure.value : 0f;
         Color startColorFilter = colorAdjustmentsComponent != null ? colorAdjustmentsComponent.colorFilter.value : Color.white;
@@ -154,6 +159,7 @@ public class DayNightLightController : MonoBehaviour
             float t = Mathf.SmoothStep(0, 1, elapsedTime / duration);
 
             globalLight.intensity = Mathf.Lerp(startLight, targetLight, t);
+            globalLight.color = Color.Lerp(startLightColor, targetColor, t);
 
             if (bloomComponent != null)
                 bloomComponent.intensity.value = Mathf.Lerp(startBloom, targetBloom, t);
@@ -173,7 +179,7 @@ public class DayNightLightController : MonoBehaviour
             {
                 StopCoroutine(transitionCoroutine);
             }
-            transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayGlobalVolumeIntensity, dayExposure, dayVignetteIntensity, transitionDuration));
+            transitionCoroutine = StartCoroutine(TransitionVisuals(dayLightIntensity, dayLightColor, dayGlobalVolumeIntensity, dayExposure, dayVignetteIntensity, transitionDuration));
         }
     }
 
@@ -182,7 +188,7 @@ public class DayNightLightController : MonoBehaviour
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
 
-        transitionCoroutine = StartCoroutine(TransitionVisuals(targetIntensity, bloomComponent?.intensity.value ?? 0f, colorAdjustmentsComponent?.postExposure.value ?? 0f, vignetteComponent?.intensity.value ?? 0f, duration));
+        transitionCoroutine = StartCoroutine(TransitionVisuals(targetIntensity, nightLightColor, bloomComponent?.intensity.value ?? 0f, colorAdjustmentsComponent?.postExposure.value ?? 0f, vignetteComponent?.intensity.value ?? 0f, duration));
     }
 
     public void RestoreLightAfterRitual(GamePhase targetState, float duration)
@@ -190,6 +196,7 @@ public class DayNightLightController : MonoBehaviour
         bool isDayState = targetState != GamePhase.Night;
 
         float targetLight = isDayState ? dayLightIntensity : nightLightIntensity;
+        Color targetColor = isDayState ? dayLightColor : nightLightColor;
         float targetBloom = isDayState ? dayGlobalVolumeIntensity : nightGlobalVolumeIntensity;
         float targetExposure = isDayState ? dayExposure : nightExposure;
         float targetVignette = isDayState ? dayVignetteIntensity : nightVignetteIntensity;
@@ -197,6 +204,6 @@ public class DayNightLightController : MonoBehaviour
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
 
-        transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetBloom, targetExposure, targetVignette, duration));
+        transitionCoroutine = StartCoroutine(TransitionVisuals(targetLight, targetColor, targetBloom, targetExposure, targetVignette, duration));
     }
 }
