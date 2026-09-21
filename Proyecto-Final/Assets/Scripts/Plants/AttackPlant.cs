@@ -142,12 +142,14 @@ public class AttackPlant : Plant
             if (queuedTarget.gameObject.activeInHierarchy)
             {
                 GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
-                BasicRangeSpell projectileComponent = projectileObj.GetComponent<BasicRangeSpell>();
+
+                Spell projectileComponent = projectileObj.GetComponent<Spell>();
 
                 if (projectileComponent != null)
                 {
                     Vector2 direction = (queuedTarget.position - firePoint.position).normalized;
-                    projectileComponent.SetDirection(direction);
+
+                    projectileComponent.Cast(direction, firePoint.position);
                 }
             }
         }

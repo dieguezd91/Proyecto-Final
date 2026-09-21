@@ -15,6 +15,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected float moveSpeed;
     protected float detectionRange;
     protected float footstepCooldown;
+    private float slowMultiplier = 1f;
 
     [SerializeField] protected LayerMask plantLayer;
 
@@ -44,8 +45,9 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
 
     #region Exposed properties (para estados)
-    public float MoveSpeed => moveSpeed;
+    public float MoveSpeed => moveSpeed * slowMultiplier; 
     public Animator Animator => animator;
+
     public bool IsDead => isDead;
     #endregion
 
@@ -373,6 +375,16 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     protected bool IsBeingKnockedBack()
     {
         return knockbackReceiver?.IsBeingKnockedBack() == true;
+    }
+
+    public void ApplySlow(float slowAmount)
+    {
+        slowMultiplier = Mathf.Clamp01(1f - slowAmount);
+    }
+
+    public void RemoveSlow()
+    {
+        slowMultiplier = 1f;
     }
 
     public float GetDistanceToTarget()
