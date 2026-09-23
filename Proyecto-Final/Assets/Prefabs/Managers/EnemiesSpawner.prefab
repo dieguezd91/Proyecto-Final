@@ -46,11 +46,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   useContinuousHordeSystem: 1
-  baseEnemiesPerNight: 4
-  enemiesPerNightIncrement: 6
+  baseEnemiesPerNight: 6
+  enemiesPerNightIncrement: 7
   difficultyScalingFactor: 1.7
   baseSpawnInterval: 3
-  minSpawnInterval: 0.4
+  minSpawnInterval: 0.6
   spawnIntervalDecreasePerDay: 0.1
   spawnPoints:
   - {fileID: 0}
