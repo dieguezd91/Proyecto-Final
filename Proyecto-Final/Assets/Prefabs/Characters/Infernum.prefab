@@ -209,6 +209,7 @@ Transform:
   - {fileID: 1303027347511237169}
   - {fileID: 7023867465920191612}
   - {fileID: 8219409823279171313}
+  - {fileID: 6032276191198040960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8548500356481358433
@@ -318,6 +319,7 @@ MonoBehaviour:
   idleSoundMinTime: 3
   idleSoundMaxTime: 10
   rangedData: {fileID: 11400000, guid: 0a0aec17e701e1c4e9f6d81771b6457c, type: 2}
+  isIceEnemy: 0
   firingPoint: {fileID: 1303027347511237169}
 --- !u!114 &935879750160187858
 MonoBehaviour:
@@ -370,7 +372,6 @@ MonoBehaviour:
   dropScatterDistance: 0.5
   explosionForce: 5
   dotSoundCooldown: 0.2
-  isRespawning: 0
   isEnemy: 1
   isPlayer: 0
   isPlant: 0
@@ -5380,6 +5381,37 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!1 &5693733157501321246
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6032276191198040960}
+  m_Layer: 8
+  m_Name: PlantGripPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6032276191198040960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5693733157501321246}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.68, y: -0.18, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6987912840467525838}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8483156297716893924
 GameObject:
   m_ObjectHideFlags: 0

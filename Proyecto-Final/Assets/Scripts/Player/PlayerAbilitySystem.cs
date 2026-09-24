@@ -342,7 +342,6 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private HarvestablePlant GetHarvestableAtPosition(Vector2 worldPosition)
     {
-        // Primero buscamos una planta colocada mediante TilePlantingSystem.
         Vector3Int cellPos =
             TilePlantingSystem.Instance.PlantingTilemap
             .WorldToCell(worldPosition);
@@ -359,8 +358,6 @@ public class PlayerAbilitySystem : MonoBehaviour
                 return harvestable;
         }
 
-        // Después buscamos plantas recolectables directamente
-        // en el escenario mediante su Collider2D.
         Collider2D[] hits =
             Physics2D.OverlapPointAll(worldPosition);
 
