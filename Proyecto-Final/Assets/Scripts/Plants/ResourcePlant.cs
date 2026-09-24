@@ -1,298 +1,229 @@
+using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
-public class HarvestReward
-{
-    public string materialName;
-    public int amount;
-    public Sprite icon;
-}
 
 public class ResourcePlant : Plant
 {
-    [Header("RESOURCES SETTINGS")]
-    [SerializeField] private int daysToProduceResources = 2;
-    [SerializeField] private int minimumResourceAmount = 1;
-    [SerializeField] private int maximumResourceAmount = 5;
-    [SerializeField] private MaterialType materialType;
-    [SerializeField] private Sprite materialSprite;
+    [Header("HEALING AURA")]
+    [SerializeField] private float healingRadius = 2.5f;
+    [SerializeField] private float healPerSecond = 5f;
+    [SerializeField] private LayerMask plantLayer;
 
-    [Header("HARVEST SETTINGS")]
-    [SerializeField] private float harvestDuration = 2f;
-    [SerializeField] private GameObject harvestProgressIndicator;
+    [Header("ENERGY")]
+    [SerializeField] private float maxEnergy = 100f;
+    [SerializeField] private float energy = 100f;
+    [SerializeField] private float energyConsumptionPerSecond = 10f;
+    [SerializeField] private float energyRegenerationPerSecond = 5f;
 
-    [Header("HARVEST FX")]
-    [SerializeField] private ParticleSystem harvestReadyParticles;
+    [Header("VFX")]
+    [SerializeField] private GameObject healingAura;
+    [SerializeField] private ParticleSystem healingParticles;
 
-    private SpriteRenderer plantRenderer;
-    private Color originalColor;
-    public Color highlightColor;
-    public Color clickColor;
+    private bool isHealing = false;
 
-    private bool isProducing = false;
-    private bool isReadyToHarvest = false;
-    private bool isBeingHarvested = false;
-    private int cycleStartDay = -1;
+    private readonly HashSet<LifeController> plantsBeingHealed =
+        new HashSet<LifeController>();
 
-    [SerializeField] private MaterialType rewardType;
-    [SerializeField] private int rewardAmount = 1;
-
-    private PlantGrowthUI growthUI;
+    public float CurrentEnergy => energy;
+    public float MaxEnergy => maxEnergy;
+    public bool IsHealing => isHealing;
 
     protected override void Start()
     {
         base.Start();
 
-        plantRenderer = GetComponent<SpriteRenderer>();
-        originalColor = plantRenderer.color;
+        energy = Mathf.Clamp(energy, 0f, maxEnergy);
 
-        cycleStartDay = DayCycleController.Instance.CurrentDay;
-        growthUI = GetComponentInChildren<PlantGrowthUI>();
+        if (healingAura != null)
+            healingAura.SetActive(false);
 
-        if (harvestProgressIndicator != null)
+        if (healingParticles != null)
+            healingParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        if (!IsFullyGrown())
         {
-            harvestProgressIndicator.SetActive(false);
+            StopHealingEffects();
+            RegenerateEnergy();
+            return;
+        }
+
+        plantsBeingHealed.Clear();
+
+        FindPlantsToHeal();
+
+        if (plantsBeingHealed.Count > 0 && energy > 0f)
+        {
+            HealPlants();
+        }
+        else
+        {
+            StopHealingEffects();
+            RegenerateEnergy();
+        }
+    }
+
+    private void FindPlantsToHeal()
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            transform.position,
+            healingRadius,
+            plantLayer
+        );
+
+        foreach (Collider2D hit in hits)
+        {
+            if (hit == null)
+                continue;
+
+            Plant plant = hit.GetComponentInParent<Plant>();
+
+            if (plant == null || plant == this)
+                continue;
+
+            LifeController life = hit.GetComponentInParent<LifeController>();
+
+            if (life == null || !life.IsAlive())
+                continue;
+
+            if (life.currentHealth >= life.maxHealth)
+                continue;
+
+            plantsBeingHealed.Add(life);
+        }
+    }
+
+    private void HealPlants()
+    {
+        if (plantsBeingHealed.Count == 0 || energy <= 0f)
+        {
+            StopHealingEffects();
+            RegenerateEnergy();
+            return;
+        }
+
+        isHealing = true;
+
+        if (healingAura != null && !healingAura.activeSelf)
+            healingAura.SetActive(true);
+
+        if (healingParticles != null && !healingParticles.isPlaying)
+            healingParticles.Play();
+
+        float maxEnergyAvailable =
+            energyConsumptionPerSecond * Time.deltaTime;
+
+        float energyUsed = Mathf.Min(
+            maxEnergyAvailable,
+            energy
+        );
+
+        float healingMultiplier = energyUsed / maxEnergyAvailable;
+
+        float totalHealing =
+            healPerSecond *
+            Time.deltaTime *
+            healingMultiplier;
+
+        float healingPerPlant =
+            totalHealing / plantsBeingHealed.Count;
+
+        foreach (LifeController life in plantsBeingHealed)
+        {
+            if (life == null || !life.IsAlive())
+                continue;
+
+            life.currentHealth = Mathf.Min(
+                life.currentHealth + healingPerPlant,
+                life.maxHealth
+            );
+
+            life.onHealthChanged?.Invoke(
+                life.currentHealth,
+                life.maxHealth
+            );
+        }
+
+        energy -= energyUsed;
+        energy = Mathf.Clamp(energy, 0f, maxEnergy);
+
+        if (energy <= 0f)
+        {
+            StopHealingEffects();
+        }
+    }
+
+    private void RegenerateEnergy()
+    {
+        if (energy >= maxEnergy)
+        {
+            energy = maxEnergy;
+            return;
+        }
+
+        energy += energyRegenerationPerSecond * Time.deltaTime;
+        energy = Mathf.Clamp(energy, 0f, maxEnergy);
+    }
+
+    private void StopHealingEffects()
+    {
+        isHealing = false;
+
+        if (healingAura != null)
+            healingAura.SetActive(false);
+
+        if (healingParticles != null && healingParticles.isPlaying)
+        {
+            healingParticles.Stop(
+                true,
+                ParticleSystemStopBehavior.StopEmittingAndClear
+            );
         }
     }
 
     protected override void OnMature()
     {
         base.OnMature();
-        cycleStartDay = DayCycleController.Instance.CurrentDay;
-    }
 
-    private void CheckProduction(int currentDay)
-    {
-        if (!IsFullyGrown() || isProducing || isReadyToHarvest || isBeingHarvested)
-            return;
-
-        int daysSinceCycleStart = currentDay - cycleStartDay;
-        if (daysSinceCycleStart >= daysToProduceResources)
-        {
-            ProduceResources();
-        }
-    }
-
-    private void ProduceResources()
-    {
-        isProducing = true;
-        StartCoroutine(FinishProduction());
-    }
-
-    private IEnumerator FinishProduction()
-    {
-        yield return new WaitForSeconds(0.5f);
-
-        isProducing = false;
-        isReadyToHarvest = true;
-
-        ActivateHarvestReadyParticles();
-    }
-
-    private void ActivateHarvestReadyParticles()
-    {
-        if (harvestReadyParticles != null && !harvestReadyParticles.isPlaying)
-            harvestReadyParticles.Play();
-    }
-
-    public void StartHarvest()
-    {
-        if (!isReadyToHarvest || isBeingHarvested)
-            return;
-
-        if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
-        {
-            return;
-        }
-
-        isBeingHarvested = true;
-        StartCoroutine(HarvestCoroutine());
-    }
-
-    private IEnumerator HarvestCoroutine()
-    {
-        if (harvestProgressIndicator != null)
-        {
-            harvestProgressIndicator.SetActive(true);
-        }
-
-        float harvestTimer = 0f;
-        while (harvestTimer < harvestDuration)
-        {
-            if (abilitySystem == null || abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
-            {
-                CancelHarvest();
-                yield break;
-            }
-
-            harvestTimer += Time.deltaTime;
-
-            yield return null;
-        }
-
-        CompleteHarvest();
-    }
-
-    public void CancelHarvest()
-    {
-        isBeingHarvested = false;
-
-        if (harvestProgressIndicator != null)
-        {
-            harvestProgressIndicator.SetActive(false);
-        }
-    }
-
-    private void CompleteHarvest()
-    {
-        if (!isBeingHarvested) return;
-
-        int resourceAmount = Random.Range(minimumResourceAmount, maximumResourceAmount + 1);
-
-        if (InventoryManager.Instance != null)
-        {
-            InventoryManager.Instance.AddMaterial(materialType, resourceAmount);
-
-            InventoryUI inventoryUI = FindObjectOfType<InventoryUI>();
-            if (inventoryUI != null && inventoryUI.gameObject.activeInHierarchy)
-            {
-                inventoryUI.UpdateAllSlots();
-            }
-        }
-
-        Sprite resourceSprite = GetResourceSprite();
-        if (resourceSprite != null)
-        {
-            InventoryManager.Instance.SetMaterialIcon(materialType, resourceSprite);
-        }
-
-        if (harvestProgressIndicator != null)
-        {
-            harvestProgressIndicator.SetActive(false);
-        }
-
-        isReadyToHarvest = false;
-        isBeingHarvested = false;
-        cycleStartDay = DayCycleController.Instance.CurrentDay;
-
-        DeactivateHarvestReadyParticles();
-
-        if (growthUI != null)
-        {
-            growthUI.UpdateProgressUI();
-        }
-    }
-
-    private void DeactivateHarvestReadyParticles()
-    {
-        if (harvestReadyParticles != null && harvestReadyParticles.isPlaying)
-            harvestReadyParticles.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        energy = maxEnergy;
     }
 
     protected override void HandleGameStateChanged(GamePhase newPhase)
     {
-         if (newPhase == GamePhase.Night)
-         {
-             base.HandleGameStateChanged(newPhase);
-             CheckProduction(DayCycleController.Instance.CurrentDay);
-         }
+        base.HandleGameStateChanged(newPhase);
 
-         if (newPhase == GamePhase.Day && isReadyToHarvest)
-         {
-             if (TutorialManager.Instance != null && TutorialManager.Instance.IsTutorialActive())
-             {
-                 TutorialEvents.InvokeFirstPlantReadyToHarvest();
-             }
-         }
+        if (newPhase == GamePhase.Night)
+        {
+            StopHealingEffects();
+        }
     }
 
     protected override void OnDestroy()
     {
+        StopHealingEffects();
         base.OnDestroy();
-
-        if (LevelManager.Instance != null)
-            GameFlowController.Instance.OnPhaseChanged -= HandleGameStateChanged;
     }
 
-    void OnMouseOver()
+    public float GetEnergyPercent()
     {
-        if (isReadyToHarvest)
-        {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null)
-            {
-                float distance = Vector2.Distance(transform.position, player.transform.position);
-                if (abilitySystem != null && distance <= abilitySystem.interactionDistance)
-                {
-                    plantRenderer.color = highlightColor;
-                }
-                else
-                {
-                    plantRenderer.color = originalColor;
-                }
-            }
-        }
-    }
-
-    void OnMouseExit()
-    {
-        if (!isBeingHarvested)
-        {
-            plantRenderer.color = originalColor;
-        }
-    }
-
-    public float GetTotalProgress()
-    {
-        if (cycleStartDay < 0)
+        if (maxEnergy <= 0f)
             return 0f;
 
-        if (isReadyToHarvest)
-            return 1f;
-
-        int currentDay = DayCycleController.Instance.CurrentDay;
-        int elapsed = currentDay - cycleStartDay;
-
-        int required = IsFullyGrown() ? daysToProduceResources : plantData.daysToGrow;
-
-        if (required <= 0)
-        {
-            return (elapsed <= 0) ? 0f : 1f;
-        }
-
-        return Mathf.Clamp01((float)elapsed / required);
+        return energy / maxEnergy;
     }
 
-    public HarvestReward GetHarvestReward()
+    private void OnDrawGizmosSelected()
     {
-        if (InventoryManager.Instance != null)
-        {
-            string name = InventoryManager.Instance.GetMaterialName(rewardType);
-            Sprite icon = InventoryManager.Instance.GetMaterialIcon(rewardType);
-            return new HarvestReward
-            {
-                materialName = name,
-                amount = rewardAmount,
-                icon = icon
-            };
-        }
-        return null;
+        Gizmos.color = isHealing
+            ? new Color(0.3f, 1f, 0.5f, 0.6f)
+            : new Color(0.3f, 1f, 0.5f, 0.25f);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            healingRadius
+        );
     }
-
-
-    public int GetLastProductionDay() => cycleStartDay;
-
-    public int GetDaysToProduce() => daysToProduceResources;
-
-    private Sprite GetResourceSprite() => materialSprite;
-
-    public bool IsReadyToHarvest() => isReadyToHarvest;
-
-    public bool IsBeingHarvested() => isBeingHarvested;
-
-    public float GetHarvestDuration() => harvestDuration;
-
-    public void CompletedHarvest() => CompleteHarvest();
 }
-

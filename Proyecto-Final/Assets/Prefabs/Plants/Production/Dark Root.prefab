@@ -118,18 +118,17 @@ MonoBehaviour:
   tilePosition: {x: 0, y: 0, z: 0}
   idleSoundMinTime: 5
   idleSoundMaxTime: 15
-  daysToProduceResources: 0
-  minimumResourceAmount: 1
-  maximumResourceAmount: 5
-  materialType: 9
-  materialSprite: {fileID: -39267108, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
-  harvestDuration: 3
-  harvestProgressIndicator: {fileID: 15842525385593699, guid: 081bc5f7e28417041b0c3ff489925d8a, type: 3}
-  harvestReadyParticles: {fileID: 3190134809603557918}
-  highlightColor: {r: 1, g: 1, b: 0, a: 1}
-  clickColor: {r: 1, g: 0, b: 0, a: 1}
-  rewardType: 9
-  rewardAmount: 2
+  healingRadius: 5
+  healPerSecond: 3
+  plantLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  maxEnergy: 100
+  energy: 100
+  energyConsumptionPerSecond: 10
+  energyRegenerationPerSecond: 5
+  healingAura: {fileID: 0}
+  healingParticles: {fileID: 0}
 --- !u!114 &5857128013590860986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,7 +162,6 @@ MonoBehaviour:
   dropScatterDistance: 0.5
   explosionForce: 0
   dotSoundCooldown: 0.2
-  isRespawning: 0
   isEnemy: 0
   isPlayer: 0
   isPlant: 1
@@ -534,16 +532,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: HarvestReadyParticle
       objectReference: {fileID: 0}
+    - target: {fileID: 8184296318486604401, guid: d76fc3d7a42a9b442ab148cc5df611e2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d76fc3d7a42a9b442ab148cc5df611e2, type: 3}
---- !u!198 &3190134809603557918 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 860433321572084644, guid: d76fc3d7a42a9b442ab148cc5df611e2, type: 3}
-  m_PrefabInstance: {fileID: 2861330822117581242}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5073571004871093618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7051947398077205704, guid: d76fc3d7a42a9b442ab148cc5df611e2, type: 3}
@@ -640,6 +637,10 @@ PrefabInstance:
     - target: {fileID: 6690542697468327941, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
       propertyPath: m_Name
       value: ResourcePlantCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6690542697468327941, guid: e9b0500d79e9d2d408c0327a08d1800a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

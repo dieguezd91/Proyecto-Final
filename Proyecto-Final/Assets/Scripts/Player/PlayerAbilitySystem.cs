@@ -61,7 +61,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private FloatingTextController floatingTextController;
 
     private bool isHarvesting = false;
-    private ResourcePlant currentHarvestPlant = null;
+    private HarvestablePlant currentHarvestPlant = null;
 
     public delegate void AbilityChangedHandler(PlayerAbility newAbility);
     public event AbilityChangedHandler OnAbilityChanged;
@@ -339,49 +339,94 @@ public class PlayerAbilitySystem : MonoBehaviour
         StopInteractionAnimation();
     }
 
+
+    private HarvestablePlant GetHarvestableAtPosition(Vector2 worldPosition)
+    {
+        // Primero buscamos una planta colocada mediante TilePlantingSystem.
+        Vector3Int cellPos =
+            TilePlantingSystem.Instance.PlantingTilemap
+            .WorldToCell(worldPosition);
+
+        Plant plantedPlant =
+            TilePlantingSystem.Instance.GetPlantAt(cellPos);
+
+        if (plantedPlant != null)
+        {
+            HarvestablePlant harvestable =
+                plantedPlant.GetComponent<HarvestablePlant>();
+
+            if (harvestable != null)
+                return harvestable;
+        }
+
+        // Después buscamos plantas recolectables directamente
+        // en el escenario mediante su Collider2D.
+        Collider2D[] hits =
+            Physics2D.OverlapPointAll(worldPosition);
+
+        foreach (Collider2D hit in hits)
+        {
+            HarvestablePlant harvestable =
+                hit.GetComponentInParent<HarvestablePlant>();
+
+            if (harvestable != null)
+                return harvestable;
+        }
+
+        return null;
+    }
+
+
     private void HandleHarvesting()
     {
+        Vector3 mouseWorld = GetMouseWorldPosition();
+
+        HarvestablePlant harvestable =
+            GetHarvestableAtPosition(mouseWorld);
+
+        if (harvestable == null)
+            return;
+
+        if (harvestable.IsBeingHarvested())
+            return;
+
+        Vector2 targetPosition =
+            harvestable.transform.position;
+
+        if (Vector2.Distance(transform.position, targetPosition) >
+            interactionDistance)
         {
-            Vector3 mouseWorld = GetMouseWorldPosition();
-            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
-
-            Plant plantBase = TilePlantingSystem.Instance.GetPlantAt(cellPos);
-
-            if (plantBase == null)
-                return;
-
-            ResourcePlant plant = plantBase as ResourcePlant;
-            if (plant == null || plant.IsBeingHarvested())
-                return;
-
-            Vector3 tileCenter = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
-            if (Vector2.Distance(transform.position, tileCenter) > interactionDistance)
-            {
-                warningBubble?.ShowMessage("Too far to harvest.");
-                return;
-            }
-
-            if (!plant.IsReadyToHarvest())
-            {
-                warningBubble?.ShowMessage("Not ready to harvest yet!");
-                return;
-            }
-
-            if (manaSystem != null && !manaSystem.UseMana(harvestManaCost))
-            {
-                warningBubble?.ShowMessage("Not enough mana to harvest!");
-
-                if (floatingTextController != null)
-                {
-                    warningBubble.ShowMessage("Insufficient Mana");
-                }
-
-                SoundManager.Instance?.PlayOneShot("Error");
-                return;
-            }
-
-            StartHarvesting(plant);
+            warningBubble?.ShowMessage("Too far to harvest.");
+            return;
         }
+
+        if (!harvestable.IsReadyToHarvest())
+        {
+            warningBubble?.ShowMessage(
+                "Not ready to harvest yet!"
+            );
+            return;
+        }
+
+        if (manaSystem != null &&
+            !manaSystem.UseMana(harvestManaCost))
+        {
+            warningBubble?.ShowMessage(
+                "Not enough mana to harvest!"
+            );
+
+            if (floatingTextController != null)
+            {
+                warningBubble?.ShowMessage(
+                    "Insufficient Mana"
+                );
+            }
+
+            SoundManager.Instance?.PlayOneShot("Error");
+            return;
+        }
+
+        StartHarvesting(harvestable);
     }
 
     private void HandleRemoving()
@@ -437,27 +482,39 @@ public class PlayerAbilitySystem : MonoBehaviour
         StopInteractionAnimation();
     }
 
-    public void StartHarvesting(ResourcePlant plant)
+    public void StartHarvesting(HarvestablePlant plant)
     {
         if (currentAbility != PlayerAbility.Harvesting ||
             plant == null ||
             !plant.IsReadyToHarvest() ||
             plant.IsBeingHarvested() ||
             isPlayingInteractionAnimation)
+        {
             return;
+        }
 
         currentHarvestPlant = plant;
         isHarvesting = true;
-        currentHarvestPlant.GetComponent<SpriteRenderer>().color = currentHarvestPlant.clickColor;
+
+        SpriteRenderer sprite =
+            currentHarvestPlant.GetComponent<SpriteRenderer>();
+
+        if (sprite != null)
+        {
+            sprite.color =
+                currentHarvestPlant.clickColor;
+        }
 
         PlayInteractionAnimation();
 
         SoundManager.Instance.Play("Harvest");
+
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(true);
         progressBar?.gameObject.SetActive(true);
 
         plant.StartHarvest();
+
         StartCoroutine(MonitorHarvest());
     }
 

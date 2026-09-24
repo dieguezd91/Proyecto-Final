@@ -10,23 +10,36 @@ public class PlantGrowthUI : MonoBehaviour
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private float fadeSpeed = 5f;
     [SerializeField] private float showDistance = 2f;
-    private Transform player;
 
-    private ResourcePlant resourcePlant;
+    private Transform player;
+    private HarvestablePlant harvestablePlant;
+
     private Camera cam;
     private Canvas canvas;
 
     private void Start()
     {
         cam = Camera.main;
-        resourcePlant = GetComponentInParent<ResourcePlant>();
-        canvas = GetComponentInParent<Canvas>();
 
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        harvestablePlant =
+            GetComponentInParent<HarvestablePlant>();
 
-        if (resourcePlant == null || fillImage == null || cam == null || promptCanvas == null || player == null)
+        canvas =
+            GetComponentInParent<Canvas>();
+
+        player =
+            GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (harvestablePlant == null ||
+            fillImage == null ||
+            cam == null ||
+            promptCanvas == null ||
+            player == null)
         {
-            Debug.LogWarning("PlantGrowthUI missing references.");
+            Debug.LogWarning(
+                "PlantGrowthUI missing references."
+            );
+
             enabled = false;
             return;
         }
@@ -38,22 +51,37 @@ public class PlantGrowthUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (canvas != null && canvas.renderMode == RenderMode.WorldSpace)
+        if (canvas != null &&
+            canvas.renderMode == RenderMode.WorldSpace)
         {
             transform.rotation = cam.transform.rotation;
         }
 
-        transform.position = resourcePlant.transform.position + offset;
+        transform.position =
+            harvestablePlant.transform.position + offset;
 
-        float dist = Vector2.Distance(resourcePlant.transform.position, player.position);
+        float dist =
+            Vector2.Distance(
+                harvestablePlant.transform.position,
+                player.position
+            );
 
-        bool shouldShow = dist <= showDistance
-                          && !resourcePlant.IsBeingHarvested()
-                          && GameFlowController.Instance.CurrentPhase != GamePhase.Night
-                          && resourcePlant.IsFullyGrown();
+        bool shouldShow =
+            dist <= showDistance &&
+            !harvestablePlant.IsBeingHarvested() &&
+            GameFlowController.Instance.CurrentPhase != GamePhase.Night &&
+            harvestablePlant.IsReadyToHarvest();
 
-        float targetAlpha = shouldShow ? 1f : 0f;
-        canvasGroup.alpha = Mathf.MoveTowards(canvasGroup.alpha, targetAlpha, fadeSpeed * Time.deltaTime);
+        float targetAlpha =
+            shouldShow ? 1f : 0f;
+
+        canvasGroup.alpha =
+            Mathf.MoveTowards(
+                canvasGroup.alpha,
+                targetAlpha,
+                fadeSpeed * Time.deltaTime
+            );
+
         canvasGroup.blocksRaycasts = shouldShow;
 
         if (shouldShow)
@@ -64,11 +92,16 @@ public class PlantGrowthUI : MonoBehaviour
 
     public void UpdateProgressUI()
     {
-        if (resourcePlant == null || fillImage == null) return;
+        if (harvestablePlant == null ||
+            fillImage == null)
+            return;
 
-        float progress = resourcePlant.GetTotalProgress();
+        float progress =
+            harvestablePlant.GetTotalProgress();
+
         fillImage.fillAmount = progress;
 
-        fillImage.enabled = !resourcePlant.IsBeingHarvested();
+        fillImage.enabled =
+            !harvestablePlant.IsBeingHarvested();
     }
 }

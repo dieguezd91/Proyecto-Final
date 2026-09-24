@@ -91,15 +91,20 @@ public class PlantManager : MonoBehaviour
         dayCounter = 0;
     }
 
-    public List<ResourcePlant> GetHarvestablePlants()
+    public List<HarvestablePlant> GetHarvestablePlants()
     {
-        List<ResourcePlant> harvestablePlants = new List<ResourcePlant>();
+        List<HarvestablePlant> harvestablePlants = new List<HarvestablePlant>();
 
-        foreach (Plant plant in registeredPlants)
+        HarvestablePlant[] allHarvestables =
+            FindObjectsOfType<HarvestablePlant>();
+
+        foreach (HarvestablePlant harvestable in allHarvestables)
         {
-            if (plant is ResourcePlant resourcePlant && resourcePlant.IsReadyToHarvest())
+            if (harvestable != null &&
+                harvestable.IsReadyToHarvest() &&
+                !harvestable.IsBeingHarvested())
             {
-                harvestablePlants.Add(resourcePlant);
+                harvestablePlants.Add(harvestable);
             }
         }
 

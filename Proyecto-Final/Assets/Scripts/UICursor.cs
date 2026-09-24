@@ -125,8 +125,13 @@ public class UICursor : MonoBehaviour
                     break;
 
                 case PlayerAbility.Harvesting:
-                    var harvestPlant = plant as ResourcePlant;
-                    cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest()) ? harvestingCursor : dayCursor;
+                    var harvestPlant = plant != null
+                        ? plant.GetComponent<HarvestablePlant>()
+                        : null;
+
+                    cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest())
+                        ? harvestingCursor
+                        : dayCursor;
                     break;
 
                 case PlayerAbility.Removing:
