@@ -5,7 +5,7 @@ public class MoonPhaseUI : MonoBehaviour
 {
     [Header("UI ELEMENTS")]
     [SerializeField] private Image moonPhaseImage;
-    [SerializeField] private Sprite[] moonPhaseSprites = new Sprite[5];
+    [SerializeField] private Sprite[] moonPhaseSprites = new Sprite[7];
 
     [Header("SETTINGS")]
     [SerializeField] private bool showMoonPhaseLabel = true;

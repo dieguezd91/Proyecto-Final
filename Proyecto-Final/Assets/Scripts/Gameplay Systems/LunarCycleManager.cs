@@ -8,8 +8,10 @@ public enum MoonPhase
     NewMoon = 0,
     CrescentMoon = 1,
     HalfMoon = 2,
-    GibbousMoon = 3,
-    FullMoon = 4
+    HalfMoon2 = 3,
+    GibbousMoon = 4,
+    GibbousMoon2 = 5,
+    FullMoon = 6
 }
 
 [Serializable]
@@ -21,7 +23,7 @@ public class LunarCycleManager : MonoBehaviour
 
     [Header("REFERENCES")]
     [SerializeField] private SpriteRenderer moonSpriteRenderer;
-    [SerializeField] private Sprite[] moonPhaseSprites = new Sprite[5];
+    [SerializeField] private Sprite[] moonPhaseSprites = new Sprite[7];
 
     [Header("SETTINGS")]
     [SerializeField] private bool cyclicProgression = true;
@@ -112,7 +114,7 @@ public class LunarCycleManager : MonoBehaviour
         MoonPhase previousPhase = currentMoonPhase;
         currentMoonPhase = phase;
 
-        if (moonSpriteRenderer != null && moonPhaseSprites != null && moonPhaseSprites.Length == 5)
+        if (moonSpriteRenderer != null && moonPhaseSprites != null && moonPhaseSprites.Length == 7)
         {
             int phaseIndex = (int)phase;
             if (phaseIndex >= 0 && phaseIndex < moonPhaseSprites.Length)
@@ -145,6 +147,7 @@ public class LunarCycleManager : MonoBehaviour
         return currentMoonPhase;
     }
 
+
     public void NotifyNightStarted()
     {
         if (!isInitialized) return;
@@ -156,7 +159,7 @@ public class LunarCycleManager : MonoBehaviour
         {
             if (!isFirstNight)
             {
-                int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
+                int nextPhaseIndex = ((int)currentMoonPhase + 1) % 7;
                 MoonPhase newPhase = (MoonPhase)nextPhaseIndex;
                 SetMoonPhase(newPhase);
             }
@@ -167,7 +170,7 @@ public class LunarCycleManager : MonoBehaviour
 
     public void ForceNextPhase()
     {
-        int nextPhaseIndex = ((int)currentMoonPhase + 1) % 5;
+        int nextPhaseIndex = ((int)currentMoonPhase + 1) % 7;
         SetMoonPhase((MoonPhase)nextPhaseIndex);
     }
 

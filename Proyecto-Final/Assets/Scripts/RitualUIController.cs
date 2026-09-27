@@ -6,7 +6,7 @@ public class RitualUIController : UIControllerBase
 {
     [Header("Ritual Overlay")]
     [SerializeField] private Image ritualOverlayImage;
-    [SerializeField] private Sprite[] ritualMoonPhaseSprites = new Sprite[5];
+    [SerializeField] private Sprite[] ritualMoonPhaseSprites = new Sprite[7];
     [SerializeField] private float overlayFadeDuration = 1.2f;
 
     private Coroutine ritualOverlayCoroutine;
@@ -72,7 +72,7 @@ public class RitualUIController : UIControllerBase
 
     private void UpdateRitualSpriteForCurrentMoonPhase()
     {
-        if (ritualMoonPhaseSprites == null || ritualMoonPhaseSprites.Length != 5)
+        if (ritualMoonPhaseSprites == null || ritualMoonPhaseSprites.Length != 7)
         {
             return;
         }

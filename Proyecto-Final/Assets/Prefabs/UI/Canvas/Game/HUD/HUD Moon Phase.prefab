@@ -93,6 +93,8 @@ MonoBehaviour:
   - {fileID: 1841481835, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -1304058712, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -956797572, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -956797572, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -1032481509, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -1032481509, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -1529809225, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   showMoonPhaseLabel: 1

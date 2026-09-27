@@ -104,6 +104,8 @@ MonoBehaviour:
   - {fileID: -1109831109, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -1338755855, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: 2132154558, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: 2132154558, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
+  - {fileID: -761080665, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -761080665, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   - {fileID: -1901002457, guid: 6b876b38e4597704b84b5e76e54d27a1, type: 3}
   overlayFadeDuration: 1.2
