@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossPrefabs:
   - {fileID: 2501910690517604512, guid: c5656cbb0adda984f89d79ed3f23685b, type: 3}
-  bossNightInterval: 5
+  bossNightInterval: 7
   bossSpawnDelay: 3
   bossSpawnPoint: {fileID: 0}
   bossRewardItemPrefab: {fileID: 0}
