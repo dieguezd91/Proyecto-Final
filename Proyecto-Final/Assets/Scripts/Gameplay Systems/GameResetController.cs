@@ -9,6 +9,7 @@ public class GameResetController : MonoBehaviour
     
     private LifeController playerLife;
     private PlayerMovementController playerMovementController;
+    private PlayerExperienceSystem playerExperienceSystem;
     private HouseLifeController homeLife;
 
     private void Awake()
@@ -22,6 +23,7 @@ public class GameResetController : MonoBehaviour
         {
             playerLife = player.GetComponent<LifeController>();
             playerMovementController = player.GetComponent<PlayerMovementController>();
+            playerExperienceSystem = player.GetComponent<PlayerExperienceSystem>();
         }
 
         if (home == null)
@@ -92,6 +94,12 @@ public class GameResetController : MonoBehaviour
             {
                 playerLife.ResetLife();
             }
+
+            if (playerExperienceSystem == null)
+            {
+                playerExperienceSystem = player.GetComponent<PlayerExperienceSystem>();
+            }
+            playerExperienceSystem?.ResetProgression();
         }
 
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");

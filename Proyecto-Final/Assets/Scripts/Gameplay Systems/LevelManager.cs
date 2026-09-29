@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private EnemiesSpawner waveSpawner;
     [SerializeField] private List<SpawnPointAnimator> spawnpoints = new List<SpawnPointAnimator>();
     [SerializeField] private AmbienceSoundManager ambienceSoundManager;
+    [SerializeField] private PlayerExperienceSystem playerExperienceSystem;
     
     public AmbienceSoundManager AmbienceSoundManager => ambienceSoundManager;
 
@@ -47,6 +48,13 @@ public class LevelManager : MonoBehaviour
                 waveSpawner.onHordeEnd.AddListener(HandleHordeCompleted);
         }
 
+        if (playerExperienceSystem == null)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+                playerExperienceSystem = player.GetComponent<PlayerExperienceSystem>();
+        }
+
         DayCycleController.Instance.StartDay();
     }
 
@@ -64,6 +72,12 @@ public class LevelManager : MonoBehaviour
     private void HandleHordeCompleted()
     {
         RewardsSystem.Instance?.EvaluateAndGrantReward();
+        if (playerExperienceSystem == null)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null) playerExperienceSystem = player.GetComponent<PlayerExperienceSystem>();
+        }
+        playerExperienceSystem?.GrantNightCompletionExperience();
         DayCycleController.Instance.StartDay();
     }
 
