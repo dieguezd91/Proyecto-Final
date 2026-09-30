@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98a760f6b0f417da10f71ab8f5267ca, type: 3}
+  m_Name: Spell_Hammer
+  m_EditorClassIdentifier: 
+  slotIndex: 4
+  spellType: 2
+  spellName: Hammer
+  spellIcon: {fileID: -777051087, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  spellPrefab: {fileID: 2902349897744729807, guid: 2c2fcb7dbf92a5e46a2ab55fc0d58326, type: 3}
+  manaCost: 40
+  cooldown: 6

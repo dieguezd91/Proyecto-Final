@@ -52,7 +52,7 @@ MonoBehaviour:
     manaCost: 30
     cooldown: 1
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 2
     spellName: Melee
     spellIcon: {fileID: -876388959, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -60,7 +60,7 @@ MonoBehaviour:
     manaCost: 20
     cooldown: 1
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 3
     spellName: Area
     spellIcon: {fileID: -64543203, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -68,7 +68,7 @@ MonoBehaviour:
     manaCost: 50
     cooldown: 7
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 1
     spellName: Piercing
     spellIcon: {fileID: -1175123755, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -76,7 +76,7 @@ MonoBehaviour:
     manaCost: 30
     cooldown: 4
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 2
     spellName: Hammer
     spellIcon: {fileID: -777051087, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -84,7 +84,7 @@ MonoBehaviour:
     manaCost: 40
     cooldown: 6
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 3
     spellName: Fire
     spellIcon: {fileID: 1807988885, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
@@ -92,7 +92,7 @@ MonoBehaviour:
     manaCost: 60
     cooldown: 4
     currentCooldown: 0
-    isUnlocked: 1
+    isUnlocked: 0
   - spellType: 0
     spellName: 
     spellIcon: {fileID: 0}

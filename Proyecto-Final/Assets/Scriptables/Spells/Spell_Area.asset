@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98a760f6b0f417da10f71ab8f5267ca, type: 3}
+  m_Name: Spell_Area
+  m_EditorClassIdentifier: 
+  slotIndex: 2
+  spellType: 3
+  spellName: Area
+  spellIcon: {fileID: -64543203, guid: f16b0a7a1ebc60749ab490e1f12b6e1a, type: 3}
+  spellPrefab: {fileID: 2376951640795662106, guid: 06700ad62ffa5c84c97e0cfe70009e4a, type: 3}
+  manaCost: 50
+  cooldown: 7

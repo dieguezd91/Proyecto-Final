@@ -18,6 +18,7 @@ public class SpellSlotsUIController : UIControllerBase
         {
             SpellInventory.Instance.onSpellSlotSelected += UpdateSelectedSlotUI;
             SpellInventory.Instance.onCooldownUpdated += UpdateSlotCooldown;
+            SpellInventory.Instance.OnSpellInventoryChanged += RefreshAllSlots;
         }
 
         if (LevelManager.Instance != null)
@@ -235,6 +236,7 @@ public class SpellSlotsUIController : UIControllerBase
         {
             SpellInventory.Instance.onSpellSlotSelected -= UpdateSelectedSlotUI;
             SpellInventory.Instance.onCooldownUpdated -= UpdateSlotCooldown;
+            SpellInventory.Instance.OnSpellInventoryChanged -= RefreshAllSlots;
         }
 
         if (LevelManager.Instance != null)

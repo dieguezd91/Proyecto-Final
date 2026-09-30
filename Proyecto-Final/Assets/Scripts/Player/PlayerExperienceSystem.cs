@@ -17,6 +17,8 @@ public class PlayerExperienceSystem : MonoBehaviour
     public ExperienceProgressionDataSO ProgressionData => progressionData;
 
     public event Action<int, int, int> OnExperienceChanged; // level, currentExperience, experienceRequired
+    public event Action<int> OnLevelUp;
+    public event Action OnProgressionReset;
 
     private void Awake()
     {
@@ -68,6 +70,7 @@ public class PlayerExperienceSystem : MonoBehaviour
         {
             currentExperience -= required;
             currentLevel++;
+            OnLevelUp?.Invoke(currentLevel);
             required = ExperienceRequired;
         }
 
@@ -79,5 +82,6 @@ public class PlayerExperienceSystem : MonoBehaviour
         currentLevel = 1;
         currentExperience = 0;
         OnExperienceChanged?.Invoke(currentLevel, currentExperience, ExperienceRequired);
+        OnProgressionReset?.Invoke();
     }
 }

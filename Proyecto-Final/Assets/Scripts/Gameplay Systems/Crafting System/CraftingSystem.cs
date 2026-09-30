@@ -39,24 +39,64 @@ public class CraftingSystem : MonoBehaviour
 {
     [SerializeField] public CraftingRecipesSeedsListSO craftingRecipes;
     [SerializeField] private List<PlantDataSO> plantDataList;
+    [SerializeField] private PlayerContentUnlockSystem contentUnlockSystem;
 
     private Dictionary<SeedsEnum, PlantDataSO> seedToPlantData = new Dictionary<SeedsEnum, PlantDataSO>();
 
     private void Awake()
     {
-        foreach (var plantData in plantDataList)
+        if (plantDataList != null)
         {
-            if (plantData.seedType != SeedsEnum.None)
+            foreach (var plantData in plantDataList)
             {
-                seedToPlantData[plantData.seedType] = plantData;
+                if (plantData != null && plantData.seedType != SeedsEnum.None)
+                {
+                    seedToPlantData[plantData.seedType] = plantData;
+                }
             }
         }
+
+        EnsureContentUnlockSystem();
+    }
+
+    private void EnsureContentUnlockSystem()
+    {
+        if (contentUnlockSystem == null)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                contentUnlockSystem = player.GetComponent<PlayerContentUnlockSystem>();
+            }
+
+            if (contentUnlockSystem == null)
+            {
+                contentUnlockSystem = FindObjectOfType<PlayerContentUnlockSystem>();
+            }
+        }
+    }
+
+    public bool IsRecipeUnlocked(SeedsEnum seedType)
+    {
+        EnsureContentUnlockSystem();
+        if (contentUnlockSystem == null) return true;
+
+        PlantDataSO plantData = GetPlantData(seedType);
+        if (plantData == null) return false;
+
+        return contentUnlockSystem.IsPlantUnlocked(plantData);
     }
 
     public void CraftSeed(SeedsEnum seedToCraft)
     {
         if (craftingRecipes == null)
         {
+            return;
+        }
+
+        if (!IsRecipeUnlocked(seedToCraft))
+        {
+            Debug.LogWarning($"[CraftingSystem] Cannot craft seed {seedToCraft}: Plant is not unlocked yet.");
             return;
         }
 
@@ -158,10 +198,32 @@ public class CraftingSystem : MonoBehaviour
 
     public List<CraftingRecipeSeedData> GetAllAvailableRecipes()
     {
+        var result = new List<CraftingRecipeSeedData>();
         if (craftingRecipes == null || craftingRecipes.recipes == null)
-            return new List<CraftingRecipeSeedData>();
+            return result;
 
-        return craftingRecipes.recipes;
+        EnsureContentUnlockSystem();
+
+        for (int i = 0; i < craftingRecipes.recipes.Count; i++)
+        {
+            var recipe = craftingRecipes.recipes[i];
+            if (recipe == null) continue;
+
+            if (contentUnlockSystem != null)
+            {
+                PlantDataSO plantData = GetPlantData(recipe.SeedToCraft);
+                if (plantData != null && contentUnlockSystem.IsPlantUnlocked(plantData))
+                {
+                    result.Add(recipe);
+                }
+            }
+            else
+            {
+                result.Add(recipe);
+            }
+        }
+
+        return result;
     }
 
     public PlantDataSO GetPlantData(SeedsEnum seedType)

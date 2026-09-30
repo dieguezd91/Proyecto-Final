@@ -15,7 +15,27 @@ MonoBehaviour:
   experiencePerNight: 125
   levelRequirements:
   - experienceRequired: 100
+    plantUnlocks:
+    - {fileID: 11400000, guid: 7bf0f3ef8064cf34f964f20572723a42, type: 2}
+    - {fileID: 11400000, guid: f63882e6bad5d994d989aa1cbe877347, type: 2}
+    spellUnlocks:
+    - {fileID: 11400000, guid: 48cca2cc0bb440be8cfc5c6c48ff5ce0, type: 2}
+    - {fileID: 11400000, guid: 162ec1307b614d7fa18df918382eb32b, type: 2}
   - experienceRequired: 240
+    plantUnlocks:
+    - {fileID: 11400000, guid: 7706c49d722e2f348a6ef0ec0be6ffcb, type: 2}
+    - {fileID: 11400000, guid: fefe1e14600e3314e8de70403c405ccb, type: 2}
+    spellUnlocks:
+    - {fileID: 11400000, guid: 83e302f1527f4942a612d74000b4d0b2, type: 2}
+    - {fileID: 11400000, guid: ac4055a8306342c5ba741947bfff0d00, type: 2}
   - experienceRequired: 360
+    plantUnlocks:
+    - {fileID: 11400000, guid: 57190e9e1a6a8694ab2eb9ee977af22b, type: 2}
+    spellUnlocks:
+    - {fileID: 11400000, guid: 2a565f690d1c4491aead3cdf403ef160, type: 2}
   - experienceRequired: 480
+    plantUnlocks:
+    - {fileID: 11400000, guid: 23eb498058265294086e4364fb9f4c73, type: 2}
+    spellUnlocks:
+    - {fileID: 11400000, guid: fc26c611669a45dfa1d596f871fc745a, type: 2}
   experienceIncreaseAfterLastLevel: 50

@@ -29,6 +29,7 @@ public class CraftingUIManager : MonoBehaviour
     [SerializeField] private CloseButton closeButton;
 
     private CraftingSystem craftingSystem;
+    private PlayerContentUnlockSystem contentUnlockSystem;
     private SeedsEnum selectedSeed;
     private List<RecipeButton> recipeButtons = new List<RecipeButton>();
     private bool hasSelectedRecipe = false;
@@ -53,6 +54,23 @@ public class CraftingUIManager : MonoBehaviour
     private void InitializeReferences()
     {
         craftingSystem = FindObjectOfType<CraftingSystem>();
+        EnsureContentUnlockSystem();
+    }
+
+    private void EnsureContentUnlockSystem()
+    {
+        if (contentUnlockSystem == null)
+        {
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null)
+            {
+                contentUnlockSystem = player.GetComponent<PlayerContentUnlockSystem>();
+            }
+            if (contentUnlockSystem == null)
+            {
+                contentUnlockSystem = FindObjectOfType<PlayerContentUnlockSystem>();
+            }
+        }
     }
 
     private void SubscribeToEvents()
@@ -64,6 +82,13 @@ public class CraftingUIManager : MonoBehaviour
 
         if (closeButton != null)
             closeButton.OnClick.AddListener(CloseCraftingUI);
+
+        EnsureContentUnlockSystem();
+        if (contentUnlockSystem != null)
+        {
+            contentUnlockSystem.OnPlantUnlocked += HandlePlantUnlocked;
+            contentUnlockSystem.OnUnlockStateRebuilt += HandleUnlockStateRebuilt;
+        }
     }
 
     private void UnsubscribeFromEvents()
@@ -76,7 +101,37 @@ public class CraftingUIManager : MonoBehaviour
         if (closeButton != null)
             closeButton.OnClick.RemoveListener(CloseCraftingUI);
 
+        if (contentUnlockSystem != null)
+        {
+            contentUnlockSystem.OnPlantUnlocked -= HandlePlantUnlocked;
+            contentUnlockSystem.OnUnlockStateRebuilt -= HandleUnlockStateRebuilt;
+        }
+
         CleanupRecipeButtons();
+    }
+
+    private void HandlePlantUnlocked(PlantDataSO plantData)
+    {
+        if (craftingUIPanel != null && craftingUIPanel.activeSelf)
+        {
+            PopulateRecipeList();
+        }
+    }
+
+    private void HandleUnlockStateRebuilt()
+    {
+        if (hasSelectedRecipe && craftingSystem != null && !craftingSystem.IsRecipeUnlocked(selectedSeed))
+        {
+            hasSelectedRecipe = false;
+            _currentSelectedButton = null;
+            ResetRecipeDisplay();
+            HideCraftButton();
+        }
+
+        if (craftingUIPanel != null && craftingUIPanel.activeSelf)
+        {
+            PopulateRecipeList();
+        }
     }
     #endregion
 
@@ -97,9 +152,17 @@ public class CraftingUIManager : MonoBehaviour
         ResetRecipeDisplay();
         HideCraftButton();
 
-        // Ensure the UI shows a recipe when opened: if we previously had a selection, reapply it; otherwise select the first available recipe
+        PopulateRecipeList();
+
+        // Ensure the UI shows a recipe when opened: if we previously had a selection and it's still unlocked, reapply it; otherwise select the first available recipe
         if (craftingSystem != null)
         {
+            if (hasSelectedRecipe && !craftingSystem.IsRecipeUnlocked(selectedSeed))
+            {
+                hasSelectedRecipe = false;
+                _currentSelectedButton = null;
+            }
+
             if (hasSelectedRecipe)
             {
                 var existingRecipe = craftingSystem.GetRecipe(selectedSeed);
