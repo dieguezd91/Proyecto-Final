@@ -41,6 +41,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] public TileBase tilledSoilTile;
     private ManaSystem manaSystem;
     private DayTimerController dayTimerController;
+    private PlantQuantitySystem plantQuantitySystem;
 
     [Header("ANIMATION")]
     [SerializeField] private Animator handAnimator;
@@ -103,6 +104,7 @@ public class PlayerAbilitySystem : MonoBehaviour
         progressBarTarget ??= transform;
         seedInventory ??= FindObjectOfType<SeedInventory>();
         dayTimerController = FindObjectOfType<DayTimerController>();
+        plantQuantitySystem = FindObjectOfType<PlantQuantitySystem>();
 
         if (handAnimator == null)
         {
@@ -273,9 +275,16 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (!isPlayingInteractionAnimation)
         {
             Vector3 mouseWorld = GetMouseWorldPosition();
-            Vector3Int cellPos = TilePlantingSystem.Instance.PlantingTilemap.WorldToCell(mouseWorld);
-            GameObject selectedPlant = seedInventory.GetSelectedPlantPrefab();
-            if (selectedPlant == null) return;
+
+            Vector3Int cellPos =
+                TilePlantingSystem.Instance.PlantingTilemap
+                .WorldToCell(mouseWorld);
+
+            GameObject selectedPlant =
+                seedInventory.GetSelectedPlantPrefab();
+
+            if (selectedPlant == null)
+                return;
 
             if (!seedInventory.HasSeedsInSelectedSlot())
             {
@@ -283,26 +292,51 @@ public class PlayerAbilitySystem : MonoBehaviour
                 return;
             }
 
-            Vector3 center = TilePlantingSystem.Instance.PlantingTilemap.GetCellCenterWorld(cellPos);
+            Vector3 center =
+                TilePlantingSystem.Instance.PlantingTilemap
+                .GetCellCenterWorld(cellPos);
 
-            if (Vector2.Distance(transform.position, center) > interactionDistance)
+            if (Vector2.Distance(transform.position, center) >
+                interactionDistance)
             {
                 warningBubble?.ShowMessage("Too far to plant.");
                 return;
             }
 
-            if (manaSystem != null && !manaSystem.UseMana(plantManaCost))
+            if (plantQuantitySystem != null &&
+                !plantQuantitySystem.CanPlant())
             {
-                warningBubble?.ShowMessage("Not enough mana to plant!");
+                warningBubble?.ShowMessage(
+                    "You reached the plant limit."
+                );
+
+                return;
+            }
+
+            if (manaSystem != null &&
+                !manaSystem.UseMana(plantManaCost))
+            {
+                warningBubble?.ShowMessage(
+                    "Not enough mana to plant!"
+                );
+
                 if (floatingTextController != null)
                 {
-                    warningBubble.ShowMessage("Insufficient Mana");
+                    warningBubble.ShowMessage(
+                        "Insufficient Mana"
+                    );
                 }
+
                 SoundManager.Instance?.PlayOneShot("Error");
                 return;
             }
 
-            StartCoroutine(PlantWithAnimation(cellPos, selectedPlant));
+            StartCoroutine(
+                PlantWithAnimation(
+                    cellPos,
+                    selectedPlant
+                )
+            );
         }
     }
 
