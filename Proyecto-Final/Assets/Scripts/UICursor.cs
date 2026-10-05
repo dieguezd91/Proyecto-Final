@@ -125,9 +125,13 @@ public class UICursor : MonoBehaviour
                     break;
 
                 case PlayerAbility.Harvesting:
-                    var harvestPlant = plant != null
-                        ? plant.GetComponent<HarvestablePlant>()
+                    var harvestPlant = playerAbilitySystem != null
+                        ? playerAbilitySystem.GetHarvestableAtPosition(mouseWorld)
                         : null;
+
+                    // Harvestables define their own range (trigger circle).
+                    if (harvestPlant != null)
+                        inRange = harvestPlant.IsPlayerInRange;
 
                     cursorToUse = (harvestPlant != null && harvestPlant.IsReadyToHarvest())
                         ? harvestingCursor

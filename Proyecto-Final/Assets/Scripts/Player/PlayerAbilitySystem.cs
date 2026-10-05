@@ -22,8 +22,8 @@ public class PlayerAbilitySystem : MonoBehaviour
     [SerializeField] private float digManaCost;
 
     [Header("HARVEST ABILITY")]
+    [Tooltip("Range for planting and removing. Harvest range is defined per HarvestableResourceSO.")]
     [SerializeField] public float interactionDistance = 2f;
-    [SerializeField] private float harvestManaCost;
 
     [Header("PLANTING ABILITY")]
     [SerializeField] private float plantManaCost;
@@ -374,7 +374,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     }
 
 
-    private HarvestablePlant GetHarvestableAtPosition(Vector2 worldPosition)
+    public HarvestablePlant GetHarvestableAtPosition(Vector2 worldPosition)
     {
         Vector3Int cellPos =
             TilePlantingSystem.Instance.PlantingTilemap
@@ -392,19 +392,8 @@ public class PlayerAbilitySystem : MonoBehaviour
                 return harvestable;
         }
 
-        Collider2D[] hits =
-            Physics2D.OverlapPointAll(worldPosition);
-
-        foreach (Collider2D hit in hits)
-        {
-            HarvestablePlant harvestable =
-                hit.GetComponentInParent<HarvestablePlant>();
-
-            if (harvestable != null)
-                return harvestable;
-        }
-
-        return null;
+        // Sprite or click collider only; the range trigger circle is ignored.
+        return HarvestablePlant.FindAtPoint(worldPosition);
     }
 
 
@@ -418,14 +407,10 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (harvestable == null)
             return;
 
-        if (harvestable.IsBeingHarvested())
+        if (harvestable.IsBeingHarvested() || isHarvesting)
             return;
 
-        Vector2 targetPosition =
-            harvestable.transform.position;
-
-        if (Vector2.Distance(transform.position, targetPosition) >
-            interactionDistance)
+        if (!harvestable.IsPlayerInRange)
         {
             warningBubble?.ShowMessage("Too far to harvest.");
             return;
@@ -434,25 +419,15 @@ public class PlayerAbilitySystem : MonoBehaviour
         if (!harvestable.IsReadyToHarvest())
         {
             warningBubble?.ShowMessage(
-                "Not ready to harvest yet!"
+                "Nothing left to harvest today."
             );
             return;
         }
 
-        if (manaSystem != null &&
-            !manaSystem.UseMana(harvestManaCost))
+        if (dayTimerController != null &&
+            dayTimerController.RemainingActions <= 0)
         {
-            warningBubble?.ShowMessage(
-                "Not enough mana to harvest!"
-            );
-
-            if (floatingTextController != null)
-            {
-                warningBubble?.ShowMessage(
-                    "Insufficient Mana"
-                );
-            }
-
+            warningBubble?.ShowMessage("No actions left today.");
             SoundManager.Instance?.PlayOneShot("Error");
             return;
         }
@@ -527,18 +502,8 @@ public class PlayerAbilitySystem : MonoBehaviour
         currentHarvestPlant = plant;
         isHarvesting = true;
 
-        SpriteRenderer sprite =
-            currentHarvestPlant.GetComponent<SpriteRenderer>();
-
-        if (sprite != null)
-        {
-            sprite.color =
-                currentHarvestPlant.clickColor;
-        }
-
+        // Tint, sound, particles and animation are handled by the plant from its HarvestableResourceSO.
         PlayInteractionAnimation();
-
-        SoundManager.Instance.Play("Harvest");
 
         progressBar?.SetImmediateProgress(0f);
         progressBar?.Show(true);
@@ -551,7 +516,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     private IEnumerator MonitorHarvest()
     {
-        float startTime = Time.time;
+        float elapsed = 0f;
         float harvestDuration = currentHarvestPlant.GetHarvestDuration();
 
         while (isHarvesting && currentHarvestPlant != null)
@@ -562,16 +527,17 @@ public class PlayerAbilitySystem : MonoBehaviour
                 continue;
             }
 
-            float elapsed = Time.time - startTime;
-            progressBar?.SetProgress(Mathf.Clamp01(elapsed / harvestDuration));
-
-            if (Vector2.Distance(transform.position, currentHarvestPlant.transform.position) > interactionDistance)
+            if (!currentHarvestPlant.IsPlayerInRange)
             {
+                warningBubble?.ShowMessage("Too far to harvest.");
                 CancelHarvest();
                 yield break;
             }
 
-            if (!currentHarvestPlant.IsBeingHarvested())
+            elapsed += Time.deltaTime;
+            progressBar?.SetProgress(harvestDuration > 0f ? Mathf.Clamp01(elapsed / harvestDuration) : 1f);
+
+            if (elapsed >= harvestDuration)
             {
                 CompleteHarvest();
                 yield break;
@@ -597,15 +563,19 @@ public class PlayerAbilitySystem : MonoBehaviour
     {
         isHarvesting = false;
         progressBar?.Hide();
-        var reward = currentHarvestPlant.GetHarvestReward();
-        if (reward != null)
+        StopInteractionAnimation();
+
+        HarvestablePlant plant = currentHarvestPlant;
+        currentHarvestPlant = null;
+
+        // The plant spawns the pickup; the pickup shows the floating text when collected.
+        if (plant != null && plant.CompleteHarvest())
         {
-            floatingTextController?.ShowPickup(reward.materialName, reward.amount, reward.icon);
             TutorialEvents.InvokePlantHarvested();
 
+            // May end the day (and start the night) when it was the last action.
             dayTimerController?.ConsumeAction(DayTimerController.DayActionType.Harvest);
         }
-        currentHarvestPlant = null;
     }
 
     private void HandleDigging()

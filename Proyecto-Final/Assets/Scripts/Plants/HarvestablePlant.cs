@@ -1,238 +1,364 @@
-using System.Collections;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
-[System.Serializable]
-public class HarvestReward
-{
-    public string materialName;
-    public int amount;
-    public Sprite icon;
-}
-
+/// <summary>
+/// World object the player harvests with the Harvest tool (by day only).
+/// Each harvest spends 1 day action and spawns 1 random pickup from the data's loot table.
+/// Has a limited number of uses that refill when a new day starts.
+/// All tuning, art, particles and sounds live in the HarvestableResourceSO.
+/// </summary>
 public class HarvestablePlant : MonoBehaviour
 {
-    [Header("HARVEST SETTINGS")]
-    [SerializeField] private float harvestDuration = 2f;
-    [SerializeField] private bool startsReadyToHarvest = true;
+    private static readonly int IsHarvestingParam = Animator.StringToHash("IsHarvesting");
+    private static readonly int IsDepletedParam = Animator.StringToHash("IsDepleted");
+    private static readonly int HarvestedParam = Animator.StringToHash("Harvested");
+    private static readonly int RegrowParam = Animator.StringToHash("Regrow");
 
-    [Header("REWARD")]
-    [SerializeField] private MaterialType rewardType;
-    [SerializeField] private int rewardAmount = 1;
-    [SerializeField] private Sprite rewardSprite;
+    [Header("DATA")]
+    [Tooltip("Defines uses, range, loot, animations, particles and sounds.")]
+    [InlineEditor]
+    [SerializeField] private HarvestableResourceSO data;
 
-    [Header("VISUAL")]
-    public Color highlightColor = Color.white;
-    public Color clickColor = Color.white;
+    [Header("REFERENCES")]
+    [Tooltip("Trigger circle = harvest range. Its radius is set from the data's Interaction Range.")]
+    [SerializeField] private CircleCollider2D rangeTrigger;
+    [Tooltip("Clickable area together with the sprite. Usually the solid base collider.")]
+    [SerializeField] private Collider2D clickCollider;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [Tooltip("Uses the data's Animator Controller (states: Idle, Harvesting, Harvested, Depleted, Regrow).")]
+    [SerializeField] private Animator animator;
+    [Tooltip("Where loot and particles spawn. Defaults to this object.")]
+    [SerializeField] private Transform effectsAnchor;
 
-    private bool isReadyToHarvest;
+    [Header("EVENTS (optional hooks for extra feedback)")]
+    public UnityEvent onHarvestStarted;
+    public UnityEvent onHarvested;
+    public UnityEvent onDepleted;
+    public UnityEvent onRefreshed;
+
+    private static readonly List<HarvestablePlant> activePlants = new List<HarvestablePlant>();
+    private readonly HashSet<Collider2D> playerCollidersInRange = new HashSet<Collider2D>();
+
+    private PlayerAbilitySystem playerAbilitySystem;
+    private GameObject harvestingParticlesInstance;
+    private Color originalColor = Color.white;
+    private int usesRemaining;
     private bool isBeingHarvested;
+    private bool isHovered;
 
-    private SpriteRenderer spriteRenderer;
-    private Color originalColor;
+    public HarvestableResourceSO Data => data;
+    public int UsesRemaining => usesRemaining;
+    public int MaxUses => data != null ? data.MaxUsesPerDay : 0;
+    public float InteractionRange => data != null ? data.InteractionRange : 0f;
+    private Vector3 EffectsPosition => effectsAnchor != null ? effectsAnchor.position : transform.position;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+
+        if (animator != null && data != null && data.AnimatorController != null)
+            animator.runtimeAnimatorController = data.AnimatorController;
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         if (spriteRenderer != null)
             originalColor = spriteRenderer.color;
 
-        isReadyToHarvest = startsReadyToHarvest;
+        if (data == null)
+            Debug.LogWarning($"HarvestablePlant '{name}' has no HarvestableResourceSO assigned.", this);
+
+        ApplyRange();
+        usesRemaining = MaxUses;
+        SetAnimBool(IsDepletedParam, false);
     }
 
-    public void SetReadyToHarvest(bool ready)
-    {
-        isReadyToHarvest = ready;
+    private void OnEnable() => activePlants.Add(this);
 
-        if (!ready)
-            CancelHarvest();
+    private void OnDisable()
+    {
+        activePlants.Remove(this);
+        playerCollidersInRange.Clear();
     }
 
-    public bool IsReadyToHarvest()
+    private void Start()
     {
-        return isReadyToHarvest;
+        DayCycleController.Instance?.OnNewDay.AddListener(HandleNewDay);
     }
 
-    public bool IsBeingHarvested()
+    private void OnDestroy()
     {
-        return isBeingHarvested;
+        if (DayCycleController.Instance != null)
+            DayCycleController.Instance.OnNewDay.RemoveListener(HandleNewDay);
+
+        DestroyHarvestingParticles();
     }
 
-    public float GetHarvestDuration()
+    public bool IsReadyToHarvest() => data != null && usesRemaining > 0;
+
+    public bool IsBeingHarvested() => isBeingHarvested;
+
+    public float GetHarvestDuration() => data != null ? data.HarvestDuration : 0f;
+
+    /// <summary>Remaining uses as 0..1 (used by PlantGrowthUI).</summary>
+    public float GetTotalProgress() => MaxUses > 0 ? (float)usesRemaining / MaxUses : 0f;
+
+    /// <summary>True while the player's body collider is inside the range trigger circle.</summary>
+    public bool IsPlayerInRange
     {
-        return harvestDuration;
-    }
-
-    public void StartHarvest()
-    {
-        if (!isReadyToHarvest || isBeingHarvested)
-            return;
-
-        PlayerAbilitySystem abilitySystem =
-            FindObjectOfType<PlayerAbilitySystem>();
-
-        if (abilitySystem == null ||
-            abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
+        get
         {
-            return;
+            playerCollidersInRange.RemoveWhere(c => c == null || !c.isActiveAndEnabled);
+            return playerCollidersInRange.Count > 0;
         }
-
-        isBeingHarvested = true;
-
-        StartCoroutine(HarvestCoroutine());
     }
 
-    private IEnumerator HarvestCoroutine()
+    /// <summary>True if the point is over the sprite or the click collider (the range circle does not count).</summary>
+    public bool ContainsClickPoint(Vector2 worldPoint)
     {
-        float timer = 0f;
+        if (clickCollider != null && clickCollider.OverlapPoint(worldPoint))
+            return true;
 
-        while (timer < harvestDuration)
+        if (spriteRenderer == null || spriteRenderer.sprite == null)
+            return false;
+
+        Bounds bounds = spriteRenderer.bounds;
+        return worldPoint.x >= bounds.min.x && worldPoint.x <= bounds.max.x &&
+               worldPoint.y >= bounds.min.y && worldPoint.y <= bounds.max.y;
+    }
+
+    /// <summary>The active harvestable under the point, or null.</summary>
+    public static HarvestablePlant FindAtPoint(Vector2 worldPoint)
+    {
+        foreach (var plant in activePlants)
         {
-            PlayerAbilitySystem abilitySystem =
-                FindObjectOfType<PlayerAbilitySystem>();
-
-            if (abilitySystem == null ||
-                abilitySystem.CurrentAbility != PlayerAbility.Harvesting)
-            {
-                CancelHarvest();
-                yield break;
-            }
-
-            timer += Time.deltaTime;
-
-            yield return null;
+            if (plant != null && plant.ContainsClickPoint(worldPoint))
+                return plant;
         }
-
-        CompletedHarvest();
-    }
-
-    public void CancelHarvest()
-    {
-        isBeingHarvested = false;
-
-        if (spriteRenderer != null)
-            spriteRenderer.color = originalColor;
-    }
-
-    public void CompletedHarvest()
-    {
-        if (!isBeingHarvested)
-            return;
-
-        if (InventoryManager.Instance != null)
-        {
-            InventoryManager.Instance.AddMaterial(
-                rewardType,
-                rewardAmount
-            );
-
-            InventoryUI inventoryUI =
-                FindObjectOfType<InventoryUI>();
-
-            if (inventoryUI != null &&
-                inventoryUI.gameObject.activeInHierarchy)
-            {
-                inventoryUI.UpdateAllSlots();
-            }
-
-            Sprite resourceSprite = GetResourceSprite();
-
-            if (resourceSprite != null)
-            {
-                InventoryManager.Instance.SetMaterialIcon(
-                    rewardType,
-                    resourceSprite
-                );
-            }
-        }
-
-        isReadyToHarvest = false;
-        isBeingHarvested = false;
-
-        if (spriteRenderer != null)
-            spriteRenderer.color = originalColor;
-    }
-
-    public HarvestReward GetHarvestReward()
-    {
-        if (InventoryManager.Instance != null)
-        {
-            string name =
-                InventoryManager.Instance.GetMaterialName(rewardType);
-
-            Sprite icon =
-                InventoryManager.Instance.GetMaterialIcon(rewardType);
-
-            if (icon == null)
-                icon = rewardSprite;
-
-            return new HarvestReward
-            {
-                materialName = name,
-                amount = rewardAmount,
-                icon = icon
-            };
-        }
-
-        return new HarvestReward
-        {
-            materialName = rewardType.ToString(),
-            amount = rewardAmount,
-            icon = rewardSprite
-        };
-    }
-
-    public float GetTotalProgress()
-    {
-        return isReadyToHarvest ? 1f : 0f;
-    }
-
-    private Sprite GetResourceSprite()
-    {
-        if (rewardSprite != null)
-            return rewardSprite;
-
-        if (InventoryManager.Instance != null)
-            return InventoryManager.Instance.GetMaterialIcon(rewardType);
 
         return null;
     }
 
-    private void OnMouseOver()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isReadyToHarvest || isBeingHarvested)
+        if (IsPlayerBody(other))
+            playerCollidersInRange.Add(other);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        playerCollidersInRange.Remove(other);
+    }
+
+    private static bool IsPlayerBody(Collider2D other)
+    {
+        if (other.isTrigger)
+            return false;
+
+        return other.CompareTag("Player") ||
+               (other.attachedRigidbody != null && other.attachedRigidbody.CompareTag("Player"));
+    }
+
+    private void ApplyRange()
+    {
+        if (rangeTrigger == null)
             return;
 
-        GameObject player =
-            GameObject.FindGameObjectWithTag("Player");
+        rangeTrigger.isTrigger = true;
 
-        if (player == null)
+        if (data != null)
+            rangeTrigger.radius = data.InteractionRange;
+    }
+
+#if UNITY_EDITOR
+    // Keeps the range circle in sync with the data while editing.
+    private void OnValidate() => ApplyRange();
+#endif
+
+    /// <summary>Called by PlayerAbilitySystem when the player starts channeling.</summary>
+    public void StartHarvest()
+    {
+        if (!IsReadyToHarvest() || isBeingHarvested)
             return;
 
-        PlayerAbilitySystem abilitySystem =
-            player.GetComponent<PlayerAbilitySystem>();
+        isBeingHarvested = true;
 
-        if (abilitySystem == null)
+        SetTint(data.HarvestingColor);
+        SetAnimBool(IsHarvestingParam, true);
+
+        DestroyHarvestingParticles();
+        if (data.HarvestingParticles != null)
+            harvestingParticlesInstance = Instantiate(data.HarvestingParticles, EffectsPosition, Quaternion.identity, transform);
+
+        PlaySound(data.HarvestingSound, "Harvest");
+
+        onHarvestStarted?.Invoke();
+    }
+
+    public void CancelHarvest()
+    {
+        if (!isBeingHarvested)
             return;
 
-        float distance =
-            Vector2.Distance(transform.position, player.transform.position);
+        isBeingHarvested = false;
+        DestroyHarvestingParticles();
+        SetTint(originalColor);
+        SetAnimBool(IsHarvestingParam, false);
+    }
 
-        if (distance <= abilitySystem.interactionDistance)
+    /// <summary>
+    /// Called by PlayerAbilitySystem when the channel finishes.
+    /// Spends one use and spawns one pickup. Returns false if nothing was harvested.
+    /// </summary>
+    public bool CompleteHarvest()
+    {
+        if (!isBeingHarvested)
+            return false;
+
+        isBeingHarvested = false;
+        DestroyHarvestingParticles();
+        SetTint(isHovered ? data.HighlightColor : originalColor);
+
+        usesRemaining = Mathf.Max(0, usesRemaining - 1);
+
+        SpawnLoot();
+        SpawnParticles(data.HarvestedParticles);
+        PlaySound(data.HarvestedSound);
+        onHarvested?.Invoke();
+
+        bool depleted = usesRemaining <= 0;
+
+        if (depleted)
         {
-            if (spriteRenderer != null)
-                spriteRenderer.color = highlightColor;
+            SpawnParticles(data.DepletedParticles);
+            PlaySound(data.DepletedSound);
+            onDepleted?.Invoke();
         }
-        else
+
+        SetAnimBool(IsHarvestingParam, false);
+        SetAnimBool(IsDepletedParam, depleted);
+        SetAnimTrigger(HarvestedParam);
+        return true;
+    }
+
+    /// <summary>Refills all uses. Called automatically when a new day starts.</summary>
+    [ContextMenu("Refresh Uses")]
+    public void Refresh()
+    {
+        if (data == null)
+            return;
+
+        bool wasFull = usesRemaining >= MaxUses;
+
+        CancelHarvest();
+        usesRemaining = MaxUses;
+        SetAnimBool(IsDepletedParam, false);
+
+        if (wasFull)
+            return;
+
+        SpawnParticles(data.RegrowParticles);
+        PlaySound(data.RegrowSound);
+        SetAnimTrigger(RegrowParam);
+        onRefreshed?.Invoke();
+    }
+
+    private void HandleNewDay(int day) => Refresh();
+
+    private void SetAnimBool(int param, bool value)
+    {
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetBool(param, value);
+    }
+
+    private void SetAnimTrigger(int param)
+    {
+        if (animator != null && animator.runtimeAnimatorController != null)
+            animator.SetTrigger(param);
+    }
+
+    private void SpawnLoot()
+    {
+        GameObject prefab = data.RollLoot();
+
+        if (prefab == null)
         {
-            if (spriteRenderer != null)
-                spriteRenderer.color = originalColor;
+            Debug.LogWarning($"'{data.name}' has an empty loot table.", data);
+            return;
+        }
+
+        GameObject pickup = Instantiate(prefab, EffectsPosition, Quaternion.identity);
+
+        // Same pop-out as LifeController enemy drops.
+        if (pickup.TryGetComponent(out Rigidbody2D rb))
+            rb.AddForce(Random.insideUnitCircle.normalized * data.LootScatterForce, ForceMode2D.Impulse);
+    }
+
+    private void SpawnParticles(GameObject prefab)
+    {
+        if (prefab == null)
+            return;
+
+        GameObject instance = Instantiate(prefab, EffectsPosition, Quaternion.identity);
+        Destroy(instance, data.ParticleLifetime);
+    }
+
+    private void DestroyHarvestingParticles()
+    {
+        if (harvestingParticlesInstance != null)
+            Destroy(harvestingParticlesInstance);
+
+        harvestingParticlesInstance = null;
+    }
+
+    private void PlaySound(SoundClipData sound, string fallbackSoundName = null)
+    {
+        if (SoundManager.Instance == null)
+            return;
+
+        if (sound != null && sound.clips != null && sound.clips.Length > 0)
+        {
+            SoundManager.Instance.PlayClip(sound, SoundSourceType.Localized, transform);
+        }
+        else if (!string.IsNullOrEmpty(fallbackSoundName))
+        {
+            SoundManager.Instance.Play(fallbackSoundName);
         }
     }
 
-    private void OnMouseExit()
+    private void SetTint(Color color)
     {
-        if (!isBeingHarvested && spriteRenderer != null)
-            spriteRenderer.color = originalColor;
+        if (spriteRenderer != null)
+            spriteRenderer.color = color;
+    }
+
+    // Hover highlight over the sprite / click collider. Only with the Harvest tool, by day, inside range.
+    private void Update()
+    {
+        if (isBeingHarvested || data == null)
+            return;
+
+        if (playerAbilitySystem == null)
+            playerAbilitySystem = FindAnyObjectByType<PlayerAbilitySystem>();
+
+        Camera cam = Camera.main;
+
+        bool hovered = cam != null &&
+                       playerAbilitySystem != null &&
+                       playerAbilitySystem.CurrentAbility == PlayerAbility.Harvesting &&
+                       GameFlowController.Instance != null &&
+                       GameFlowController.Instance.CurrentPhase == GamePhase.Day &&
+                       IsReadyToHarvest() &&
+                       IsPlayerInRange &&
+                       ContainsClickPoint(cam.ScreenToWorldPoint(Input.mousePosition));
+
+        if (hovered == isHovered)
+            return;
+
+        isHovered = hovered;
+        SetTint(isHovered ? data.HighlightColor : originalColor);
     }
 }
