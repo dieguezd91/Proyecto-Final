@@ -8,6 +8,7 @@ public class HouseDoor : MonoBehaviour
 
     [SerializeField] private Collider2D outsideCollider;
     [SerializeField] private Collider2D insideCollider;
+    [SerializeField] private Collider2D colliderToDisable;
 
     [Header("Spawn Points")]
     [SerializeField] private Transform outsideSpawn;
@@ -177,11 +178,21 @@ public class HouseDoor : MonoBehaviour
 
                 return;
             }
+
+            if (colliderToDisable != null)
+            {
+                colliderToDisable.enabled = true;
+            }
         }
 
         if (goingInside && !canEnterAtNight)
         {
             return;
+        }
+
+        if (goingInside && colliderToDisable != null)
+        {
+            colliderToDisable.enabled = false;
         }
 
         if (goingInside && GameFlowController.Instance.CurrentPhase == GamePhase.Night)
