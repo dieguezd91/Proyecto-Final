@@ -68,11 +68,14 @@ public sealed class UpgradePanel : MonoBehaviour
             });
         if (!levelUpView.Show(data, pending)) WiringFailure();
     }
-    public void ShowShop()
+    public void ShowShop() => DisplayShop(true);
+    private void RefreshShop() => DisplayShop(false);
+    private void DisplayShop(bool newOpen)
     {
         if (!IsReady || runtime == null) { WiringFailure(); return; }
         shopRefresh = false;
-        Hide();
+        newOpen |= !shopView.gameObject.activeInHierarchy;
+        if (newOpen) Hide();
         IsShopOpen = true;
         shopDefinitions.Clear(); shopTargets.Clear();
         var items = new List<SpecialUpgradeItemData>();
@@ -98,13 +101,13 @@ public sealed class UpgradePanel : MonoBehaviour
                 });
                 shopDefinitions.Add(definition); shopTargets.Add(target.Id);
             }
-        if (!shopView.Show(items)) WiringFailure();
+        if (!(newOpen ? shopView.Show(items) : shopView.Refresh(items))) WiringFailure();
     }
     private void Purchase(int index)
     {
         if (runtime == null || !IsShopOpen || index < 0 || index >= shopDefinitions.Count) return;
         runtime.Purchase(shopDefinitions[index], shopTargets[index]);
-        runtime.RefreshTargets(); ShowShop();
+        runtime.RefreshTargets(); RefreshShop();
     }
     public void CloseShop()
     {
@@ -140,7 +143,7 @@ public sealed class UpgradePanel : MonoBehaviour
     private void OnDestroy() { if (runtime != null) Unbind(runtime); }
     private void Update()
     {
-        if (IsShopOpen && shopRefresh) { runtime.RefreshTargets(); ShowShop(); }
+        if (IsShopOpen && shopRefresh) { runtime.RefreshTargets(); RefreshShop(); }
         if (IsShopOpen && Input.GetKeyDown(KeyCode.Escape) && !InputConsumptionManager.IsEscapeConsumed)
         {
             InputConsumptionManager.ConsumeEscape(); CloseShop();

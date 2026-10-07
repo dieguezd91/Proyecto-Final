@@ -10,7 +10,10 @@ using static UpgradeUIArtTests;
 // Read-only prefab and measured Play Mode contracts; never authors or generates production assets.
 public class UpgradeUICompactLayoutTests
 {
-    internal const string Output = "Library/MagicGardenCompactUIValidation/";
+    // Stable across EnterPlayMode domain reloads, fresh for every native Editor invocation.
+    internal static readonly string Output = "Library/MagicGardenScrollbarValidation/native-" +
+        System.Diagnostics.Process.GetCurrentProcess().Id + "-" +
+        System.Diagnostics.Process.GetCurrentProcess().StartTime.ToUniversalTime().ToString("yyyyMMdd-HHmmss") + "/";
     private static Rect InSpace(RectTransform child, RectTransform space)
     {
         var points = new Vector3[4]; child.GetWorldCorners(points);
@@ -60,7 +63,7 @@ public class UpgradeUICompactLayoutTests
         var viewport = window.Find("Specials scroll/Viewport") as RectTransform;
         if (viewport != null)
         {
-            Assert.That(viewport.rect.size, Is.EqualTo(new Vector2(950, 540)));
+            Assert.That(viewport.rect.size, Is.EqualTo(new Vector2(918, 540)));
             Contains(window.rect, InSpace(viewport, window), "viewport", 20);
         }
         foreach (Component row in panel.GetComponentsInChildren(TypeOf("SpecialUpgradeItemView"), true)) RowOrCard(row.gameObject);
@@ -75,7 +78,8 @@ public class UpgradeUICompactLayoutTests
         UnitScale(root);
         var rect = (RectTransform)root.transform;
         bool card = root.name.StartsWith("LevelUpCard");
-        Assert.That(rect.rect.width, Is.EqualTo(card ? 300 : 950).Within(.1));
+        float expectedWidth = card ? 300 : root.transform.parent != null && root.transform.parent.name == "Content" ? 918 : 950;
+        Assert.That(rect.rect.width, Is.EqualTo(expectedWidth).Within(.1));
         Assert.That(rect.rect.height, Is.EqualTo(card ? 420 : 200).Within(.1));
         var visual = root.transform.Find("Action visual") as RectTransform;
         Assert.That(visual, Is.Not.Null); Contains(rect.rect, InSpace(visual, rect), "action", 12);

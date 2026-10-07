@@ -16,7 +16,7 @@ using static UpgradeUIArtTests;
 // Editor test assembly deliberately enters real Play Mode. Reflection preserves the Assembly-CSharp boundary.
 public class UpgradeUIArtPlayModeChecks
 {
-    private const string Output = UpgradeUICompactLayoutTests.Output;
+    private static readonly string Output = UpgradeUICompactLayoutTests.Output;
     [UnityTearDown] public IEnumerator LeavePlayModeAfterFailure()
     {
         if (EditorApplication.isPlaying) yield return new ExitPlayMode();
@@ -61,7 +61,7 @@ public class UpgradeUIArtPlayModeChecks
     {
         Pointer(button, "pointerEnter"); Pointer(button, "pointerDown"); Pointer(button, "pointerUp"); Pointer(button, "pointerClick");
     }
-    private static IEnumerator ButtonStates(Component button)
+    internal static IEnumerator ButtonStates(Component button)
     {
         var eventType = TypeOf("UnityEngine.EventSystems.EventSystem", "UnityEngine.UI");
         var events = eventType.GetProperty("current").GetValue(null);
@@ -148,7 +148,7 @@ public class UpgradeUIArtPlayModeChecks
                 Assert.That(Bounds((RectTransform)graphic.transform).Overlaps(Bounds((RectTransform)((Component)Field(row, field)).transform)), Is.False, field);
         }
     }
-    private static IEnumerator Capture(Canvas canvas, GameObject panel, string name, int width, int height)
+    internal static IEnumerator Capture(Canvas canvas, GameObject panel, string name, int width, int height)
     {
         Assert.That(SystemInfo.graphicsDeviceType.ToString(), Is.Not.EqualTo("Null"), "Native graphics device required");
         var go = new GameObject("UI capture camera"); var camera = go.AddComponent<Camera>();

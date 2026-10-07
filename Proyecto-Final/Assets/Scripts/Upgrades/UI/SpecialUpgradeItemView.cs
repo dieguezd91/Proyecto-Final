@@ -1,15 +1,27 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public sealed class SpecialUpgradeItemView : MonoBehaviour
+public sealed class SpecialUpgradeItemView : MonoBehaviour, ISelectHandler
 {
     [SerializeField] private Button purchaseButton;
     [SerializeField] private Image background, icon;
     [SerializeField] private TMP_Text targetLabel, nameLabel, descriptionLabel, costsLabel, prerequisitesLabel, stacksLabel;
     private Action<int> purchased;
     private int index;
+    private Action<RectTransform> selected;
+    public Button PurchaseButton => purchaseButton;
+    public void ConfigureNavigation(Navigation navigation, Action<RectTransform> onSelected)
+    {
+        purchaseButton.navigation = navigation;
+        selected = onSelected;
+    }
+    public void OnSelect(BaseEventData eventData)
+    {
+        if (purchaseButton != null && purchaseButton.IsInteractable()) selected?.Invoke((RectTransform)transform);
+    }
     public bool IsConfigured => purchaseButton != null && background != null && icon != null && targetLabel != null &&
         nameLabel != null && descriptionLabel != null && costsLabel != null && prerequisitesLabel != null && stacksLabel != null;
     public bool Bind(SpecialUpgradeItemData data, int row, Action<int> callback)
@@ -29,6 +41,6 @@ public sealed class SpecialUpgradeItemView : MonoBehaviour
         return true;
     }
     private void Purchase() { if (purchaseButton.interactable) purchased?.Invoke(index); }
-    public void Hide() { purchased = null; gameObject.SetActive(false); }
+    public void Hide() { purchased = null; selected = null; gameObject.SetActive(false); }
     private void OnDestroy() { if (purchaseButton != null) purchaseButton.onClick.RemoveListener(Purchase); }
 }
