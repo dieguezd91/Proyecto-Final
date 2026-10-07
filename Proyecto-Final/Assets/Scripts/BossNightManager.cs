@@ -7,14 +7,13 @@ public class BossNightManager : MonoBehaviour
 {
     [Header("Boss Configuration")]
     [SerializeField] private List<GameObject> bossPrefabs = new List<GameObject>();
-    [SerializeField] private int bossNightInterval = 5;
+    [SerializeField] private int bossNightInterval = 7;
     [SerializeField] private float bossSpawnDelay = 3f;
     [SerializeField] private Transform bossSpawnPoint;
     [SerializeField] private GameObject bossRewardItemPrefab;
 
-
     [Header("Boss Night Settings")]
-    [SerializeField] private bool useDynamicBossSelection = true;
+    [SerializeField] private bool useDynamicBossSelection = false;
     [SerializeField] private float bossAnnouncementDuration = 2f;
 
     [Header("Events")]
@@ -30,6 +29,8 @@ public class BossNightManager : MonoBehaviour
 
     private bool bossHasSpawnedThisNight = false;
     private int lastBossNightDay = -1;
+
+    private int currentBossIndex = 0;
 
     public bool IsBossNight => isBossNight;
     public bool IsBossActive => currentBoss != null;
@@ -134,12 +135,7 @@ public class BossNightManager : MonoBehaviour
         }
 
         yield return new WaitUntil(() => bossDefeated);
-
-       
-
-        onBossDefeated?.Invoke(currentBoss);
     }
-
 
     private void SpawnBoss()
     {
@@ -187,8 +183,7 @@ public class BossNightManager : MonoBehaviour
         }
         else
         {
-            int bossNightCount = DayCycleController.Instance.CurrentDay / bossNightInterval;
-            int bossIndex = (bossNightCount - 1) % bossPrefabs.Count;
+            int bossIndex = currentBossIndex % bossPrefabs.Count;
             return bossPrefabs[bossIndex];
         }
     }
@@ -221,14 +216,24 @@ public class BossNightManager : MonoBehaviour
     private void OnBossDefeated(GameObject defeatedBoss)
     {
         bossDefeated = true;
-        
         currentBoss = null;
+
+        currentBossIndex++;
+
+        if (enemiesSpawner != null)
+        {
+            enemiesSpawner.AdvanceEnemyHorde();
+        }
+
+        if (DayCycleController.Instance != null)
+        {
+            DayCycleController.Instance.RequestWeekReset();
+        }
 
         onBossDefeated?.Invoke(defeatedBoss);
 
         GrantBossRewards();
     }
-
 
     private void GrantBossRewards()
     {

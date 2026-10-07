@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+[System.Serializable]
+public class EnemyHorde
+{
+    public string hordeName;
+    public List<EnemyWeight> enemies = new List<EnemyWeight>();
+}
+
 [System.Serializable]
 public class EnemyWeight
 {
@@ -29,8 +37,10 @@ public class EnemiesSpawner : MonoBehaviour
     public bool dontSpawnWhenPlayerNearby = true;
     public float playerCheckRadius = 5f;
 
-    [Header("ENEMIES")]
-    [SerializeField] private List<EnemyWeight> enemyWeights;
+    [Header("ENEMY HORDES")]
+    [SerializeField] private List<EnemyHorde> enemyHordes = new List<EnemyHorde>();
+
+    private int currentEnemyHorde = 0;
 
     [Header("BOSS")]
     [SerializeField] private BossNightManager bossNightManager;
@@ -138,7 +148,7 @@ public class EnemiesSpawner : MonoBehaviour
 
     private void StartBossNight()
     {
-        Debug.Log("Iniciando noche de jefe - No se spawnearán enemigos normales");
+        Debug.Log("Iniciando noche de jefe");
 
         ResetHordeCounters();
         onHordeStart?.Invoke();
@@ -162,10 +172,11 @@ public class EnemiesSpawner : MonoBehaviour
 
         ResetHordeCounters();
 
-        int currentDay = DayCycleController.Instance.CurrentDay;
-        totalEnemiesToKill = baseEnemiesPerNight + ((currentDay - 1) * enemiesPerNightIncrement);
+        int totalNights = DayCycleController.Instance.TotalNights;
 
-        currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (currentDay - 1) * spawnIntervalDecreasePerDay);
+        totalEnemiesToKill = baseEnemiesPerNight + ((totalNights - 1) * enemiesPerNightIncrement);
+
+        currentSpawnInterval = Mathf.Max(minSpawnInterval, baseSpawnInterval - (totalNights - 1) * spawnIntervalDecreasePerDay);
 
         ConfigureEnemyRoulette();
 
@@ -227,9 +238,9 @@ public class EnemiesSpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        if (spawnPoints.Count == 0 || enemyWeights.Count == 0)
+        if (spawnPoints.Count == 0 || enemyHordes.Count == 0)
         {
-            Debug.Log("No hay puntos de spawn o enemigos asignados");
+            Debug.Log("No hay puntos de spawn o hordas de enemigos asignadas");
             return;
         }
 
@@ -271,11 +282,23 @@ public class EnemiesSpawner : MonoBehaviour
 
         GameObject selectedEnemyPrefab = enemyRoulette.Roll();
 
-        GameObject enemy = Instantiate(selectedEnemyPrefab, spawnPoint.position, spawnPoint.rotation);
+        if (selectedEnemyPrefab == null)
+        {
+            Debug.LogWarning("No hay enemigos disponibles en la horda actual.");
+            return;
+        }
+
+        GameObject enemy = Instantiate(
+            selectedEnemyPrefab,
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+
         enemy.transform.SetParent(this.transform);
         activeEnemies.Add(enemy);
 
         LifeController enemyLife = enemy.GetComponent<LifeController>();
+
         if (enemyLife != null)
         {
             enemyLife.onDeath.AddListener(() => OnEnemyDeath(enemy));
@@ -435,17 +458,58 @@ public class EnemiesSpawner : MonoBehaviour
     {
         enemyRoulette.Clear();
 
-        foreach (var ew in enemyWeights)
+        if (enemyHordes.Count == 0)
+        {
+            Debug.LogWarning("[EnemiesSpawner] No hay hordas de enemigos configuradas.");
+            return;
+        }
+
+        int hordeIndex = Mathf.Clamp(
+            currentEnemyHorde,
+            0,
+            enemyHordes.Count - 1
+        );
+
+        EnemyHorde selectedHorde = enemyHordes[hordeIndex];
+
+        foreach (var ew in selectedHorde.enemies)
         {
             if (ew.prefab != null && ew.weight > 0f)
+            {
                 enemyRoulette.Add(ew.prefab, ew.weight);
+            }
         }
+
+        Debug.Log(
+            $"[EnemiesSpawner] Usando horda de enemigos: {selectedHorde.hordeName}"
+        );
     }
 
     private int GetTrulyAliveEnemiesCount()
     {
         activeEnemies.RemoveAll(e => e == null);
         return activeEnemies.Count;
+    }
+
+    public void AdvanceEnemyHorde()
+    {
+        if (enemyHordes.Count == 0)
+            return;
+
+        if (currentEnemyHorde < enemyHordes.Count - 1)
+        {
+            currentEnemyHorde++;
+
+            Debug.Log(
+                $"[EnemiesSpawner] Nueva horda de enemigos: {enemyHordes[currentEnemyHorde].hordeName}"
+            );
+        }
+        else
+        {
+            Debug.Log(
+                "[EnemiesSpawner] Ya se alcanzó la última horda de enemigos."
+            );
+        }
     }
 
     private void OnDestroy()

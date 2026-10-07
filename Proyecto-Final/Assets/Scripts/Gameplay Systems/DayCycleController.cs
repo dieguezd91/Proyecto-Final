@@ -7,7 +7,11 @@ public class DayCycleController : MonoBehaviour
 
     [SerializeField] private int currentDay = 0;
 
+    private int totalNights = 0;
+    private bool weekResetPending = false;
+
     public int CurrentDay => currentDay;
+    public int TotalNights => totalNights;
 
     public UnityEvent<int> OnNewDay;
 
@@ -35,8 +39,21 @@ public class DayCycleController : MonoBehaviour
 
     public void StartNight()
     {
+        if (weekResetPending)
+        {
+            currentDay = 0;
+            weekResetPending = false;
+        }
+
         currentDay++;
+        totalNights++;
+
         GameFlowController.Instance.SetPhase(GamePhase.Night);
+    }
+
+    public void RequestWeekReset()
+    {
+        weekResetPending = true;
     }
 
     public void ResetDayCount()

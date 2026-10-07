@@ -60,13 +60,29 @@ MonoBehaviour:
   useRandomSpawnPoint: 1
   dontSpawnWhenPlayerNearby: 1
   playerCheckRadius: 5
-  enemyWeights:
-  - prefab: {fileID: 654258422932643597, guid: cbec6260f6e304b499c47224480c584f, type: 3}
-    weight: 0.6
-  - prefab: {fileID: 4654744101768285803, guid: 44ca0037d2621034db113ad614aea001, type: 3}
-    weight: 0.3
-  - prefab: {fileID: 7894955776486503493, guid: 6171ad0f73df2fa4db59be62d9ef0f25, type: 3}
-    weight: 0.2
+  enemyHordes:
+  - hordeName: Horde 1
+    enemies:
+    - prefab: {fileID: 654258422932643597, guid: cbec6260f6e304b499c47224480c584f, type: 3}
+      weight: 0.15
+    - prefab: {fileID: 4654744101768285803, guid: 44ca0037d2621034db113ad614aea001, type: 3}
+      weight: 0.08
+    - prefab: {fileID: 7894955776486503493, guid: 6171ad0f73df2fa4db59be62d9ef0f25, type: 3}
+      weight: 0.07
+  - hordeName: Horde 2
+    enemies:
+    - prefab: {fileID: 654258422932643597, guid: 58a559149a8d3fb499e7a57d09706eb7, type: 3}
+      weight: 0.18
+    - prefab: {fileID: 654258422932643597, guid: a3198af927cec884193cbd386f3a1553, type: 3}
+      weight: 0.18
+    - prefab: {fileID: 4654744101768285803, guid: 287bf39330875e94b99b6be212d77171, type: 3}
+      weight: 0.12
+    - prefab: {fileID: 4654744101768285803, guid: 155e6d34d19cc1147b31c45a478f7f9b, type: 3}
+      weight: 0.1
+    - prefab: {fileID: 7894955776486503493, guid: c67ec03cda71f4347b3392dc1cd118d3, type: 3}
+      weight: 0.06
+    - prefab: {fileID: 7894955776486503493, guid: 0c6645d7ba9ecec4f9d92c49f3fb21ca, type: 3}
+      weight: 0.06
   bossNightManager: {fileID: 0}
   onHordeStart:
     m_PersistentCalls:
@@ -94,11 +110,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossPrefabs:
   - {fileID: 2501910690517604512, guid: c5656cbb0adda984f89d79ed3f23685b, type: 3}
+  - {fileID: 2501910690517604512, guid: 061b3383418a1b048bb5fcf893c90b3f, type: 3}
   bossNightInterval: 7
   bossSpawnDelay: 3
   bossSpawnPoint: {fileID: 0}
   bossRewardItemPrefab: {fileID: 0}
-  useDynamicBossSelection: 1
+  useDynamicBossSelection: 0
   bossAnnouncementDuration: 2
   onBossNightStart:
     m_PersistentCalls:
