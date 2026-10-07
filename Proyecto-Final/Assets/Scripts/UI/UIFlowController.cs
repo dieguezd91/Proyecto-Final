@@ -6,7 +6,8 @@ public enum UIModal
     None,
     Inventory,
     Crafting,
-    Restoration
+    Restoration,
+    LevelUp
 }
 
 public sealed class UIFlowController : MonoBehaviour
@@ -24,6 +25,7 @@ public sealed class UIFlowController : MonoBehaviour
 
     public bool Open(UIModal modal)
     {
+        if (UpgradeRuntime.GameplayBlocked && modal != UIModal.LevelUp) return false;
         if (modal == UIModal.None)
             return false;
 

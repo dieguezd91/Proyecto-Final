@@ -1,0 +1,58 @@
+# Magic Garden run upgrades
+
+## Wiring and ownership
+
+`UpgradeRuntime` installs on the existing `GameFlowController` when **Game** loads. It uses the scene's player XP, life, movement, pause, spell inventory, seed inventory and UI flow. No scene/prefab YAML changes or Inspector setup are required. `UpgradePanel` creates a default UGUI canvas with three horizontal cards and existing target sprites; its separate scrollable cauldron view uses the current materials. The original crafting panel is retired by its compatibility component, while serialized component GUIDs and legacy seed APIs remain valid.
+
+Only `MagicGarden.Core` has a production asmdef, with no engine references. Existing scripts remain in Assembly-CSharp, retaining plugin and serialized MonoBehaviour boundaries. Editor tests reference the core and use reflection for Assembly-CSharp integration. `StandaloneCoreChecks` is compiled only with `MAGIC_GARDEN_STANDALONE`; it runs the same core NUnit cases without pretending to execute Unity.
+
+State is one run-owned `RunState`: target/stat stack counts and bonuses, special-upgrade stacks, and composed effect values. Configuration assets and prefab base values are never changed at runtime. Resetting player progression clears run upgrades. Current projectiles consult their line's state on damage/knockback and normal range expiry; future projectiles inherit the same identity. Plant attack/detection/healing queries likewise consult current state. Player maximum health adds the gained capacity to current health, preserving missing health; movement keeps existing ice/attack penalties. In-progress spell/teleport/Sierra/rose cooldowns are normalized when their effective rate changes. ResourcePlant skips frozen updates so a zero delta-time energy budget cannot produce a NaN healing multiplier.
+
+Stable default ids are `player`, `ability:teleport`, `spell:<slotIndex>`, and `plant:<SeedsEnum>`. Plant identity never depends on seed-slot order. SpellDataSO and PlantDataSO allow explicit id overrides. Ownership is current unlocked spell slots, the integrated teleport ability, living planted lines and positive-count seed slots, not every plant ever unlocked. A planted representative supplies maturity-aware preview bases; a seed-only line previews its prefab basis. Damage means the base hit (Piercing's first hit), not random damage or ritual buffs; Area means radius; AttackSpeed is attacks/second; plant Range is detection or Sierra's attachment distance. Melee Range/Area previews include the other radius modifier.
+
+## Balance asset
+
+`Assets/Scriptables/Upgrades/Resources/MagicGardenBalance.json` is loaded automatically as a TextAsset. Numeric enum order is stable:
+
+- Stats: MaxHealth=0, Damage=1, AttackSpeed=2, MoveSpeed=3, Range=4, Area=5, Knockback=6, Quantity=7.
+- Rarity: Base=0, Common=1, Rare=2, Legendary=3.
+- Effects: LateralProjectiles=0, ExtraPierce=1, TraversalDamage=2, AreaMultiplier=3, AdditionalTargets=4.
+- Costs use the existing MaterialType numeric ids (not a new resource system).
+
+`stats` configures names, appearance weights and per-target maximum stacks. `rarities` configures rarity weights and fractional base bonuses. `profiles` provides eight scaling ratios per capability; optional `targetId` overrides a particular weapon/plant line's profile. Ratios multiply rarity bonuses, and stacks add relative to the target's unchanged base. AttackSpeed increases reciprocal cooldown rate; effective cooldown is always finite and at least 0.001 seconds. Quantity always adds exactly one, even with zero rarity bonus or zero scaling ratio. Its initial appearance weight is 0.025 and maximum stacks is three.
+
+Selection filters ownership, supported positive base values, scaling compatibility, maximum stacks and finite positive weights **before** weighted sampling. A target/stat pair is unique regardless of rarity. Invalid/zero percentage rarities do not create empty percentage upgrades; zero bonus remains meaningful for Quantity. Fewer than three candidates yield fewer cards. An empty pool offers explicit Continue, consuming one queued choice without locking gameplay.
+
+`specials` is a separate list of stable ids, capability targets, display text, material costs, prerequisites, maximum stacks and composed effect arrays. Prerequisites are ids purchased for the same target. Initial examples integrate Basic Shot's two lateral projectiles, Piercing extension plus traversed-hit damage, area radius modification, and AttackPlant's additional distinct targets. The master volley demonstrates a prerequisite. No special enters the level-up pool and no per-upgrade boolean flags are used.
+
+## XP and necessary baseline adaptations
+
+The existing Experience Progression asset now holds cumulative entry thresholds `0,100,250,450,750,1200,1800,2600,3500,4500`. Append explicit higher-level thresholds to configure L11+; there is no extrapolation. Its existing level-to-content unlock lists and 125 XP night reward remain intact. Old per-level `ExperienceLevelData.experienceRequired` fields remain serialized for compatibility but no longer control the XP curve. CurrentExperience is now total run XP, and the existing XP UI displays a cumulative interval. Every crossed threshold increments PendingChoices; all choices are presented without briefly resuming between levels.
+
+EnemyData configures Skeleton=15, GardenGnome=20 and Infernum=25. Death calls the existing `LifeController.Drop` path once; it creates an actual XP pickup alongside existing materials/mana and does not grant XP directly. The drop is guarded and spawned at Die rather than only at animation completion, because GardenGnome can destroy itself immediately after Die. Existing animation callbacks cannot duplicate it. Pickups reuse the configured enemy sprite, physics scatter, player contact/attraction and pickup sound.
+
+Piercing originally has **unlimited** unique hits within its normal lifetime, not a finite pierce count. Reducing that baseline to manufacture a count would regress combat. Its special instead allows one additional unique hit beyond normal travel range, bounded by configurable `pierceGraceSeconds`, and increases damage on traversed (after-first) hits. Normal in-range piercing remains unlimited. This semantic adaptation needs play-mode acceptance.
+
+Removing cauldron seed production otherwise makes newly unlocked plant lines inaccessible. `seedsOnPlantUnlock` therefore configures initial seed delivery for each newly unlocked line (initial value one). Existing owned seed counts are untouched. Full seed inventories defer delivery until space is freed; repeated unlock rebuilds do not duplicate deliveries. Legacy seed-crafting APIs remain available for existing integrations, but the cauldron never invokes them. Existing planting, seed swapping, growth and unlock event contracts are retained.
+
+## Modal and material transactions
+
+LevelUp is its own GamePhase overlay and UIModal, not Paused. WorldPhase continues to track day/night; underlying phase transitions are not replayed when the choice closes. The overlay acquires timeScale only after another modal/pause clears and gated/typing/Wait tutorial instructions finish, freezes gameplay, blocks InputReader gameplay emissions, guards independent spell/ability/seed/weapon consumers and temporarily suspends raw-input InteractionTriggers plus boss/lunar debug-input managers. Deferring gated tutorial UI preserves its existing typing/confirmation lifecycle instead of killing its animations to manufacture a global input block. EventSystem stays interactive. It restores its saved timeScale on release/disable/unload without overriding an active PauseController. PauseController resumes its own prior scale, never unfreezing an active level-up owner. Game over cancels the modal; remaining choices stay pending until a valid world phase or progression reset.
+
+InventoryManager aggregates duplicate costs, rejects invalid/nonpositive/overflow costs and checks all resources before debit. All balances and the composed upgrade commit before material notifications. Failed upgrade commits roll back before notification. A transaction guard blocks notification-driven reentrant consumption. Special purchases also recheck target ownership, prerequisites and stacks immediately before payment. Shop refreshes requested by resource events are deferred to Update, never purchases triggered by resource UI callbacks.
+
+## Verification and remaining acceptance checks
+
+Unity 2022.3.62f3 batch compilation **passed with no C# errors**. Native EditMode XML confirms **32 passed, zero failed/inconclusive/skipped**: 24 core cases and eight reflection-integration cases. The alternate pure-core runner also passed 24/24. Persistent evidence is in project `Library/MagicGardenValidation/compile.log`, `editmode.log`, and `editmode-results.xml` (ignored local outputs).
+
+Initial Unity runs were deferred while the user's Editor owned the project; native validation ran after the user closed it. No Editor was killed, lock removed, dependencies changed, or commits made. FireSpell's pre-existing hiding warning was removed while preserving its independent lifetime routines. Twenty-six other C# warning sites remain; a complete HEAD warning comparison was not run. Validation-generated ProjectSettings defaults were removed with targeted edits only.
+
+**The user confirmed Play Mode validation before authorizing the implementation commit.** This is user-reported interactive acceptance, not an agent-run PlayMode test. Successful compilation and EditMode tests alone do not establish actual combat, UI readability, animations, or modal timing. Retain this regression checklist for future changes:
+
+1. Actual Skeleton/Gnome/Infernum deaths spawn one pickup each; no XP changes until collection; death animation callbacks do not duplicate drops.
+2. Crossing several cumulative thresholds queues every choice; one/two/zero eligible offers never lock input. Cards remain interactive at timeScale zero.
+3. Mouse/keyboard movement, spells, teleport, ability cycles, planting, harvesting, seed swapping, weapon selection, interactions and inventory opening are blocked during choice ownership. Confirm in-progress abilities resume safely.
+4. Pause before/while queued choices, externally triggered day/night/game-over transitions, component disable and scene unload preserve timeScale/modal ownership.
+5. Compare card previews against actual target damage/radius/rate/speed/health; test several planted instances, maturity and newly spawned projectiles/plants of the same line.
+6. Buy lateral shot, pierce extension, area and branching volley using actual inventory materials; prerequisites/max stacks/duplicate costs/resource refreshes reject invalid purchases without spending. Check shop scrolling and card readability at supported resolutions.
+7. Existing seeds still plant/grow/swap; newly unlocked lines receive configured starter seeds once, including deferred delivery after a full inventory.

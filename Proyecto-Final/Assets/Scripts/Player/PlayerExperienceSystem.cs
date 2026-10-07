@@ -10,6 +10,13 @@ public class PlayerExperienceSystem : MonoBehaviour
     [SerializeField] private int currentLevel = 1;
     [SerializeField] private int currentExperience = 0;
 
+    public int PendingChoices { get; private set; }
+    public bool ConsumeChoice()
+    {
+        if (PendingChoices <= 0) return false;
+        PendingChoices--;
+        return true;
+    }
     public int CurrentLevel => currentLevel;
     public int CurrentExperience => currentExperience;
     public int ExperienceRequired => GetRequiredExperience(currentLevel);
@@ -63,17 +70,15 @@ public class PlayerExperienceSystem : MonoBehaviour
         if (amount <= 0) return;
         if (!ValidateConfiguration()) return;
 
-        currentExperience += amount;
+        currentExperience = MagicGarden.ExperienceCurve.Add(currentExperience, amount);
         int required = ExperienceRequired;
-
         while (required > 0 && currentExperience >= required)
         {
-            currentExperience -= required;
             currentLevel++;
+            PendingChoices++;
             OnLevelUp?.Invoke(currentLevel);
             required = ExperienceRequired;
         }
-
         OnExperienceChanged?.Invoke(currentLevel, currentExperience, required);
     }
 
@@ -81,6 +86,7 @@ public class PlayerExperienceSystem : MonoBehaviour
     {
         currentLevel = 1;
         currentExperience = 0;
+        PendingChoices = 0;
         OnExperienceChanged?.Invoke(currentLevel, currentExperience, ExperienceRequired);
         OnProgressionReset?.Invoke();
     }

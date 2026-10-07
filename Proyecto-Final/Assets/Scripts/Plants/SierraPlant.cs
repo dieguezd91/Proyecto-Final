@@ -26,6 +26,14 @@ public class SierraPlant : Plant
     [Header("VFX")]
     [SerializeField] private ParticleSystem attackParticles;
 
+    public override MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var target = base.DescribeUpgradeTarget();
+        target.Bases[MagicGarden.Stat.Damage] = attackDamagePerSecond;
+        target.Bases[MagicGarden.Stat.AttackSpeed] = 1 / Mathf.Max(0.001f, attackCooldown);
+        target.Bases[MagicGarden.Stat.Range] = attachRange;
+        return target;
+    }
     private Transform originalParent;
     private Vector3 originalLocalPosition;
     private Quaternion originalLocalRotation;
@@ -37,6 +45,7 @@ public class SierraPlant : Plant
     private bool isReturning = false;
 
     private float cooldownTimer = 0f;
+    private float previousEffectiveCooldown;
 
     private new void Awake()
     {
@@ -47,11 +56,16 @@ public class SierraPlant : Plant
 
     protected override void Update()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         base.Update();
 
         if (!IsFullyGrown())
             return;
 
+        float effective = UpgradedCooldown(attackCooldown);
+        if (previousEffectiveCooldown > 0 && previousEffectiveCooldown != effective)
+            cooldownTimer *= effective / previousEffectiveCooldown;
+        previousEffectiveCooldown = effective;
         if (cooldownTimer > 0f)
         {
             cooldownTimer -= Time.deltaTime;
@@ -68,7 +82,7 @@ public class SierraPlant : Plant
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(
             transform.position,
-            detectionRange,
+            Upgraded(MagicGarden.Stat.Range, detectionRange),
             enemyLayer
         );
 
@@ -100,7 +114,7 @@ public class SierraPlant : Plant
         if (closestEnemy == null)
             return;
 
-        if (closestDistance <= attachRange)
+        if (closestDistance <= Upgraded(MagicGarden.Stat.Range, attachRange))
         {
             StartCoroutine(AttackEnemy(closestEnemy));
         }
@@ -159,7 +173,7 @@ public class SierraPlant : Plant
                currentTargetLife.IsAlive())
         {
             float damage =
-                attackDamagePerSecond * Time.deltaTime;
+                Upgraded(MagicGarden.Stat.Damage, attackDamagePerSecond) * Time.deltaTime;
 
             currentTargetLife.TakeDamage(
                 damage,
@@ -244,7 +258,8 @@ public class SierraPlant : Plant
         currentTarget = null;
         currentTargetLife = null;
 
-        cooldownTimer = attackCooldown;
+        cooldownTimer = UpgradedCooldown(attackCooldown);
+        previousEffectiveCooldown = cooldownTimer;
         isAttacking = false;
     }
 

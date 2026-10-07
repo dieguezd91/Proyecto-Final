@@ -23,6 +23,7 @@ MonoBehaviour:
   homePriority: 0
   footstepCooldown: 0.35
   manaDropChance: 0.5
+  experienceReward: 20
   acceleration: 2
   stopDistance: 0.8
   chaseYOffset: 0.5

@@ -8,6 +8,15 @@ public class IceRangeSeed : Spell
     [Header("ICE AREA")]
     [SerializeField] private GameObject iceSlowArea;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Range] = speed * lifeTime;
+        target.Bases[MagicGarden.Stat.Quantity] = 1;
+        var area = iceSlowArea != null ? iceSlowArea.GetComponent<IceSlowArea>() : null;
+        if (area != null) target.Bases[MagicGarden.Stat.Area] = area.BaseRadius;
+        return target;
+    }
     private Vector2 direction;
     private bool isInitialized = false;
 
@@ -55,6 +64,8 @@ public class IceRangeSeed : Spell
 
         iceSlowArea.transform.SetParent(null);
         iceSlowArea.transform.position = transform.position;
+        var area = iceSlowArea.GetComponent<IceSlowArea>();
+        if (area != null) area.SetUpgradeTarget(UpgradeTargetId, UpgradeCapability);
         iceSlowArea.SetActive(true);
     }
 

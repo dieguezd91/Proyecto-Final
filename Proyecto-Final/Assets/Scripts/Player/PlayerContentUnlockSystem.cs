@@ -11,6 +11,10 @@ public class PlayerContentUnlockSystem : MonoBehaviour
 
     private readonly HashSet<SeedsEnum> unlockedPlants = new HashSet<SeedsEnum>();
     private readonly HashSet<SpellDataSO> unlockedSpells = new HashSet<SpellDataSO>();
+    private readonly HashSet<SeedsEnum> deliveredSeeds = new HashSet<SeedsEnum>();
+    private readonly List<PlantDataSO> pendingSeeds = new List<PlantDataSO>();
+    private SeedInventory seedInventory;
+    private bool deliveringSeeds;
 
     public event Action<PlantDataSO> OnPlantUnlocked;
     public event Action<SpellDataSO> OnSpellUnlocked;
@@ -46,7 +50,30 @@ public class PlayerContentUnlockSystem : MonoBehaviour
 
     private void Start()
     {
+        seedInventory = SeedInventory.Instance;
+        if (seedInventory != null) seedInventory.onInventoryChanged += DeliverPendingSeeds;
         InitializeUnlocks();
+    }
+    private void OnDestroy()
+    {
+        if (seedInventory != null) seedInventory.onInventoryChanged -= DeliverPendingSeeds;
+    }
+    private void QueueSeeds(PlantDataSO plant)
+    {
+        if (deliveredSeeds.Add(plant.seedType)) pendingSeeds.Add(plant);
+    }
+    private void DeliverPendingSeeds()
+    {
+        if (deliveringSeeds || seedInventory == null) return;
+        int amount = UpgradeRuntime.Current?.Balance != null ? UpgradeRuntime.Current.Balance.seedsOnPlantUnlock : 0;
+        if (amount <= 0) return;
+        deliveringSeeds = true;
+        try
+        {
+            for (int i = pendingSeeds.Count - 1; i >= 0; i--)
+                if (seedInventory.TryGrantUnlockedPlant(pendingSeeds[i], amount)) pendingSeeds.RemoveAt(i);
+        }
+        finally { deliveringSeeds = false; }
     }
 
     private void EnsurePlayerExperienceSystem()
@@ -125,6 +152,7 @@ public class PlayerContentUnlockSystem : MonoBehaviour
                     if (plant != null && plant.seedType != SeedsEnum.None)
                     {
                         unlockedPlants.Add(plant.seedType);
+                        QueueSeeds(plant);
                     }
                 }
             }
@@ -147,6 +175,7 @@ public class PlayerContentUnlockSystem : MonoBehaviour
             }
         }
 
+        DeliverPendingSeeds();
         OnUnlockStateRebuilt?.Invoke();
     }
 
@@ -176,6 +205,8 @@ public class PlayerContentUnlockSystem : MonoBehaviour
                 {
                     if (unlockedPlants.Add(plant.seedType))
                     {
+                        QueueSeeds(plant);
+                        DeliverPendingSeeds();
                         OnPlantUnlocked?.Invoke(plant);
                     }
                 }
@@ -205,6 +236,8 @@ public class PlayerContentUnlockSystem : MonoBehaviour
 
     private void HandleProgressionReset()
     {
+        deliveredSeeds.Clear();
+        pendingSeeds.Clear();
         int resetLevel = playerExperienceSystem != null ? playerExperienceSystem.CurrentLevel : 1;
         RebuildUnlocksUpToLevel(resetLevel);
     }

@@ -1,4 +1,6 @@
 using UnityEngine;
+using System.Collections;
+using MagicGarden;
 
 public abstract class Spell : MonoBehaviour
 {
@@ -10,19 +12,44 @@ public abstract class Spell : MonoBehaviour
     [SerializeField] protected GameObject floatingDamagePrefab;
     [SerializeField] protected GameObject impactParticlesPrefab;
 
+    public string UpgradeTargetId { get; private set; }
+    public string UpgradeCapability { get; private set; }
+    public void SetUpgradeTarget(string id, string capability)
+    {
+        UpgradeTargetId = id;
+        UpgradeCapability = capability;
+    }
+    protected float Upgraded(Stat stat, float basis) => UpgradeRuntime.Value(UpgradeTargetId, stat, basis, UpgradeCapability ?? GetType().Name);
+    protected float Special(EffectKind kind) => UpgradeRuntime.EffectValue(UpgradeTargetId, kind);
+    protected float DamageMultiplier => damage > 0 ? Upgraded(Stat.Damage, damage) / damage : Upgraded(Stat.Damage, 1);
     protected virtual void Awake()
     {
-        if (lifeTime > 0f)
+        if (lifeTime > 0f) StartCoroutine(Lifetime());
+    }
+    private IEnumerator Lifetime()
+    {
+        float elapsed = 0;
+        while (elapsed < Upgraded(Stat.Range, lifeTime))
         {
-            Destroy(gameObject, lifeTime);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
+        if (!ExtendLifetime()) Destroy(gameObject);
+    }
+    protected virtual bool ExtendLifetime() => false;
+    public virtual Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = new Target { Id = id, Name = displayName, Capability = GetType().Name };
+        if (damage > 0) target.Bases[Stat.Damage] = damage;
+        target.Bases[Stat.Knockback] = 8;
+        return target;
     }
 
     public abstract void Cast(Vector2 direction, Vector3 spawnPosition);
 
     protected virtual void ApplyDamage(Collider2D target)
     {
-        float dmg = Random.Range(damage, damage + 5f);
+        float dmg = Random.Range(damage, damage + 5f) * DamageMultiplier;
 
         if (RitualBuffManager.Instance != null)
         {
@@ -81,7 +108,7 @@ public abstract class Spell : MonoBehaviour
         if (knockback != null)
         {
             Vector2 direction = (target.transform.position - transform.position).normalized;
-            knockback.ApplyKnockback(direction, 8f);
+            knockback.ApplyKnockback(direction, Upgraded(Stat.Knockback, 8f));
         }
     }
 }

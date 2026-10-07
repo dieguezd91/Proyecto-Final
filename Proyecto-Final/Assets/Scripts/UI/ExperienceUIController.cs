@@ -95,14 +95,16 @@ public class ExperienceUIController : MonoBehaviour
 
         if (xpText != null)
         {
-            xpText.text = $"{currentXp} / {requiredXp} XP";
+            xpText.text = requiredXp > 0 ? $"{currentXp} / {requiredXp} XP" : $"{currentXp} XP (MAX)";
         }
 
         if (xpSlider != null)
         {
-            xpSlider.minValue = 0;
-            xpSlider.maxValue = requiredXp;
-            xpSlider.value = currentXp;
+            int floor = playerExperienceSystem != null && playerExperienceSystem.ProgressionData != null
+                ? playerExperienceSystem.ProgressionData.GetLevelThreshold(level) : 0;
+            xpSlider.minValue = floor;
+            xpSlider.maxValue = requiredXp > floor ? requiredXp : floor + 1;
+            xpSlider.value = requiredXp > 0 ? currentXp : floor + 1;
         }
     }
 }

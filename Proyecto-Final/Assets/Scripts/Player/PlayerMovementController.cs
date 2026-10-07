@@ -51,6 +51,7 @@ public class PlayerMovementController : MonoBehaviour
     private bool hasMovedForTutorial = false;
     private bool tutorialBlocksMovement;
 
+    public float BaseMoveSpeed => maxSpeed;
     public bool IsMovementEnabled => movementEnabled;
     public bool IsMoving => currentVelocity.sqrMagnitude > 0.01f;
     public Vector2 MoveInput => moveInput;
@@ -103,7 +104,7 @@ public class PlayerMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal)
+        if (UpgradeRuntime.GameplayBlocked || (UIManager.Instance?.Flow != null && UIManager.Instance.Flow.HasOpenModal))
         {
             currentVelocity = Vector2.zero;
 
@@ -191,7 +192,7 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         // Velocidad base modificada por el hielo
-        Vector2 targetVelocity = moveInput * maxSpeed * iceSlowMultiplier;
+        Vector2 targetVelocity = moveInput * UpgradeRuntime.Value("player", MagicGarden.Stat.MoveSpeed, maxSpeed, "Player") * iceSlowMultiplier;
 
         if (Time.time < attackSlowEndTime)
         {

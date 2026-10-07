@@ -23,6 +23,7 @@ MonoBehaviour:
   homePriority: 1.5
   footstepCooldown: 0.4
   manaDropChance: 0.5
+  experienceReward: 25
   shootingRange: 6
   fireRate: 0.5
   bulletForce: 5

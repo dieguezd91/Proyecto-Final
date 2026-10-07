@@ -11,6 +11,12 @@ public class TeleportSpell : Spell
     [SerializeField] private GameObject teleportEndEffectPrefab;
     [SerializeField] private float effectDuration = 0.5f;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = new MagicGarden.Target { Id = id, Name = displayName, Capability = GetType().Name };
+        target.Bases[MagicGarden.Stat.Range] = teleportDistance;
+        return target;
+    }
     private Transform playerTransform;
     private bool hasExecuted = false;
 
@@ -30,9 +36,9 @@ public class TeleportSpell : Spell
         Vector3 startPosition = playerTransform.position;
 
         Vector2 teleportDirection = direction.normalized;
-        Vector3 targetPosition = startPosition + (Vector3)(teleportDirection * teleportDistance);
+        Vector3 targetPosition = startPosition + (Vector3)(teleportDirection * Upgraded(MagicGarden.Stat.Range, teleportDistance));
 
-        RaycastHit2D hit = Physics2D.Raycast(startPosition, teleportDirection, teleportDistance, collisionMask);
+        RaycastHit2D hit = Physics2D.Raycast(startPosition, teleportDirection, Upgraded(MagicGarden.Stat.Range, teleportDistance), collisionMask);
 
         if (hit.collider != null)
         {

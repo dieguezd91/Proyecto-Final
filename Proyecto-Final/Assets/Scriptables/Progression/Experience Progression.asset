@@ -38,4 +38,14 @@ MonoBehaviour:
     - {fileID: 11400000, guid: 23eb498058265294086e4364fb9f4c73, type: 2}
     spellUnlocks:
     - {fileID: 11400000, guid: fc26c611669a45dfa1d596f871fc745a, type: 2}
-  experienceIncreaseAfterLastLevel: 50
+  cumulativeThresholds:
+  - 0
+  - 100
+  - 250
+  - 450
+  - 750
+  - 1200
+  - 1800
+  - 2600
+  - 3500
+  - 4500

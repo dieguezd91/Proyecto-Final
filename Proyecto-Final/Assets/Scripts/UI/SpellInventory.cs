@@ -13,6 +13,8 @@ public enum SpellType
 [Serializable]
 public class SpellSlot
 {
+    public string upgradeTargetId;
+    public string UpgradeId(int index) => string.IsNullOrEmpty(upgradeTargetId) ? "spell:" + index : upgradeTargetId;
     public SpellType spellType;
     public string spellName;
     public Sprite spellIcon;
@@ -43,6 +45,7 @@ public class SpellInventory : MonoBehaviour
     [SerializeField] public SpellSlot[] spellSlots = new SpellSlot[7];
 
     private int selectedSlotIndex = 0;
+    private float[] previousEffectiveCooldowns;
 
     public event Action<int> onSpellSlotSelected;
     public event Action<int> onCooldownUpdated;
@@ -67,8 +70,14 @@ public class SpellInventory : MonoBehaviour
 
     private void UpdateCooldowns()
     {
+        if (previousEffectiveCooldowns == null || previousEffectiveCooldowns.Length != spellSlots.Length)
+            previousEffectiveCooldowns = new float[spellSlots.Length];
         for (int i = 0; i < spellSlots.Length; i++)
         {
+            float effective = EffectiveCooldown(i);
+            if (spellSlots[i] != null && previousEffectiveCooldowns[i] > 0 && previousEffectiveCooldowns[i] != effective)
+                spellSlots[i].currentCooldown *= effective / previousEffectiveCooldowns[i];
+            previousEffectiveCooldowns[i] = effective;
             if (spellSlots[i] != null && spellSlots[i].currentCooldown > 0f)
             {
                 spellSlots[i].currentCooldown -= Time.deltaTime;
@@ -96,6 +105,7 @@ public class SpellInventory : MonoBehaviour
 
     public void SelectSlot(int index)
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (index < 0 || index >= spellSlots.Length) return;
 
         selectedSlotIndex = index;
@@ -120,6 +130,7 @@ public class SpellInventory : MonoBehaviour
 
     public bool CanCastSelectedSpell()
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
         var slot = GetSelectedSpellSlot();
         if (slot == null || !slot.isUnlocked || slot.spellType == SpellType.None || slot.spellPrefab == null) return false;
         if (slot.currentCooldown > 0f) return false;
@@ -137,7 +148,9 @@ public class SpellInventory : MonoBehaviour
         var slot = spellSlots[slotIndex];
         if (slot != null)
         {
-            slot.currentCooldown = slot.cooldown;
+            slot.currentCooldown = EffectiveCooldown(slotIndex);
+            if (previousEffectiveCooldowns != null && slotIndex < previousEffectiveCooldowns.Length)
+                previousEffectiveCooldowns[slotIndex] = slot.currentCooldown;
             onCooldownUpdated?.Invoke(slotIndex);
         }
     }
@@ -158,6 +171,7 @@ public class SpellInventory : MonoBehaviour
             spellSlots[slotIndex] = new SpellSlot();
         }
 
+        spellSlots[slotIndex].upgradeTargetId = spellData.UpgradeTargetId;
         spellSlots[slotIndex].spellType = spellData.SpellType;
         spellSlots[slotIndex].spellName = spellData.SpellName;
         spellSlots[slotIndex].spellIcon = spellData.SpellIcon;
@@ -233,11 +247,20 @@ public class SpellInventory : MonoBehaviour
         var slot = GetSpellSlot(slotIndex);
         if (slot == null || slot.cooldown <= 0f) return 0f;
 
-        return slot.currentCooldown / slot.cooldown;
+        return slot.currentCooldown / EffectiveCooldown(slotIndex);
+    }
+
+    public float EffectiveCooldown(int index)
+    {
+        var slot = GetSpellSlot(index);
+        if (slot == null) return 0.001f;
+        var spell = slot.spellPrefab != null ? slot.spellPrefab.GetComponent<Spell>() : null;
+        return UpgradeRuntime.Cooldown(slot.UpgradeId(index), slot.cooldown, spell != null ? spell.GetType().Name : "");
     }
 
     public void CycleSpell(int direction)
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (spellSlots == null || spellSlots.Length == 0) return;
         if (direction == 0) return;
 

@@ -83,7 +83,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void Update()
     {
-        if (isDead) return;
+        if (isDead || UpgradeRuntime.GameplayBlocked) return;
 
         UpdateTargeting();
         StateMachine.Tick();
@@ -92,7 +92,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void FixedUpdate()
     {
-        if (isDead || IsBeingKnockedBack()) return;
+        if (isDead || UpgradeRuntime.GameplayBlocked || IsBeingKnockedBack()) return;
 
         StateMachine.FixedTick();
     }
@@ -140,6 +140,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
             lifeController.maxHealth = data.MaxHealth;
             lifeController.currentHealth = data.MaxHealth;
             lifeController.manaDropChance = data.ManaDropChance;
+            lifeController.ConfigureExperienceDrop(data.ExperienceReward, data.EnemyIcon);
         }
     }
 

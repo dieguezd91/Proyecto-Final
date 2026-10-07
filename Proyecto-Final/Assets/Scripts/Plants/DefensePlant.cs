@@ -13,6 +13,16 @@ public class DefensePlant : Plant
     public Color attractionColor = new Color(0.5f, 1f, 0.5f, 0.3f);
     public Color reflectColor = new Color(1f, 0.5f, 0.5f, 0.5f);
 
+    public override MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var target = base.DescribeUpgradeTarget();
+        target.Capability = "DefensePlant";
+        target.Bases[MagicGarden.Stat.Damage] = reflectDamage;
+        target.Bases[MagicGarden.Stat.AttackSpeed] = 1 / Mathf.Max(0.001f, reflectInterval);
+        target.Bases[MagicGarden.Stat.Range] = attractionRadius;
+        target.Bases[MagicGarden.Stat.Area] = reflectRadius;
+        return target;
+    }
     private float reflectTimer = 0f;
     private bool canReflect = false;
     private Dictionary<EnemyBase, Coroutine> attractedEnemies = new Dictionary<EnemyBase, Coroutine>();
@@ -40,6 +50,7 @@ public class DefensePlant : Plant
 
     protected override void Update()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         base.Update();
 
         canReflect = IsFullyGrown();
@@ -48,7 +59,7 @@ public class DefensePlant : Plant
         {
             AttractEnemies();
             reflectTimer += Time.deltaTime;
-            if (reflectTimer >= reflectInterval)
+            if (reflectTimer >= UpgradedCooldown(reflectInterval))
             {
                 ReflectDamage();
                 reflectTimer = 0f;
@@ -58,7 +69,7 @@ public class DefensePlant : Plant
 
     void AttractEnemies()
     {
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, attractionRadius, enemyLayer);
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, Upgraded(MagicGarden.Stat.Range, attractionRadius), enemyLayer);
 
         foreach (Collider2D enemyCollider in enemiesInRange)
         {
@@ -113,14 +124,14 @@ public class DefensePlant : Plant
 
     void ReflectDamage()
     {
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, reflectRadius, enemyLayer);
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, Upgraded(MagicGarden.Stat.Area, reflectRadius), enemyLayer);
 
         foreach (Collider2D enemyCollider in enemiesInRange)
         {
             LifeController enemyHealth = enemyCollider.GetComponent<LifeController>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(reflectDamage);
+                enemyHealth.TakeDamage(Upgraded(MagicGarden.Stat.Damage, reflectDamage));
             }
         }
     }

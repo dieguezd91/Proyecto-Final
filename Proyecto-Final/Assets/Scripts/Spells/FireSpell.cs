@@ -12,6 +12,13 @@ public class FireSpell : Spell
     [Header("DAMAGE SETTINGS")]
     [SerializeField] private float damagePerHit = 5f;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = new MagicGarden.Target { Id = id, Name = displayName, Capability = GetType().Name };
+        target.Bases[MagicGarden.Stat.Damage] = damagePerHit;
+        target.Bases[MagicGarden.Stat.Range] = projectileSpeed * projectileLifeTime;
+        return target;
+    }
     private bool isActive = false;
     private int spellSlotIndex = -1;
     private PlayerSpellController playerSpellController;
@@ -19,8 +26,10 @@ public class FireSpell : Spell
 
     [HideInInspector] public bool isProjectile = false;
 
-    private void Awake()
+    protected override void Awake()
     {
+        // Intentionally do not call base.Awake: FireRoutine and ProjectileLifetime
+        // own flame lifetimes; the generic lifetime could destroy the controller early.
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -69,8 +78,19 @@ public class FireSpell : Spell
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             transform.rotation = Quaternion.Euler(0, 0, angle);
 
-            Destroy(gameObject, projectileLifeTime);
+            StartCoroutine(ProjectileLifetime());
         }
+    }
+
+    private IEnumerator ProjectileLifetime()
+    {
+        float elapsed = 0;
+        while (elapsed < Upgraded(MagicGarden.Stat.Range, projectileLifeTime))
+        {
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        Destroy(gameObject);
     }
 
     public void SetSpellSlotIndex(int slotIndex)
@@ -93,6 +113,7 @@ public class FireSpell : Spell
             flameProj.transform.SetParent(null);
 
             FireSpell flameScript = flameProj.GetComponent<FireSpell>();
+            flameScript.SetUpgradeTarget(UpgradeTargetId, UpgradeCapability);
             flameScript.isProjectile = true;
             flameScript.isActive = false;
 
@@ -134,7 +155,7 @@ public class FireSpell : Spell
 
             if (life != null && life.IsAlive())
             {
-                float damage = damagePerHit;
+                float damage = Upgraded(MagicGarden.Stat.Damage, damagePerHit);
 
                 if (RitualBuffManager.Instance != null)
                 {

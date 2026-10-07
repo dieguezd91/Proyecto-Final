@@ -13,11 +13,19 @@ public class ElectricPlantAura : MonoBehaviour
     [Header("VFX & Feedback")]
     [SerializeField] private GameObject floatingDamagePrefab;
 
+    public void Describe(MagicGarden.Target target)
+    {
+        target.Capability = "ElectricPlantAura";
+        target.Bases[MagicGarden.Stat.Damage] = damagePerSecond;
+        target.Bases[MagicGarden.Stat.Area] = radius;
+    }
+    private Plant plant;
     private LifeController lifeController;
 
     private void Awake()
     {
         lifeController = GetComponent<LifeController>();
+        plant = GetComponent<Plant>();
     }
 
     private void OnEnable()
@@ -42,13 +50,14 @@ public class ElectricPlantAura : MonoBehaviour
 
     private void ApplyAreaEffects()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             transform.position,
-            radius,
+            plant != null ? plant.Upgraded(MagicGarden.Stat.Area, radius) : radius,
             enemyLayer
         );
 
-        float damage = damagePerSecond * areaCheckInterval;
+        float damage = (plant != null ? plant.Upgraded(MagicGarden.Stat.Damage, damagePerSecond) : damagePerSecond) * areaCheckInterval;
 
         foreach (var hit in hits)
         {

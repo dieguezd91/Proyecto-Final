@@ -57,6 +57,14 @@ public class LifeController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     private bool isDead = false;
+    private bool dropsSpawned;
+    private int experienceDrop;
+    private Sprite experienceIcon;
+    public void ConfigureExperienceDrop(int amount, Sprite icon)
+    {
+        experienceDrop = Mathf.Max(0, amount);
+        experienceIcon = icon;
+    }
     [SerializeField] private bool isEnemy;
     [SerializeField] private bool isPlayer;
     [SerializeField] private bool isPlant;
@@ -83,7 +91,7 @@ public class LifeController : MonoBehaviour
 
     public void TakeDamage(float damage, DamageType damageType = DamageType.SingleTick, DamageElement damageElement = DamageElement.Normal)
     {
-        if (isDead) return;
+        if (isDead || UpgradeRuntime.GameplayBlocked) return;
 
         currentHealth -= damage;
         currentHealth = Mathf.Max(0f, currentHealth);
@@ -145,6 +153,9 @@ public class LifeController : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
+        // Some gnomes destroy themselves immediately after Die instead of waiting
+        // for an animation event. Spawn once here, through the existing drop path.
+        if (isEnemy) Drop();
 
         if (isPlayer)
         {
@@ -295,6 +306,13 @@ public class LifeController : MonoBehaviour
 
     public void Drop()
     {
+        if (!isDead || dropsSpawned) return;
+        dropsSpawned = true;
+        if (experienceDrop > 0)
+        {
+            var pickup = ExperiencePickup.Spawn(transform.position, experienceDrop, experienceIcon);
+            Scatter(pickup);
+        }
         if (lootTable != null && lootTable.Count > 0)
         {
             foreach (var loot in lootTable)
@@ -319,6 +337,11 @@ public class LifeController : MonoBehaviour
     {
         GameObject newItem = Instantiate(prefabToSpawn, transform.position, Quaternion.identity);
 
+        Scatter(newItem);
+    }
+
+    private void Scatter(GameObject newItem)
+    {
         Rigidbody2D rb = newItem.GetComponent<Rigidbody2D>();
 
         if (rb != null)
@@ -332,6 +355,7 @@ public class LifeController : MonoBehaviour
     public void ResetLife()
     {
         isDead = false;
+        dropsSpawned = false;
 
         currentHealth = maxHealth;
         onHealthChanged?.Invoke(currentHealth, maxHealth);

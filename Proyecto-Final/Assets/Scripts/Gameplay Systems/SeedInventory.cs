@@ -95,6 +95,7 @@ public class SeedInventory : MonoBehaviour
 
     public void SelectSlot(int slotIndex)
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (slotIndex >= 0 && slotIndex < plantSlots.Length)
         {
             selectedSlotIndex = slotIndex;
@@ -144,6 +145,7 @@ public class SeedInventory : MonoBehaviour
 
     public void ConsumeSeedInSelectedSlot()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         var slot = GetSelectedPlantSlot();
         if (slot != null && slot.seedCount > 0)
         {
@@ -160,6 +162,23 @@ public class SeedInventory : MonoBehaviour
                 NotifyInventoryChanged();
             }
         }
+    }
+
+    // New plant unlocks remain usable after the cauldron stops producing seeds.
+    // Existing seed counts/data are preserved; full inventory defers delivery.
+    public bool TryGrantUnlockedPlant(PlantDataSO data, int amount)
+    {
+        if (data == null || data.seedType == SeedsEnum.None || data.plantPrefab == null || amount <= 0) return false;
+        for (int i = 0; i < plantSlots.Length; i++)
+            if (plantSlots[i] != null && plantSlots[i].seedType == data.seedType && plantSlots[i].seedCount > 0) return true;
+        for (int i = 0; i < plantSlots.Length; i++)
+            if (plantSlots[i] == null || plantSlots[i].seedCount <= 0)
+            {
+                if (plantSlots[i] == null) plantSlots[i] = new PlantSlot();
+                UnlockPlant(data.seedType, data.plantPrefab, data.plantName, data.plantIcon, i, data.daysToGrow, amount, data.description, data);
+                return true;
+            }
+        return false;
     }
 
     public bool AddSeedsToSlot(int slotIndex, int amount)
@@ -214,6 +233,7 @@ public class SeedInventory : MonoBehaviour
 
     public bool SwapSlots(int a, int b)
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
         if (a < 0 || a >= plantSlots.Length || b < 0 || b >= plantSlots.Length)
             return false;
 

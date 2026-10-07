@@ -11,6 +11,15 @@ public class HammerSpell : Spell
     [SerializeField] private GameObject slashEffectPrefab;
     [SerializeField] private float effectDuration = 0.5f;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Range] = UpgradeRuntime.Value(id, MagicGarden.Stat.Area, attackRadius, GetType().Name);
+        target.Bases[MagicGarden.Stat.Area] = UpgradeRuntime.Value(id, MagicGarden.Stat.Range, attackRadius, GetType().Name);
+        target.Bases[MagicGarden.Stat.Knockback] = knockbackForce;
+        return target;
+    }
+    private float EffectiveRadius => Upgraded(MagicGarden.Stat.Range, Upgraded(MagicGarden.Stat.Area, attackRadius));
     private bool hasExecuted = false;
 
     public override void Cast(Vector2 direction, Vector3 spawnPosition)
@@ -39,7 +48,7 @@ public class HammerSpell : Spell
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(
             transform.position,
-            attackRadius,
+            EffectiveRadius,
             enemyLayer
         );
 
@@ -92,7 +101,7 @@ public class HammerSpell : Spell
 
             knockback.ApplyKnockback(
                 knockbackDirection,
-                knockbackForce
+                Upgraded(MagicGarden.Stat.Knockback, knockbackForce)
             );
         }
     }

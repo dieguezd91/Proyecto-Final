@@ -60,6 +60,12 @@ public class InputReader : MonoBehaviour
     private void Update()
     {
         ReadContinuousState();
+        if (UpgradeRuntime.GameplayBlocked)
+        {
+            MoveInput = Vector2.zero;
+            if (Input.GetKeyDown(KeyCode.Escape)) InputConsumptionManager.ConsumeEscape();
+            return; // EventSystem UI remains active; no independent gameplay subscribers run.
+        }
         ReadGameplayKeys();
         ReadUIKeys();
         ReadSlotKeys();

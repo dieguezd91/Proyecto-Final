@@ -9,6 +9,18 @@ public class AttackPlant : Plant
     public float detectionRange = 8f;
     public LayerMask enemyLayer;
 
+    public override MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var target = base.DescribeUpgradeTarget();
+        var spell = projectile != null ? projectile.GetComponent<Spell>() : null;
+        if (spell == null) { target.Bases.Clear(); target.Capability = "Plant"; return target; }
+        var projectileTarget = spell.DescribeUpgradeTarget(UpgradeId, target.Name);
+        foreach (var value in projectileTarget.Bases) target.Bases[value.Key] = value.Value;
+        target.Capability = "AttackPlant";
+        target.Bases[MagicGarden.Stat.AttackSpeed] = 1 / Mathf.Max(0.001f, cooldown);
+        target.Bases[MagicGarden.Stat.Range] = detectionRange;
+        return target;
+    }
     private float attackTimer = 0f;
     private bool canShoot = false;
     private Transform target;
@@ -52,6 +64,7 @@ public class AttackPlant : Plant
 
     protected override void Update()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         base.Update();
         canShoot = IsFullyGrown();
 
@@ -62,7 +75,7 @@ public class AttackPlant : Plant
             if (target != null)
             {
                 attackTimer += Time.deltaTime;
-                if (attackTimer >= cooldown)
+                if (attackTimer >= UpgradedCooldown(cooldown))
                 {
                     StartAttackSequence();
                     attackTimer = 0f;
@@ -105,7 +118,7 @@ public class AttackPlant : Plant
 
     void DetectEnemies()
     {
-        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, detectionRange, enemyLayer);
+        Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(transform.position, Upgraded(MagicGarden.Stat.Range, detectionRange), enemyLayer);
         float closestDistance = Mathf.Infinity;
         Transform closestEnemy = null;
 
@@ -137,22 +150,30 @@ public class AttackPlant : Plant
 
     public void OnShootAnimationEvent()
     {
-        if (projectile != null && queuedTarget != null)
+        if (UpgradeRuntime.GameplayBlocked || projectile == null || queuedTarget == null || !queuedTarget.gameObject.activeInHierarchy) return;
+        ShootAt(queuedTarget);
+        int additional = Mathf.Max(Mathf.RoundToInt(UpgradeRuntime.EffectValue(UpgradeId, MagicGarden.EffectKind.AdditionalTargets)), 0);
+        if (additional <= 0) return;
+        var seen = new System.Collections.Generic.HashSet<LifeController>();
+        var primary = queuedTarget.GetComponent<LifeController>();
+        if (primary != null) seen.Add(primary);
+        var enemies = Physics2D.OverlapCircleAll(transform.position, Upgraded(MagicGarden.Stat.Range, detectionRange), enemyLayer);
+        foreach (var enemy in enemies)
         {
-            if (queuedTarget.gameObject.activeInHierarchy)
-            {
-                GameObject projectileObj = Instantiate(this.projectile, firePoint.position, firePoint.rotation);
-
-                Spell projectileComponent = projectileObj.GetComponent<Spell>();
-
-                if (projectileComponent != null)
-                {
-                    Vector2 direction = (queuedTarget.position - firePoint.position).normalized;
-
-                    projectileComponent.Cast(direction, firePoint.position);
-                }
-            }
+            var life = enemy.GetComponent<LifeController>();
+            if (life == null || !life.IsAlive() || enemy.GetComponent<GardenGnome>() != null || !seen.Add(life)) continue;
+            ShootAt(enemy.transform);
+            if (--additional == 0) break;
         }
+    }
+    private void ShootAt(Transform enemy)
+    {
+        Vector2 direction = (enemy.position - firePoint.position).normalized;
+        var spell = projectile.GetComponent<Spell>();
+        if (spell == null) return;
+        var description = spell.DescribeUpgradeTarget(UpgradeId, "");
+        UpgradeCasting.Cast(projectile, firePoint.position, direction, UpgradeId, "AttackPlant",
+            description.Bases.ContainsKey(MagicGarden.Stat.Quantity));
     }
 
     public void OnAttackAnimationEnd()

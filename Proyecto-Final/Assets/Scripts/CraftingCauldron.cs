@@ -8,6 +8,7 @@ public class CraftingCauldron : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        if (!CanInteract()) return;
         // Play interaction sound globally through SoundManager
         if (interactSound != null && interactSound.CanPlay())
         {
@@ -20,7 +21,7 @@ public class CraftingCauldron : MonoBehaviour, IInteractable
 
     public bool CanInteract()
     {
-        return GameFlowController.Instance.CurrentPhase != GamePhase.Night &&
+        return !UpgradeRuntime.GameplayBlocked && GameFlowController.Instance.CurrentPhase == GamePhase.Day &&
                !(UIManager.Instance?.Flow != null && UIManager.Instance.Flow.IsOpen(UIModal.Crafting));
     }
 

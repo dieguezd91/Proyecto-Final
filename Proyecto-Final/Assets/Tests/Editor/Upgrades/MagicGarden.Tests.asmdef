@@ -1,0 +1,6 @@
+{
+  "name": "MagicGarden.Tests",
+  "references": ["MagicGarden.Core"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

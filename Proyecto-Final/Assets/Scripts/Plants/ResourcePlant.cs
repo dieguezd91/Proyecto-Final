@@ -23,6 +23,12 @@ public class ResourcePlant : Plant
     private readonly HashSet<LifeController> plantsBeingHealed =
         new HashSet<LifeController>();
 
+    public override MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var target = base.DescribeUpgradeTarget();
+        target.Bases[MagicGarden.Stat.Area] = healingRadius;
+        return target;
+    }
     public float CurrentEnergy => energy;
     public float MaxEnergy => maxEnergy;
     public bool IsHealing => isHealing;
@@ -42,6 +48,8 @@ public class ResourcePlant : Plant
 
     protected override void Update()
     {
+        // A frozen aura must not divide zero energy by a zero delta-time budget.
+        if (UpgradeRuntime.GameplayBlocked || Time.deltaTime <= 0) return;
         base.Update();
 
         if (!IsFullyGrown())
@@ -70,7 +78,7 @@ public class ResourcePlant : Plant
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             transform.position,
-            healingRadius,
+            Upgraded(MagicGarden.Stat.Area, healingRadius),
             plantLayer
         );
 

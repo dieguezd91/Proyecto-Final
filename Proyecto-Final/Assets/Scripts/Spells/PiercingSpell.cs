@@ -10,6 +10,24 @@ public class PiercingSpell : Spell
     [SerializeField] private float firstHitDamage = 30f;
     [SerializeField] private float followingHitDamage = 15f;
 
+    private int extensionHits;
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Damage] = firstHitDamage;
+        target.Bases[MagicGarden.Stat.Range] = speed * lifeTime;
+        target.Bases[MagicGarden.Stat.Quantity] = 1;
+        return target;
+    }
+    protected override bool ExtendLifetime()
+    {
+        extensionHits = Mathf.RoundToInt(Special(MagicGarden.EffectKind.ExtraPierce));
+        if (extensionHits <= 0) return false;
+        // Baseline is unlimited piercing inside normal travel range. Preserve it;
+        // purchased pierces are additional unique hits beyond that range.
+        Destroy(gameObject, UpgradeRuntime.Current.Balance.pierceGraceSeconds);
+        return true;
+    }
     private Vector2 direction;
     private bool isInitialized = false;
 
@@ -68,6 +86,8 @@ public class PiercingSpell : Spell
             currentDamage = followingHitDamage;
         }
 
+        currentDamage = Upgraded(MagicGarden.Stat.Damage, currentDamage);
+        if (hitEnemies.Count > 1) currentDamage *= 1 + Special(MagicGarden.EffectKind.TraversalDamage);
         if (RitualBuffManager.Instance != null)
         {
             currentDamage *= RitualBuffManager.Instance.GetDamageMultiplier();
@@ -78,6 +98,7 @@ public class PiercingSpell : Spell
         ShowDamageText(collision.transform, currentDamage);
         PlayImpactEffects(collision.transform.position);
         ApplyKnockback(collision);
+        if (extensionHits > 0 && --extensionHits == 0) Destroy(gameObject);
 
     }
 

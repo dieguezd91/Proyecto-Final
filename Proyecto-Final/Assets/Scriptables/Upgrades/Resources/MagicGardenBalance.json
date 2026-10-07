@@ -1,0 +1,44 @@
+{
+  "lateralAngle": 14,
+  "pierceGraceSeconds": 2,
+  "seedsOnPlantUnlock": 1,
+  "stats": [
+    {"stat":0,"displayName":"Vital bloom","weight":1,"maxStacks":10},
+    {"stat":1,"displayName":"Lethal bloom","weight":1,"maxStacks":10},
+    {"stat":2,"displayName":"Quick bloom","weight":1,"maxStacks":10},
+    {"stat":3,"displayName":"Fleet bloom","weight":0.8,"maxStacks":10},
+    {"stat":4,"displayName":"Far bloom","weight":0.8,"maxStacks":10},
+    {"stat":5,"displayName":"Wide bloom","weight":0.8,"maxStacks":10},
+    {"stat":6,"displayName":"Forceful bloom","weight":0.6,"maxStacks":10},
+    {"stat":7,"displayName":"Abundant bloom","weight":0.025,"maxStacks":3}
+  ],
+  "rarities": [
+    {"rarity":0,"weight":50,"bonus":0.05},
+    {"rarity":1,"weight":35,"bonus":0.10},
+    {"rarity":2,"weight":12,"bonus":0.20},
+    {"rarity":3,"weight":3,"bonus":0.35}
+  ],
+  "profiles": [
+    {"capability":"Player","ratios":[1,0,0,1,0,0,0,0]},
+    {"capability":"BasicRangeSpell","ratios":[0,1,1,0,1,0,1,1]},
+    {"capability":"PiercingSpell","ratios":[0,1,1,0,1,0,1,1]},
+    {"capability":"BasicAreaSpell","ratios":[0,1,1,0,1,1,1,1]},
+    {"capability":"BasicMeleeSpell","ratios":[0,1,1,0,1,0.5,1,0]},
+    {"capability":"HammerSpell","ratios":[0,1,1,0,1,0.5,1,0]},
+    {"capability":"FireSpell","ratios":[0,1,1,0,1,0,0,0]},
+    {"capability":"TeleportSpell","ratios":[0,0,1,0,1,0,0,0]},
+    {"capability":"AttackPlant","ratios":[0,1,1,0,1,1,1,1]},
+    {"capability":"DefensePlant","ratios":[0,1,1,0,1,1,0,0]},
+    {"capability":"SierraPlant","ratios":[0,1,1,0,1,0,0,0]},
+    {"capability":"ResourcePlant","ratios":[0,0,0,0,0,1,0,0]},
+    {"capability":"ElectricPlantAura","ratios":[0,1,0,0,0,1,0,0]},
+    {"capability":"StormRoseReactiveAura","ratios":[0,1,1,0,0,1,0,0]}
+  ],
+  "specials": [
+    {"id":"basic-lateral","capability":"BasicRangeSpell","displayName":"Lateral shot","description":"Two lateral projectiles per cast.","maxStacks":1,"prerequisites":[],"costs":[{"material":1,"amount":3},{"material":2,"amount":2}],"effects":[{"kind":0,"value":2}]},
+    {"id":"pierce-extension","capability":"PiercingSpell","displayName":"Persistent pierce","description":"One extra enemy beyond normal travel range; traversed hits gain damage.","maxStacks":1,"prerequisites":[],"costs":[{"material":1,"amount":4},{"material":3,"amount":2}],"effects":[{"kind":1,"value":1},{"kind":2,"value":0.25}]},
+    {"id":"wide-explosion","capability":"BasicAreaSpell","displayName":"Expanded blast","description":"Explosion radius +30%.","maxStacks":2,"prerequisites":[],"costs":[{"material":4,"amount":3},{"material":1,"amount":2}],"effects":[{"kind":3,"value":0.30}]},
+    {"id":"branching-volley","capability":"AttackPlant","displayName":"Branching volley","description":"Attack one additional distinct enemy in range.","maxStacks":2,"prerequisites":[],"costs":[{"material":2,"amount":3},{"material":3,"amount":2}],"effects":[{"kind":4,"value":1}]},
+    {"id":"branching-volley-master","capability":"AttackPlant","displayName":"Master volley","description":"Another distinct enemy; requires Branching volley.","maxStacks":1,"prerequisites":["branching-volley"],"costs":[{"material":3,"amount":5}],"effects":[{"kind":4,"value":1}]}
+  ]
+}

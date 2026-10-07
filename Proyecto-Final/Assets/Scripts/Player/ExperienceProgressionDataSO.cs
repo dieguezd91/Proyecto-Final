@@ -35,12 +35,14 @@ public class ExperienceProgressionDataSO : ScriptableObject
     [Header("Level Curve Configuration")]
     [SerializeField] private List<ExperienceLevelData> levelRequirements = new List<ExperienceLevelData>();
 
-    [Header("Extrapolation After Configured Levels")]
-    [Min(1)]
-    [SerializeField] private int experienceIncreaseAfterLastLevel = 50;
+    [Header("Cumulative XP to enter L1, L2, ... (append explicit L11+ only)")]
+    [SerializeField] private List<int> cumulativeThresholds = new List<int>
+        { 0, 100, 250, 450, 750, 1200, 1800, 2600, 3500, 4500 };
+
+    public IReadOnlyList<int> CumulativeThresholds => cumulativeThresholds;
+    public int GetLevelThreshold(int level) => level > 0 && level <= cumulativeThresholds.Count ? cumulativeThresholds[level - 1] : 0;
 
     public int ExperiencePerNight => Mathf.Max(1, experiencePerNight);
-    public int ExperienceIncreaseAfterLastLevel => Mathf.Max(1, experienceIncreaseAfterLastLevel);
     public IReadOnlyList<ExperienceLevelData> LevelRequirements => levelRequirements;
 
     public ExperienceLevelData GetLevelData(int level)
@@ -61,35 +63,6 @@ public class ExperienceProgressionDataSO : ScriptableObject
 
     public int GetExperienceRequiredForLevel(int level)
     {
-        if (level < 1)
-        {
-            level = 1;
-        }
-
-        if (levelRequirements == null || levelRequirements.Count == 0)
-        {
-            Debug.LogError(
-                $"[{nameof(ExperienceProgressionDataSO)}] No level requirements configured.",
-                this);
-
-            return 0;
-        }
-
-        int index = level - 1;
-
-        if (index < levelRequirements.Count)
-        {
-            return Mathf.Max(1, levelRequirements[index].ExperienceRequired);
-        }
-
-        int lastConfiguredLevel = levelRequirements.Count;
-        int lastRequired = Mathf.Max(
-            1,
-            levelRequirements[lastConfiguredLevel - 1].ExperienceRequired);
-
-        int levelsAbove = level - lastConfiguredLevel;
-
-        return lastRequired +
-               levelsAbove * ExperienceIncreaseAfterLastLevel;
+        return MagicGarden.ExperienceCurve.Next(cumulativeThresholds, level);
     }
 }

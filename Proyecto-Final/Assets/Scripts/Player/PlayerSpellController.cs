@@ -119,6 +119,7 @@ public class PlayerSpellController : MonoBehaviour
 
     private void CastSpell()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         WorldTransitionAnimator worldTransitionCheck = FindObjectOfType<WorldTransitionAnimator>();
         if (worldTransitionCheck != null && worldTransitionCheck.IsInInterior)
         {
@@ -134,18 +135,11 @@ public class PlayerSpellController : MonoBehaviour
         mousePos.z = 0f;
         Vector2 direction = (mousePos - transform.position).normalized;
 
-        GameObject spellObject = Instantiate(selectedSpell.spellPrefab, firePoint.position, Quaternion.identity);
-        Spell spellComponent = spellObject.GetComponent<Spell>();
-
-        if (spellComponent != null)
-        {
-            spellComponent.Cast(direction, firePoint.position);
-        }
-        else
-        {
-            Debug.LogWarning($"El prefab {selectedSpell.spellName} no tiene un componente Spell");
-            Destroy(spellObject);
-        }
+        var prefabSpell = selectedSpell.spellPrefab.GetComponent<Spell>();
+        if (prefabSpell == null) return;
+        var descriptor = prefabSpell.DescribeUpgradeTarget(selectedSpell.UpgradeId(selectedSlotIndex), selectedSpell.spellName);
+        Spell spellComponent = UpgradeCasting.Cast(selectedSpell.spellPrefab, firePoint.position, direction,
+            descriptor.Id, descriptor.Capability, descriptor.Bases.ContainsKey(MagicGarden.Stat.Quantity));
 
         SoundManager.Instance.Play("ShootSpell", SoundSourceType.Localized, transform);
         if (playerMovementController != null) playerMovementController.ApplyAttackMovementPenalty();
@@ -174,6 +168,7 @@ public class PlayerSpellController : MonoBehaviour
 
     private bool CanCastSpell()
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
 
         if (fireSpellActive)
             return false;

@@ -107,9 +107,10 @@ public class CraftingSystem : MonoBehaviour
             return;
         }
 
-        if (HasRequiredMaterials(recipe.MaterialsRequired))
+        if (UpgradeRuntime.GameplayBlocked || !seedToPlantData.TryGetValue(seedToCraft, out var knownPlant) || SeedInventory.Instance == null) return;
+        if (FindSlotBySeed(seedToCraft) == -1 && FindFreeSlotOrSpecific(knownPlant) == -1) return;
+        if (InventoryManager.Instance != null && InventoryManager.Instance.TrySpendCosts(ToCosts(recipe.MaterialsRequired)))
         {
-            ConsumeMaterials(recipe.MaterialsRequired);
 
             if (seedToPlantData.TryGetValue(seedToCraft, out PlantDataSO plantData))
             {
@@ -163,26 +164,19 @@ public class CraftingSystem : MonoBehaviour
 
     public bool HasRequiredMaterials(List<MaterialRequirement> materialsRequired)
     {
-        if (InventoryManager.Instance == null) return false;
-
-        foreach (var requirement in materialsRequired)
-        {
-            if (!InventoryManager.Instance.HasEnoughMaterial(requirement.materialType, requirement.quantity))
-            {
-                return false;
-            }
-        }
-        return true;
+        return InventoryManager.Instance != null && InventoryManager.Instance.HasCosts(ToCosts(materialsRequired));
     }
 
-    private void ConsumeMaterials(List<MaterialRequirement> materialsRequired)
+    private static List<MagicGarden.Cost> ToCosts(List<MaterialRequirement> requirements)
     {
-        if (InventoryManager.Instance == null) return;
-
-        foreach (var requirement in materialsRequired)
+        if (requirements == null) return null;
+        var costs = new List<MagicGarden.Cost>();
+        foreach (var requirement in requirements)
         {
-            InventoryManager.Instance.UseMaterial(requirement.materialType, requirement.quantity);
+            if (requirement == null) return null;
+            costs.Add(new MagicGarden.Cost { material = (int)requirement.materialType, amount = requirement.quantity });
         }
+        return costs;
     }
 
     public CraftingRecipeSeedData GetRecipe(SeedsEnum seedType)

@@ -60,6 +60,7 @@ public class LevelManager : MonoBehaviour
 
     private void Update()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (Input.GetKeyDown(KeyCode.K))
             ForceEndNight();
 

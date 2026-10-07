@@ -490,6 +490,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public void StartHarvesting(HarvestablePlant plant)
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (currentAbility != PlayerAbility.Harvesting ||
             plant == null ||
             !plant.IsReadyToHarvest() ||
@@ -593,6 +594,7 @@ public class PlayerAbilitySystem : MonoBehaviour
 
     public bool TryDig(Vector2 position)
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
         if (currentAbility != PlayerAbility.Digging || isDigging)
             return false;
 
@@ -741,7 +743,7 @@ public class PlayerAbilitySystem : MonoBehaviour
     private bool IsAbilityGameState()
     {
         var phase = GameFlowController.Instance.CurrentPhase;
-        return phase == GamePhase.Day;
+        return !UpgradeRuntime.GameplayBlocked && phase == GamePhase.Day;
     }
 
     public bool IsBusy()

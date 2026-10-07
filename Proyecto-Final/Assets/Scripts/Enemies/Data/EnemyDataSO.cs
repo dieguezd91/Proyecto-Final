@@ -23,6 +23,8 @@ public class EnemyDataSO : ScriptableObject
     [SerializeField] private float footstepCooldown = 0.2f;
 
     [Header("Rewards")]
+    [Min(0)] [SerializeField] private int experienceReward;
+    public int ExperienceReward => Mathf.Max(0, experienceReward);
     [SerializeField] private float manaDropChance = 0.5f;
 
     public string EnemyName => enemyName;

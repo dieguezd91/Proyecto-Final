@@ -5,6 +5,13 @@ public class BasicRangeSpell : Spell
     [Header("SETTINGS")]
     [SerializeField] private float speed = 10f;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Range] = speed * lifeTime;
+        target.Bases[MagicGarden.Stat.Quantity] = 1;
+        return target;
+    }
     private Vector2 direction;
     private bool isInitialized = false;
 

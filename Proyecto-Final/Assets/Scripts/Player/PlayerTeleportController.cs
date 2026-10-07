@@ -8,10 +8,19 @@ public class PlayerTeleportController : MonoBehaviour
     [SerializeField] private float teleportCooldown = 2f;
 
     private float currentTeleportCooldown = 0f;
+    private float previousEffectiveCooldown;
 
     public event Action<float, float> OnTeleportCooldownChanged;
 
-    public float TeleportCooldown => teleportCooldown;
+    public float TeleportCooldown => UpgradeRuntime.Cooldown("ability:teleport", teleportCooldown, "TeleportSpell");
+    public MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var spell = teleportPrefab != null ? teleportPrefab.GetComponent<Spell>() : null;
+        if (spell == null) return null;
+        var target = spell.DescribeUpgradeTarget("ability:teleport", "Teleport ability");
+        target.Bases[MagicGarden.Stat.AttackSpeed] = 1 / Mathf.Max(0.001f, teleportCooldown);
+        return target;
+    }
     public float CurrentTeleportCooldown => currentTeleportCooldown;
 
     private InputReader input;
@@ -54,6 +63,10 @@ public class PlayerTeleportController : MonoBehaviour
 
     private void UpdateTeleportCooldown()
     {
+        float effective = TeleportCooldown;
+        if (previousEffectiveCooldown > 0 && previousEffectiveCooldown != effective)
+            currentTeleportCooldown *= effective / previousEffectiveCooldown;
+        previousEffectiveCooldown = effective;
         if (currentTeleportCooldown > 0f)
         {
             currentTeleportCooldown -= Time.deltaTime;
@@ -63,7 +76,7 @@ public class PlayerTeleportController : MonoBehaviour
                 currentTeleportCooldown = 0f;
             }
 
-            OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
+            OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, TeleportCooldown);
         }
     }
 
@@ -86,6 +99,7 @@ public class PlayerTeleportController : MonoBehaviour
 
     private bool CanUseTeleport()
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
         if (currentTeleportCooldown > 0f) return false;
         if (IsInsideHouseLayer()) return false;
         if (!IsDaytime() && manaSystem != null && manaSystem.GetCurrentMana() < teleportManaCost) return false;
@@ -112,6 +126,7 @@ public class PlayerTeleportController : MonoBehaviour
 
             if (spellComponent != null)
             {
+                spellComponent.SetUpgradeTarget("ability:teleport", "TeleportSpell");
                 spellComponent.Cast(direction, playerTransform.position);
             }
             else
@@ -120,8 +135,9 @@ public class PlayerTeleportController : MonoBehaviour
             }
         }
 
-        currentTeleportCooldown = teleportCooldown;
-        OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, teleportCooldown);
+        currentTeleportCooldown = TeleportCooldown;
+        previousEffectiveCooldown = currentTeleportCooldown;
+        OnTeleportCooldownChanged?.Invoke(currentTeleportCooldown, TeleportCooldown);
 
         TutorialEvents.InvokeTeleportCasted();
 

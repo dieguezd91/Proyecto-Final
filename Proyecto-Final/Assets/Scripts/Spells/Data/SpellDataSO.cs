@@ -3,6 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Spell Data", menuName = "Game Data/Spell")]
 public class SpellDataSO : ScriptableObject
 {
+    [Tooltip("Optional stable run target id; defaults to spell:<slotIndex>.")]
+    [SerializeField] private string upgradeTargetId;
+    public string UpgradeTargetId => string.IsNullOrEmpty(upgradeTargetId) ? "spell:" + slotIndex : upgradeTargetId;
     [SerializeField] private int slotIndex;
     [SerializeField] private SpellType spellType;
     [SerializeField] private string spellName;

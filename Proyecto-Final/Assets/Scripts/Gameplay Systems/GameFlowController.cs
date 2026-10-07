@@ -9,7 +9,8 @@ public enum GamePhase
     Day = 2,
     Night = 3,
     MainMenu = 8,
-    OnRitual = 10
+    OnRitual = 10,
+    LevelUp = 11
 }
 
 public class GameFlowController : MonoBehaviour
@@ -19,7 +20,9 @@ public class GameFlowController : MonoBehaviour
     [SerializeField] private GamePhase currentPhase = GamePhase.None;
     [SerializeField] private WorldTransitionAnimator worldAnimator;
 
-    public GamePhase CurrentPhase => currentPhase;
+    public bool IsChoosingUpgrade { get; internal set; }
+    public GamePhase CurrentPhase => IsChoosingUpgrade ? GamePhase.LevelUp : currentPhase;
+    public GamePhase WorldPhase => currentPhase;
 
     public event Action<GamePhase> OnPhaseChanged;
 

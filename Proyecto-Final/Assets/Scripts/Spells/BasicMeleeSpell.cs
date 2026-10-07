@@ -11,6 +11,15 @@ public class BasicMeleeSpell : Spell
     [SerializeField] private GameObject slashEffectPrefab;
     [SerializeField] private float effectDuration = 0.5f;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Range] = UpgradeRuntime.Value(id, MagicGarden.Stat.Area, attackRadius, GetType().Name);
+        target.Bases[MagicGarden.Stat.Area] = UpgradeRuntime.Value(id, MagicGarden.Stat.Range, attackRadius, GetType().Name);
+        target.Bases[MagicGarden.Stat.Knockback] = knockbackForce;
+        return target;
+    }
+    private float EffectiveRadius => Upgraded(MagicGarden.Stat.Range, Upgraded(MagicGarden.Stat.Area, attackRadius));
     private Vector2 castDirection;
     private bool hasExecuted = false;
 
@@ -38,7 +47,7 @@ public class BasicMeleeSpell : Spell
         if (hasExecuted) return;
         hasExecuted = true;
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, attackRadius, enemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, EffectiveRadius, enemyLayer);
 
         if (hitEnemies.Length > 0)
         {
@@ -75,7 +84,7 @@ public class BasicMeleeSpell : Spell
         if (knockback != null)
         {
             Vector2 knockbackDirection = (target.transform.position - transform.position).normalized;
-            knockback.ApplyKnockback(knockbackDirection, knockbackForce);
+            knockback.ApplyKnockback(knockbackDirection, Upgraded(MagicGarden.Stat.Knockback, knockbackForce));
         }
     }
 

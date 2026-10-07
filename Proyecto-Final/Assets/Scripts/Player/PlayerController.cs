@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
 
     public bool CanAct()
     {
+        if (UpgradeRuntime.GameplayBlocked) return false;
         if (lifeController == null || !lifeController.IsAlive())
             return false;
 

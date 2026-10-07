@@ -22,8 +22,17 @@ public class StormRoseReactiveAura : MonoBehaviour
     [SerializeField] private GameObject floatingDamagePrefab;
 
 
+    public void Describe(MagicGarden.Target target)
+    {
+        target.Capability = "StormRoseReactiveAura";
+        target.Bases[MagicGarden.Stat.Damage] = initialDamage;
+        target.Bases[MagicGarden.Stat.Area] = radius;
+        target.Bases[MagicGarden.Stat.AttackSpeed] = 1 / Mathf.Max(0.001f, cooldown);
+    }
+    private Plant plant;
     private LifeController lifeController;
     private float cooldownTimer = 0f;
+    private float previousEffectiveCooldown;
     private bool areaActive = false;
 
     private HashSet<LifeController> damagedTargets =
@@ -32,6 +41,7 @@ public class StormRoseReactiveAura : MonoBehaviour
     private void Awake()
     {
         lifeController = GetComponent<LifeController>();
+        plant = GetComponent<Plant>();
     }
 
     private void OnEnable()
@@ -48,17 +58,23 @@ public class StormRoseReactiveAura : MonoBehaviour
 
     private void Update()
     {
+        float effective = plant != null ? plant.UpgradedCooldown(cooldown) : cooldown;
+        if (previousEffectiveCooldown > 0 && previousEffectiveCooldown != effective)
+            cooldownTimer *= effective / previousEffectiveCooldown;
+        previousEffectiveCooldown = effective;
         if (cooldownTimer > 0f)
             cooldownTimer -= Time.deltaTime;
     }
 
     private void OnDamaged(float damage, LifeController.DamageType damageType)
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         if (cooldownTimer > 0f || areaActive)
             return;
 
         StartCoroutine(AreaRoutine());
-        cooldownTimer = cooldown;
+        cooldownTimer = plant != null ? plant.UpgradedCooldown(cooldown) : cooldown;
+        previousEffectiveCooldown = cooldownTimer;
     }
 
     private IEnumerator AreaRoutine()
@@ -81,9 +97,10 @@ public class StormRoseReactiveAura : MonoBehaviour
 
     private void ApplyAreaEffects()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             transform.position,
-            radius,
+            plant != null ? plant.Upgraded(MagicGarden.Stat.Area, radius) : radius,
             enemyLayer
         );
 
@@ -95,8 +112,9 @@ public class StormRoseReactiveAura : MonoBehaviour
 
             if (!damagedTargets.Contains(enemyLife))
             {
-                enemyLife.TakeDamage(initialDamage);
-                ShowDamageText(enemyLife.transform, initialDamage);
+                float upgradedDamage = plant != null ? plant.Upgraded(MagicGarden.Stat.Damage, initialDamage) : initialDamage;
+                enemyLife.TakeDamage(upgradedDamage);
+                ShowDamageText(enemyLife.transform, upgradedDamage);
 
                 damagedTargets.Add(enemyLife);
             }
@@ -108,7 +126,8 @@ public class StormRoseReactiveAura : MonoBehaviour
                 poison = enemyLife.gameObject.AddComponent<PoisonEffect>();
             }
 
-            poison.ApplyPoison(poisonDuration, poisonTickRate, poisonDamagePerTick);
+            poison.ApplyPoison(poisonDuration, poisonTickRate,
+                plant != null ? plant.Upgraded(MagicGarden.Stat.Damage, poisonDamagePerTick) : poisonDamagePerTick);
         }
     }
 

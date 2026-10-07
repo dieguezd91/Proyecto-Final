@@ -46,6 +46,26 @@ public class Plant : MonoBehaviour
     private Collider2D plantCollider;
 
     public PlantSoundBase SoundBase => _soundBase;
+    public string UpgradeId => plantData != null ? plantData.UpgradeLineId : null;
+    public virtual MagicGarden.Target DescribeUpgradeTarget()
+    {
+        var target = new MagicGarden.Target { Id = UpgradeId, Name = plantData != null ? plantData.plantName : name, Capability = GetType().Name };
+        var electric = GetComponent<ElectricPlantAura>();
+        var rose = GetComponent<StormRoseReactiveAura>();
+        if (electric != null) electric.Describe(target);
+        else if (rose != null) rose.Describe(target);
+        if (IsFullyGrown()) target.Name += " (mature)";
+        return target;
+    }
+    public float Upgraded(MagicGarden.Stat stat, float basis) => UpgradeRuntime.Value(UpgradeId, stat, basis, DescribeCapability());
+    public float UpgradedCooldown(float basis) => UpgradeRuntime.Cooldown(UpgradeId, basis, DescribeCapability());
+    private string DescribeCapability()
+    {
+        if (GetType() != typeof(Plant)) return GetType().Name;
+        if (GetComponent<ElectricPlantAura>() != null) return "ElectricPlantAura";
+        if (GetComponent<StormRoseReactiveAura>() != null) return "StormRoseReactiveAura";
+        return "Plant";
+    }
 
     private float nextIdleSoundTime = 0f;
     [SerializeField] private float idleSoundMinTime = 5f;

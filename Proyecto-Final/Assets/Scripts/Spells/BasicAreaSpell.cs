@@ -12,6 +12,16 @@ public class BasicAreaSpell : Spell
     [SerializeField] private GameObject explosionEffectPrefab;
     [SerializeField] private float explosionEffectDuration;
 
+    public override MagicGarden.Target DescribeUpgradeTarget(string id, string displayName)
+    {
+        var target = base.DescribeUpgradeTarget(id, displayName);
+        target.Bases[MagicGarden.Stat.Range] = speed * lifeTime;
+        target.Bases[MagicGarden.Stat.Area] = explosionRadius;
+        target.Bases[MagicGarden.Stat.Knockback] = knockbackForce;
+        target.Bases[MagicGarden.Stat.Quantity] = 1;
+        return target;
+    }
+    private float EffectiveRadius => Upgraded(MagicGarden.Stat.Area, explosionRadius) * (1 + Special(MagicGarden.EffectKind.AreaMultiplier));
     private Vector2 direction;
     private bool hasExploded = false;
     private bool isInitialized = false;
@@ -57,7 +67,7 @@ public class BasicAreaSpell : Spell
         if (hasExploded) return;
         hasExploded = true;
 
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius, enemyLayer);
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, EffectiveRadius, enemyLayer);
 
         if (hitEnemies.Length > 0)
         {
@@ -88,7 +98,7 @@ public class BasicAreaSpell : Spell
 
         GameObject explosion = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
 
-        float scale = explosionRadius;
+        float scale = EffectiveRadius;
         explosion.transform.localScale = Vector3.one * scale;
 
         Destroy(explosion, explosionEffectDuration);
@@ -100,7 +110,7 @@ public class BasicAreaSpell : Spell
         if (knockback != null)
         {
             Vector2 knockbackDirection = (target.transform.position - transform.position).normalized;
-            knockback.ApplyKnockback(knockbackDirection, knockbackForce);
+            knockback.ApplyKnockback(knockbackDirection, Upgraded(MagicGarden.Stat.Knockback, knockbackForce));
         }
     }
 

@@ -12,6 +12,9 @@ public class IceSlowArea : MonoBehaviour
 
     [SerializeField] private LayerMask enemyLayer;
 
+    public float BaseRadius => radius;
+    private string upgradeId, capability;
+    public void SetUpgradeTarget(string id, string kind) { upgradeId = id; capability = kind; }
     private float remainingDuration;
 
     private HashSet<EnemyBase> affectedEnemies = new HashSet<EnemyBase>();
@@ -24,6 +27,7 @@ public class IceSlowArea : MonoBehaviour
 
     private void Update()
     {
+        if (UpgradeRuntime.GameplayBlocked) return;
         remainingDuration -= Time.deltaTime;
 
         if (remainingDuration <= 0f)
@@ -39,7 +43,7 @@ public class IceSlowArea : MonoBehaviour
     {
         Collider2D[] enemies = Physics2D.OverlapCircleAll(
             transform.position,
-            radius,
+            UpgradeRuntime.Value(upgradeId, MagicGarden.Stat.Area, radius, capability ?? "AttackPlant"),
             enemyLayer
         );
 

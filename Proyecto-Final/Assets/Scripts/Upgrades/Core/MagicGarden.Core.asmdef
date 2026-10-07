@@ -1,0 +1,5 @@
+{
+  "name": "MagicGarden.Core",
+  "rootNamespace": "MagicGarden",
+  "noEngineReferences": true
+}
