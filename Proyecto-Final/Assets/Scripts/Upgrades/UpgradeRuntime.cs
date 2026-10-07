@@ -66,7 +66,13 @@ public sealed class UpgradeRuntime : MonoBehaviour
             foreach (var profile in Balance.profiles)
                 if (profile != null && !string.IsNullOrEmpty(profile.capability))
                     profiles[string.IsNullOrEmpty(profile.targetId) ? profile.capability : profile.targetId] = profile;
-        panel = UpgradePanel.Create(this);
+        panel = FindObjectOfType<UpgradePanel>();
+        if (panel == null || !panel.Initialize(this))
+        {
+            Debug.LogError("Magic Garden requires a wired UpgradePanel presenter in the existing Canvas Game UI prefab. No runtime UI fallback is created.");
+            enabled = false;
+            return;
+        }
         inventory = InventoryManager.Instance;
         if (inventory != null) inventory.onMaterialChanged += MaterialsChanged;
         UIEvents.OnCraftingUIToggleRequested += ToggleShop;
@@ -76,7 +82,7 @@ public sealed class UpgradeRuntime : MonoBehaviour
     private void Update()
     {
         if (choosing) { Time.timeScale = 0; return; }
-        if (experience == null || experience.PendingChoices == 0 || panel == null) return;
+        if (experience == null || experience.PendingChoices == 0 || panel == null || !panel.IsReady) return;
         var flow = UIManager.Instance?.Flow;
         var phase = GameFlowController.Instance.WorldPhase;
         if (flow == null || flow.HasOpenModal || (pause != null && pause.IsPaused) || Time.timeScale <= 0 ||
@@ -155,7 +161,7 @@ public sealed class UpgradeRuntime : MonoBehaviour
         if (inventory != null) inventory.onMaterialChanged -= MaterialsChanged;
         if (experience != null) experience.OnProgressionReset -= ResetRun;
         if (GameFlowController.Instance != null) GameFlowController.Instance.OnPhaseChanged -= PhaseChanged;
-        if (panel != null) Destroy(panel.gameObject);
+        panel?.Unbind(this); // The authored Canvas/presenter belong to the scene, not this runtime.
     }
     private void ResetRun()
     {
@@ -254,7 +260,7 @@ public sealed class UpgradeRuntime : MonoBehaviour
     private void MaterialsChanged(MaterialType type, int amount) => panel?.RequestShopRefresh();
     public void ToggleShop()
     {
-        if (!isActiveAndEnabled || panel == null || choosing) return;
+        if (!isActiveAndEnabled || panel == null || !panel.IsReady || choosing) return;
         if (panel.IsShopOpen) panel.CloseShop();
         else if (GameFlowController.Instance.CurrentPhase == GamePhase.Day &&
                  UIManager.Instance?.Flow != null && UIManager.Instance.Flow.Open(UIModal.Crafting))
