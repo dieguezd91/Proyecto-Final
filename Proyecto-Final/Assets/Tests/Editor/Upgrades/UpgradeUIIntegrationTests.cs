@@ -77,7 +77,7 @@ public class UpgradeUIIntegrationTests
             Assert.That(component.GetType().FullName, Is.Not.EqualTo("UnityEngine.EventSystems.EventSystem"));
             Assert.That(component, Is.Not.TypeOf<Canvas>());
         }
-        Assert.That(Property(Field(view, "background"), "type").ToString(), Is.EqualTo("Sliced"));
+        UpgradeUIArtTests.AssertFrame(root, view);
     }
     [Test] public void LevelPanelContainsExactlyThreeHorizontalNestedCardSources()
     {
@@ -92,7 +92,9 @@ public class UpgradeUIIntegrationTests
             Assert.That(PrefabUtility.GetCorrespondingObjectFromSource(card), Is.Not.Null);
             var rect = (RectTransform)card.transform;
             Assert.That(rect.anchorMin.x, Is.GreaterThan(previous)); previous = rect.anchorMin.x;
-            Assert.That(rect.anchorMin.y, Is.EqualTo(0)); Assert.That(rect.anchorMax.y, Is.EqualTo(1));
+            Assert.That(rect.anchorMin.y, Is.EqualTo(.5f)); Assert.That(rect.anchorMax.y, Is.EqualTo(.5f));
+            Assert.That(rect.anchorMax, Is.EqualTo(rect.anchorMin));
+            Assert.That(rect.sizeDelta, Is.EqualTo(new Vector2(300, 420)));
         }
     }
     [Test] public void ExistingSceneCanvasInheritsPresenterAndInactiveNestedPanelsWithoutNewCanvasOrEventSystem()
@@ -114,7 +116,7 @@ public class UpgradeUIIntegrationTests
         Assert.That(Regex.Matches(scene, "m_SourcePrefab: \\{fileID: 100100000, guid: " + guid).Count, Is.EqualTo(1));
         Assert.That(Regex.Matches(scene, "m_Name: EventSystem\\r?\\n").Count, Is.EqualTo(1));
     }
-    [Test] public void AuthoredButtonsSerializeAllStandardStatesAndSlicedTargets()
+    [Test] public void AuthoredButtonsSerializeAllStandardStatesAndSimpleCraftTargets()
     {
         var canvas = AssetDatabase.LoadAssetAtPath<GameObject>(CanvasPath);
         var roots = new[] { ((Component)Field(View(canvas, "UpgradePanel"), "levelUpView")).gameObject,
@@ -127,7 +129,13 @@ public class UpgradeUIIntegrationTests
                 if (component.GetType().FullName != "UnityEngine.UI.Button") continue;
                 found++;
                 Assert.That(Property(component, "transition").ToString(), Is.EqualTo("ColorTint"));
-                Assert.That(Property(Property(component, "targetGraphic"), "type").ToString(), Is.EqualTo("Sliced"));
+                Assert.That(Property(Property(component, "targetGraphic"), "type").ToString(), Is.EqualTo("Simple"));
+                Assert.That(Property(Property(component, "targetGraphic"), "preserveAspect"), Is.True);
+                Assert.That(((UnityEngine.Object)Property(Property(component, "targetGraphic"), "sprite")).name, Is.EqualTo("CraftButton"));
+                var frameView = component.GetComponentInParent(Production(root.name.Contains("SpecialUpgradeItem")
+                    ? "SpecialUpgradeItemView" : component.name == "LevelUpCard" ? "LevelUpCardView"
+                    : component.name == "Close" ? "SpecialUpgradePanelView" : "LevelUpPanelView"), true);
+                UpgradeUIArtTests.AssertFrame(frameView.gameObject, frameView);
                 var serialized = new SerializedObject(component);
                 foreach (string state in new[] { "Normal", "Highlighted", "Pressed", "Selected", "Disabled" })
                 {
